@@ -3,6 +3,7 @@
 #include <string>
 
 #include "src/Parser/Scanner.h"
+#include "src/SDB3_header.h"
 
 /* import the parser's token type into a local typedef */
 typedef SDB::Parser::token token;
@@ -15,6 +16,19 @@ typedef SDB::Parser::token_type token_type;
 /* This disables inclusion of unistd.h, which is not available under Visual C++
  * on Win32. The C++ scanner uses STL streams instead. */
 #define YY_NO_UNISTD_H
+
+ulong get_ket_idx(char *str, yy_size_t len) { // tidy later!!
+    // std::string s(str, len);
+    // return ket_map.get_idx(s.substr(1, s.size() - 2));
+    if (len <= 2) { return ket_map.get_idx(""); } // later swap in the value of get_idx("").
+    std::string s(++str, --(--len));
+    return ket_map.get_idx(s);
+}
+
+ulong get_op_idx(char *str, yy_size_t len) {
+    std::string s(str, len);
+    return ket_map.get_idx(s);
+}
 
 %}
 
@@ -45,6 +59,8 @@ typedef SDB::Parser::token_type token_type;
 #define YY_USER_ACTION  yylloc->columns(yyleng);
 %}
 
+digit           [0-9]
+
 %%
 
 
@@ -53,7 +69,39 @@ typedef SDB::Parser::token_type token_type;
 yylloc->step();
 %}
 
+"--".*"\n" { return token::COMMENT; }
 
+"|_self>" { return token::SELF_KET; }
+
+"|_self"{digit}">" { yylval->integerVal = yytext[6] - '0'; return token::SELF_KETK; }
+
+"|"[^<|>]*">" { yylval->ulongVal = get_ket_idx(yytext, yyleng); return token::KET_LABEL; }
+
+[a-zA-Z!][a-zA-Z0-9\-\+!?\.:]+ { yylval->ulongVal = get_op_idx(yytext, yyleng); return token::OP_LABEL; }
+
+"\""[^\"\[\]<|>]*"\"" { yylval->stringVal = new std::string(yytext, yyleng); return token::STRING; }
+
+"+=>" { return token::ADD_LEARN_SYM; }
+".=>" { return token::SEQ_LEARN_SYM; }
+"#=>" { return token::STORE_LEARN_SYM; }
+"!=>" { return token::MEM_LEARN_SYM; }
+"=>" { return token::LEARN_SYM; }
+
+"+" { return token::PLUS_OP; }
+"-" { return token::MINUS_OP; }
+"." { return token::SEQ_OP; }
+"__" { return token::MERGE2_OP; }
+"_" { return token::MERGE_OP; }
+
+"(" { return token::LPAREN; }
+")" { return token::RPAREN; }
+"[" { return token::LSQUARE; }
+"]" { return token::RSQUARE; }
+
+"," { return token::COMMA; }
+"^" { return token::POWER; }
+"\"" { return token::QUOTE; }
+"\*" { return token::STAR; }
 
 [0-9]+ {
         yylval->integerVal = atoi(yytext);
@@ -61,23 +109,24 @@ yylloc->step();
     }
 
 [0-9]+"."[0-9]* {
-yylval->doubleVal = atof(yytext);
-return token::DOUBLE;
-}
+        yylval->doubleVal = atof(yytext);
+        return token::DOUBLE;
+    }
 
 [A-Za-z][A-Za-z0-9_,.-]* {
-yylval->stringVal = new std::string(yytext, yyleng);
-return token::STRING;
-}
+        yylval->stringVal = new std::string(yytext, yyleng);
+        return token::STRING;
+    }
 
 [ \t\r]+ {
-yylloc->step();
-}
+        yylloc->step();
+        return token::SPACE;
+    }
 
 \n {
-yylloc->lines(yyleng); yylloc->step();
-return token::EOL;
-}
+        yylloc->lines(yyleng); yylloc->step();
+        return token::EOL;
+    }
 
 
 . {
@@ -116,7 +165,7 @@ namespace SDB {
 
 int SDBFlexLexer::yylex()
 {
-    std::cerr << "in SDBFlexLexer::yylex() !" << std::endl;
+    std::cerr << "We shouldn't be here, in SDBFlexLexer::yylex() !" << std::endl;
     return 0;
 }
 
