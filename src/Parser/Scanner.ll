@@ -120,7 +120,7 @@ yylloc->step();
 
 [ \t\r]+ {
         yylloc->step();
-        return token::SPACE;
+        // return token::SPACE;  // tends to cause parse errors!
     }
 
 \n {

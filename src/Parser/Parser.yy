@@ -49,7 +49,7 @@
 /* verbose error messages */
 %error-verbose
 
- /*** BEGIN EXAMPLE - Change the example grammar's tokens below ***/
+
 
 %union {
     int  			integerVal;
@@ -57,6 +57,9 @@
     double 			doubleVal;
     std::string*		stringVal;
     class BaseSequence* bSeq;
+    class Ket* ketVal;
+    class Superposition* spVal;
+    class Sequence* seqVal;
 }
 
 %token			END	     0	"end of file"
@@ -89,11 +92,16 @@
 %token          QUOTE           "quotation symbol"
 %token          STAR            "*"
 
+%type <ketVal> ket
+%type <spVal> superposition
+%type <seqVal> sequence
 
 %destructor { delete $$; } STRING
+%destructor { delete $$; } ket
+%destructor { delete $$; } superposition
+%destructor { delete $$; } sequence
 
 
- /*** END EXAMPLE - Change the example grammar's tokens above ***/
 
 %{
 
@@ -122,7 +130,36 @@ item  : INTEGER EOL { std::cout << "INT: " << $1 << std::endl; }
       | KET_LABEL EOL { std::cout << "KET_LABEL: " << ket_map.get_str($1) << std::endl; }
       | SELF_KETK EOL { std::cout << "|_self3>: " << $1 << std::endl; }
       | COMMENT { std::cout << "found a comment" << std::endl; }
+      | sequence { std::cout << "sequence: " << $1->to_string() << std::endl; }
+      | learn_rule
+      | recall_rule
       ;
+
+ket   : KET_LABEL { $$ = new Ket($1); }
+      | INTEGER KET_LABEL { $$ = new Ket($2, $1); }
+      | DOUBLE KET_LABEL { $$ = new Ket($2, $1); }
+      ;
+
+superposition : ket { $$ = new Superposition(*$1); }
+              | superposition PLUS_OP ket { $1->add(*$3); $$ = $1; }
+              | superposition MINUS_OP ket { $3->multiply(-1); $1->add(*$3); $$ = $1; }
+              ;
+
+sequence : superposition { $$ = new Sequence(*$1); }
+         | sequence SEQ_OP superposition { $1->append(*$3); $$ = $1; }
+         | sequence MERGE2_OP superposition { $1->merge(*$3, " "); $$ = $1; }
+         | sequence MERGE_OP superposition { $1->merge(*$3); $$ = $1; }
+         ;
+
+learn_rule : OP_LABEL KET_LABEL LEARN_SYM sequence { driver.context.learn($1, $2, std::make_shared<Sequence>(*$4)); }
+           | OP_LABEL KET_LABEL ADD_LEARN_SYM sequence { driver.context.add_learn($1, $2, std::make_shared<Sequence>(*$4)); }
+           | OP_LABEL KET_LABEL SEQ_LEARN_SYM sequence { driver.context.seq_learn($1, $2, std::make_shared<Sequence>(*$4)); }
+           | OP_LABEL KET_LABEL STORE_LEARN_SYM sequence { driver.context.stored_learn($1, $2, std::make_shared<Sequence>(*$4)); }
+           | OP_LABEL KET_LABEL MEM_LEARN_SYM sequence { driver.context.memoize_learn($1, $2, std::make_shared<Sequence>(*$4)); }
+           ;
+
+recall_rule : OP_LABEL KET_LABEL { std::cout << "recall: " << driver.context.recall($1, $2)->to_string() << std::endl; }
+            ;
 
 %% /*** Additional Code ***/
 
