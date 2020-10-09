@@ -13,6 +13,7 @@ int main() {
     driver.parse_string(" (3|a> + 2.2|b> . |c> . |x> . 2|y> - 3|z> ) \n");
     driver.parse_string("3.1|x> __ 2|y>\n");
     driver.parse_string("op |foo> => 2.7|bah>\n");
+    driver.parse_string("op1 |*> #=> |op1:> __ |_self>\n");
     driver.parse_string("op2 op1|X> #=> 7.2|Y>\n");
     driver.parse_string("op3 op2 op1 |bah> #=> 7|foo>\n");
     driver.parse_string("op |foo>\n");

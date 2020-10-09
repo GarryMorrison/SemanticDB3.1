@@ -158,7 +158,7 @@ line : item EOL
 
 item : operator_sequence { std::cout << $1->to_string() << std::endl; }
      | general_sequence { std::cout << "general sequence: " << $1->to_string() << std::endl; }
-     | learn_rule { std::cout << "learn rule: " << $1->to_string() << std::endl; }
+     | learn_rule { std::cout << "learn rule: " << $1->to_string() << std::endl; $1->Compile(driver.context); }
      ;
 
 

@@ -36,5 +36,41 @@ const std::string LearnRule::to_string() const {
 }
 
 void LearnRule::Compile(ContextList &context) {
-    return;
+    if (_ket_op->type() == OPEMPTY) {
+        if (_ket_like_seq->is_ket()) {  // Primary / most common branch
+            ulong label_idx = _ket_like_seq->to_ket().label_idx();    // Can we instead directly invoke .label_idx() ?
+            switch (_rule_type) {
+                case RULENORMAL : { context.learn(_first_op_idx, label_idx, _RHS_seq); return; }
+                case RULEADD : { context.add_learn(_first_op_idx, label_idx, _RHS_seq); return; }
+                case RULESEQ : { context.seq_learn(_first_op_idx, label_idx, _RHS_seq); return; }
+                case RULESTORED : { context.stored_learn(_first_op_idx, label_idx, _RHS_seq); return; }
+                case RULEMEMOIZE : { context.memoize_learn(_first_op_idx, label_idx, _RHS_seq); return; }
+                default: return;
+            }
+        } else {
+            for (const auto k: _ket_like_seq->to_sp()) {  // Not sure this branch is ever triggered.
+                ulong label_idx = k.label_idx();
+                switch (_rule_type) {
+                    case RULENORMAL : { context.learn(_first_op_idx, label_idx, _RHS_seq); return; }
+                    case RULEADD : { context.add_learn(_first_op_idx, label_idx, _RHS_seq); return; }
+                    case RULESEQ : { context.seq_learn(_first_op_idx, label_idx, _RHS_seq); return; }
+                    case RULESTORED : { context.stored_learn(_first_op_idx, label_idx, _RHS_seq); return; }
+                    case RULEMEMOIZE : { context.memoize_learn(_first_op_idx, label_idx, _RHS_seq); return; }
+                    default: return;
+                }
+            }
+        }
+    }
+    Superposition indirect_sp = _ket_op->Compile(context, _ket_like_seq->to_seq()).to_sp();
+    for (const auto k: indirect_sp) {
+        ulong label_idx = k.label_idx();
+        switch (_rule_type) {
+            case RULENORMAL : { context.learn(_first_op_idx, label_idx, _RHS_seq); return; }
+            case RULEADD : { context.add_learn(_first_op_idx, label_idx, _RHS_seq); return; }
+            case RULESEQ : { context.seq_learn(_first_op_idx, label_idx, _RHS_seq); return; }
+            case RULESTORED : { context.stored_learn(_first_op_idx, label_idx, _RHS_seq); return; }
+            case RULEMEMOIZE : { context.memoize_learn(_first_op_idx, label_idx, _RHS_seq); return; }
+            default: return;
+        }
+    }
 }
