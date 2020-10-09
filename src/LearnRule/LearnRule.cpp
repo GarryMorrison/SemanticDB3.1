@@ -20,6 +20,7 @@ LearnRule::LearnRule(OperatorWithSequence &head, unsigned int rule_type, Operato
 }
 
 const std::string LearnRule::to_string() const {
+    if (!_valid_learn_rule) { return ""; }
     std::string rule_sym;
     switch (_rule_type) {
         case RULENORMAL : { rule_sym = " => "; break; }
@@ -36,6 +37,7 @@ const std::string LearnRule::to_string() const {
 }
 
 void LearnRule::Compile(ContextList &context) {
+    if (!_valid_learn_rule) { return; }
     if (_ket_op->type() == OPEMPTY) {
         if (_ket_like_seq->is_ket()) {  // Primary / most common branch
             ulong label_idx = _ket_like_seq->to_ket().label_idx();    // Can we instead directly invoke .label_idx() ?
@@ -61,7 +63,7 @@ void LearnRule::Compile(ContextList &context) {
             }
         }
     }
-    Superposition indirect_sp = _ket_op->Compile(context, _ket_like_seq->to_seq()).to_sp();
+    Superposition indirect_sp = _ket_op->Compile(context, _ket_like_seq->to_seq()).to_sp(); // A question remains, when should we compile this section?
     for (const auto k: indirect_sp) {
         ulong label_idx = k.label_idx();
         switch (_rule_type) {

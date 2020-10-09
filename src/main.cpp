@@ -23,6 +23,7 @@ int main() {
     driver.parse_string("5|bah>\n");
     driver.parse_string("op3 2 op2 5.1 op1|bah>\n");
     driver.parse_string("op2 op1|foo> + 3.7|bah> - 9|_self> . |x> _ |y> __ 2.1|z>\n");
+    driver.parse_string("fn[*, \"str\"]\n");
     context.print_universe();
 
     return 0;

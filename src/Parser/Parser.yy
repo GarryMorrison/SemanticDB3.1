@@ -67,6 +67,9 @@
     class BaseOperator* baseOpVal;
     class OperatorWithSequence* opWithSeqVal;
     class LearnRule* learnRuleVal;
+    class CompoundConstant* constVal;
+    std::vector<std::shared_ptr<CompoundConstant> >* constVec;
+    class CompoundOperator* compOpVal;
 }
 
 %token			END	     0	"end of file"
@@ -111,6 +114,9 @@
 %type <baseOpVal> operator
 %type <opWithSeqVal> operator_with_sequence general_sequence
 %type <learnRuleVal> learn_rule
+%type <constVal> constant
+%type <constVec> parameters
+// %type <compOpVal> compound_operator
 
 
 %destructor { delete $$; } STRING
@@ -159,6 +165,7 @@ line : item EOL
 item : operator_sequence { std::cout << $1->to_string() << std::endl; }
      | general_sequence { std::cout << "general sequence: " << $1->to_string() << std::endl; }
      | learn_rule { std::cout << "learn rule: " << $1->to_string() << std::endl; $1->Compile(driver.context); }
+//     | compound_operator { std::cout << "compound operator: " << $1->to_string() << std::endl; }
      ;
 
 
@@ -212,7 +219,8 @@ operator_sequence : operator { std::shared_ptr<BaseOperator> tmp_ptr($1); $$ = n
                   | operator_sequence operator { $$ = $1; std::shared_ptr<BaseOperator> tmp_ptr($2); $$->append(tmp_ptr); }
                   ;
 
-operator : OP_LABEL { $$ = new SimpleOperator($1); }
+operator : OP_LABEL LSQUARE parameters RSQUARE { $$ = new CompoundOperator($1, *$3); }
+         | OP_LABEL { $$ = new SimpleOperator($1); }
          | INTEGER { $$ = new NumericOperator($1); }
          | DOUBLE { $$ = new NumericOperator($1); }
          ;
@@ -222,6 +230,21 @@ general_sequence : operator_with_sequence { $$ = $1; }
                  | general_sequence INFIX_OP operator_with_sequence { $$ = $1; $$->append($2, *$3); }
                  | LPAREN general_sequence RPAREN { $$ = $2; }
                  ;
+
+constant : STRING { $$ = new ConstantString(*$1); }
+         | STAR { $$ = new ConstantOperator("*"); }
+         ;
+
+parameters : constant { $$ = new std::vector<std::shared_ptr<CompoundConstant>>;
+                        std::shared_ptr<CompoundConstant> tmp_ptr($1);
+                        $$->push_back(tmp_ptr);
+                        }
+           | parameters COMMA constant { $$ = $1; std::shared_ptr<CompoundConstant> tmp_ptr($3); $$->push_back(tmp_ptr); }
+           ;
+/*
+compound_operator : OP_LABEL LSQUARE parameters RSQUARE { $$ = new CompoundOperator($1, *$3); }
+                  ;
+*/
 
 %% /*** Additional Code ***/
 

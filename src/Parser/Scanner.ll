@@ -80,7 +80,7 @@ yylloc->step();
 
 [a-zA-Z!][a-zA-Z0-9\-\+!?\.:]+ { yylval->ulongVal = get_op_idx(yytext, yyleng); return token::OP_LABEL; }
 
-"\""[^\"\[\]<|>]*"\"" { yylval->stringVal = new std::string(yytext, yyleng); return token::STRING; }
+"\""[^\"\[\]<|>]*"\"" { yylval->stringVal = new std::string(++yytext, yyleng - 2); return token::STRING; }
 
 "+=>" { yylval->integerVal = RULEADD; return token::LEARN_SYM; }
 ".=>" { yylval->integerVal = RULESEQ; return token::LEARN_SYM; }

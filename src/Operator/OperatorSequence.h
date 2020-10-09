@@ -25,7 +25,7 @@ private:
     // std::vector<BaseOperator*> op_seq;
     std::shared_ptr<BaseOperator> head_op;
     std::vector<std::shared_ptr<BaseOperator> > tail_op_seq;
-    friend class LearnRule;
+    // friend class LearnRule;
 
 public:
     OperatorSequence() { op_symbol = SPLUS; }
