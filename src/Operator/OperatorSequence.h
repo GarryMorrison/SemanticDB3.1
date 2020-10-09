@@ -16,13 +16,16 @@
 #include "../Sequence/Sequence.h"
 #include "../Context/ContextList.h"
 #include "../Context/NewContext.h"
+#include "src/LearnRule/LearnRule.h"
 
 
 class OperatorSequence : public BaseOperator {
 private:
     unsigned int op_symbol;
     // std::vector<BaseOperator*> op_seq;
-    std::vector<std::shared_ptr<BaseOperator> > op_seq;
+    std::shared_ptr<BaseOperator> head_op;
+    std::vector<std::shared_ptr<BaseOperator> > tail_op_seq;
+    friend class LearnRule;
 
 public:
     OperatorSequence() { op_symbol = SPLUS; }
@@ -39,6 +42,10 @@ public:
     Sequence Compile(NewContext& context, const Sequence& seq) const;
     Sequence Compile(ContextList& context, const Sequence& seq, const ulong label_idx) const;
     // Sequence Compile(ContextList& context, const Sequence& seq, const std::vector<Sequence>& args) const;
+
+    const int type() const { return OPSEQUENCE; }
+    const ulong get_head_op_idx() const;
+    const std::shared_ptr<BaseOperator>  get_tail_op() const;
     const std::string to_string() const;
 };
 

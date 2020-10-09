@@ -14,6 +14,7 @@
 #include "../Context/NewContext.h"
 #include "BaseOperator.h"
 #include "../CompoundConstant/CompoundConstant.h"
+#include "NumericOperator.h"
 
 class CompoundOperator : public BaseOperator {
 private:
@@ -94,6 +95,9 @@ public:
 
     // void append(CompoundConstant* const_op);
     void append(std::shared_ptr<CompoundConstant> constant);
+    const int type() const { return OPCOMPOUND; }
+    const ulong get_head_op_idx() const { return 0; }
+    const std::shared_ptr<BaseOperator> get_tail_op() const { return std::make_shared<NumericOperator>(1); }
     const std::string to_string() const;
 
     Sequence Compile(NewContext& context, const Sequence& seq) const;

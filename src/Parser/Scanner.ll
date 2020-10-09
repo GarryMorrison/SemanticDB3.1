@@ -1,6 +1,7 @@
 %{ /*** C/C++ Declarations ***/
 
 #include <string>
+#include <memory>
 
 #include "src/Parser/Scanner.h"
 #include "src/SDB3_header.h"
@@ -21,7 +22,7 @@ ulong get_ket_idx(char *str, yy_size_t len) { // tidy later!!
     // std::string s(str, len);
     // return ket_map.get_idx(s.substr(1, s.size() - 2));
     if (len <= 2) { return ket_map.get_idx(""); } // later swap in the value of get_idx("").
-    std::string s(++str, --(--len));
+    std::string s(++str, len - 2);
     return ket_map.get_idx(s);
 }
 
@@ -81,17 +82,17 @@ yylloc->step();
 
 "\""[^\"\[\]<|>]*"\"" { yylval->stringVal = new std::string(yytext, yyleng); return token::STRING; }
 
-"+=>" { return token::ADD_LEARN_SYM; }
-".=>" { return token::SEQ_LEARN_SYM; }
-"#=>" { return token::STORE_LEARN_SYM; }
-"!=>" { return token::MEM_LEARN_SYM; }
-"=>" { return token::LEARN_SYM; }
+"+=>" { yylval->integerVal = RULEADD; return token::LEARN_SYM; }
+".=>" { yylval->integerVal = RULESEQ; return token::LEARN_SYM; }
+"#=>" { yylval->integerVal = RULESTORED; return token::LEARN_SYM; }
+"!=>" { yylval->integerVal = RULEMEMOIZE; return token::LEARN_SYM; }
+"=>" { yylval->integerVal = RULENORMAL; return token::LEARN_SYM; }
 
-"+" { return token::PLUS_OP; }
-"-" { return token::MINUS_OP; }
-"." { return token::SEQ_OP; }
-"__" { return token::MERGE2_OP; }
-"_" { return token::MERGE_OP; }
+"+" { yylval->integerVal = SPLUS; return token::INFIX_OP; }
+"-" { yylval->integerVal = SMINUS; return token::INFIX_OP; }
+"." { yylval->integerVal = SSEQ; return token::INFIX_OP; }
+"__" { yylval->integerVal = SMERGE2; return token::INFIX_OP; }
+"_" { yylval->integerVal = SMERGE; return token::INFIX_OP; }
 
 "(" { return token::LPAREN; }
 ")" { return token::RPAREN; }
@@ -120,7 +121,7 @@ yylloc->step();
 
 [ \t\r]+ {
         yylloc->step();
-        // return token::SPACE;  // tends to cause parse errors!
+        //return token::SPACE;  // tends to cause parse errors!
     }
 
 \n {

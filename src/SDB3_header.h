@@ -32,6 +32,6 @@
 #include "Function/misc.h"
 #include "Function/Timer.h"
 #include "Operator/FunctionOperator.h"
-
+#include "src/LearnRule/LearnRule.h"
 
 #endif //SDB3_1_SDB3_HEADER_H

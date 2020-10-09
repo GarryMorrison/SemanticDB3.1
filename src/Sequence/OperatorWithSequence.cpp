@@ -9,6 +9,13 @@
 #include "Sequence.h"
 #include "SelfKet.h"
 
+void OperatorWithSequence::append(const unsigned int the_sign, const OperatorWithSequence &opWithSeq) {
+    if (opWithSeq.size() == 0) { return; }
+    sign_vec.push_back(the_sign);
+    op_vec.push_back(opWithSeq.op_vec[0]);  // handle longer opWithSeq later!!!
+    seq_vec.push_back(opWithSeq.seq_vec[0]);
+}
+
 const size_t OperatorWithSequence::size() const {
     return sign_vec.size();
 }

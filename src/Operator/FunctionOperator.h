@@ -8,7 +8,7 @@
 #include <string>
 #include "BaseOperator.h"
 #include "../Sequence/BaseSequence.h"
-
+#include "NumericOperator.h"
 
 class FunctionOperator : public BaseOperator {
 private:
@@ -80,6 +80,9 @@ public:
 
     FunctionOperator(const std::string &s, const std::vector<std::shared_ptr<BaseSequence> > &seq_vec2) : seq_vec(seq_vec2) { idx = ket_map.get_idx(s); }
 
+    const int type() const { return OPFUNCTION; }
+    const ulong get_head_op_idx() const { return 0; }
+    const std::shared_ptr<BaseOperator> get_tail_op() const { return std::make_shared<NumericOperator>(1); }
     const std::string to_string() const;
     Sequence Compile(NewContext& context, const Sequence& seq) const { return seq; };
     Sequence Compile(ContextList& context, const Sequence& seq) const;

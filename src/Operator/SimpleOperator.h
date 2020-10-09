@@ -10,6 +10,7 @@
 #include "../Sequence/Sequence.h"
 #include "../Context/ContextList.h"
 #include "BaseOperator.h"
+#include "NumericOperator.h"
 
 class SimpleOperator : public BaseOperator {
 private:
@@ -24,9 +25,13 @@ public:
         if (split_idx[0] != ket_map.get_idx("op")) { op_idx = ket_map.get_idx(""); }
         op_idx = split_idx[1];
     }
+
+    const int type() const { return OPSIMPLE; }
+    const ulong get_head_op_idx() const { return op_idx; }
+    const std::shared_ptr<BaseOperator> get_tail_op() const { return std::make_shared<NumericOperator>(1); }
     const std::string to_string() const { return ket_map.get_str(op_idx); };
 
-    ulong get_idx() const { return op_idx; }
+    ulong get_idx() const { return op_idx; }  // yeah, a duplicate of get_op_idx(). Tidy later!
     std::string get_str() const { return ket_map.get_str(op_idx); }
 
     Sequence Compile(NewContext& context, const Sequence& seq) const;

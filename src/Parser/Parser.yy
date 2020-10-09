@@ -3,6 +3,7 @@
 #include <stdio.h>
 #include <string>
 #include <vector>
+#include <memory>
 
 #include "src/SDB3_header.h"
 #include "src/Parser/Driver.h"
@@ -33,6 +34,8 @@
 /* set the parser's class identifier */
 %define "parser_class_name" {Parser}
 
+// %glr-parser
+
 /* keep track of the current position within the input */
 %locations
 %initial-action
@@ -60,6 +63,10 @@
     class Ket* ketVal;
     class Superposition* spVal;
     class Sequence* seqVal;
+    class OperatorSequence* opSeqVal;
+    class BaseOperator* baseOpVal;
+    class OperatorWithSequence* opWithSeqVal;
+    class LearnRule* learnRuleVal;
 }
 
 %token			END	     0	"end of file"
@@ -73,16 +80,19 @@
 %token <stringVal> 	STRING		"string"
 %token <ulongVal>   KET_LABEL   "ket label idx"
 %token <ulongVal>   OP_LABEL    "operator label idx"
-%token          ADD_LEARN_SYM   "add learn symbol"
-%token          SEQ_LEARN_SYM   "sequence learn symbol"
-%token          STORE_LEARN_SYM   "store learn symbol"
-%token          MEM_LEARN_SYM   "memoize learn symbol"
-%token          LEARN_SYM       "learn symbol"
-%token          PLUS_OP         "infix plus operator"
-%token          MINUS_OP         "infix minus operator"
-%token          SEQ_OP         "infix sequence operator"
-%token          MERGE2_OP         "infix merge2 operator"
-%token          MERGE_OP         "infix merge operator"
+%token <ulongVal>   OP_LABEL_SPACE    "operator label idx with space"
+%token <integerVal> LEARN_SYM   "learn symbol"
+// %token          ADD_LEARN_SYM   "add learn symbol"
+// %token          SEQ_LEARN_SYM   "sequence learn symbol"
+// %token          STORE_LEARN_SYM   "store learn symbol"
+// %token          MEM_LEARN_SYM   "memoize learn symbol"
+// %token          LEARN_SYM       "learn symbol"
+%token <integerVal> INFIX_OP    "infix operator"
+// %token          PLUS_OP         "infix plus operator"
+// %token          MINUS_OP         "infix minus operator"
+// %token          SEQ_OP         "infix sequence operator"
+// %token          MERGE2_OP         "infix merge2 operator"
+// %token          MERGE_OP         "infix merge operator"
 %token          LPAREN          "left parenthesis"
 %token          RPAREN          "right parenthesis"
 %token          LSQUARE          "left square parenthesis"
@@ -92,19 +102,27 @@
 %token          QUOTE           "quotation symbol"
 %token          STAR            "*"
 
-%type <ketVal> ket
-%type <spVal> superposition
-%type <seqVal> sequence
+
+// %type <ketVal> ket
+// %type <spVal> superposition
+// %type <seqVal> sequence
+%type <bSeq> ket
+%type <opSeqVal> operator_sequence
+%type <baseOpVal> operator
+%type <opWithSeqVal> operator_with_sequence general_sequence
+%type <learnRuleVal> learn_rule
+
 
 %destructor { delete $$; } STRING
 %destructor { delete $$; } ket
-%destructor { delete $$; } superposition
-%destructor { delete $$; } sequence
+// %destructor { delete $$; } superposition
+// %destructor { delete $$; } sequence
 
 
 
 %{
 
+#include <memory>
 #include "src/Parser/Driver.h"
 #include "src/Parser/Scanner.h"
 
@@ -114,32 +132,43 @@
 #undef yylex
 #define yylex driver.lexer->lex
 
+
+std::string operator_sequence_string(std::vector<std::string> vec) {
+    std::string s;
+    for (const auto &s2: vec) {
+        s += s2 + ", ";
+    }
+    return s;
+}
+
 %}
 
 %% /*** Grammar Rules ***/
 
-start : END | list END;
+start : END
+      | line END;
 
-list : item
-     | list item
+line : item EOL
+     | line item EOL
      ;
 
-item  : INTEGER EOL { std::cout << "INT: " << $1 << std::endl; }
-      | DOUBLE EOL { std::cout << "DOUBLE: " << $1 << std::endl; }
-      | OP_LABEL EOL { std::cout << "OP_LABEL: " << ket_map.get_str($1) << std::endl; }
-      | KET_LABEL EOL { std::cout << "KET_LABEL: " << ket_map.get_str($1) << std::endl; }
-      | SELF_KETK EOL { std::cout << "|_self3>: " << $1 << std::endl; }
-      | COMMENT { std::cout << "found a comment" << std::endl; }
-      | sequence { std::cout << "sequence: " << $1->to_string() << std::endl; }
-      | learn_rule
-      | recall_rule
-      ;
+//item  : sequence { std::cout << "sequence: " << $1->to_string() << std::endl; }
+//      | learn_rule
+//      | operator_with_sequence
+
+item : operator_sequence { std::cout << $1->to_string() << std::endl; }
+     | general_sequence { std::cout << "general sequence: " << $1->to_string() << std::endl; }
+     | learn_rule { std::cout << "learn rule: " << $1->to_string() << std::endl; }
+     ;
+
 
 ket   : KET_LABEL { $$ = new Ket($1); }
-      | INTEGER KET_LABEL { $$ = new Ket($2, $1); }
-      | DOUBLE KET_LABEL { $$ = new Ket($2, $1); }
+      | SELF_KET { $$ = new SelfKet(); }
+//      | INTEGER KET_LABEL { $$ = new Ket($2, $1); }
+//      | DOUBLE KET_LABEL { $$ = new Ket($2, $1); }
       ;
 
+/*
 superposition : ket { $$ = new Superposition(*$1); }
               | superposition PLUS_OP ket { $1->add(*$3); $$ = $1; }
               | superposition MINUS_OP ket { $3->multiply(-1); $1->add(*$3); $$ = $1; }
@@ -149,17 +178,50 @@ sequence : superposition { $$ = new Sequence(*$1); }
          | sequence SEQ_OP superposition { $1->append(*$3); $$ = $1; }
          | sequence MERGE2_OP superposition { $1->merge(*$3, " "); $$ = $1; }
          | sequence MERGE_OP superposition { $1->merge(*$3); $$ = $1; }
+//         | LPAREN sequence RPAREN { $$ = $2; }
          ;
 
-learn_rule : OP_LABEL KET_LABEL LEARN_SYM sequence { driver.context.learn($1, $2, std::make_shared<Sequence>(*$4)); }
-           | OP_LABEL KET_LABEL ADD_LEARN_SYM sequence { driver.context.add_learn($1, $2, std::make_shared<Sequence>(*$4)); }
-           | OP_LABEL KET_LABEL SEQ_LEARN_SYM sequence { driver.context.seq_learn($1, $2, std::make_shared<Sequence>(*$4)); }
-           | OP_LABEL KET_LABEL STORE_LEARN_SYM sequence { driver.context.stored_learn($1, $2, std::make_shared<Sequence>(*$4)); }
-           | OP_LABEL KET_LABEL MEM_LEARN_SYM sequence { driver.context.memoize_learn($1, $2, std::make_shared<Sequence>(*$4)); }
+
+learn_rule : OP_LABEL KET_LABEL LEARN_SYM general_sequence { driver.context.learn($1, $2, std::make_shared<Sequence>(*$4)); }
+           | OP_LABEL KET_LABEL ADD_LEARN_SYM general_sequence { driver.context.add_learn($1, $2, std::make_shared<Sequence>(*$4)); }
+           | OP_LABEL KET_LABEL SEQ_LEARN_SYM general_sequence { driver.context.seq_learn($1, $2, std::make_shared<Sequence>(*$4)); }
+           | OP_LABEL KET_LABEL STORE_LEARN_SYM general_sequence { driver.context.stored_learn($1, $2, std::make_shared<Sequence>(*$4)); }
+           | OP_LABEL KET_LABEL MEM_LEARN_SYM general_sequence { driver.context.memoize_learn($1, $2, std::make_shared<Sequence>(*$4)); }
+           ;
+*/
+
+learn_rule : operator_with_sequence LEARN_SYM general_sequence { $$ = new LearnRule(*$1, $2, *$3); }
            ;
 
-recall_rule : OP_LABEL KET_LABEL { std::cout << "recall: " << driver.context.recall($1, $2)->to_string() << std::endl; }
-            ;
+operator_with_sequence : ket {
+                            std::cout << "naked ket: " << $1->to_string() << std::endl;
+                            std::shared_ptr<BaseOperator> tmp_op_ptr = std::make_shared<SimpleOperator>("");
+                            std::shared_ptr<BaseSequence> tmp_seq_ptr($1);
+                            $$ = new OperatorWithSequence(tmp_op_ptr, tmp_seq_ptr);
+                       }
+                       | operator_sequence ket {
+                            std::cout << $1->to_string() << $2->to_string() << std::endl;
+                            std::shared_ptr<BaseOperator> tmp_op_ptr($1);
+                            std::shared_ptr<BaseSequence> tmp_seq_ptr($2);
+                            $$ = new OperatorWithSequence(tmp_op_ptr, tmp_seq_ptr);
+                       }
+                       | operator_sequence LPAREN general_sequence RPAREN { std::cout << $1->to_string() << std::endl; }
+                       ;
+
+operator_sequence : operator { std::shared_ptr<BaseOperator> tmp_ptr($1); $$ = new OperatorSequence(tmp_ptr); }
+                  | operator_sequence operator { $$ = $1; std::shared_ptr<BaseOperator> tmp_ptr($2); $$->append(tmp_ptr); }
+                  ;
+
+operator : OP_LABEL { $$ = new SimpleOperator($1); }
+         | INTEGER { $$ = new NumericOperator($1); }
+         | DOUBLE { $$ = new NumericOperator($1); }
+         ;
+
+
+general_sequence : operator_with_sequence { $$ = $1; }
+                 | general_sequence INFIX_OP operator_with_sequence { $$ = $1; $$->append($2, *$3); }
+                 | LPAREN general_sequence RPAREN { $$ = $2; }
+                 ;
 
 %% /*** Additional Code ***/
 
@@ -168,3 +230,4 @@ void SDB::Parser::error(const Parser::location_type& l,
 {
     driver.error(l, m);
 }
+

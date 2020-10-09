@@ -8,6 +8,7 @@
 #include <string>
 #include <memory>
 #include "BaseOperator.h"
+#include "NumericOperator.h"
 
 class PoweredOperator : public BaseOperator {
 private:
@@ -22,6 +23,10 @@ public:
     Sequence Compile(ContextList& context, const Sequence& seq) const;
     Sequence Compile(ContextList& context, const Sequence& seq, const ulong label_idx) const;
     // Sequence Compile(ContextList& context, const Sequence& seq, const std::vector<Sequence>& args) const;
+
+    const int type() const { return OPPOWER; }
+    const ulong get_head_op_idx() const { return 0; }
+    const std::shared_ptr<BaseOperator> get_tail_op() const { return std::make_shared<NumericOperator>(1); }
     const std::string to_string() const;
 };
 

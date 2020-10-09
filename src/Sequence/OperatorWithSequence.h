@@ -18,6 +18,7 @@
 #include <vector>
 #include "BaseSequence.h"
 #include "../Operator/BaseOperator.h"
+#include "src/LearnRule/LearnRule.h"
 
 class OperatorWithSequence : public BaseSequence {
 private:
@@ -28,8 +29,10 @@ private:
     std::vector<unsigned int> sign_vec;
     std::vector<std::shared_ptr<BaseOperator> > op_vec;
     std::vector<std::shared_ptr<BaseSequence> > seq_vec;
+    friend class LearnRule;
 
 public:
+    OperatorWithSequence() {}
     OperatorWithSequence(const std::shared_ptr<BaseOperator> the_op, const std::shared_ptr<BaseSequence> the_seq) {
         // op = the_op; seq = the_seq; sign = SPLUS;
         sign_vec.push_back(SPLUS);
@@ -55,6 +58,8 @@ public:
         op_vec.push_back(the_op);
         seq_vec.push_back(the_seq);
     }
+
+    void append(const unsigned int the_sign, const OperatorWithSequence& opWithSeq);
 
     const int type() const { return OPERATORWITHSEQUENCE; };
     const bool is_ket() const { return false; }

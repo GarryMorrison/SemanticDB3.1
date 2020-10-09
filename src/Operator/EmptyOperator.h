@@ -17,6 +17,10 @@ public:
     Sequence Compile(ContextList& context, const Sequence& seq) const { return seq; };
     Sequence Compile(ContextList& context, const Sequence& seq, const ulong label_idx) const { return seq; }
     Sequence Compile(ContextList& context, const Sequence& seq, const std::vector<Sequence>& args) const { return seq; }
+
+    const int type() const { return OPEMPTY; }
+    const ulong get_head_op_idx() const { return 0; }
+    const std::shared_ptr<BaseOperator> get_tail_op() const { return std::make_shared<NumericOperator>(1); }
     const std::string to_string() const { return ""; };
 
 };

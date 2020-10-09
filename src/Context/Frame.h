@@ -17,6 +17,8 @@
 #define RULENORMAL 21
 #define RULESTORED 22
 #define RULEMEMOIZE 23
+#define RULEADD 24
+#define RULESEQ 25
 
 class Frame {
 private:
