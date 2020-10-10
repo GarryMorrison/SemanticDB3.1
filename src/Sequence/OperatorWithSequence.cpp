@@ -30,15 +30,15 @@ const std::string OperatorWithSequence::to_string() const {
     for (; sign_vec_iter != sign_vec.end() and op_vec_iter != op_vec.end() and seq_vec_iter != seq_vec.end();
         ++sign_vec_iter, ++op_vec_iter, ++seq_vec_iter) {
         switch(*sign_vec_iter) {
-            case SPLUS: s += "+ "; break;
-            case SMINUS: s += "- "; break;
-            case SSEQ: s += ". "; break;
-            case SMERGE: s += "_ "; break;
-            case SMERGE2: s += "__ "; break;
+            case SPLUS: s += " + "; break;
+            case SMINUS: s += " - "; break;
+            case SSEQ: s += " . "; break;
+            case SMERGE: s += " _ "; break;
+            case SMERGE2: s += " __ "; break;
         }
         std::string pre = " ( ";
         std::string post = " ) ";
-        if ((*seq_vec_iter)->is_ket()) { pre = ""; post = " "; }
+        if ((*seq_vec_iter)->is_ket()) { pre = ""; post = ""; }
         // s += (*op_vec_iter)->to_string() + " ( " + (*seq_vec_iter)->to_string() + " ) ";
         s += (*op_vec_iter)->to_string() + pre + (*seq_vec_iter)->to_string() + post;
     }

@@ -111,7 +111,7 @@
 // %type <seqVal> sequence
 %type <bSeq> ket
 %type <opSeqVal> operator_sequence
-%type <baseOpVal> operator
+%type <baseOpVal> operator compound_operator function_operator
 %type <opWithSeqVal> operator_with_sequence general_sequence
 %type <learnRuleVal> learn_rule
 %type <constVal> constant
@@ -219,11 +219,34 @@ operator_sequence : operator { std::shared_ptr<BaseOperator> tmp_ptr($1); $$ = n
                   | operator_sequence operator { $$ = $1; std::shared_ptr<BaseOperator> tmp_ptr($2); $$->append(tmp_ptr); }
                   ;
 
+/*
 operator : OP_LABEL LSQUARE parameters RSQUARE { $$ = new CompoundOperator($1, *$3); }
          | OP_LABEL LPAREN general_sequence RPAREN { $$ = new FunctionOperator($1, *$3); }
          | OP_LABEL LPAREN general_sequence COMMA general_sequence RPAREN { $$ = new FunctionOperator($1, *$3, *$5); }
          | OP_LABEL LPAREN general_sequence COMMA general_sequence COMMA general_sequence RPAREN { $$ = new FunctionOperator($1, *$3, *$5, *$7); }
          | OP_LABEL LPAREN general_sequence COMMA general_sequence COMMA general_sequence COMMA general_sequence RPAREN { $$ = new FunctionOperator($1, *$3, *$5, *$7, *$9); }
+         | constant {
+                switch ($1->type()) {
+                    case COPERATOR : { $$ = new SimpleOperator($1->get_operator()); break; }
+                    case CINT : { $$ = new NumericOperator($1->get_int()); break; }
+                    case CFLOAT : { $$ = new NumericOperator($1->get_float()); break; }
+                    default : { $$ = new EmptyOperator(); }
+                }
+         }
+         ;
+*/
+
+compound_operator : OP_LABEL LSQUARE parameters RSQUARE { $$ = new CompoundOperator($1, *$3); }
+                  ;
+
+function_operator : OP_LABEL LPAREN general_sequence RPAREN { $$ = new FunctionOperator($1, *$3); }
+                  | OP_LABEL LPAREN general_sequence COMMA general_sequence RPAREN { $$ = new FunctionOperator($1, *$3, *$5); }
+                  | OP_LABEL LPAREN general_sequence COMMA general_sequence COMMA general_sequence RPAREN { $$ = new FunctionOperator($1, *$3, *$5, *$7); }
+                  | OP_LABEL LPAREN general_sequence COMMA general_sequence COMMA general_sequence COMMA general_sequence RPAREN { $$ = new FunctionOperator($1, *$3, *$5, *$7, *$9); }
+                  ;
+
+operator : compound_operator { $$ = $1; }
+         | function_operator { $$ = $1; }
          | constant {
                 switch ($1->type()) {
                     case COPERATOR : { $$ = new SimpleOperator($1->get_operator()); break; }
