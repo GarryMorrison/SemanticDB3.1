@@ -30,7 +30,8 @@ int main() {
     driver.parse_string("op3 |Y> => ssplit[\", \"] |a, b, c, d, e>\n");
     driver.parse_string("op4 |Z> => rel-kets[*] |>\n");
     driver.parse_string("op5 |Z> => simm(|a> + |b> + |c>, |b>) |result>\n");
-    driver.parse_string("op6 |Z> => srange(|1>, |5>) |>\n");
+    driver.parse_string("op6 |Z> => seq2sp srange(|1>, |5>) |>\n");
+    driver.parse_string("op7 |Z> => ( + 1 - 2 op1 . 3) |x>\n");
     context.print_universe();
 
     return 0;

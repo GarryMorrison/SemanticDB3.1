@@ -18,6 +18,7 @@ private:
 
 public:
     BracketOperator(OperatorSequence &op_seq) { sign_vec.push_back(SPLUS); op_seq_vec.push_back(op_seq); }
+    BracketOperator(unsigned int type, OperatorSequence &op_seq) { sign_vec.push_back(type); op_seq_vec.push_back(op_seq); }
     BracketOperator(BracketOperator &b_operator) : sign_vec(b_operator.sign_vec), op_seq_vec(b_operator.op_seq_vec) { }
     void append(OperatorSequence &op_seq) { sign_vec.push_back(SPLUS); op_seq_vec.push_back(op_seq); }
     void append(unsigned int type, OperatorSequence &op_seq) { sign_vec.push_back(type); op_seq_vec.push_back(op_seq); }

@@ -70,6 +70,7 @@
     class CompoundConstant* constVal;
     std::vector<std::shared_ptr<CompoundConstant> >* constVec;
     class CompoundOperator* compOpVal;
+    class BracketOperator* bracketOpVal;
 }
 
 %token			END	     0	"end of file"
@@ -84,6 +85,7 @@
 %token <ulongVal>   KET_LABEL   "ket label idx"
 %token <ulongVal>   OP_LABEL    "operator label idx"
 %token <ulongVal>   OP_LABEL_SPACE    "operator label idx with space"
+%token <ulongVal>   FN_LPAREN   "function label with left parenthesis"
 %token <integerVal> LEARN_SYM   "learn symbol"
 // %token          ADD_LEARN_SYM   "add learn symbol"
 // %token          SEQ_LEARN_SYM   "sequence learn symbol"
@@ -117,6 +119,7 @@
 %type <constVal> constant
 %type <constVec> parameters
 // %type <compOpVal> compound_operator
+%type <bracketOpVal> bracket_operator bracket_parameters
 
 
 %destructor { delete $$; } STRING
@@ -166,6 +169,7 @@ item : operator_sequence { std::cout << $1->to_string() << std::endl; }
      | general_sequence { std::cout << "general sequence: " << $1->to_string() << std::endl; }
      | learn_rule { std::cout << "learn rule: " << $1->to_string() << std::endl; $1->Compile(driver.context); }
 //     | compound_operator { std::cout << "compound operator: " << $1->to_string() << std::endl; }
+//     | bracket_operator
      ;
 
 
@@ -239,14 +243,23 @@ operator : OP_LABEL LSQUARE parameters RSQUARE { $$ = new CompoundOperator($1, *
 compound_operator : OP_LABEL LSQUARE parameters RSQUARE { $$ = new CompoundOperator($1, *$3); }
                   ;
 
+/*
 function_operator : OP_LABEL LPAREN general_sequence RPAREN { $$ = new FunctionOperator($1, *$3); }
                   | OP_LABEL LPAREN general_sequence COMMA general_sequence RPAREN { $$ = new FunctionOperator($1, *$3, *$5); }
                   | OP_LABEL LPAREN general_sequence COMMA general_sequence COMMA general_sequence RPAREN { $$ = new FunctionOperator($1, *$3, *$5, *$7); }
                   | OP_LABEL LPAREN general_sequence COMMA general_sequence COMMA general_sequence COMMA general_sequence RPAREN { $$ = new FunctionOperator($1, *$3, *$5, *$7, *$9); }
                   ;
+*/
 
-operator : compound_operator { $$ = $1; }
-         | function_operator { $$ = $1; }
+function_operator : FN_LPAREN general_sequence RPAREN { $$ = new FunctionOperator($1, *$2); }
+                  | FN_LPAREN general_sequence COMMA general_sequence RPAREN { $$ = new FunctionOperator($1, *$2, *$4); }
+                  | FN_LPAREN general_sequence COMMA general_sequence COMMA general_sequence RPAREN { $$ = new FunctionOperator($1, *$2, *$4, *$6); }
+                  | FN_LPAREN general_sequence COMMA general_sequence COMMA general_sequence COMMA general_sequence RPAREN { $$ = new FunctionOperator($1, *$2, *$4, *$6, *$8); }
+                  ;
+
+operator : function_operator { $$ = $1; }
+         | compound_operator { $$ = $1; }
+         | bracket_operator { $$ = $1; }
          | constant {
                 switch ($1->type()) {
                     case COPERATOR : { $$ = new SimpleOperator($1->get_operator()); break; }
@@ -277,6 +290,13 @@ parameters : constant { $$ = new std::vector<std::shared_ptr<CompoundConstant>>;
            | parameters COMMA constant { $$ = $1; std::shared_ptr<CompoundConstant> tmp_ptr($3); $$->push_back(tmp_ptr); }
            ;
 
+bracket_parameters : operator_sequence { $$ = new BracketOperator(*$1); }
+                   | INFIX_OP operator_sequence { $$ = new BracketOperator($1, *$2); }
+                   | bracket_parameters INFIX_OP operator_sequence { $$ = $1; $$->append($2, *$3); }
+                   ;
+
+bracket_operator : LPAREN bracket_parameters RPAREN { $$ = $2; }
+                 ;
 
 %% /*** Additional Code ***/
 
