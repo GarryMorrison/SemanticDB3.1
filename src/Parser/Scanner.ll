@@ -78,7 +78,7 @@ yylloc->step();
 
 "|"[^<|>]*">" { yylval->ulongVal = get_ket_idx(yytext, yyleng); return token::KET_LABEL; }
 
-[a-zA-Z!][a-zA-Z0-9\-\+!?\.:]+ { yylval->ulongVal = get_op_idx(yytext, yyleng); return token::OP_LABEL; }
+[a-zA-Z!][a-zA-Z0-9\-\+!\?\.:]+ { yylval->ulongVal = get_op_idx(yytext, yyleng); return token::OP_LABEL; }
 
 "\""[^\"\[\]<|>]*"\"" { yylval->stringVal = new std::string(++yytext, yyleng - 2); return token::STRING; }
 
@@ -112,11 +112,6 @@ yylloc->step();
 [0-9]+"."[0-9]* {
         yylval->doubleVal = atof(yytext);
         return token::DOUBLE;
-    }
-
-[A-Za-z][A-Za-z0-9_,.-]* {
-        yylval->stringVal = new std::string(yytext, yyleng);
-        return token::STRING;
     }
 
 [ \t\r]+ {

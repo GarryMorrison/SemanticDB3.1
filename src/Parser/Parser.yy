@@ -220,9 +220,14 @@ operator_sequence : operator { std::shared_ptr<BaseOperator> tmp_ptr($1); $$ = n
                   ;
 
 operator : OP_LABEL LSQUARE parameters RSQUARE { $$ = new CompoundOperator($1, *$3); }
-         | OP_LABEL { $$ = new SimpleOperator($1); }
-         | INTEGER { $$ = new NumericOperator($1); }
-         | DOUBLE { $$ = new NumericOperator($1); }
+         | constant {
+                switch ($1->type()) {
+                    case COPERATOR : { $$ = new SimpleOperator($1->get_operator()); break; }
+                    case CINT : { $$ = new NumericOperator($1->get_int()); break; }
+                    case CFLOAT : { $$ = new NumericOperator($1->get_float()); break; }
+                    default : { $$ = new EmptyOperator(); }
+                }
+         }
          ;
 
 
@@ -233,6 +238,9 @@ general_sequence : operator_with_sequence { $$ = $1; }
 
 constant : STRING { $$ = new ConstantString(*$1); }
          | STAR { $$ = new ConstantOperator("*"); }
+         | OP_LABEL { $$ = new ConstantOperator($1); }
+         | INTEGER { $$ = new ConstantInteger($1); }
+         | DOUBLE { $$ = new ConstantFloat($1); }
          ;
 
 parameters : constant { $$ = new std::vector<std::shared_ptr<CompoundConstant>>;
@@ -241,10 +249,7 @@ parameters : constant { $$ = new std::vector<std::shared_ptr<CompoundConstant>>;
                         }
            | parameters COMMA constant { $$ = $1; std::shared_ptr<CompoundConstant> tmp_ptr($3); $$->push_back(tmp_ptr); }
            ;
-/*
-compound_operator : OP_LABEL LSQUARE parameters RSQUARE { $$ = new CompoundOperator($1, *$3); }
-                  ;
-*/
+
 
 %% /*** Additional Code ***/
 
