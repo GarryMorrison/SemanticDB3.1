@@ -212,7 +212,7 @@ operator_with_sequence : ket {
                             std::shared_ptr<BaseSequence> tmp_seq_ptr($2);
                             $$ = new OperatorWithSequence(tmp_op_ptr, tmp_seq_ptr);
                        }
-                       | operator_sequence LPAREN general_sequence RPAREN { std::cout << $1->to_string() << std::endl; }
+//                       | operator_sequence LPAREN general_sequence RPAREN { std::cout << $1->to_string() << std::endl; }
                        ;
 
 operator_sequence : operator { std::shared_ptr<BaseOperator> tmp_ptr($1); $$ = new OperatorSequence(tmp_ptr); }
@@ -220,6 +220,10 @@ operator_sequence : operator { std::shared_ptr<BaseOperator> tmp_ptr($1); $$ = n
                   ;
 
 operator : OP_LABEL LSQUARE parameters RSQUARE { $$ = new CompoundOperator($1, *$3); }
+         | OP_LABEL LPAREN general_sequence RPAREN { $$ = new FunctionOperator($1, *$3); }
+         | OP_LABEL LPAREN general_sequence COMMA general_sequence RPAREN { $$ = new FunctionOperator($1, *$3, *$5); }
+         | OP_LABEL LPAREN general_sequence COMMA general_sequence COMMA general_sequence RPAREN { $$ = new FunctionOperator($1, *$3, *$5, *$7); }
+         | OP_LABEL LPAREN general_sequence COMMA general_sequence COMMA general_sequence COMMA general_sequence RPAREN { $$ = new FunctionOperator($1, *$3, *$5, *$7, *$9); }
          | constant {
                 switch ($1->type()) {
                     case COPERATOR : { $$ = new SimpleOperator($1->get_operator()); break; }

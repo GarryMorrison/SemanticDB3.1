@@ -9,6 +9,8 @@
 #include "BaseOperator.h"
 #include "../Sequence/BaseSequence.h"
 #include "NumericOperator.h"
+#include "../Sequence/OperatorWithSequence.h"
+
 
 class FunctionOperator : public BaseOperator {
 private:
@@ -45,6 +47,10 @@ public:
         seq_vec.push_back(param2);
         seq_vec.push_back(param3);
     }
+    FunctionOperator(const ulong idx2, const OperatorWithSequence& param0);
+    FunctionOperator(const ulong idx2, const OperatorWithSequence& param0, const OperatorWithSequence& param1);
+    FunctionOperator(const ulong idx2, const OperatorWithSequence& param0, const OperatorWithSequence& param1, const OperatorWithSequence& param2);
+    FunctionOperator(const ulong idx2, const OperatorWithSequence& param0, const OperatorWithSequence& param1, const OperatorWithSequence& param2, const OperatorWithSequence& param3);
     FunctionOperator(const std::string &s,
                      const std::shared_ptr<BaseSequence> &param0) {
         idx = ket_map.get_idx(s);

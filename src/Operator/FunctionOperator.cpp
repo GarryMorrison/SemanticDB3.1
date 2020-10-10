@@ -2,8 +2,35 @@
 // Created by Garry Morrison on 28/09/2020.
 //
 
+#include <memory>
 #include "FunctionOperator.h"
 #include "../FunctionOperatorMap/FunctionOperatorMap.h"
+
+FunctionOperator::FunctionOperator(const ulong idx2, const OperatorWithSequence &param0) : idx(idx2) {
+    seq_vec.push_back(std::make_shared<OperatorWithSequence>(param0));
+}
+
+FunctionOperator::FunctionOperator(const ulong idx2, const OperatorWithSequence &param0,
+                                   const OperatorWithSequence &param1) : idx(idx2) {
+    seq_vec.push_back(std::make_shared<OperatorWithSequence>(param0));
+    seq_vec.push_back(std::make_shared<OperatorWithSequence>(param1));
+}
+
+FunctionOperator::FunctionOperator(const ulong idx2, const OperatorWithSequence &param0,
+                                   const OperatorWithSequence &param1, const OperatorWithSequence &param2) : idx(idx2) {
+    seq_vec.push_back(std::make_shared<OperatorWithSequence>(param0));
+    seq_vec.push_back(std::make_shared<OperatorWithSequence>(param1));
+    seq_vec.push_back(std::make_shared<OperatorWithSequence>(param2));
+}
+
+FunctionOperator::FunctionOperator(const ulong idx2, const OperatorWithSequence &param0,
+                                   const OperatorWithSequence &param1, const OperatorWithSequence &param2,
+                                   const OperatorWithSequence &param3) : idx(idx2) {
+    seq_vec.push_back(std::make_shared<OperatorWithSequence>(param0));
+    seq_vec.push_back(std::make_shared<OperatorWithSequence>(param1));
+    seq_vec.push_back(std::make_shared<OperatorWithSequence>(param2));
+    seq_vec.push_back(std::make_shared<OperatorWithSequence>(param3));
+}
 
 const std::string FunctionOperator::to_string() const {
     std::string s = ket_map.get_str(idx) + "( ";

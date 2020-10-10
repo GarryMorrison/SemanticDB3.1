@@ -29,6 +29,8 @@ int main() {
     driver.parse_string("testfn[2, 3.14, *, \"str\", op3]\n");
     driver.parse_string("op3 |Y> => ssplit[\", \"] |a, b, c, d, e>\n");
     driver.parse_string("op4 |Z> => rel-kets[*] |>\n");
+    driver.parse_string("op5 |Z> => simm(|a> + |b> + |c>, |b>) |result>\n");
+    driver.parse_string("op6 |Z> => srange(|1>, |5>) |>\n");
     context.print_universe();
 
     return 0;
