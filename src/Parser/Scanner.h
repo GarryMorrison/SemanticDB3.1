@@ -1,6 +1,11 @@
 //
 // Created by Garry Morrison on 5/10/2020.
 //
+// Sourced from here:
+// https://github.com/bingmann/flex-bison-cpp-example
+// Also inspired by code here:
+// https://github.com/jonathan-beard/simple_wc_example
+
 
 #ifndef SDB3_1_SCANNER_H
 #define SDB3_1_SCANNER_H

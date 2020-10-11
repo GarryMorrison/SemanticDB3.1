@@ -3,6 +3,8 @@
 //
 // Sourced from here:
 // https://github.com/bingmann/flex-bison-cpp-example
+// Also inspired by code here:
+// https://github.com/jonathan-beard/simple_wc_example
 
 
 #ifndef SDB3_1_DRIVER_H
