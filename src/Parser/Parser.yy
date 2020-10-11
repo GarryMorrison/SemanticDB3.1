@@ -113,7 +113,7 @@
 // %type <seqVal> sequence
 %type <bSeq> ket
 %type <opSeqVal> operator_sequence
-%type <baseOpVal> operator compound_operator function_operator
+%type <baseOpVal> operator compound_operator function_operator general_operator
 %type <opWithSeqVal> operator_with_sequence general_sequence
 %type <learnRuleVal> learn_rule
 %type <constVal> constant
@@ -219,8 +219,8 @@ operator_with_sequence : ket {
 //                       | operator_sequence LPAREN general_sequence RPAREN { std::cout << $1->to_string() << std::endl; }
                        ;
 
-operator_sequence : operator { std::shared_ptr<BaseOperator> tmp_ptr($1); $$ = new OperatorSequence(tmp_ptr); }
-                  | operator_sequence operator { $$ = $1; std::shared_ptr<BaseOperator> tmp_ptr($2); $$->append(tmp_ptr); }
+operator_sequence : general_operator { std::shared_ptr<BaseOperator> tmp_ptr($1); $$ = new OperatorSequence(tmp_ptr); }
+                  | operator_sequence general_operator { $$ = $1; std::shared_ptr<BaseOperator> tmp_ptr($2); $$->append(tmp_ptr); }
                   ;
 
 /*
@@ -270,6 +270,9 @@ operator : function_operator { $$ = $1; }
          }
          ;
 
+general_operator : operator { $$ = $1; }
+                 | operator POWER INTEGER { std::shared_ptr<BaseOperator> tmp_ptr($1); $$ = new PoweredOperator(tmp_ptr, $3); }
+                 ;
 
 general_sequence : operator_with_sequence { $$ = $1; }
                  | general_sequence INFIX_OP operator_with_sequence { $$ = $1; $$->append($2, *$3); }
