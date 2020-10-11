@@ -147,7 +147,8 @@ double simm(const Sequence &seq1, const Sequence &seq2) {
 
 Sequence op_simm2(const Sequence &input_seq, const Sequence &seq1, const Sequence &seq2) {
     double result = simm(seq1, seq2);
-    if (input_seq.size() == 0) { return Ket("simm", result); }  // Not quite correct. Fix!
+    if (input_seq.size() == 0) { return Ket("simm", result); }
+    if (input_seq.is_ket() && input_seq.to_ket().label_idx() == ket_map.get_idx("")) { return Ket("simm", result); }  // Tidy!
     if (input_seq.is_ket()) { Ket k = input_seq.to_ket(); return Ket(k.label_idx(), k.value()*result); }
     Superposition sp;
     for (const auto k: input_seq.to_sp()) { // For now, let's just cast input_seq to a superposition.

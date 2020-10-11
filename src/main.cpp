@@ -29,7 +29,7 @@ int main() {
     driver.parse_string("testfn[2, 3.14, *, \"str\", op3]\n");
     driver.parse_string("op3 |Y> => ssplit[\", \"] |a, b, c, d, e>\n");
     driver.parse_string("op4 |Z> => rel-kets[*] |>\n");
-    driver.parse_string("op5 |Z> => simm(|a> + |b> + |c>, |b>) |result>\n");
+    driver.parse_string("op5 |Z> => simm(|a> + |b> + |c>, |b>) |>\n");
     driver.parse_string("op6 |Z> => seq2sp srange(|1>, |5>) |>\n");
     driver.parse_string("op7 |Z> => op1 ( + 1 - 2 op1 . 3) |x>\n");
     driver.parse_string("op8 |Z> => 5^3 op1^2 |z>\n");
