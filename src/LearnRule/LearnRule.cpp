@@ -19,6 +19,21 @@ LearnRule::LearnRule(OperatorWithSequence &head, unsigned int rule_type, Operato
     _valid_learn_rule = true;
 }
 
+/*
+LearnRule::LearnRule(class OperatorWithSequence &head, unsigned int rule_type, class MultiLearnRule &tail)
+        : _first_op_idx(0), _valid_learn_rule(false), _rule_type(rule_type) {
+
+    if (head.op_vec.empty() || head.seq_vec.empty()) { return; }
+    if ((head.op_vec[0]->type() != OPSIMPLE) && (head.op_vec[0]->type() != OPSEQUENCE)) { return; }
+
+    _first_op_idx = head.op_vec[0]->get_head_op_idx();
+    _ket_op = head.op_vec[0]->get_tail_op();
+    _ket_like_seq = head.seq_vec[0];
+    _RHS_seq = std::make_shared<MultiLearnRule>(tail);
+    _valid_learn_rule = true;
+}
+*/
+
 const std::string LearnRule::to_string() const {
     if (!_valid_learn_rule) { return ""; }
     std::string rule_sym;

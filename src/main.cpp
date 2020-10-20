@@ -33,6 +33,7 @@ int main() {
     driver.parse_string("op6 |Z> => seq2sp srange(|1>, |5>) |>\n");
     driver.parse_string("op7 |Z> => op1 ( + 1 - 2 op1 . 3) |x>\n");
     driver.parse_string("op8 |Z> => 5^3 op1^2 |z>\n");
+    driver.parse_string("op9 |Z> #=>\n    print |Hello ... >\n    print |... there!>\n");
     context.print_universe();
 
     return 0;

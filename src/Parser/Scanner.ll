@@ -105,6 +105,8 @@ yylloc->step();
 "\"" { return token::QUOTE; }
 "\*" { return token::STAR; }
 
+"\n    " { return token::EOL_SPACE4; }
+
 [0-9]+ {
         yylval->integerVal = atoi(yytext);
         return token::INTEGER;

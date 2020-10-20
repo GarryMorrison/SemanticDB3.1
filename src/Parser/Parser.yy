@@ -71,6 +71,7 @@
     std::vector<std::shared_ptr<CompoundConstant> >* constVec;
     class CompoundOperator* compOpVal;
     class BracketOperator* bracketOpVal;
+    class MultiLearnRule* multiLearnRuleVal;
 }
 
 %token			END	     0	"end of file"
@@ -106,6 +107,7 @@
 %token          POWER           "power"
 %token          QUOTE           "quotation symbol"
 %token          STAR            "*"
+%token          EOL_SPACE4      "end of line with space 4"
 
 
 // %type <ketVal> ket
@@ -120,6 +122,7 @@
 %type <constVec> parameters
 // %type <compOpVal> compound_operator
 %type <bracketOpVal> bracket_operator bracket_parameters
+%type <multiLearnRuleVal> multi_learn_rule
 
 
 %destructor { delete $$; } STRING
@@ -157,17 +160,18 @@ std::string operator_sequence_string(std::vector<std::string> vec) {
 start : END
       | line END;
 
-line : item EOL
-     | line item EOL
+line : item
+     | line item
      ;
 
 //item  : sequence { std::cout << "sequence: " << $1->to_string() << std::endl; }
 //      | learn_rule
 //      | operator_with_sequence
 
-item : operator_sequence { std::cout << $1->to_string() << std::endl; }
-     | general_sequence { std::cout << "general sequence: " << $1->to_string() << std::endl; }
-     | learn_rule { std::cout << "learn rule: " << $1->to_string() << std::endl; $1->Compile(driver.context); }
+item : operator_sequence EOL { std::cout << $1->to_string() << std::endl; }
+     | general_sequence EOL { std::cout << "general sequence: " << $1->to_string() << std::endl; }
+     | learn_rule EOL { std::cout << "learn rule: " << $1->to_string() << std::endl; $1->Compile(driver.context); }
+     | general_learn_rule EOL
 //     | compound_operator { std::cout << "compound operator: " << $1->to_string() << std::endl; }
 //     | bracket_operator
      ;
@@ -203,6 +207,27 @@ learn_rule : OP_LABEL KET_LABEL LEARN_SYM general_sequence { driver.context.lear
 
 learn_rule : operator_with_sequence LEARN_SYM general_sequence { $$ = new LearnRule(*$1, $2, *$3); }
            ;
+
+/*
+general_learn_rule : operator_with_sequence LEARN_SYM EOL_SPACE4 general_sequence
+                   | operator_with_sequence LEARN_SYM multi_learn_rule
+                   | operator_with_sequence LEARN_SYM multi_learn_rule EOL_SPACE4 general_sequence
+                   ;
+
+
+multi_learn_rule : EOL_SPACE4 learn_rule
+                 | multi_learn_rule EOL_SPACE4 learn_rule
+                 ;
+*/
+
+general_learn_rule : operator_with_sequence LEARN_SYM multi_learn_rule { std::cout << "multi_learn_rule: " << $3->to_string() << std::endl; }
+                   ;
+
+multi_learn_rule : EOL_SPACE4 learn_rule { $$ = new MultiLearnRule(*$2); }
+                 | EOL_SPACE4 general_sequence { $$ = new MultiLearnRule(*$2); }
+                 | multi_learn_rule EOL_SPACE4 learn_rule { $$->append(*$3); }
+                 | multi_learn_rule EOL_SPACE4 general_sequence { $$->append(*$3); }
+                 ;
 
 operator_with_sequence : ket {
                             std::cout << "naked ket: " << $1->to_string() << std::endl;

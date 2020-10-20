@@ -11,6 +11,7 @@
 #include "src/Sequence/Sequence.h"
 #include "src/Context/ContextList.h"
 #include "src/Sequence/OperatorWithSequence.h"
+// #include "src/Sequence/MultiLearnRule.h"
 
 
 class LearnRule {
@@ -24,6 +25,7 @@ private:
 
 public:
     LearnRule(class OperatorWithSequence& head, unsigned int rule_type, class OperatorWithSequence& tail);
+    // LearnRule(class OperatorWithSequence& head, unsigned int rule_type, class MultiLearnRule& tail);
     bool is_valid_learn_rule() { return _valid_learn_rule; }
     const std::string to_string() const;
     void Compile(ContextList &context);
