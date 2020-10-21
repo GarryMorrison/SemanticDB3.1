@@ -16,7 +16,7 @@
 #include "../Sequence/Sequence.h"
 #include "../Context/ContextList.h"
 #include "../Context/NewContext.h"
-#include "src/LearnRule/LearnRule.h"
+#include "src/Sequence/LearnRule.h"
 
 
 class OperatorSequence : public BaseOperator {

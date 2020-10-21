@@ -18,7 +18,7 @@
 #include <vector>
 #include "BaseSequence.h"
 #include "../Operator/BaseOperator.h"
-#include "src/LearnRule/LearnRule.h"
+#include "LearnRule.h"
 
 class OperatorWithSequence : public BaseSequence {
 private:

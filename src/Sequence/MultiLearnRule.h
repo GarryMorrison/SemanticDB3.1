@@ -5,10 +5,12 @@
 #ifndef SDB3_1_MULTILEARNRULE_H
 #define SDB3_1_MULTILEARNRULE_H
 
+#define MULTILEARNRULE 12
+
 #include <vector>
 #include <variant>
 #include "OperatorWithSequence.h"
-#include "../LearnRule/LearnRule.h"
+#include "LearnRule.h"
 
 
 class MultiLearnRule {
