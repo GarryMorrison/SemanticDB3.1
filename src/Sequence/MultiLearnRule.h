@@ -16,8 +16,9 @@
 
 class MultiLearnRule : public BaseSequence {
 private:
-    std::vector<std::variant<LearnRule, OperatorWithSequence>> vec_rules;  // I'm not sure variant is the best choice here!
-                                                                           // Maybe make LearnRule BaseSequence?
+    // std::vector<std::variant<LearnRule, OperatorWithSequence>> vec_rules;  // I'm not sure variant is the best choice here! Maybe make LearnRule BaseSequence?
+    std::vector<std::shared_ptr<BaseSequence> > vec_rules;
+
 public:
     MultiLearnRule(const LearnRule& learn_rule);
     MultiLearnRule(const OperatorWithSequence& operator_with_sequence);
