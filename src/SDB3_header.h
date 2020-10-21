@@ -34,5 +34,6 @@
 #include "Operator/FunctionOperator.h"
 #include "src/Sequence/LearnRule.h"
 #include "Sequence/MultiLearnRule.h"
+#include "Sequence/MultiSelfKet.h"
 
 #endif //SDB3_1_SDB3_HEADER_H

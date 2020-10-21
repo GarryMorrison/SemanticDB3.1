@@ -79,7 +79,9 @@
 %token          SPACE   "white space char"
 %token          COMMENT "comment string"
 %token          SELF_KET "self ket"
+%token          MULTI_SELF_KET "multi self ket"
 %token <integerVal>     SELF_KETK   "self ket k"
+%token <integerVal>     MULTI_SELF_KETK   "multi self ket k"
 %token <integerVal> 	INTEGER		"integer"
 %token <doubleVal> 	DOUBLE		"double"
 %token <stringVal> 	STRING		"string"
@@ -179,6 +181,7 @@ item : operator_sequence EOL { std::cout << $1->to_string() << std::endl; }
 
 ket   : KET_LABEL { $$ = new Ket($1); }
       | SELF_KET { $$ = new SelfKet(); }
+      | MULTI_SELF_KET { $$ = new MultiSelfKet(); }
 //      | INTEGER KET_LABEL { $$ = new Ket($2, $1); }
 //      | DOUBLE KET_LABEL { $$ = new Ket($2, $1); }
       ;

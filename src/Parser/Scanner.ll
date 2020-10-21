@@ -73,8 +73,10 @@ yylloc->step();
 "--".*"\n" { return token::COMMENT; }
 
 "|_self>" { return token::SELF_KET; }
+"|__self>" { return token::MULTI_SELF_KET; }
 
 "|_self"{digit}">" { yylval->integerVal = yytext[6] - '0'; return token::SELF_KETK; }
+"|__self"{digit}">" { yylval->integerVal = yytext[6] - '0'; return token::MULTI_SELF_KETK; }
 
 "|"[^<|>]*">" { yylval->ulongVal = get_ket_idx(yytext, yyleng); return token::KET_LABEL; }
 
