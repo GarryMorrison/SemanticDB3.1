@@ -27,3 +27,24 @@ const std::string MultiLearnRule::to_string() const {
     }
     return s;
 }
+
+Sequence MultiLearnRule::Compile(NewContext &context) const {
+    return Sequence();
+}
+
+Sequence MultiLearnRule::Compile(NewContext &context, const ulong label_idx) const {
+    return Sequence();
+}
+
+Sequence MultiLearnRule::Compile(ContextList &context) const {
+    return Sequence();
+}
+
+Sequence MultiLearnRule::Compile(ContextList &context, const ulong label_idx) const {
+    return Sequence();
+}
+
+Sequence MultiLearnRule::Compile(ContextList &context, const std::vector<Sequence> &args) const {
+    return Sequence();
+}
+

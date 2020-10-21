@@ -11,9 +11,10 @@
 #include <variant>
 #include "OperatorWithSequence.h"
 #include "LearnRule.h"
+#include "BaseSequence.h"
 
 
-class MultiLearnRule {
+class MultiLearnRule : public BaseSequence {
 private:
     std::vector<std::variant<LearnRule, OperatorWithSequence>> vec_rules;  // I'm not sure variant is the best choice here!
                                                                            // Maybe make LearnRule BaseSequence?
@@ -22,7 +23,26 @@ public:
     MultiLearnRule(const OperatorWithSequence& operator_with_sequence);
     void append(const LearnRule& learn_rule);
     void append(const OperatorWithSequence& operator_with_sequence);
+
+    // methods needed to support BaseSequence:
+    const int type() const { return MULTILEARNRULE; }
+    const bool is_ket() const { return false; }
+    const size_t size() const { return vec_rules.size(); }
     const std::string to_string() const;
+
+    Ket to_ket() const { return Ket(); }  // Do something more interesting with these later!
+    Superposition to_sp() const { return Superposition(); }
+    Sequence to_seq() const { return Sequence(); }
+
+    std::shared_ptr<BaseSequence> b_add(std::shared_ptr<BaseSequence> bSeq) { return bSeq; }  // Maybe change later!
+    std::shared_ptr<BaseSequence> b_append(std::shared_ptr<BaseSequence> bSeq) { return bSeq; }
+
+    Sequence Compile(NewContext& context) const;  // Really should get rid of these two.
+    Sequence Compile(NewContext& context, const ulong label_idx) const;
+
+    Sequence Compile(ContextList& context) const;  // needs filling out
+    Sequence Compile(ContextList& context, const ulong label_idx) const;  // needs filling out
+    Sequence Compile(ContextList& context, const std::vector<Sequence>& args) const; // needs filling out
 };
 
 
