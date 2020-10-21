@@ -117,7 +117,7 @@
 %type <opSeqVal> operator_sequence
 %type <baseOpVal> operator compound_operator function_operator general_operator
 %type <opWithSeqVal> operator_with_sequence general_sequence
-%type <learnRuleVal> learn_rule
+%type <learnRuleVal> learn_rule general_learn_rule
 %type <constVal> constant
 %type <constVec> parameters
 // %type <compOpVal> compound_operator
@@ -171,7 +171,7 @@ line : item
 item : operator_sequence EOL { std::cout << $1->to_string() << std::endl; }
      | general_sequence EOL { std::cout << "general sequence: " << $1->to_string() << std::endl; }
      | learn_rule EOL { std::cout << "learn rule: " << $1->to_string() << std::endl; $1->Compile(driver.context); }
-     | general_learn_rule EOL
+     | general_learn_rule EOL { std::cout << "multi learn rule:\n" << $1->to_string() << std::endl; $1->Compile(driver.context); }
 //     | compound_operator { std::cout << "compound operator: " << $1->to_string() << std::endl; }
 //     | bracket_operator
      ;
@@ -208,19 +208,7 @@ learn_rule : OP_LABEL KET_LABEL LEARN_SYM general_sequence { driver.context.lear
 learn_rule : operator_with_sequence LEARN_SYM general_sequence { $$ = new LearnRule(*$1, $2, *$3); }
            ;
 
-/*
-general_learn_rule : operator_with_sequence LEARN_SYM EOL_SPACE4 general_sequence
-                   | operator_with_sequence LEARN_SYM multi_learn_rule
-                   | operator_with_sequence LEARN_SYM multi_learn_rule EOL_SPACE4 general_sequence
-                   ;
-
-
-multi_learn_rule : EOL_SPACE4 learn_rule
-                 | multi_learn_rule EOL_SPACE4 learn_rule
-                 ;
-*/
-
-general_learn_rule : operator_with_sequence LEARN_SYM multi_learn_rule { std::cout << "multi_learn_rule: " << $3->to_string() << std::endl; }
+general_learn_rule : operator_with_sequence LEARN_SYM multi_learn_rule { $$ = new LearnRule(*$1, $2, *$3); }
                    ;
 
 multi_learn_rule : EOL_SPACE4 learn_rule { $$ = new MultiLearnRule(*$2); }

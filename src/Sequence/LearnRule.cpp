@@ -5,6 +5,7 @@
 #include <memory>
 #include "LearnRule.h"
 #include "src/Operator/NumericOperator.h"
+#include "MultiLearnRule.h"
 
 LearnRule::LearnRule(OperatorWithSequence &head, unsigned int rule_type, OperatorWithSequence &tail)  // Tidy this function!!!
     : _first_op_idx(0), _valid_learn_rule(false), _rule_type(rule_type) {
@@ -19,8 +20,8 @@ LearnRule::LearnRule(OperatorWithSequence &head, unsigned int rule_type, Operato
     _valid_learn_rule = true;
 }
 
-/*
-LearnRule::LearnRule(class OperatorWithSequence &head, unsigned int rule_type, class MultiLearnRule &tail)
+
+LearnRule::LearnRule(OperatorWithSequence &head, unsigned int rule_type, MultiLearnRule &tail)
         : _first_op_idx(0), _valid_learn_rule(false), _rule_type(rule_type) {
 
     if (head.op_vec.empty() || head.seq_vec.empty()) { return; }
@@ -32,7 +33,7 @@ LearnRule::LearnRule(class OperatorWithSequence &head, unsigned int rule_type, c
     _RHS_seq = std::make_shared<MultiLearnRule>(tail);
     _valid_learn_rule = true;
 }
-*/
+
 
 const std::string LearnRule::to_string() const {
     if (!_valid_learn_rule) { return ""; }

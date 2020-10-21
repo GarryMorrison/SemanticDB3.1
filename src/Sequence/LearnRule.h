@@ -28,7 +28,7 @@ private:
 
 public:
     LearnRule(class OperatorWithSequence& head, unsigned int rule_type, class OperatorWithSequence& tail);
-    // LearnRule(class OperatorWithSequence& head, unsigned int rule_type, class MultiLearnRule& tail);
+    LearnRule(class OperatorWithSequence& head, unsigned int rule_type, class MultiLearnRule& tail);
     bool is_valid_learn_rule() { return _valid_learn_rule; }
 
     // void Compile(ContextList &context); We need it to return Sequence instead.

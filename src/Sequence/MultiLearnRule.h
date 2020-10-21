@@ -20,6 +20,7 @@ private:
     std::vector<std::shared_ptr<BaseSequence> > vec_rules;
 
 public:
+    MultiLearnRule() {}
     MultiLearnRule(const LearnRule& learn_rule);
     MultiLearnRule(const OperatorWithSequence& operator_with_sequence);
     void append(const LearnRule& learn_rule);
