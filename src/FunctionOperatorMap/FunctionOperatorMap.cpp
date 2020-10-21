@@ -47,6 +47,9 @@ FunctionOperatorMap::FunctionOperatorMap() {
     idx = ket_map.get_idx("bar-chart");
     fn_map.compound_sp_fn.emplace(idx, &op_bar_chart);
 
+    idx = ket_map.get_idx("print");
+    fn_map.ket_fn.emplace(idx, &print_ket);
+
     idx = ket_map.get_idx("extract-head");
     fn_map.ket_fn.emplace(idx, &extract_head);
 

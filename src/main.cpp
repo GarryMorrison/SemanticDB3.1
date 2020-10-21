@@ -34,6 +34,8 @@ int main() {
     driver.parse_string("op7 |Z> => op1 ( + 1 - 2 op1 . 3) |x>\n");
     driver.parse_string("op8 |Z> => 5^3 op1^2 |z>\n");
     driver.parse_string("op9 |Z> #=>\n    print |Hello ... >\n    print |... there!>\n    |return value>\n");
+    driver.parse_string("op10 |Z> => op9 |Z>\n");
+    // driver.parse_string("print |Hello world!>\n");
     context.print_universe();
 
     return 0;
