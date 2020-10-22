@@ -39,6 +39,9 @@ int main() {
     driver.parse_string("op12 |Z> => op11 |Z>\n");
     driver.parse_string("n-1 |*> #=> arithmetic(|_self>, |->, |1>) |>\n");
     driver.parse_string("op13 |Z> => n-1 |13>\n");
+    driver.parse_string("op2 |5> #=>\n    the-square |var 3> => arithmetic(|__self>, |*>, |__self>) |>\n    |ret val>\n");
+    driver.parse_string("op2 |6> #=>\n    the-product |3> => arithmetic(|_self>, |*>, |__self>) |>\n    |ret val>\n");
+    driver.parse_string("op2 |X> => op2 |5> + op2 |6>\n");
     context.print_universe();
 
     return 0;
