@@ -30,7 +30,7 @@ const std::string OperatorWithSequence::to_string() const {
     for (; sign_vec_iter != sign_vec.end() and op_vec_iter != op_vec.end() and seq_vec_iter != seq_vec.end();
         ++sign_vec_iter, ++op_vec_iter, ++seq_vec_iter) {
         switch(*sign_vec_iter) {
-            case SPLUS: s += " + "; break;
+            case SPLUS: { if (sign_vec_iter == sign_vec.cbegin()) { s = " "; } else { s += " + "; } break; }
             case SMINUS: s += " - "; break;
             case SSEQ: s += " . "; break;
             case SMERGE: s += " _ "; break;
