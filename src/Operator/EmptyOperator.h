@@ -16,6 +16,7 @@ public:
     Sequence Compile(NewContext& context, const Sequence& seq) const { return seq; };
     Sequence Compile(ContextList& context, const Sequence& seq) const { return seq; };
     Sequence Compile(ContextList& context, const Sequence& seq, const ulong label_idx) const { return seq; }
+    Sequence Compile(ContextList& context, const Sequence& seq, const ulong label_idx, const ulong multi_label_idx) const { return seq; }
     Sequence Compile(ContextList& context, const Sequence& seq, const std::vector<Sequence>& args) const { return seq; }
 
     const int type() const { return OPEMPTY; }

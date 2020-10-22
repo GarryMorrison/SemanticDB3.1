@@ -117,6 +117,34 @@ Sequence BracketOperator::Compile(ContextList &context, const Sequence &seq, con
     return seq2;
 }
 
+Sequence BracketOperator::Compile(ContextList &context, const Sequence &seq, const ulong label_idx, const ulong multi_label_idx) const {
+    Sequence seq2;
+    auto sign_vec_iter = sign_vec.cbegin();
+    auto op_seq_vec_iter = op_seq_vec.cbegin();
+    for (; sign_vec_iter != sign_vec.end() and op_seq_vec_iter != op_seq_vec.end();
+           ++sign_vec_iter, ++op_seq_vec_iter) {
+        Sequence compiled_seq = op_seq_vec_iter->Compile(context, seq, label_idx, multi_label_idx);
+        switch (*sign_vec_iter) {
+            case SPLUS:
+                seq2.add(compiled_seq);  // use move semantics??
+                break;
+            case SMINUS:
+                compiled_seq.multiply(-1);
+                seq2.add(compiled_seq);
+                break;
+            case SSEQ:
+                seq2.append(compiled_seq);
+                break;
+            case SMERGE:
+                seq2.merge(compiled_seq);
+                break;
+            case SMERGE2:
+                seq2.merge(compiled_seq, " ");
+                break;
+        }
+    }
+    return seq2;
+}
 
 const std::string BracketOperator::to_string() const {
     std::string s = "(";

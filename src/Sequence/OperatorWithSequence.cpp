@@ -167,7 +167,7 @@ Sequence OperatorWithSequence::Compile(ContextList& context, const ulong label_i
         // tmp_result = op_vec.at(k)->Compile(context, seq_vec.at(k)->to_seq());
         // Sequence tmp_result = (*op_vec_iter)->Compile(context, (*seq_vec_iter)->Compile(context));
         Sequence tmp_seq = (*seq_vec_iter)->Compile(context, label_idx);
-        Sequence tmp_result = (*op_vec_iter)->Compile(context, tmp_seq);
+        Sequence tmp_result = (*op_vec_iter)->Compile(context, tmp_seq, label_idx);
         // Sequence tmp_result;
         // std::cout << "\nop_vec_iter: " << (*op_vec_iter)->to_string() << std::endl;
         // std::cout << "seq_vec_iter: " << (*seq_vec_iter)->to_string() << std::endl;
@@ -201,7 +201,8 @@ Sequence OperatorWithSequence::Compile(ContextList &context, const ulong label_i
         // tmp_result = op_vec.at(k)->Compile(context, seq_vec.at(k)->to_seq());
         // Sequence tmp_result = (*op_vec_iter)->Compile(context, (*seq_vec_iter)->Compile(context));
         Sequence tmp_seq = (*seq_vec_iter)->Compile(context, label_idx, multi_label_idx);
-        Sequence tmp_result = (*op_vec_iter)->Compile(context, tmp_seq);
+        // Sequence tmp_result = (*op_vec_iter)->Compile(context, tmp_seq);
+        Sequence tmp_result = (*op_vec_iter)->Compile(context, tmp_seq, label_idx, multi_label_idx);
         // Sequence tmp_result;
         // std::cout << "\nop_vec_iter: " << (*op_vec_iter)->to_string() << std::endl;
         // std::cout << "seq_vec_iter: " << (*seq_vec_iter)->to_string() << std::endl;

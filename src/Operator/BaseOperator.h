@@ -31,6 +31,7 @@ public:
     virtual Sequence Compile(NewContext& context, const Sequence& seq) const = 0;  // will probably deprecate this one.
     virtual Sequence Compile(ContextList& context, const Sequence& seq) const = 0;
     virtual Sequence Compile(ContextList& context, const Sequence& seq, const ulong label_idx) const = 0;
+    virtual Sequence Compile(ContextList& context, const Sequence& seq, const ulong label_idx, const ulong multi_label_idx) const = 0;
     // virtual Sequence Compile(ContextList& context, const Sequence& seq, const std::vector<Sequence>& args) const = 0;
 };
 

@@ -28,6 +28,13 @@ Sequence PoweredOperator::Compile(ContextList &context, const Sequence &seq, con
     return result;
 }
 
+Sequence PoweredOperator::Compile(ContextList &context, const Sequence &seq, const ulong label_idx, const ulong multi_label_idx) const {
+    Sequence result(seq);
+    for (unsigned int i = 0; i < pow_; i++) {
+        result = b_op->Compile(context, result, label_idx, multi_label_idx);
+    }
+    return result;
+}
 
 const std::string PoweredOperator::to_string() const {
     std::string s;

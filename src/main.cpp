@@ -37,7 +37,8 @@ int main() {
     driver.parse_string("op10 |Z> => op9 |Z>\n");
     driver.parse_string("op11 |Z> #=>\n    the |var 1> => 3|_self>\n    the|var 2> => 5.7|__self>\n    the |run> => |success>\n    |new return value>\n");
     driver.parse_string("op12 |Z> => op11 |Z>\n");
-    // driver.parse_string("print |Hello world!>\n");
+    driver.parse_string("n-1 |*> #=> arithmetic(|_self>, |->, |1>) |>\n");
+    driver.parse_string("op13 |Z> => n-1 |13>\n");
     context.print_universe();
 
     return 0;

@@ -43,6 +43,9 @@ Sequence CompoundOperator::Compile(ContextList &context, const Sequence &seq, co
     return this->Compile(context, seq);
 }
 
+Sequence CompoundOperator::Compile(ContextList &context, const Sequence &seq, const ulong label_idx, const ulong multi_label_idx) const {
+    return this->Compile(context, seq);
+}
 
 const std::string CompoundOperator::to_string() const {
     std::string s;

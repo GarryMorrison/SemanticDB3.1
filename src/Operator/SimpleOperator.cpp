@@ -85,3 +85,7 @@ Sequence SimpleOperator::Compile(ContextList& context, const Sequence& seq) cons
 Sequence SimpleOperator::Compile(ContextList &context, const Sequence &seq, const ulong label_idx) const {
     return this->Compile(context, seq);  // I presume simple operator has no label_idx dependence.
 }
+
+Sequence SimpleOperator::Compile(ContextList &context, const Sequence &seq, const ulong label_idx, const ulong multi_label_idx) const {
+    return this->Compile(context, seq);
+}
