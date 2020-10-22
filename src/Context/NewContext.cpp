@@ -375,6 +375,36 @@ unsigned int NewContext::recall_type(const ulong op_idx, const ulong label_idx) 
     return RULEUNDEFINED;
 }
 
+unsigned int NewContext::recall_descent_type(const std::string &op, const std::string &label) {
+    ulong op_idx = ket_map.get_idx(op);
+    ulong label_idx = ket_map.get_idx(label);
+    return this->recall_descent_type(op_idx, label_idx);
+}
+
+unsigned int NewContext::recall_descent_type(const ulong op_idx, const ulong label_idx) {
+    unsigned int result;
+    if (rules_dict.find(label_idx) != rules_dict.end()) {
+        result = rules_dict[label_idx].recall_type(op_idx);
+        if (result != RULEUNDEFINED) { return result; }
+    }
+    ulong trial_label_idx = label_idx;
+    ulong star_idx = ket_map.get_idx("*");  // implement label descent, not sure cost of this vs just splitting strings approach
+    auto label_split_idx = ket_map.get_split_idx(trial_label_idx);
+    while (!label_split_idx.empty()) {
+        label_split_idx.pop_back();
+        label_split_idx.push_back(star_idx);
+        trial_label_idx = ket_map.get_idx(label_split_idx);
+
+        if (rules_dict.find(trial_label_idx) != rules_dict.end()) {
+            result = rules_dict[trial_label_idx].recall_type(op_idx);
+            if (result != RULEUNDEFINED) { return result; }
+        }
+        label_split_idx.pop_back();
+    }
+    return RULEUNDEFINED;
+}
+
+
 std::vector<ulong> NewContext::relevant_kets(const ulong op_idx) {
     if (op_idx == ket_map.get_idx("*")) { return sort_order; }
     std::vector<ulong> result;

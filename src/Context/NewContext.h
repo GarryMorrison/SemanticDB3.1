@@ -72,6 +72,9 @@ public:
     unsigned int recall_type(const std::string& op, const std::string& label);
     unsigned int recall_type(const ulong op_idx, const ulong label_idx);
 
+    unsigned int recall_descent_type(const std::string& op, const std::string& label);
+    unsigned int recall_descent_type(const ulong op_idx, const ulong label_idx);
+
     std::vector<ulong> relevant_kets(const ulong op_idx);
     std::vector<ulong> relevant_kets(const std::string &op);
 
