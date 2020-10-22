@@ -42,6 +42,11 @@ int main() {
     driver.parse_string("op2 |5> #=>\n    the-square |var 3> => arithmetic(|__self>, |*>, |__self>) |>\n    |ret val>\n");
     driver.parse_string("op2 |6> #=>\n    the-product |3> => arithmetic(|_self>, |*>, |__self>) |>\n    |ret val>\n");
     driver.parse_string("op2 |X> => op2 |5> + op2 |6>\n");
+    // Quick test of Fibonacci:
+    driver.parse_string("Fib |0> => |0>\n");
+    driver.parse_string("Fib |1> => |1>\n");
+    driver.parse_string("Fib |*> !=> arithmetic(Fib n-1 |_self>, |+>, Fib n-1^2 |_self>) |>\n");
+    driver.parse_string("the-Fib |result> => Fib |10>\n");
     context.print_universe();
 
     return 0;
