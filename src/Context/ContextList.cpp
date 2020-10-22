@@ -80,12 +80,12 @@ BaseSequence* ContextList::recall(const ulong op_idx, const ulong label_idx) {
 */
 
 void ContextList::learn(const ulong op_idx, const ulong label_idx, std::shared_ptr<BaseSequence> bSeq) {
-    if (bSeq->type() == OPERATORWITHSEQUENCE || bSeq->type() == SELFKET) {
+    if (bSeq->type() == OPERATORWITHSEQUENCE || bSeq->type() == SELFKET) {  // Probably need to add more types here.
         // Sequence result = bSeq->Compile(*this);
         // Sequence result;
         // Sequence result = bSeq->Compile(this->data[index]);  // This seems to be bug free so far.
         // Sequence result = bSeq->Compile(this->data[index], label_idx);
-        Sequence result = bSeq->Compile(*this, label_idx);
+        Sequence result = bSeq->Compile(*this, label_idx);  // Maybe this should be in LearnRule instead??
         std::shared_ptr<BaseSequence> bSeq2 = std::make_shared<Sequence>(result);  // should we merge these two lines?
         data[index].learn(op_idx, label_idx, bSeq2);
     } else {
