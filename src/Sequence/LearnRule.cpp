@@ -108,6 +108,10 @@ Sequence LearnRule::Compile(ContextList &context, const ulong label_idx) const {
     return this->Compile(context); // TODO: fill out later!
 }
 
+Sequence LearnRule::Compile(ContextList &context, const ulong label_idx, const ulong multi_label_idx) const {
+    return this->Compile(context); // TODO: fill out later!
+}
+
 Sequence LearnRule::Compile(ContextList &context, const std::vector<Sequence> &args) const {
     return this->Compile(context);  // TODO: fill out later!
 }

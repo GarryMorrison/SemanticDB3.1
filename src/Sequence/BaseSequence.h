@@ -39,6 +39,7 @@ public:
 
     virtual Sequence Compile(ContextList& context) const = 0;
     virtual Sequence Compile(ContextList& context, const ulong label_idx) const = 0;
+    virtual Sequence Compile(ContextList& context, const ulong label_idx, const ulong multi_label_idx) const = 0;
     virtual Sequence Compile(ContextList& context, const std::vector<Sequence>& args) const = 0;
 };
 

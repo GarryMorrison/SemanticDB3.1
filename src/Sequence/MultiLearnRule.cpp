@@ -46,7 +46,15 @@ Sequence MultiLearnRule::Compile(ContextList &context) const {
 }
 
 Sequence MultiLearnRule::Compile(ContextList &context, const ulong label_idx) const {
-    return this->Compile(context);  // TODO: fill out later
+    Sequence result;
+    for (const auto& rule: vec_rules) {
+        result = rule->Compile(context, label_idx, label_idx);
+    }
+    return result;
+}
+
+Sequence MultiLearnRule::Compile(ContextList &context, const ulong label_idx, const ulong multi_label_idx) const {
+    return this->Compile(context, label_idx);
 }
 
 Sequence MultiLearnRule::Compile(ContextList &context, const std::vector<Sequence> &args) const {

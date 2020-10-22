@@ -188,6 +188,10 @@ Sequence OperatorWithSequence::Compile(ContextList& context, const ulong label_i
     return result;
 }
 
+Sequence OperatorWithSequence::Compile(ContextList &context, const ulong label_idx, const ulong multi_label_idx) const {
+    return this->Compile(context, label_idx); // TODO: fill out later!
+}
+
 // Implement later!
 Sequence OperatorWithSequence::Compile(ContextList& context, const std::vector<Sequence>& args) const {
     return this->to_seq();

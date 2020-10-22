@@ -128,6 +128,7 @@ public:
 
     Sequence Compile(ContextList& context) const { return (*this); };
     Sequence Compile(ContextList& context, const ulong label_idx) const { return (*this); };
+    Sequence Compile(ContextList& context, const ulong label_idx, const ulong multi_label_idx) const { return *this; }
     Sequence Compile(ContextList& context, const std::vector<Sequence>& args) const { return (*this); };
 };
 

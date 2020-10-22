@@ -73,6 +73,14 @@ Sequence SelfKet::Compile(ContextList& context, const ulong label_idx) const {
     return this->to_seq();
 }
 
+Sequence SelfKet::Compile(ContextList &context, const ulong label_idx, const ulong multi_label_idx) const {
+    if (idx == 1) {
+        Ket tmp(label_idx, value);
+        return tmp.to_seq();
+    }
+    return this->to_seq();
+}
+
 Sequence SelfKet::Compile(ContextList& context, const std::vector<Sequence>& args) const {
     if (idx < args.size()) {  // Need to handle |_self0> too.
         return args.at(idx);
