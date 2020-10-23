@@ -157,6 +157,21 @@ FunctionOperatorMap::FunctionOperatorMap() {
     idx = ket_map.get_idx("similar-input");
     fn_map.compound_context_seq_fn.emplace(idx, &op_similar_input);
 
+    idx = ket_map.get_idx("minus");
+    fn_map.compound_ket_fn.emplace(idx, &op_minus);
+
+    idx = ket_map.get_idx("plus");
+    fn_map.compound_ket_fn.emplace(idx, &op_plus);
+
+    idx = ket_map.get_idx("times-by");
+    fn_map.compound_ket_fn.emplace(idx, &op_times_by);
+
+    idx = ket_map.get_idx("divide-by");
+    fn_map.compound_ket_fn.emplace(idx, &op_divide_by);
+
+    idx = ket_map.get_idx("mod");
+    fn_map.compound_ket_fn.emplace(idx, &op_modulus);
+
 }
 
 void FunctionOperatorMap::print() const {

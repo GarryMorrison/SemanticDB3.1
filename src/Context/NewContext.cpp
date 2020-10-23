@@ -381,11 +381,11 @@ unsigned int NewContext::recall_descent_type(const std::string &op, const std::s
     return this->recall_descent_type(op_idx, label_idx);
 }
 
-unsigned int NewContext::recall_descent_type(const ulong op_idx, const ulong label_idx) {
+unsigned int NewContext::recall_descent_type(const ulong op_idx, const ulong label_idx) {  // I suspect this really slows things down!
     unsigned int result;
     if (rules_dict.find(label_idx) != rules_dict.end()) {
         result = rules_dict[label_idx].recall_type(op_idx);
-        if (result != RULEUNDEFINED) { return result; }
+        if (result != RULEUNDEFINED) { return result; }  // Is this correct? Should we just return result, no matter what it is??
     }
     ulong trial_label_idx = label_idx;
     ulong star_idx = ket_map.get_idx("*");  // implement label descent, not sure cost of this vs just splitting strings approach

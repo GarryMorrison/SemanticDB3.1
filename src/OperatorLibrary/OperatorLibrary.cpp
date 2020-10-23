@@ -243,3 +243,76 @@ Superposition op_similar_input(const Sequence &seq, ContextList &context, const 
         default: return Superposition();  // Alternatively, we could return seq.
     }
 }
+
+// Wow! A lot of work just to subtract a number!!
+Ket op_minus(const Ket k, const std::vector<std::shared_ptr<CompoundConstant> > &parameters) {
+    if (parameters.empty()) { return Ket(); }  // Alternatively, return k.
+    long double value = parameters[0]->get_float();
+    auto split_idx = k.label_split_idx();
+    long double number = std::stold(ket_map.get_str(split_idx.back()));  // Possibly wrap this in a try/catch.
+    split_idx.pop_back();
+    if (split_idx.empty()) {
+        return Ket(float_to_int(number - value, default_decimal_places), k.value());
+    } else {
+        std::string category = ket_map.get_str(split_idx) + ": ";
+        return Ket(category + float_to_int(number - value, default_decimal_places), k.value());
+    }
+}
+
+Ket op_plus(const Ket k, const std::vector<std::shared_ptr<CompoundConstant> > &parameters) {
+    if (parameters.empty()) { return Ket(); }  // Alternatively, return k.
+    long double value = parameters[0]->get_float();
+    auto split_idx = k.label_split_idx();
+    long double number = std::stold(ket_map.get_str(split_idx.back()));  // Possibly wrap this in a try/catch.
+    split_idx.pop_back();
+    if (split_idx.empty()) {
+        return Ket(float_to_int(number + value, default_decimal_places), k.value());
+    } else {
+        std::string category = ket_map.get_str(split_idx) + ": ";
+        return Ket(category + float_to_int(number + value, default_decimal_places), k.value());
+    }
+}
+
+Ket op_times_by(const Ket k, const std::vector<std::shared_ptr<CompoundConstant> > &parameters) {
+    if (parameters.empty()) { return Ket(); }  // Alternatively, return k.
+    long double value = parameters[0]->get_float();
+    auto split_idx = k.label_split_idx();
+    long double number = std::stold(ket_map.get_str(split_idx.back()));  // Possibly wrap this in a try/catch.
+    split_idx.pop_back();
+    if (split_idx.empty()) {
+        return Ket(float_to_int(number * value, default_decimal_places), k.value());
+    } else {
+        std::string category = ket_map.get_str(split_idx) + ": ";
+        return Ket(category + float_to_int(number * value, default_decimal_places), k.value());
+    }
+}
+
+Ket op_divide_by(const Ket k, const std::vector<std::shared_ptr<CompoundConstant> > &parameters) {
+    if (parameters.empty()) { return Ket(); }  // Alternatively, return k.
+    long double value = parameters[0]->get_float();
+    if (double_eq(value, 0)) { return k; } // prevent divide by zero.
+    auto split_idx = k.label_split_idx();
+    long double number = std::stold(ket_map.get_str(split_idx.back()));  // Possibly wrap this in a try/catch.
+    split_idx.pop_back();
+    if (split_idx.empty()) {
+        return Ket(float_to_int(number / value, default_decimal_places), k.value());
+    } else {
+        std::string category = ket_map.get_str(split_idx) + ": ";
+        return Ket(category + float_to_int(number / value, default_decimal_places), k.value());
+    }
+}
+
+Ket op_modulus(const Ket k, const std::vector<std::shared_ptr<CompoundConstant> > &parameters) {
+    if (parameters.empty()) { return Ket(); }  // Alternatively, return k.
+    long double value = parameters[0]->get_float();
+    auto split_idx = k.label_split_idx();
+    long double number = std::stold(ket_map.get_str(split_idx.back()));  // Possibly wrap this in a try/catch.
+    split_idx.pop_back();
+    long long result = static_cast<long long>(number) % static_cast<long long>(value);
+    if (split_idx.empty()) {
+        return Ket(float_to_int(result, default_decimal_places), k.value());
+    } else {
+        std::string category = ket_map.get_str(split_idx) + ": ";
+        return Ket(category + float_to_int(result, default_decimal_places), k.value());
+    }
+}

@@ -47,6 +47,8 @@ int main() {
     driver.parse_string("Fib |1> => |1>\n");
     driver.parse_string("Fib |*> !=> arithmetic(Fib n-1 |_self>, |+>, Fib n-1^2 |_self>) |>\n");
     driver.parse_string("the-Fib |result> => Fib |10>\n");
+    driver.parse_string("the-minus |result> => minus[2.1] |number: 5.27> + minus[3] |8>\n");
+    driver.parse_string("the-arithmetic |result> => mod[4] minus[1] divide-by[2] plus[1] times-by[5] |3>\n");
     context.print_universe();
 
     return 0;

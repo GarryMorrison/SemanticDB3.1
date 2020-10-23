@@ -222,7 +222,7 @@ Sequence ContextList::active_recall(const ulong op_idx, const ulong label_idx) {
     // return data[index].recall(op_idx, label_idx)->Compile(this->data[index]);
     // return data[index].recall(op_idx, label_idx)->Compile(this->data[index], label_idx);
     // unsigned int the_recall_type = data[index].recall_type(op_idx, label_idx);
-    unsigned int the_recall_type = data[index].recall_descent_type(op_idx, label_idx);
+    unsigned int the_recall_type = data[index].recall_descent_type(op_idx, label_idx);  // Probably slows things down quite a bit over .recall_type()!
 
 //     std::cout << "active_recall:" << std::endl;
 //     std::cout << "    op_idx: " << ket_map.get_str(op_idx) << std::endl;
