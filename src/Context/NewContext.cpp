@@ -424,6 +424,27 @@ std::vector<ulong> NewContext::relevant_kets(const std::string &op) {
     return this->relevant_kets(op_idx);
 }
 
+void NewContext::fn_learn(const ulong op_idx, const int param_size, std::shared_ptr<BaseSequence> bSeq) {
+    Frame frame;
+    if (fn_rules_dict.find(param_size) == fn_rules_dict.end()) {
+        fn_rules_dict[param_size] = frame;
+    }
+    fn_rules_dict[param_size].learn(op_idx, bSeq);
+}
+
+std::shared_ptr<BaseSequence> NewContext::fn_recall(const ulong op_idx, const int param_size) {
+    if (fn_rules_dict.find(param_size) == fn_rules_dict.end()) {
+        return std::make_shared<Sequence>();
+    }
+    return fn_rules_dict[param_size].recall(op_idx);
+}
+
+unsigned int NewContext::fn_recall_type(const ulong op_idx, const int param_size) {
+    if (fn_rules_dict.find(param_size) == fn_rules_dict.end()) {
+        return RULEUNDEFINED;
+    }
+    return RULESTORED;
+}
 
 void NewContext::print_universe() const {
     std::string s, op, label;
@@ -462,6 +483,26 @@ void NewContext::print_universe() const {
         }
         s += "\n";
     }
+    s += "\n";
+
+    for (int param_size = 1; param_size <= 4; param_size++) {
+        switch(param_size) {
+            case 1 : label = "(*)"; break;
+            case 2 : label = "(*,*)"; break;
+            case 3 : label = "(*,*,*)"; break;
+            case 4 : label = "(*,*,*,*)"; break;
+        }
+        if (fn_rules_dict.find(param_size) != fn_rules_dict.end()) {
+            frame = fn_rules_dict.at(param_size);
+            rule = frame.recall(supported_ops_idx);
+            s += "supported-ops " + label + " => " + rule->to_string() + "\n";
+            for (const ulong op_idx : frame.supported_ops()) {
+                s += ket_map.get_str(op_idx) + " " + label + " #=> " + frame.recall(op_idx)->to_string() + "\n";
+            }
+            s += "\n";
+        }
+    }
+
     s += "------------------------------------------\n";
     std::cout << s;
 }

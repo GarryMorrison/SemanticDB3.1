@@ -50,6 +50,7 @@ int main() {
     driver.parse_string("the-minus |result> => minus[2.1] |number: 5.27> + minus[3] |8>\n");
     driver.parse_string("the-arithmetic |result> => mod[4] minus[1] divide-by[2] plus[1] times-by[5] |3>\n");
     driver.parse_string("op (*,*) #=> 3|__self0> + 5|__self1> + 7|__self2>\n");
+    driver.parse_string("op2 (*,*,*,*) #=>\n    3|__self0> + 5|__self1> + 7|__self2> + 11|__self3> + 13|__self4>\n");
     context.print_universe();
 
     return 0;

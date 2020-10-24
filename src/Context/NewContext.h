@@ -19,7 +19,7 @@ private:
     std::unordered_map<ulong, Frame> rules_dict;
     std::vector<ulong> sort_order;
     std::unordered_map<ulong, Frame> fn_rules_dict;
-    std::vector<ulong> fn_sort_order;
+    // std::vector<ulong> fn_sort_order;
 
 public:
     // NewContext(const std::string& s) { name = s; };
@@ -81,6 +81,11 @@ public:
 
     // void fn_learn(const ulong op_idx, const ulong param_size, BaseRule* brule);
     // BaseRule* fn_recall(const ulong op_idx, const ulong param_size);
+
+    void fn_learn(const ulong op_idx, const int param_size, std::shared_ptr<BaseSequence> bSeq);
+    std::shared_ptr<BaseSequence> fn_recall(const ulong op_idx, const int param_size);
+    unsigned int fn_recall_type(const ulong op_idx, const int param_size);
+
     void print_universe() const;
 };
 

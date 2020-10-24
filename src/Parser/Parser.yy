@@ -223,8 +223,8 @@ multi_learn_rule : EOL_SPACE4 learn_rule { $$ = new MultiLearnRule(*$2); }
                  | multi_learn_rule EOL_SPACE4 general_sequence { $$->append(*$3); }
                  ;
 
-function_learn_rule : OP_LABEL FN_SYM LEARN_SYM general_sequence
-                    | OP_LABEL FN_SYM LEARN_SYM multi_learn_rule
+function_learn_rule : OP_LABEL FN_SYM LEARN_SYM general_sequence { std::shared_ptr<BaseSequence> tmp_ptr($4); driver.context.fn_learn($1, $2, tmp_ptr); }
+                    | OP_LABEL FN_SYM LEARN_SYM multi_learn_rule { std::shared_ptr<BaseSequence> tmp_ptr($4); driver.context.fn_learn($1, $2, tmp_ptr); }
                     ;
 
 operator_with_sequence : ket {

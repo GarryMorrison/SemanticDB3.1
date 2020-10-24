@@ -253,6 +253,18 @@ Sequence ContextList::active_recall(const ulong op_idx, const ulong label_idx) {
     }
 }
 
+void ContextList::fn_learn(const ulong op_idx, const int param_size, std::shared_ptr<BaseSequence> bSeq) {
+    data[index].fn_learn(op_idx, param_size, bSeq);
+}
+
+std::shared_ptr<BaseSequence> ContextList::fn_recall(const ulong op_idx, const int param_size) {
+    return data[index].fn_recall(op_idx, param_size);
+}
+
+unsigned int ContextList::fn_recall_type(const ulong op_idx, const int param_size) {
+    return data[index].fn_recall_type(op_idx, param_size);
+}
+
 
 void ContextList::print_multiverse() const {
     for (const auto &context: data) {
