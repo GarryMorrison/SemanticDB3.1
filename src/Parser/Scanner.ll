@@ -76,7 +76,7 @@ yylloc->step();
 "|__self>" { return token::MULTI_SELF_KET; }
 
 "|_self"{digit}">" { yylval->integerVal = yytext[6] - '0'; return token::SELF_KETK; }
-"|__self"{digit}">" { yylval->integerVal = yytext[6] - '0'; return token::MULTI_SELF_KETK; }
+"|__self"{digit}">" { yylval->integerVal = yytext[7] - '0'; return token::MULTI_SELF_KETK; }
 
 "|"[^<|>]*">" { yylval->ulongVal = get_ket_idx(yytext, yyleng); return token::KET_LABEL; }
 
@@ -90,6 +90,11 @@ yylloc->step();
 "#=>" { yylval->integerVal = RULESTORED; return token::LEARN_SYM; }
 "!=>" { yylval->integerVal = RULEMEMOIZE; return token::LEARN_SYM; }
 "=>" { yylval->integerVal = RULENORMAL; return token::LEARN_SYM; }
+
+"(*)" { yylval->integerVal = 1; return token::FN_SYM; }
+"(*,*)" { yylval->integerVal = 2; return token::FN_SYM; }
+"(*,*,*)" { yylval->integerVal = 3; return token::FN_SYM; }
+"(*,*,*,*)" { yylval->integerVal = 4; return token::FN_SYM; }
 
 "+" { yylval->integerVal = SPLUS; return token::INFIX_OP; }
 "-" { yylval->integerVal = SMINUS; return token::INFIX_OP; }
