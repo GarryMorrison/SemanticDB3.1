@@ -89,3 +89,7 @@ Sequence SimpleOperator::Compile(ContextList &context, const Sequence &seq, cons
 Sequence SimpleOperator::Compile(ContextList &context, const Sequence &seq, const ulong label_idx, const ulong multi_label_idx) const {
     return this->Compile(context, seq);
 }
+
+Sequence SimpleOperator::Compile(ContextList &context, const Sequence &seq, const ulong label_idx, const std::vector<Sequence> &args) const {
+    return this->Compile(context, seq);
+}

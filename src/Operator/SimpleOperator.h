@@ -38,6 +38,7 @@ public:
     Sequence Compile(ContextList& context, const Sequence& seq) const;
     Sequence Compile(ContextList& context, const Sequence& seq, const ulong label_idx) const;
     Sequence Compile(ContextList& context, const Sequence& seq, const ulong label_idx, const ulong multi_label_idx) const;
+    Sequence Compile(ContextList& context, const Sequence& seq, const ulong label_idx, const std::vector<Sequence>& args) const;
 };
 
 

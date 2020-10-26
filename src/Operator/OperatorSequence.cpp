@@ -68,6 +68,17 @@ Sequence OperatorSequence::Compile(ContextList &context, const Sequence &seq, co
     return result;
 }
 
+Sequence OperatorSequence::Compile(ContextList &context, const Sequence &seq, const ulong label_idx, const std::vector<Sequence> &args) const {
+    Sequence result(seq);
+    for (auto it = tail_op_seq.rbegin(); it != tail_op_seq.rend(); ++it) {
+        result = (*it)->Compile(context, result, label_idx, args);
+    }
+    result = head_op->Compile(context, result, label_idx, args);
+    if (op_symbol == SMINUS) { result.multiply(-1); } // not 100% sure this should be here.
+    return result;
+}
+
+
 const ulong OperatorSequence::get_head_op_idx() const {
     if (head_op->type() == OPSIMPLE) { return head_op->get_head_op_idx(); }
     return 0;

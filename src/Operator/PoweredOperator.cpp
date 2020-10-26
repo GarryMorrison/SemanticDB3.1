@@ -36,6 +36,14 @@ Sequence PoweredOperator::Compile(ContextList &context, const Sequence &seq, con
     return result;
 }
 
+Sequence PoweredOperator::Compile(ContextList &context, const Sequence &seq, const ulong label_idx, const std::vector<Sequence> &args) const {
+    Sequence result(seq);
+    for (unsigned int i = 0; i < pow_; i++) {
+        result = b_op->Compile(context, result, label_idx, args);
+    }
+    return result;
+}
+
 const std::string PoweredOperator::to_string() const {
     std::string s;
     s = b_op->to_string() + "^" + std::to_string(pow_);

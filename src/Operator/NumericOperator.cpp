@@ -32,6 +32,12 @@ Sequence NumericOperator::Compile(ContextList &context, const Sequence &seq, con
     return result;
 }
 
+Sequence NumericOperator::Compile(ContextList &context, const Sequence &seq, const ulong label_idx, const std::vector<Sequence> &args) const {
+    Sequence result(seq);
+    result.multiply(value);
+    return result;
+}
+
 const std::string NumericOperator::to_string() const {
     if (double_eq(value, round(value))) {
         return std::to_string((int)round(value));

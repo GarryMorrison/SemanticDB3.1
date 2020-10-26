@@ -53,6 +53,8 @@ int main() {
     driver.parse_string("op2 (*,*,*,*) #=>\n    3|__self0> + 5|__self1> + 7|__self2> + 11|__self3> + 13|__self4>\n");
     driver.parse_string("the-op |result> => op(|b>, |c>) |a>\n");
     driver.parse_string("the-op2 |result> => op2(|b>, |c>, |d>, |e>) |a>\n");
+    driver.parse_string("add (*,*) #=> arithmetic(|__self1>, |+>, |__self2>) |>\n");
+    driver.parse_string("the-add |result> => add(|3>, |5>) |>\n");
     context.print_universe();
 
     return 0;
