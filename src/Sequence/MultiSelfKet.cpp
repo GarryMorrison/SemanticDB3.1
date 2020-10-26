@@ -80,9 +80,9 @@ Sequence MultiSelfKet::Compile(ContextList &context, const ulong label_idx, cons
     return this->to_seq();
 }
 
-Sequence MultiSelfKet::Compile(ContextList& context, const std::vector<Sequence>& args) const {
-//     if (idx < args.size()) {  // Need to handle |_self0> too.
-//         return args.at(idx);
-//     }
+Sequence MultiSelfKet::Compile(ContextList& context, const ulong label_idx, const std::vector<Sequence>& args) const {
+    if (idx < args.size()) {
+        return args.at(idx);
+    }
     return this->to_seq();
 }

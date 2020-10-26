@@ -136,6 +136,6 @@ Sequence Ket::Compile(ContextList &context, const ulong label_idx, const ulong m
     return this->to_seq();
 }
 
-Sequence Ket::Compile(ContextList& context, const std::vector<Sequence>& args) const {
+Sequence Ket::Compile(ContextList& context, const ulong label_idx, const std::vector<Sequence>& args) const {
     return this->to_seq();
 }

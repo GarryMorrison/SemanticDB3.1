@@ -222,7 +222,38 @@ Sequence OperatorWithSequence::Compile(ContextList &context, const ulong label_i
     return result;
 }
 
-// Implement later!
-Sequence OperatorWithSequence::Compile(ContextList& context, const std::vector<Sequence>& args) const {
-    return this->to_seq();
+
+Sequence OperatorWithSequence::Compile(ContextList& context, const ulong label_idx, const std::vector<Sequence>& args) const {
+    Sequence result;
+    if (sign_vec.empty()) { return result; }
+
+    auto sign_vec_iter = sign_vec.cbegin();
+    auto op_vec_iter = op_vec.cbegin();
+    auto seq_vec_iter = seq_vec.cbegin();
+    for (; sign_vec_iter != sign_vec.end() and op_vec_iter != op_vec.end() and seq_vec_iter != seq_vec.end();
+           ++sign_vec_iter, ++op_vec_iter, ++seq_vec_iter) {
+        // Sequence tmp_result;
+        // tmp_result = op_vec.at(k)->Compile(context, seq_vec.at(k)->to_seq());
+        // Sequence tmp_result = (*op_vec_iter)->Compile(context, (*seq_vec_iter)->Compile(context));
+        Sequence tmp_seq = (*seq_vec_iter)->Compile(context, label_idx, args);
+        // Sequence tmp_result = (*op_vec_iter)->Compile(context, tmp_seq);
+        Sequence tmp_result = (*op_vec_iter)->Compile(context, tmp_seq, label_idx);
+        // Sequence tmp_result = (*op_vec_iter)->Compile(context, tmp_seq, label_idx, args);  // TODO: implement later!
+        // Sequence tmp_result;
+        // std::cout << "\nop_vec_iter: " << (*op_vec_iter)->to_string() << std::endl;
+        // std::cout << "seq_vec_iter: " << (*seq_vec_iter)->to_string() << std::endl;
+        // std::cout << "tmp_seq: " << tmp_seq.to_string() << std::endl;
+        // std::cout << "tmp_result: " << tmp_result.to_string() << std::endl;
+        if ((*sign_vec_iter) == SMINUS) {
+            tmp_result.multiply(-1);
+        }
+        switch((*sign_vec_iter)) {
+            case SPLUS: { result.add(tmp_result); break; }
+            case SMINUS: { result.add(tmp_result); break; }
+            case SSEQ: { result.append(tmp_result); break; }
+            case SMERGE: { result.merge(tmp_result); break; }
+            case SMERGE2: { result.merge(tmp_result, " "); break; }
+        }
+    }
+    return result;
 }
