@@ -51,6 +51,8 @@ int main() {
     driver.parse_string("the-arithmetic |result> => mod[4] minus[1] divide-by[2] plus[1] times-by[5] |3>\n");
     driver.parse_string("op (*,*) #=> 3|__self0> + 5|__self1> + 7|__self2>\n");
     driver.parse_string("op2 (*,*,*,*) #=>\n    3|__self0> + 5|__self1> + 7|__self2> + 11|__self3> + 13|__self4>\n");
+    driver.parse_string("the-op |result> => op(|b>, |c>) |a>\n");
+    driver.parse_string("the-op2 |result> => op2(|b>, |c>, |d>, |e>) |a>\n");
     context.print_universe();
 
     return 0;
