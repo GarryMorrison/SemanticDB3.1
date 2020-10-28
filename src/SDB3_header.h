@@ -35,5 +35,6 @@
 #include "src/Sequence/LearnRule.h"
 #include "Sequence/MultiLearnRule.h"
 #include "Sequence/MultiSelfKet.h"
+#include "src/Parser/Driver.h"
 
 #endif //SDB3_1_SDB3_HEADER_H

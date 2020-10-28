@@ -1,0 +1,4 @@
+Fib |0> => |0>
+Fib |1> => |1>
+Fib |*> !=> arithmetic(Fib minus[1] |_self>, |+>, Fib minus[2] |_self>) |>
+
