@@ -325,9 +325,10 @@ Ket op_toupper(const Ket k, const std::vector<std::shared_ptr<CompoundConstant> 
         if (idx < 0 || idx >= label.size()) {
             continue;
         }
-        if (label[idx] >= 'a' && label[idx] <= 'z') {  // assumes ASCII
-            label[idx] = label[idx] - 32;
-        }
+        // if (label[idx] >= 'a' && label[idx] <= 'z') {  // assumes ASCII. Is there a better way to do this?
+        //     label[idx] = label[idx] - 32;
+        // }
+        label[idx] = std::toupper(label[idx]);
     }
     return Ket(label, k.value());
 }
@@ -340,9 +341,10 @@ Ket op_tolower(const Ket k, const std::vector<std::shared_ptr<CompoundConstant> 
         if (idx < 0 || idx >= label.size()) {
             continue;
         }
-        if (label[idx] >= 'A' && label[idx] <= 'Z') {  // assumes ASCII
-            label[idx] = label[idx] + 32;
-        }
+        // if (label[idx] >= 'A' && label[idx] <= 'Z') {  // assumes ASCII. Is there a better way to do this?
+        //     label[idx] = label[idx] + 32;
+        // }
+        label[idx] = std::tolower(label[idx]);
     }
     return Ket(label, k.value());
 }
