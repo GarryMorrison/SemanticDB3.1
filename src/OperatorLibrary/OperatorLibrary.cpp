@@ -346,3 +346,17 @@ Ket op_tolower(const Ket k, const std::vector<std::shared_ptr<CompoundConstant> 
     }
     return Ket(label, k.value());
 }
+
+Ket toupperket(const Ket k) {
+    std::string label = k.label();
+    std::transform(label.begin(), label.end(), label.begin(),
+                   [](unsigned char c){ return std::toupper(c); });
+    return Ket(label, k.value());
+}
+
+Ket tolowerket(const Ket k) {
+    std::string label = k.label();
+    std::transform(label.begin(), label.end(), label.begin(),
+                   [](unsigned char c){ return std::tolower(c); });
+    return Ket(label, k.value());
+}

@@ -36,5 +36,7 @@ Ket op_divide_by(const Ket k, const std::vector<std::shared_ptr<CompoundConstant
 Ket op_modulus(const Ket k, const std::vector<std::shared_ptr<CompoundConstant> > &parameters);
 Ket op_toupper(const Ket k, const std::vector<std::shared_ptr<CompoundConstant> > &parameters);
 Ket op_tolower(const Ket k, const std::vector<std::shared_ptr<CompoundConstant> > &parameters);
+Ket toupperket(const Ket k);
+Ket tolowerket(const Ket k);
 
 #endif //SDB3_1_OPERATORLIBRARY_H

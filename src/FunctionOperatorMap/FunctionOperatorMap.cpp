@@ -173,9 +173,11 @@ FunctionOperatorMap::FunctionOperatorMap() {
     fn_map.compound_ket_fn.emplace(idx, &op_modulus);
 
     idx = ket_map.get_idx("to-upper");
+    fn_map.ket_fn.emplace(idx, &toupperket);
     fn_map.compound_ket_fn.emplace(idx, &op_toupper);
 
     idx = ket_map.get_idx("to-lower");
+    fn_map.ket_fn.emplace(idx, &tolowerket);
     fn_map.compound_ket_fn.emplace(idx, &op_tolower);
 
 }
