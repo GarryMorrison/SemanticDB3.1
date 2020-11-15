@@ -172,6 +172,12 @@ FunctionOperatorMap::FunctionOperatorMap() {
     idx = ket_map.get_idx("mod");
     fn_map.compound_ket_fn.emplace(idx, &op_modulus);
 
+    idx = ket_map.get_idx("to-upper");
+    fn_map.compound_ket_fn.emplace(idx, &op_toupper);
+
+    idx = ket_map.get_idx("to-lower");
+    fn_map.compound_ket_fn.emplace(idx, &op_tolower);
+
 }
 
 void FunctionOperatorMap::print() const {

@@ -316,3 +316,33 @@ Ket op_modulus(const Ket k, const std::vector<std::shared_ptr<CompoundConstant> 
         return Ket(category + float_to_int(result, default_decimal_places), k.value());
     }
 }
+
+Ket op_toupper(const Ket k, const std::vector<std::shared_ptr<CompoundConstant> > &parameters) {
+    if (parameters.empty()) { return k; }
+    std::string label = k.label();
+    for (const auto &elt: parameters) {
+        int idx = elt->get_int() - 1;  // to-upper[1] changes case of first char, not the second.
+        if (idx < 0 || idx >= label.size()) {
+            continue;
+        }
+        if (label[idx] >= 'a' && label[idx] <= 'z') {  // assumes ASCII
+            label[idx] = label[idx] - 32;
+        }
+    }
+    return Ket(label, k.value());
+}
+
+Ket op_tolower(const Ket k, const std::vector<std::shared_ptr<CompoundConstant> > &parameters) {
+    if (parameters.empty()) { return k; }
+    std::string label = k.label();
+    for (const auto &elt: parameters) {
+        int idx = elt->get_int() - 1;  // to-lower[1] changes case of first char, not the second.
+        if (idx < 0 || idx >= label.size()) {
+            continue;
+        }
+        if (label[idx] >= 'A' && label[idx] <= 'Z') {  // assumes ASCII
+            label[idx] = label[idx] + 32;
+        }
+    }
+    return Ket(label, k.value());
+}
