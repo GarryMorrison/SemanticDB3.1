@@ -172,7 +172,7 @@ line : item
 //      | operator_with_sequence
 
 item : operator_sequence EOL { std::cout << "operator sequence: " << $1->to_string() << std::endl; }
-     | general_sequence EOL { std::cout << "general sequence: " << $1->Compile(driver.context).to_string() << std::endl; }
+     | general_sequence EOL { std::cout << "general sequence:\n" << $1->Compile(driver.context).to_string() << std::endl; }
      | learn_rule EOL { std::cout << "learn rule: " << $1->to_string() << std::endl; $1->Compile(driver.context); }
      | general_learn_rule EOL { std::cout << "multi learn rule:\n" << $1->to_string() << std::endl; $1->Compile(driver.context); }
      | function_learn_rule EOL
