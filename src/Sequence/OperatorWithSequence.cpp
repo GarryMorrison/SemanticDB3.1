@@ -135,10 +135,14 @@ Sequence OperatorWithSequence::Compile(ContextList& context) const {
         // Sequence tmp_result = (*op_vec_iter)->Compile(context, (*seq_vec_iter)->Compile(context));
         Sequence tmp_seq = (*seq_vec_iter)->Compile(context);
         Sequence tmp_result = (*op_vec_iter)->Compile(context, tmp_seq);
-        // std::cout << "\nop_vec_iter: " << (*op_vec_iter)->to_string() << std::endl;
-        // std::cout << "seq_vec_iter: " << (*seq_vec_iter)->to_string() << std::endl;
-        // std::cout << "sign_vec_iter: " << (*sign_vec_iter) << std::endl;
-        // std::cout << "tmp_result: " << tmp_result.to_string() << std::endl;
+
+        // std::cout << "\nOperatorWithSequence::Compile:" << std::endl;  // Later, if in debug mode, print this out.
+        // std::cout << "    op_vec_iter: " << (*op_vec_iter)->to_string() << std::endl;
+        // std::cout << "    op_vec_iter type: " << (*op_vec_iter)->type() << std::endl;
+        // std::cout << "    seq_vec_iter: " << (*seq_vec_iter)->to_string() << std::endl;
+        // std::cout << "    sign_vec_iter: " << (*sign_vec_iter) << std::endl;
+        // std::cout << "    tmp_seq: " << tmp_seq.to_string() << std::endl;
+        // std::cout << "    tmp_result: " << tmp_result.to_string() << std::endl;
         if ((*sign_vec_iter) == SMINUS) {
             tmp_result.multiply(-1);
         }
