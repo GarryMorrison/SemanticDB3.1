@@ -39,9 +39,11 @@ FunctionOperatorMap::FunctionOperatorMap() {
     fn_map.compound_sigmoids.emplace(idx, &op_sigmoid_in_range);
 
     idx = ket_map.get_idx("split");
+    fn_map.ket_fn.emplace(idx, &op_split_ket);
     fn_map.compound_ket_fn.emplace(idx, &op_split);
 
     idx = ket_map.get_idx("ssplit");
+    fn_map.ket_fn.emplace(idx, &op_ssplit_ket);
     fn_map.compound_ket_fn.emplace(idx, &op_ssplit);
 
     idx = ket_map.get_idx("bar-chart");

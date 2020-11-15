@@ -93,6 +93,13 @@ Sequence op_ssplit(const Ket k, const std::vector<std::shared_ptr<CompoundConsta
     return ssplit(k, delim);
 }
 
+Superposition op_split_ket(const Ket k) {
+    return split(k);
+}
+
+Sequence op_ssplit_ket(const Ket k) {
+    return ssplit(k);
+}
 
 Ket extract_head(const Ket k) {
     ulong head_idx = ket_map.get_head_idx(k.label_idx());

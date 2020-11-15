@@ -15,6 +15,9 @@ Sequence ssplit(const Ket k);
 Sequence ssplit(const Ket k, const std::string& delimiter);
 // Sequence ssplit(const Ket k, const std::vector<std::shared_ptr<CompoundConstant> > &parameters);
 Sequence op_ssplit(const Ket k, const std::vector<std::shared_ptr<CompoundConstant> > &parameters);
+Superposition op_split_ket(const Ket k);
+Sequence op_ssplit_ket(const Ket k);
+
 Ket extract_head(const Ket k);
 Ket extract_tail(const Ket k);
 Ket extract_category(const Ket k);
