@@ -17,6 +17,8 @@ std::string help_string = "\n    q, quit, exit        quit the semantic agent\n"
                           "    .                    repeat last command\n"
                           "    i                    interactive history\n"
                           "    history              show console history\n"
+                          "    quiet on             switch time-taken messages off\n"
+                          "    quiet off            switch time-taken messages on\n"
                           "    -- comment           ignore, this is just a comment line\n";
 
 
@@ -135,6 +137,12 @@ int main(int argc, char** argv) {
                 for (const auto line: sa_history) {
                     std::cout << "    " << line << std::endl;
                 }
+            } else if (shell_input == "quiet on") {
+                quiet_mode = true;
+                std::cout << "Switched to quiet mode." << std::endl;
+            } else if (shell_input == "quiet off") {
+                quiet_mode = false;
+                std::cout << "Switched off quiet mode." << std::endl;
             } else {
                 Timer_ms timer("\n    Time taken", quiet_mode);  // Time the execution of the command. The destructor prints the results.
                 parse_success = driver.parse_string(shell_input + "\n");  // Is there a cleaner way than adding \n here?
