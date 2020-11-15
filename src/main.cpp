@@ -123,6 +123,7 @@ int main(int argc, char** argv) {
                 context.print_multiverse();
             } else if (shell_input.substr(0, 5) == "load ") {
                 file_name = shell_input.substr(5);
+                Timer_ms timer("\n    Time taken", quiet_mode);  // Time the load time.
                 parse_success = driver.parse_file(file_name);  // Need security check on file we are loading?
                 if (!parse_success) {
                     std::cout << "Parse failed for file: " << file_name << std::endl;
@@ -135,6 +136,7 @@ int main(int argc, char** argv) {
                     std::cout << "    " << line << std::endl;
                 }
             } else {
+                Timer_ms timer("\n    Time taken", quiet_mode);  // Time the execution of the command. The destructor prints the results.
                 parse_success = driver.parse_string(shell_input + "\n");  // Is there a cleaner way than adding \n here?
                 if (!parse_success) {
                     std::cout << "Parse failed for command: " << shell_input << std::endl;

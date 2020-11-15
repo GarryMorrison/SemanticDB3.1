@@ -60,10 +60,16 @@ class Timer_ms {
 private:
     const char* m_Name;
     std::chrono::high_resolution_clock::time_point m_StartTimepoint;
+    bool m_quiet_mode;
     bool m_Stopped;
 public:
     Timer_ms(const char* name)
-            : m_Name(name), m_Stopped(false) {
+            : m_Name(name), m_quiet_mode(false), m_Stopped(false) {
+        m_StartTimepoint = std::chrono::high_resolution_clock::now();
+    }
+
+    Timer_ms(const char* name, bool quiet_mode)
+            : m_Name(name), m_quiet_mode(quiet_mode), m_Stopped(false) {
         m_StartTimepoint = std::chrono::high_resolution_clock::now();
     }
 
@@ -73,7 +79,9 @@ public:
         long long start = std::chrono::time_point_cast<std::chrono::milliseconds>(m_StartTimepoint).time_since_epoch().count();
         long long end = std::chrono::time_point_cast<std::chrono::milliseconds>(endTimepoint).time_since_epoch().count();
 
-        std::cout << m_Name << ": " << (end - start) << " milliseconds" << std::endl;
+        if (!m_quiet_mode) {
+            std::cout << m_Name << ": " << display_time(end - start) << std::endl;
+        }
         m_Stopped = true;
     }
 
