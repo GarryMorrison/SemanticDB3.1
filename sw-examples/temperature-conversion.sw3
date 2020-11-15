@@ -1,0 +1,18 @@
+-- Convert between Kelvin, Celsius and Fahrenheit:
+
+to-Kelvin |K: *> #=> |_self>
+to-Celsius |K: *> #=> |C:> __ round[2] minus[273.15] extract-value |_self>
+to-Fahrenheit |K: *> #=> |F:> __ round[2] minus[459.67] times-by[1.8] extract-value |_self>
+
+to-Kelvin |C: *> #=> |K:> __ round[2] plus[273.15] extract-value |_self>
+to-Celsius |C: *> #=> |_self>
+to-Fahrenheit |C: *> #=> |F:> __ round[2] plus[32] times-by[1.8] extract-value |_self>
+
+to-Kelvin |F: *> #=> |K:> __ round[2] times-by[0.5556] plus[459.67] extract-value |_self>
+to-Celsius |F: *> #=> |C:> __ round[2] times-by[0.5556] minus[32] extract-value |_self>
+to-Fahrenheit |F: *> #=> |_self>
+
+to-K |*> #=> to-Kelvin |_self>
+to-C |*> #=> to-Celsius |_self>
+to-F |*> #=> to-Fahrenheit |_self>
+
