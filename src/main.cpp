@@ -21,6 +21,7 @@ std::string help_string = "\n    q, quit, exit        quit the semantic agent\n"
                           "    quiet off            switch time-taken messages on\n"
                           "    -- comment           ignore, this is just a comment line\n";
 
+unsigned int default_decimal_places;
 
 int main(int argc, char** argv) {
 
@@ -34,9 +35,11 @@ int main(int argc, char** argv) {
     try {
         TCLAP::CmdLine cmd("The Semantic DB 3.1 shell", ' ', "3.1");
 
-        TCLAP::SwitchArg interactive_switch("i","interactive","Enter interactive mode", cmd, false);
-        TCLAP::SwitchArg dump_switch("d","dump","Dump context", cmd, false);
+        TCLAP::ValueArg<unsigned int> decimal_places_arg("p", "places", "Ket decimal places", false, 5, "integer");
+        cmd.add( decimal_places_arg );
         TCLAP::SwitchArg quiet_switch("q","quiet","Switch to quiet mode", cmd, false);
+        TCLAP::SwitchArg dump_switch("d","dump","Dump context", cmd, false);
+        TCLAP::SwitchArg interactive_switch("i","interactive","Enter interactive mode", cmd, false);
         TCLAP::UnlabeledMultiArg<std::string> multi("f", "List of file names", false, "file names", cmd);
 
         cmd.parse( argc, argv ); // parse the commandline input
@@ -44,11 +47,13 @@ int main(int argc, char** argv) {
         bool interactive_mode = interactive_switch.getValue();
         bool dump_context = dump_switch.getValue();
         bool quiet_mode = quiet_switch.getValue();
+        default_decimal_places = decimal_places_arg.getValue();
         std::vector<std::string> file_names = multi.getValue();
 
         std::cout << "interactive mode: " << interactive_mode << std::endl;
         std::cout << "dump context: " << dump_context << std::endl;
         std::cout << "quiet mode: " << quiet_mode << std::endl;
+        std::cout << "default_decimal_places: " << default_decimal_places << std::endl;
 
         int k = 0;
         for (const auto file_name: file_names) {
