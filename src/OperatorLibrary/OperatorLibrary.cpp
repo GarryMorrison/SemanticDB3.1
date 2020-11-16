@@ -369,3 +369,75 @@ Ket tolowerket(const Ket k) {
                    [](unsigned char c){ return std::tolower(c); });
     return Ket(label, k.value());
 }
+
+
+Ket op_table(const Superposition &sp, ContextList &context, const std::vector<std::shared_ptr<CompoundConstant> > &parameters) {
+    unsigned int width = parameters.size();
+    unsigned int height = sp.size();
+    std::vector<SimpleOperator> operators;
+    operators.reserve(width);
+    std::vector<std::string> header;
+    header.reserve(width);
+    std::vector<unsigned int> column_widths;
+    column_widths.reserve(width);
+    std::vector<std::string> table_body;
+    table_body.reserve(width * height);
+
+    for (const auto &elt: parameters) {
+        SimpleOperator op = elt->get_operator();
+        operators.push_back(op);
+        std::string op_label = op.to_string();
+        header.push_back(op_label);
+        unsigned int column_width = op_label.size();
+        column_widths.push_back(column_width);  // initial size of columns is the header widths
+    }
+
+    for (const auto &k: sp) {
+        Sequence seq = k.to_seq();
+        unsigned int idx = 0;
+        for (const auto &op: operators) {
+            std::string str;
+            if (idx == 0) {
+                str = k.label();
+            } else {
+                str = op.Compile(context, seq).to_string();
+            }
+            table_body.push_back(str);
+            column_widths[idx] = std::max(column_widths[idx], (unsigned int)str.size());
+            idx++;
+        }
+    }
+
+    // std::cout << std::left << std::setfill(' ') << std::setw(max_len) << k.label() << " : ";
+    // std::cout << std::setfill('|') << std::setw((ulong)k.value()) << "|" << std::endl;
+    unsigned int idx = 0;
+    for (const auto column_width: column_widths) {
+        std::cout << "+" << std::left << std::setfill('-') << std::setw(column_width + 2) << "-";
+    }
+    std::cout << "+" << std::endl;
+    for (const auto &str: header) {
+        std::cout << "| " << std::left << std::setfill(' ') << std::setw(column_widths[idx]) << str << " ";
+        idx++;
+    }
+    std::cout << "|" << std::endl;
+    for (const auto column_width: column_widths) {
+        std::cout << "+" << std::left << std::setfill('-') << std::setw(column_width + 2) << "-";
+    }
+    std::cout << "+" << std::endl;
+
+    idx = 0;
+    for (const auto &str: table_body) {
+        std::cout << "| " << std::left << std::setfill(' ') << std::setw(column_widths[idx]) << str << " ";
+        idx++;
+        idx = idx % width;
+        if (idx == 0) {
+            std::cout << "|" << std::endl;
+        }
+    }
+
+    for (const auto column_width: column_widths) {
+        std::cout << "+" << std::left << std::setfill('-') << std::setw(column_width + 2) << "-";
+    }
+    std::cout << "+" << std::endl;
+    return Ket("table");
+}

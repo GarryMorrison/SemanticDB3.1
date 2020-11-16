@@ -32,6 +32,9 @@ Sequence CompoundOperator::Compile(ContextList& context, const Sequence& seq) co
     } else if (fn_map.compound_sigmoids.find(op_idx) != fn_map.compound_sigmoids.end()) {
         auto sigmoid = fn_map.compound_sigmoids[op_idx];
         return seq.apply_compound_sigmoid(sigmoid, const_vec); // Change parameters to & later.
+    } else if (fn_map.compound_context_sp_fn.find(op_idx) != fn_map.compound_context_sp_fn.end()) {
+        auto fn = fn_map.compound_context_sp_fn[op_idx];
+        return fn(seq.to_sp(), context, const_vec);  // TODO: do something smarter with seq -> sp issue.
     } else if (fn_map.compound_context_seq_fn.find(op_idx) != fn_map.compound_context_seq_fn.end()) {
         auto fn = fn_map.compound_context_seq_fn[op_idx];
         return fn(seq, context, const_vec);

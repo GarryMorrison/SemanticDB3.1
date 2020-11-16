@@ -182,6 +182,8 @@ FunctionOperatorMap::FunctionOperatorMap() {
     fn_map.ket_fn.emplace(idx, &tolowerket);
     fn_map.compound_ket_fn.emplace(idx, &op_tolower);
 
+    idx = ket_map.get_idx("table");
+    fn_map.compound_context_sp_fn.emplace(idx, &op_table);
 }
 
 void FunctionOperatorMap::print() const {
@@ -227,6 +229,11 @@ void FunctionOperatorMap::print() const {
 
     std::cout << "seq_fn:" << std::endl;
     for (const auto &it : seq_fn) {
+        std::cout << "    " << ket_map.get_str(it.first) << std::endl;
+    }
+
+    std::cout << "compound_context_sp_fn:" << std::endl;
+    for (const auto &it : compound_context_sp_fn) {
         std::cout << "    " << ket_map.get_str(it.first) << std::endl;
     }
 

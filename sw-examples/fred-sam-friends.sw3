@@ -1,0 +1,10 @@
+-- Learn Fred and Sam's friends and age:
+
+friends |Fred> => |Jack> + |Harry> + |Ed> + |Mary> + |Rob> + |Patrick> + |Emma> + |Charlie>
+age |Fred> => |32>
+
+friends |Sam> => |Charlie> + |George> + |Emma> + |Jack> + |Robert> + |Frank> + |Julie>
+age |Sam> => |34>
+
+table[person, age, friends] split[" "] |Fred Sam>
+
