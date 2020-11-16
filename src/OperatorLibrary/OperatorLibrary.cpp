@@ -400,7 +400,8 @@ Ket op_table(const Superposition &sp, ContextList &context, const std::vector<st
             if (idx == 0) {
                 str = k.label();
             } else {
-                str = op.Compile(context, seq).to_string();
+                // str = op.Compile(context, seq).to_string();  // Swap in something better to display in a table than Sequence::to_string().
+                str = op.Compile(context, seq).readable_display();
             }
             table_body.push_back(str);
             column_widths[idx] = std::max(column_widths[idx], (unsigned int)str.size());
@@ -408,8 +409,6 @@ Ket op_table(const Superposition &sp, ContextList &context, const std::vector<st
         }
     }
 
-    // std::cout << std::left << std::setfill(' ') << std::setw(max_len) << k.label() << " : ";
-    // std::cout << std::setfill('|') << std::setw((ulong)k.value()) << "|" << std::endl;
     unsigned int idx = 0;
     for (const auto column_width: column_widths) {
         std::cout << "+" << std::left << std::setfill('-') << std::setw(column_width + 2) << "-";
@@ -429,7 +428,7 @@ Ket op_table(const Superposition &sp, ContextList &context, const std::vector<st
     for (const auto &str: table_body) {
         std::cout << "| " << std::left << std::setfill(' ') << std::setw(column_widths[idx]) << str << " ";
         idx++;
-        idx = idx % width;
+        idx %= width;
         if (idx == 0) {
             std::cout << "|" << std::endl;
         }

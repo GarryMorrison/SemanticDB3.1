@@ -80,9 +80,9 @@ const size_t Superposition::size() const {
 }
 
 const std::string Superposition::to_string() const {
-    std::string s;
-    if (sp.empty()) {s = "|>"; return s; }
+    if (sp.empty()) { return "|>"; }
 
+    std::string s;
     std::string label;
     std::string value_string;
     std::string sign;
@@ -119,6 +119,49 @@ const std::string Superposition::to_string() const {
     }
     return s;
 }
+
+const std::string Superposition::readable_display() const {
+    if (sp.empty()) { return "|>"; }
+
+    std::string s;
+    std::string label;
+    std::string value_string;
+    std::string sign;
+    bool first_pass = true;
+    for (const auto idx: sort_order) {
+        auto label = ket_map.get_str(idx);
+        auto value = sp.at(idx);
+        sign = " + ";
+        if (double_eq(fabs(value), 1.0)) {
+            value_string = "";
+            if (value < 0) { sign = " - "; }
+        }
+        else {
+            // if (double_eq(value, round(value))) {
+            //     value_string = std::to_string((int)round(fabs(value))) + " ";
+            // }
+            // else {
+            //     value_string = std::to_string(fabs(value)) + " ";
+            // }
+            value_string = float_to_int(fabs(value), default_decimal_places) + " "; // improve!
+            if (value < 0) { sign = " - "; }
+        }
+
+        if (first_pass && value >= 0) {
+            s += value_string + label;
+            first_pass = false;
+        }
+        else if (first_pass && value < 0) {
+            s += "- " + value_string + label;
+            first_pass = false;
+        }
+        else {
+            s += sign + value_string + label;
+        }
+    }
+    return s;
+}
+
 
 Ket Superposition::to_ket() const {
     if (sp.empty()) { return Ket(); }

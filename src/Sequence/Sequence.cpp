@@ -60,10 +60,26 @@ const std::string Sequence::to_string() const {
         else {
             s += " . " + sp.to_string();
         }
-
     }
     return s;
 }
+
+const std::string Sequence::readable_display() const {
+    if (seq.empty()) { return ""; }
+    std::string s;
+    bool first_pass = true;
+    for (const auto &sp: seq) {
+        if (first_pass) {
+            s += sp.readable_display();
+            first_pass = false;
+        }
+        else {
+            s += " . " + sp.readable_display();
+        }
+    }
+    return s;
+}
+
 
 Ket Sequence::to_ket() const {
     if (seq.empty()) { return Ket(); }
