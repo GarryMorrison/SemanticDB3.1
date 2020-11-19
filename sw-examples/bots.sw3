@@ -63,3 +63,5 @@ friends |bot: Madison> => |bot: Emma> + |bot: Bella>
 
 transpose-table[bot, name, mother, father, birth-sign] split[", "] |bot: Bella, bot: Emma, bot: Madison>
 
+transpose-table[bot, *] split[", "] |bot: Bella, bot: Emma, bot: Madison>
+

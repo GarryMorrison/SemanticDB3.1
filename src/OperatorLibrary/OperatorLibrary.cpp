@@ -446,10 +446,32 @@ Ket op_table(const Superposition &sp, ContextList &context, const std::vector<st
 Ket op_transpose_table(const Superposition &sp, ContextList &context, const std::vector<std::shared_ptr<CompoundConstant> > &parameters) {
     if (parameters.empty()) { return Ket(""); }
 
-    unsigned int height = parameters.size();
-    unsigned int width = sp.size() + 1;
     std::vector<SimpleOperator> operators;
-    operators.reserve(height);
+    if (parameters.size() == 2) {
+        if (parameters[1]->get_operator().to_string() == "*") {
+            SimpleOperator op = parameters[0]->get_operator();
+            operators.push_back(op);
+            Superposition supported_ops;
+            for (const auto &k: sp) {
+                Superposition tmp_sp = context.recall("supported-ops", k.label())->to_sp(); // swap to idx version later.
+                supported_ops.add(tmp_sp);
+            }
+            for (const auto &s_op: supported_ops) {
+                ulong idx = s_op.label_split_idx()[1];  // Assumes our s_op are in form: |op: some-op>
+                SimpleOperator op2(idx);
+                operators.push_back(op2);
+            }
+        }
+    }
+    if (operators.empty()) {
+        for (const auto &elt: parameters) {
+            SimpleOperator op = elt->get_operator();
+            operators.push_back(op);
+        }
+    }
+
+    unsigned int height = operators.size();
+    unsigned int width = sp.size() + 1;
     std::vector<std::string> header;
     header.reserve(width);
     std::vector<unsigned int> column_widths;
@@ -457,36 +479,32 @@ Ket op_transpose_table(const Superposition &sp, ContextList &context, const std:
     std::vector<std::string> table_body;
     table_body.reserve(width * ( height - 1));
 
-    unsigned int idx = 0;
-    for (const auto &elt: parameters) {
-        SimpleOperator op = elt->get_operator();
-        std::string op_label = op.to_string();
-        if (idx == 0) {
-            header.push_back(op_label);
-            column_widths.push_back(op_label.size());
-        } else {
-            operators.push_back(op);
-        }
-        idx++;
-    }
-
+    header.push_back(operators[0].to_string());
+    column_widths.push_back(operators[0].to_string().size());
     for (const auto &k: sp) {
         header.push_back(k.label());
         column_widths.push_back(k.label().size());
     }
 
+    unsigned int idx = 0;
     std::string str;
+    bool first_pass = true;
     for (const auto &op: operators) {
-        idx = 0;
-        table_body.push_back(op.to_string());
-        column_widths[0] = std::max(column_widths[0], (unsigned int)op.to_string().size());
-        idx++;
-        for (const auto &k: sp) {
-            Sequence seq = k.to_seq();
-            str = op.Compile(context, seq).readable_display();
-            table_body.push_back(str);
-            column_widths[idx] = std::max(column_widths[idx], (unsigned int)str.size());
+        if (first_pass) {
+            first_pass = false;
+            continue;
+        } else {
+            idx = 0;
+            table_body.push_back(op.to_string());
+            column_widths[0] = std::max(column_widths[0], (unsigned int) op.to_string().size());
             idx++;
+            for (const auto &k: sp) {
+                Sequence seq = k.to_seq();
+                str = op.Compile(context, seq).readable_display();
+                table_body.push_back(str);
+                column_widths[idx] = std::max(column_widths[idx], (unsigned int) str.size());
+                idx++;
+            }
         }
     }
 
