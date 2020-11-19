@@ -184,6 +184,10 @@ FunctionOperatorMap::FunctionOperatorMap() {
 
     idx = ket_map.get_idx("table");
     fn_map.compound_context_sp_fn.emplace(idx, &op_table);
+
+    idx = ket_map.get_idx("transpose-table");
+    fn_map.compound_context_sp_fn.emplace(idx, &op_transpose_table);
+
 }
 
 void FunctionOperatorMap::print() const {

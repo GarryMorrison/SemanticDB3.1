@@ -1,0 +1,65 @@
+name |bot: Bella> => |Bella>
+mother |bot: Bella> => |Mia>
+father |bot: Bella> => |William>
+birth-sign |bot: Bella> => |birth-sign: Cancer>
+number-siblings |bot: Bella> => |number: 1>
+wine-preference |bot: Bella> => |wine: Merlot>
+favourite-fruit |bot: Bella> => |fruit: pineapples>
+favourite-music |bot: Bella> => |music: genre: punk>
+favourite-play |bot: Bella> => |play: Endgame>
+hair-colour |bot: Bella> => |hair-colour: gray>
+eye-colour |bot: Bella> => |eye-colour: hazel>
+where-live |bot: Bella> => |location: Sydney>
+favourite-holiday-spot |bot: Bella> => |location: Paris>
+make-of-car |bot: Bella> => |car: Porsche>
+religion |bot: Bella> => |religion: Christianity>
+personality-type |bot: Bella> => |personality-type: the guardian>
+current-emotion |bot: Bella> => |emotion: fear>
+bed-time |bot: Bella> => |time: 8pm>
+age |bot: Bella> => |age: 31>
+
+name |bot: Emma> => |Emma>
+mother |bot: Emma> => |Madison>
+father |bot: Emma> => |Nathan>
+birth-sign |bot: Emma> => |birth-sign: Capricorn>
+number-siblings |bot: Emma> => |number: 4>
+wine-preference |bot: Emma> => |wine: Pinot Noir>
+favourite-fruit |bot: Emma> => |fruit: oranges>
+favourite-music |bot: Emma> => |music: genre: hip hop>
+favourite-play |bot: Emma> => |play: No Exit>
+hair-colour |bot: Emma> => |hair-colour: red>
+eye-colour |bot: Emma> => |eye-colour: gray>
+where-live |bot: Emma> => |location: New York>
+favourite-holiday-spot |bot: Emma> => |location: the Taj Mahal>
+make-of-car |bot: Emma> => |car: BMW>
+religion |bot: Emma> => |religion: Taoism>
+personality-type |bot: Emma> => |personality-type: the visionary>
+current-emotion |bot: Emma> => |emotion: kindness>
+bed-time |bot: Emma> => |time: 2am>
+age |bot: Emma> => |age: 29>
+
+name |bot: Madison> => |Madison>
+mother |bot: Madison> => |Mia>
+father |bot: Madison> => |Ian>
+birth-sign |bot: Madison> => |birth-sign: Cancer>
+number-siblings |bot: Madison> => |number: 6>
+wine-preference |bot: Madison> => |wine: Pinot Noir>
+favourite-fruit |bot: Madison> => |fruit: pineapples>
+favourite-music |bot: Madison> => |music: genre: blues>
+favourite-play |bot: Madison> => |play: Death of a Salesman>
+hair-colour |bot: Madison> => |hair-colour: red>
+eye-colour |bot: Madison> => |eye-colour: amber>
+where-live |bot: Madison> => |location: Vancouver>
+favourite-holiday-spot |bot: Madison> => |location: Uluru>
+make-of-car |bot: Madison> => |car: Bugatti>
+religion |bot: Madison> => |religion: Islam>
+personality-type |bot: Madison> => |personality-type: the performer>
+current-emotion |bot: Madison> => |emotion: indignation>
+bed-time |bot: Madison> => |time: 10:30pm>
+hungry |bot: Madison> => |starving>
+age |bot: Madison> => |age: 23>
+friends |bot: Madison> => |bot: Emma> + |bot: Bella>
+
+
+transpose-table[bot, name, mother, father, birth-sign] split[", "] |bot: Bella, bot: Emma, bot: Madison>
+

@@ -124,6 +124,7 @@ yylloc->step();
         return token::DOUBLE;
     }
 
+
 [ \t\r]+ {
         yylloc->step();
         //return token::SPACE;  // tends to cause parse errors!

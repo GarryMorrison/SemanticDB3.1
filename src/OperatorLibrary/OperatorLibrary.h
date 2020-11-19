@@ -42,5 +42,6 @@ Ket op_tolower(const Ket k, const std::vector<std::shared_ptr<CompoundConstant> 
 Ket toupperket(const Ket k); // rename these two ...
 Ket tolowerket(const Ket k);
 Ket op_table(const Superposition &sp, ContextList &context, const std::vector<std::shared_ptr<CompoundConstant> > &parameters);
+Ket op_transpose_table(const Superposition &sp, ContextList &context, const std::vector<std::shared_ptr<CompoundConstant> > &parameters);
 
 #endif //SDB3_1_OPERATORLIBRARY_H

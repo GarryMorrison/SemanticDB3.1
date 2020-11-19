@@ -372,6 +372,8 @@ Ket tolowerket(const Ket k) {
 
 
 Ket op_table(const Superposition &sp, ContextList &context, const std::vector<std::shared_ptr<CompoundConstant> > &parameters) {
+    if (parameters.empty()) { return Ket(""); }
+
     unsigned int width = parameters.size();
     unsigned int height = sp.size();
     std::vector<SimpleOperator> operators;
@@ -438,5 +440,81 @@ Ket op_table(const Superposition &sp, ContextList &context, const std::vector<st
         std::cout << "+" << std::left << std::setfill('-') << std::setw(column_width + 2) << "-";
     }
     std::cout << "+" << std::endl;
+    return Ket("table");
+}
+
+Ket op_transpose_table(const Superposition &sp, ContextList &context, const std::vector<std::shared_ptr<CompoundConstant> > &parameters) {
+    if (parameters.empty()) { return Ket(""); }
+
+    unsigned int height = parameters.size();
+    unsigned int width = sp.size() + 1;
+    std::vector<SimpleOperator> operators;
+    operators.reserve(height);
+    std::vector<std::string> header;
+    header.reserve(width);
+    std::vector<unsigned int> column_widths;
+    column_widths.reserve(width);
+    std::vector<std::string> table_body;
+    table_body.reserve(width * ( height - 1));
+
+    unsigned int idx = 0;
+    for (const auto &elt: parameters) {
+        SimpleOperator op = elt->get_operator();
+        std::string op_label = op.to_string();
+        if (idx == 0) {
+            header.push_back(op_label);
+            column_widths.push_back(op_label.size());
+        } else {
+            operators.push_back(op);
+        }
+        idx++;
+    }
+
+    for (const auto &k: sp) {
+        header.push_back(k.label());
+        column_widths.push_back(k.label().size());
+    }
+
+    std::string str;
+    for (const auto &op: operators) {
+        idx = 0;
+        table_body.push_back(op.to_string());
+        column_widths[0] = std::max(column_widths[0], (unsigned int)op.to_string().size());
+        idx++;
+        for (const auto &k: sp) {
+            Sequence seq = k.to_seq();
+            str = op.Compile(context, seq).readable_display();
+            table_body.push_back(str);
+            column_widths[idx] = std::max(column_widths[idx], (unsigned int)str.size());
+            idx++;
+        }
+    }
+
+    for (const auto column_width: column_widths) {
+        std::cout << "+" << std::left << std::setfill('-') << std::setw(column_width + 2) << "-";
+    }
+    std::cout << "+" << std::endl;
+    idx = 0;
+    for (const auto &str: header) {
+        std::cout << "| " << std::left << std::setfill(' ') << std::setw(column_widths[idx]) << str << " ";
+        idx++;
+    }
+    std::cout << "|" << std::endl;
+
+    idx = 0;
+    for (const auto &str: table_body) {
+        std::cout << "| " << std::left << std::setfill(' ') << std::setw(column_widths[idx]) << str << " ";
+        idx++;
+        idx %= width;
+        if (idx == 0) {
+            std::cout << "|" << std::endl;
+        }
+    }
+
+    for (const auto column_width: column_widths) {
+        std::cout << "+" << std::left << std::setfill('-') << std::setw(column_width + 2) << "-";
+    }
+    std::cout << "+" << std::endl;
+
     return Ket("table");
 }
