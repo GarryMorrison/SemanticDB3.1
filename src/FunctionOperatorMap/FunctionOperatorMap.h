@@ -10,6 +10,8 @@
 #include "../Sequence/Sequence.h"
 #include "../Context/ContextList.h"
 
+template <class T>
+void print_map(const std::string& s, T& our_map);
 
 class FunctionOperatorMap {
 private:

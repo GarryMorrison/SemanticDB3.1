@@ -22,6 +22,7 @@ std::string help_string = "\n    q, quit, exit        quit the semantic agent\n"
                           "    history              show console history\n"
                           "    quiet on             switch time-taken messages off\n"
                           "    quiet off            switch time-taken messages on\n"
+                          "    usage                show available operators\n"
                           "    -- comment           ignore, this is just a comment line\n";
 
 unsigned int default_decimal_places;
@@ -161,6 +162,8 @@ int main(int argc, char** argv) {
                 std::cin >> history_index;
                 std::cin.ignore();
                 context.set(history_index);
+            } else if (shell_input == "usage") {
+                fn_map.print();
             } else {
                 Timer_ms timer("\n    Time taken", quiet_mode);  // Time the execution of the command. The destructor prints the results.
                 parse_success = driver.parse_string(shell_input + "\n");  // Is there a cleaner way than adding \n here?

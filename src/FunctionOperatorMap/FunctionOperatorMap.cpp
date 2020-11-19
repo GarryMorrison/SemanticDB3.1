@@ -190,93 +190,37 @@ FunctionOperatorMap::FunctionOperatorMap() {
 
 }
 
-void FunctionOperatorMap::print() const {
-    std::cout << "built_in:" << std::endl;
-    for (const auto &it : built_in) {
-        std::cout << "    " << ket_map.get_str(it.first) << std::endl;
+template <class T>
+void print_map(const std::string& s, T& our_map) {
+    std::cout << s << std::endl;
+    std::vector<std::string> tmp_sorted;
+    for (const auto &it: our_map) {
+        tmp_sorted.push_back(ket_map.get_str(it.first));
     }
+    std::sort(tmp_sorted.begin(), tmp_sorted.end());
+    for (const auto &str: tmp_sorted) {
+        std::cout << "    " << str << std::endl;
+    }
+}
 
-    std::cout << "compound_built_in:" << std::endl;
-    for (const auto &it : compound_built_in) {
-        std::cout << "    " << ket_map.get_str(it.first) << std::endl;
-    }
-
-    std::cout << "sigmoid:" << std::endl;
-    for (const auto &it : sigmoids) {
-        std::cout << "    " << ket_map.get_str(it.first) << std::endl;
-    }
-
-    std::cout << "compound_sigmoid:" << std::endl;
-    for (const auto &it : compound_sigmoids) {
-        std::cout << "    " << ket_map.get_str(it.first) << std::endl;
-    }
-
-    std::cout << "ket_fn:" << std::endl;
-    for (const auto &it : ket_fn) {
-        std::cout << "    " << ket_map.get_str(it.first) << std::endl;
-    }
-
-    std::cout << "compound_ket_fn:" << std::endl;
-    for (const auto &it : compound_ket_fn) {
-        std::cout << "    " << ket_map.get_str(it.first) << std::endl;
-    }
-
-    std::cout << "sp_fn:" << std::endl;
-    for (const auto &it : sp_fn) {
-        std::cout << "    " << ket_map.get_str(it.first) << std::endl;
-    }
-
-    std::cout << "compound_sp_fn:" << std::endl;
-    for (const auto &it : compound_sp_fn) {
-        std::cout << "    " << ket_map.get_str(it.first) << std::endl;
-    }
-
-    std::cout << "seq_fn:" << std::endl;
-    for (const auto &it : seq_fn) {
-        std::cout << "    " << ket_map.get_str(it.first) << std::endl;
-    }
-
-    std::cout << "compound_context_sp_fn:" << std::endl;
-    for (const auto &it : compound_context_sp_fn) {
-        std::cout << "    " << ket_map.get_str(it.first) << std::endl;
-    }
-
-    std::cout << "compound_context_seq_fn:" << std::endl;
-    for (const auto &it : compound_context_seq_fn) {
-        std::cout << "    " << ket_map.get_str(it.first) << std::endl;
-    }
-
-    std::cout << "whitelist_1:" << std::endl;
-    for (const auto &it : whitelist_1) {
-        std::cout << "    " << ket_map.get_str(it.first) << std::endl;
-    }
-    std::cout << "whitelist_2:" << std::endl;
-    for (const auto &it : whitelist_2) {
-        std::cout << "    " << ket_map.get_str(it.first) << std::endl;
-    }
-    std::cout << "whitelist_3:" << std::endl;
-    for (const auto &it : whitelist_3) {
-        std::cout << "    " << ket_map.get_str(it.first) << std::endl;
-    }
-    std::cout << "whitelist_4:" << std::endl;
-    for (const auto &it : whitelist_4) {
-        std::cout << "    " << ket_map.get_str(it.first) << std::endl;
-    }
-
-    std::cout << "context_whitelist_1:" << std::endl;
-    for (const auto &it : context_whitelist_1) {
-        std::cout << "    " << ket_map.get_str(it.first) << std::endl;
-    }
-    std::cout << "context_whitelist_2:" << std::endl;
-    for (const auto &it : context_whitelist_2) {
-        std::cout << "    " << ket_map.get_str(it.first) << std::endl;
-    }
-    std::cout << "context_whitelist_3:" << std::endl;
-    for (const auto &it : context_whitelist_3) {
-        std::cout << "    " << ket_map.get_str(it.first) << std::endl;
-    }
-    std::cout << "context_whitelist_4:" << std::endl;
-    for (const auto &it : context_whitelist_4) {
-        std::cout << "    " << ket_map.get_str(it.first) << std::endl;
-    }
+void FunctionOperatorMap::print() const { // Doesn't need to be optimized at all.
+    print_map("built_in:", built_in);
+    print_map("compound_built_in:", compound_built_in);
+    print_map("sigmoid:", sigmoids);
+    print_map("compound_sigmoid:", compound_sigmoids);
+    print_map("ket_fn:", ket_fn);
+    print_map("compound_ket_fn:", compound_ket_fn);
+    print_map("sp_fn:", sp_fn);
+    print_map("compound_sp_fn:", compound_sp_fn);
+    print_map("seq_fn:", seq_fn);
+    print_map("compound_context_sp_fn:", compound_context_sp_fn);
+    print_map("compound_context_seq_fn:", compound_context_seq_fn);
+    print_map("function_1:", whitelist_1);
+    print_map("function_2:", whitelist_2);
+    print_map("function_3:", whitelist_3);
+    print_map("function_4:", whitelist_4);
+    print_map("context_function_1:", context_whitelist_1);
+    print_map("context_function_2:", context_whitelist_2);
+    print_map("context_function_3:", context_whitelist_3);
+    print_map("context_function_4:", context_whitelist_4);
 }
