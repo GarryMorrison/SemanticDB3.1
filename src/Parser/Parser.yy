@@ -78,6 +78,7 @@
 %token			EOL		"end of line"
 %token          SPACE   "white space char"
 %token          COMMENT "comment string"
+%token          CONTEXT "context learn rule"
 %token          SELF_KET "self ket"
 %token          MULTI_SELF_KET "multi self ket"
 %token <integerVal>     SELF_KETK   "self ket k"
@@ -177,6 +178,7 @@ item : operator_sequence EOL { Sequence seq(""); std::cout << "operator sequence
      | general_learn_rule EOL { std::cout << "multi learn rule:\n" << $1->to_string() << std::endl; $1->Compile(driver.context); }
      | function_learn_rule EOL
      | COMMENT
+     | CONTEXT KET_LABEL EOL { driver.context.set(ket_map.get_str($2)); }
      | EOL
 //     | compound_operator { std::cout << "compound operator: " << $1->to_string() << std::endl; }
 //     | bracket_operator

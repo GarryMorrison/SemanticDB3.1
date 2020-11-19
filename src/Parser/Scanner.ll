@@ -70,6 +70,7 @@ digit           [0-9]
 yylloc->step();
 %}
 
+"|context> => " { return token::CONTEXT; }
 "--".*"\n" { return token::COMMENT; }
 
 "|_self>" { return token::SELF_KET; }

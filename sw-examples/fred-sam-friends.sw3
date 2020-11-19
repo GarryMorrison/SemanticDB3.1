@@ -1,5 +1,7 @@
 -- Learn Fred and Sam's friends and age:
 
+|context> => |Fred Sam friends>
+
 friends |Fred> => |Jack> + |Harry> + |Ed> + |Mary> + |Rob> + |Patrick> + |Emma> + |Charlie>
 age |Fred> => |32>
 
