@@ -8,3 +8,5 @@ age |Sam> => |34>
 
 table[person, age, friends] split[" "] |Fred Sam>
 
+table[person, *] split[" "] |Fred Sam>
+

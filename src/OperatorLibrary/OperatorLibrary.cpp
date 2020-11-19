@@ -374,10 +374,32 @@ Ket tolowerket(const Ket k) {
 Ket op_table(const Superposition &sp, ContextList &context, const std::vector<std::shared_ptr<CompoundConstant> > &parameters) {
     if (parameters.empty()) { return Ket(""); }
 
-    unsigned int width = parameters.size();
-    unsigned int height = sp.size();
     std::vector<SimpleOperator> operators;
-    operators.reserve(width);
+    if (parameters.size() == 2) {
+        if (parameters[1]->get_operator().to_string() == "*") {
+            SimpleOperator op = parameters[0]->get_operator();
+            operators.push_back(op);
+            Superposition supported_ops;
+            for (const auto &k: sp) {
+                Superposition tmp_sp = context.recall("supported-ops", k.label())->to_sp(); // swap to idx version later.
+                supported_ops.add(tmp_sp);
+            }
+            for (const auto &s_op: supported_ops) {
+                ulong idx = s_op.label_split_idx()[1];  // Assumes our s_op are in form: |op: some-op>
+                SimpleOperator op2(idx);
+                operators.push_back(op2);
+            }
+        }
+    }
+    if (operators.empty()) {
+        for (const auto &elt: parameters) {
+            SimpleOperator op = elt->get_operator();
+            operators.push_back(op);
+        }
+    }
+
+    unsigned int width = operators.size();
+    unsigned int height = sp.size();
     std::vector<std::string> header;
     header.reserve(width);
     std::vector<unsigned int> column_widths;
@@ -385,9 +407,7 @@ Ket op_table(const Superposition &sp, ContextList &context, const std::vector<st
     std::vector<std::string> table_body;
     table_body.reserve(width * height);
 
-    for (const auto &elt: parameters) {
-        SimpleOperator op = elt->get_operator();
-        operators.push_back(op);
+    for (const auto &op: operators) {
         std::string op_label = op.to_string();
         header.push_back(op_label);
         unsigned int column_width = op_label.size();
