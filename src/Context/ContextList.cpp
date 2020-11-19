@@ -32,6 +32,24 @@ void ContextList::set(const std::string& s) {
     }
 }
 
+void ContextList::set(const ulong idx) {
+    if (idx < 0 || idx >= max_index) {
+        return;
+    }
+    index = idx;
+}
+
+void ContextList::show_context_list() {
+    std::cout << "\nContextList:\n";
+    for (ulong k = 0; k < max_index; k++ ) {
+        std::string star = "   ";
+        if (k == index) {
+            star = " * ";
+        }
+        std::cout << "    " << k << ")" << star << data[k].get_name() << std::endl;
+    }
+}
+
 /*
 void ContextList::learn(const ulong op_idx, const ulong label_idx, BaseSequence* bSeq) {
     data[index].learn(op_idx, label_idx, bSeq);

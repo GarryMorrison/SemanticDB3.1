@@ -20,6 +20,8 @@ private:
 public:
     ContextList(const std::string& s);
     void set(const std::string& s);
+    void set(const ulong idx);
+    void show_context_list();
 
 /*
     void learn(const ulong op_idx, const ulong label_idx, BaseSequence* bSeq);

@@ -7,13 +7,16 @@
 
 
 std::string standard_introduction_text = "Welcome to the Semantic DB version 3.1\n";
-std::string interactive_introduction_text = "\nWelcome to the Semantic DB version 3.1 shell.\nLast updated 14th November 2020.\nType h for help.\n";
+std::string interactive_introduction_text = "\nWelcome to the Semantic DB version 3.1 shell.\nLast updated 19th November 2020.\nType h for help.\n";
 
 std::string help_string = "\n    q, quit, exit        quit the semantic agent\n"
                           "    h, help              print this message\n"
                           "    dump                 print current context\n"
                           "    dump multi           print context list\n"
                           "    load file.sw3        load the given file\n"
+                          "    context              show known context's\n"
+                          "    context string       set context to string\n"
+                          "    icontext             interactively choose context\n"
                           "    .                    repeat last command\n"
                           "    i                    interactive history\n"
                           "    history              show console history\n"
@@ -148,6 +151,16 @@ int main(int argc, char** argv) {
             } else if (shell_input == "quiet off") {
                 quiet_mode = false;
                 std::cout << "Switched off quiet mode." << std::endl;
+            } else if (shell_input == "context") {
+                context.show_context_list();
+            } else if (shell_input.substr(0, 8) == "context ") {
+                context.set(shell_input.substr(8));
+            } else if (shell_input == "icontext") {
+                context.show_context_list();
+                std::cout << "\nEnter your selection: ";
+                std::cin >> history_index;
+                std::cin.ignore();
+                context.set(history_index);
             } else {
                 Timer_ms timer("\n    Time taken", quiet_mode);  // Time the execution of the command. The destructor prints the results.
                 parse_success = driver.parse_string(shell_input + "\n");  // Is there a cleaner way than adding \n here?
