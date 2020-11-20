@@ -243,7 +243,11 @@ operator_with_sequence : ket {
                             std::shared_ptr<BaseSequence> tmp_seq_ptr($2);
                             $$ = new OperatorWithSequence(tmp_op_ptr, tmp_seq_ptr);
                        }
-//                       | operator_sequence LPAREN general_sequence RPAREN { std::cout << $1->to_string() << std::endl; }
+                       | operator_sequence LPAREN general_sequence RPAREN {
+                            std::shared_ptr<BaseOperator> tmp_op_ptr($1);
+                            std::shared_ptr<BaseSequence> tmp_seq_ptr($3);
+                            $$ = new OperatorWithSequence(tmp_op_ptr, tmp_seq_ptr);
+                       }
                        ;
 
 operator_sequence : general_operator { std::shared_ptr<BaseOperator> tmp_ptr($1); $$ = new OperatorSequence(tmp_ptr); }
