@@ -191,11 +191,32 @@ Sequence op_intersection2(const Sequence &input_seq, const Sequence &one, const 
     return seq;
 }
 
+// Filter could do with some optimization!
 Sequence op_filter(ContextList &context, const Sequence &input_seq, const Sequence &one, const Sequence &two) {
-    std::cout << "input_seq: " << input_seq.to_string() << std::endl;
-    std::cout << "one: " << one.to_string() << std::endl;
-    std::cout << "two: " << two.to_string() << std::endl;
 
+    Superposition result;
+    // First branch:
+    // NB: Can be expensive! Especially if rel-kets[*] is large, or supported-ops is large.
+    // Eg: filter(|*>, |doctor> + |nurse>) rel-kets[*]
+    if (one.to_ket().label_idx() == ket_map.get_idx("*")) {
+        ulong supported_ops_idx = ket_map.get_idx("supported-ops");
+        for (const auto &k: input_seq.to_sp()) {
+            Superposition s_ops = context.recall(supported_ops_idx, k.label_idx())->to_sp();
+            for (const auto &s_op: s_ops) {
+                ulong result_idx = context.recall(s_op.label_split_idx()[1], k.label_idx())->to_ket().label_idx();
+                for (const auto &k2: two.to_sp()) {
+                    if (result_idx == k2.label_idx()) {
+                        result.add(k.label_idx());
+                        goto break_loop;
+                    }
+                }
+            }
+            break_loop:;
+        }
+        return result;
+    }
+
+    // General branch:
     auto one_vec = one.to_ket().label_split_idx();
     if (one_vec.size() < 2) { return Ket(""); }
 
@@ -212,14 +233,10 @@ Sequence op_filter(ContextList &context, const Sequence &input_seq, const Sequen
     } else {
         return Ket("");
     }
-    for (const auto &op: operators) {
-        std::cout << "operator: " << op.to_string() << std::endl;
-    }
 
     ulong two_idx = two.to_ket().label_idx();
     ulong star_idx = ket_map.get_idx("*");
 
-    Superposition result;
     if (two_idx == star_idx) {
         for (const auto &k: input_seq.to_sp()) {
             Sequence seq = k.to_seq();

@@ -35,7 +35,6 @@ occupation |Jack> => |nurse>
 
 
 -- put filter() to the test:
--- print |Is furniture:>
 filter(|op: is-furniture>, |yes>) shuffle rel-kets[*]
 
 filter(|ops: occupation father>, |nurse>) rel-kets[*]
@@ -43,3 +42,5 @@ filter(|ops: occupation father>, |nurse>) rel-kets[*]
 filter(|op: father>, |*>) rel-kets[*]
 
 filter(|ops: occupation father>, |doctor> + |nurse>) rel-kets[*]
+
+filter(|*>, |doctor> + |nurse>) rel-kets[*]
