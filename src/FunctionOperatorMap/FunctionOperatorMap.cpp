@@ -188,6 +188,9 @@ FunctionOperatorMap::FunctionOperatorMap() {
     idx = ket_map.get_idx("transpose-table");
     fn_map.compound_context_sp_fn.emplace(idx, &op_transpose_table);
 
+    idx = ket_map.get_idx("filter");
+    fn_map.context_whitelist_2.emplace(idx, &op_filter);
+
 }
 
 template <class T>

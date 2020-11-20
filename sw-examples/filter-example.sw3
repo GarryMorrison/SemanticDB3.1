@@ -1,0 +1,45 @@
+-- load some toy knowledge to test the filter() function:
+
+is-food |bread> => |yes>
+is-food |cheese> => |yes>
+is-food |steak> => |yes>
+
+is-furniture |chair> => |yes>
+is-furniture |table> => |yes>
+is-furniture |stool> => |yes>
+is-furniture |lounge> => |yes>
+
+is-day-of-week |monday> => |yes>
+is-day-of-week |tuesday> => |yes>
+is-day-of-week |wednesday> => |yes>
+is-day-of-week |thursday> => |yes>
+is-day-of-week |friday> => |yes>
+is-day-of-week |saturday> => |yes>
+is-day-of-week |sunday> => |yes>
+
+is-week-day |monday> => |yes>
+is-week-day |tuesday> => |yes>
+is-week-day |wednesday> => |yes>
+is-week-day |thursday> => |yes>
+is-week-day |friday> => |yes>
+
+is-weekend |saturday> => |yes>
+is-weekend |sunday> => |yes>
+
+father |John> => |Fred>
+occupation |Fred> => |politician>
+father |Sam> => |Robert>
+occupation |Robert> => |doctor>
+father |Emma> => |Jack>
+occupation |Jack> => |nurse>
+
+
+-- put filter() to the test:
+-- print |Is furniture:>
+filter(|op: is-furniture>, |yes>) shuffle rel-kets[*]
+
+filter(|ops: occupation father>, |nurse>) rel-kets[*]
+
+filter(|op: father>, |*>) rel-kets[*]
+
+filter(|ops: occupation father>, |doctor> + |nurse>) rel-kets[*]

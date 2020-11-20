@@ -6,6 +6,9 @@
 #include <set>
 #include "FunctionOperatorLibrary.h"
 #include "../Function/misc.h"
+#include "../Operator/SimpleOperator.h"
+#include "../Function/split_join.h"
+
 
 Sequence op_srange2(const Sequence& input_seq, const Sequence& start, const Sequence& stop) {
     Sequence step("1");
@@ -188,3 +191,64 @@ Sequence op_intersection2(const Sequence &input_seq, const Sequence &one, const 
     return seq;
 }
 
+Sequence op_filter(ContextList &context, const Sequence &input_seq, const Sequence &one, const Sequence &two) {
+    std::cout << "input_seq: " << input_seq.to_string() << std::endl;
+    std::cout << "one: " << one.to_string() << std::endl;
+    std::cout << "two: " << two.to_string() << std::endl;
+
+    auto one_vec = one.to_ket().label_split_idx();
+    if (one_vec.size() < 2) { return Ket(""); }
+
+    std::vector<SimpleOperator> operators;
+    if (one_vec[0] == ket_map.get_idx("op")) {
+        SimpleOperator op(one_vec[1]);
+        operators.push_back(op);
+    } else if (one_vec[0] == ket_map.get_idx("ops")) {
+        auto string_ops = split(ket_map.get_str(one_vec[1]), " ");
+        for (const auto &s: string_ops) {
+            SimpleOperator op(s);
+            operators.push_back(op);
+        }
+    } else {
+        return Ket("");
+    }
+    for (const auto &op: operators) {
+        std::cout << "operator: " << op.to_string() << std::endl;
+    }
+
+    ulong two_idx = two.to_ket().label_idx();
+    ulong star_idx = ket_map.get_idx("*");
+
+    Superposition result;
+    if (two_idx == star_idx) {
+        for (const auto &k: input_seq.to_sp()) {
+            Sequence seq = k.to_seq();
+            bool match = true;
+            for (auto it = operators.rbegin(); it != operators.rend(); ++it) {
+                if (context.recall_type((*it).get_idx(), seq.to_ket().label_idx()) != RULENORMAL) {
+                    match = false;
+                    break;
+                }
+                seq = (*it).Compile(context, seq);
+            }
+            if (match) {
+                result.add(k.label_idx());
+            }
+        }
+    } else {
+        for (const auto &k: input_seq.to_sp()) {
+            Sequence seq = k.to_seq();
+            for (auto it = operators.rbegin(); it != operators.rend(); ++it) {
+                seq = (*it).Compile(context, seq);
+            }
+            ulong result_idx = seq.to_ket().label_idx();
+            for (const auto &k2: two.to_sp()) {
+                if (result_idx == k2.label_idx()) {
+                    result.add(k.label_idx());
+                    break;
+                }
+            }
+        }
+    }
+    return result;
+}
