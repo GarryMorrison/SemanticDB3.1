@@ -21,6 +21,7 @@ public:
     ContextList(const std::string& s);
     void set(const std::string& s);
     void set(const ulong idx);
+    void reset();
     void show_context_list();
 
 /*

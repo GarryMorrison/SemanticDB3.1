@@ -39,6 +39,14 @@ void ContextList::set(const ulong idx) {
     index = idx;
 }
 
+void ContextList::reset() {
+    index = 0;
+    max_index = 1;
+    NewContext tmp(name);
+    data.clear();
+    data.push_back(tmp);
+}
+
 void ContextList::show_context_list() {
     std::cout << "\nContextList:\n";
     for (ulong k = 0; k < max_index; k++ ) {
