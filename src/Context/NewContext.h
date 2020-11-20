@@ -86,7 +86,7 @@ public:
     std::shared_ptr<BaseSequence> fn_recall(const ulong op_idx, const int param_size);
     unsigned int fn_recall_type(const ulong op_idx, const int param_size);
 
-    void print_universe() const;
+    void print_universe(bool clean = true) const;
 };
 
 

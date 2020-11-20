@@ -446,7 +446,7 @@ unsigned int NewContext::fn_recall_type(const ulong op_idx, const int param_size
     return RULESTORED;
 }
 
-void NewContext::print_universe() const {
+void NewContext::print_universe(bool clean) const {
     std::string s, op, label;
     ulong supported_ops_idx;
     Frame frame;
@@ -464,8 +464,10 @@ void NewContext::print_universe() const {
         label = ket_map.get_str(label_idx);
         // frame = rules_dict[label_idx];
         frame = rules_dict.at(label_idx);
-        rule = frame.recall(supported_ops_idx);
-        s += "supported-ops |" + label + "> => " + rule->to_string() + "\n";
+        if (!clean) {
+            rule = frame.recall(supported_ops_idx);
+            s += "supported-ops |" + label + "> => " + rule->to_string() + "\n";
+        }
         for (const ulong op_idx: frame.supported_ops()) {
             // ulong op_split_idx = ket_map.get_split_idx(op_idx).back();
             // op = ket_map.get_str(op_split_idx);

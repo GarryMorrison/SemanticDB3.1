@@ -7,12 +7,14 @@
 
 
 std::string standard_introduction_text = "Welcome to the Semantic DB version 3.1\n";
-std::string interactive_introduction_text = "\nWelcome to the Semantic DB version 3.1 shell.\nLast updated 20th November 2020.\nType h for help.\n";
+std::string interactive_introduction_text = "\nWelcome to the Semantic DB version 3.1 shell.\nLast updated 21st November 2020.\nType h for help.\n";
 
 std::string help_string = "\n    q, quit, exit        quit the semantic agent\n"
                           "    h, help              print this message\n"
                           "    dump                 print current context\n"
                           "    dump multi           print context list\n"
+                          "    dump verbose         print current context including supported-ops\n"
+                          "    dump multi verbose   print context list including supported-ops\n"
                           "    load file.sw3        load the given file\n"
                           "    context              show known context's\n"
                           "    context string       set context to string\n"
@@ -138,6 +140,10 @@ int main(int argc, char** argv) {
                 context.print_universe();
             } else if (shell_input == "dump multi") {
                 context.print_multiverse();
+            } else if (shell_input == "dump verbose") {
+                context.print_universe(false);
+            } else if (shell_input == "dump multi verbose") {
+                context.print_multiverse(false);
             } else if (shell_input.substr(0, 5) == "load ") {
                 file_name = shell_input.substr(5);
                 Timer_ms timer("\n    Time taken", quiet_mode);  // Time the load time.
