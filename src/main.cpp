@@ -32,6 +32,7 @@ extern OperatorUsageMap operator_usage_map;
 
 int main(int argc, char** argv) {
 
+    bool show_command_line_parse_details = false;
     std::deque<std::string> sa_history;
     bool parse_success = true;
     unsigned int history_index = 0;
@@ -57,15 +58,17 @@ int main(int argc, char** argv) {
         default_decimal_places = decimal_places_arg.getValue();
         std::vector<std::string> file_names = multi.getValue();
 
-        std::cout << "interactive mode: " << interactive_mode << std::endl;
-        std::cout << "dump context: " << dump_context << std::endl;
-        std::cout << "quiet mode: " << quiet_mode << std::endl;
-        std::cout << "default_decimal_places: " << default_decimal_places << std::endl;
+        if (show_command_line_parse_details) {
+            std::cout << "interactive mode: " << interactive_mode << std::endl;
+            std::cout << "dump context: " << dump_context << std::endl;
+            std::cout << "quiet mode: " << quiet_mode << std::endl;
+            std::cout << "default_decimal_places: " << default_decimal_places << std::endl;
 
-        int k = 0;
-        for (const auto file_name: file_names) {
-            k++;
-            std::cout << "file name " << k << ": " << file_name << std::endl;
+            int k = 0;
+            for (const auto file_name: file_names) {
+                k++;
+                std::cout << "file name " << k << ": " << file_name << std::endl;
+            }
         }
 
         if (!interactive_mode && file_names.empty()) {

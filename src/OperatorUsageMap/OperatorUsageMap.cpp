@@ -8,13 +8,13 @@ OperatorUsageMap operator_usage_map;
 
 OperatorUsageMap::OperatorUsageMap() {
     operator_usage_map.map["empty"] =
-            "empty:\n"
+            "\nempty:\n"
             "    description:\n\n"
             "    examples:\n\n"
-            "    see also:\n\n";
+            "    see also:\n";
 
     operator_usage_map.map["clean"] =
-            "clean:\n"
+            "\nclean:\n"
             "    description:\n"
             "        clean ket\n"
             "        clean the coefficients of the given superposition\n"
@@ -25,10 +25,10 @@ OperatorUsageMap::OperatorUsageMap() {
             "        drop clean (3|a> + 2.2|b> - 3 |c> + |d>)\n"
             "            |a> + |b> + |d>\n\n"
             "    see also:\n"
-            "        drop\n\n";
+            "        drop\n";
 
     operator_usage_map.map["drop"] =
-            "drop:\n"
+            "\ndrop:\n"
             "    description:\n"
             "        drop sp\n"
             "        drop all kets with coeff <= 0 from the given superposition\n\n"
