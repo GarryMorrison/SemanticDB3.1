@@ -206,6 +206,9 @@ FunctionOperatorMap::FunctionOperatorMap() {
     idx = ket_map.get_idx("smerge");
     fn_map.seq_fn.emplace(idx, &op_smerge);
     fn_map.compound_seq_fn.emplace(idx, &op_smerge1);
+
+    idx = ket_map.get_idx("learn-grid");
+    fn_map.compound_context_sp_fn.emplace(idx, &op_learn_grid);
 }
 
 template <class T>

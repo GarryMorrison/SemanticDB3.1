@@ -202,6 +202,43 @@ OperatorUsageMap::OperatorUsageMap() {
             "    see also:\n"
             "        ssplit, smap";
 
+    operator_usage_map.map["learn-grid"] =
+            "\nlearn-grid:\n"
+            "    description:\n"
+            "        learn-grid[width, height]\n"
+            "        learn-grid[width, height, operator]\n"
+            "        learn a grid of specified width and height\n"
+            "        all cells initialized to zero, with respect to operator \"operator\"\n"
+            "        if operator is not specified, use \"value\"\n"
+            "        and we learn all direction operators, N, NE, E, SE, S, SW, W, NW, that don't point outside the grid\n\n"
+            "    examples:\n"
+            "        -- learn a sample grid:\n"
+            "        learn-grid[2,2]\n"
+            "        dump\n"
+            "        ------------------------------------------\n"
+            "        |context> => |Global context>\n"
+            "\n"
+            "        value |grid: 0: 0> => |0>\n"
+            "        E |grid: 0: 0> => |grid: 0: 1>\n"
+            "        SE |grid: 0: 0> => |grid: 1: 1>\n"
+            "        S |grid: 0: 0> => |grid: 1: 0>\n"
+            "\n"
+            "        value |grid: 0: 1> => |0>\n"
+            "        S |grid: 0: 1> => |grid: 1: 1>\n"
+            "        SW |grid: 0: 1> => |grid: 1: 0>\n"
+            "        W |grid: 0: 1> => |grid: 0: 0>\n"
+            "\n"
+            "        value |grid: 1: 0> => |0>\n"
+            "        N |grid: 1: 0> => |grid: 0: 0>\n"
+            "        NE |grid: 1: 0> => |grid: 0: 1>\n"
+            "        E |grid: 1: 0> => |grid: 1: 1>\n"
+            "\n"
+            "        value |grid: 1: 1> => |0>\n"
+            "        N |grid: 1: 1> => |grid: 0: 1>\n"
+            "        W |grid: 1: 1> => |grid: 1: 0>\n"
+            "        NW |grid: 1: 1> => |grid: 0: 0>\n"
+            "        ------------------------------------------\n\n"
+            "    see also:\n";
 }
 
 std::string OperatorUsageMap::get_usage(const std::string &s) const {

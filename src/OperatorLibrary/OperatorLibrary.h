@@ -46,4 +46,7 @@ Ket op_transpose_table(const Superposition &sp, ContextList &context, const std:
 Ket op_smerge(const Sequence &seq);
 Ket op_smerge1(const Sequence &seq, const std::vector<std::shared_ptr<CompoundConstant> > &parameters);
 
+// Not sure this is the best parameter structure for this function, but will do for now.
+Ket op_learn_grid(const Superposition &sp, ContextList &context, const std::vector<std::shared_ptr<CompoundConstant> > &parameters);
+
 #endif //SDB3_1_OPERATORLIBRARY_H

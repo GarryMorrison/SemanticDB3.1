@@ -585,3 +585,83 @@ Ket op_smerge1(const Sequence &seq, const std::vector<std::shared_ptr<CompoundCo
     return Ket(s);
 }
 
+ulong grid_element(const unsigned int x, const unsigned int y) {
+    return ket_map.get_idx("grid: " + std::to_string(x) + ": " + std::to_string(y));
+}
+
+bool is_in_grid(const int x, const int y, const unsigned int width, const unsigned int height) {
+    if (x < 0 || y < 0 || x >= width || y >= height) { return false; }
+    return true;
+}
+
+Ket op_learn_grid(const Superposition &sp, ContextList &context, const std::vector<std::shared_ptr<CompoundConstant> > &parameters) {
+    if (parameters.size() < 2) { return Ket(""); }
+    unsigned int width = parameters[0]->get_int();
+    unsigned int height = parameters[1]->get_int();
+
+    ulong op_idx = ket_map.get_idx("value");
+    if (parameters.size() == 3) {
+        op_idx = parameters[2]->get_operator().get_idx();
+    } else if (parameters.size() > 3) {  // later maybe handle more than one operator to zero out?
+        return Ket("");
+    }
+    std::cout << "operator: " << ket_map.get_str(op_idx) << std::endl;
+    std::shared_ptr<BaseSequence> zero_seq = std::make_shared<Ket>("0");
+
+    ulong north_idx = ket_map.get_idx("N");
+    ulong north_east_idx = ket_map.get_idx("NE");
+    ulong east_idx = ket_map.get_idx("E");
+    ulong south_east_idx = ket_map.get_idx("SE");
+    ulong south_idx = ket_map.get_idx("S");
+    ulong south_west_idx = ket_map.get_idx("SW");
+    ulong west_idx = ket_map.get_idx("W");
+    ulong north_west_idx = ket_map.get_idx("NW");
+
+    for (int y = 0; y < height; y++) {
+        for (int x = 0; x < width; x++) {
+            ulong element_idx = grid_element(y,x);
+            context.learn(op_idx, element_idx, zero_seq);
+            if (is_in_grid(x, y - 1, width, height)) {
+                ulong neighbour_idx = grid_element(y - 1, x);
+                std::shared_ptr<BaseSequence> neighbour = std::make_shared<Ket>(neighbour_idx);
+                context.learn(north_idx, element_idx, neighbour);
+            }
+            if (is_in_grid(x + 1, y - 1, width, height)) {
+                ulong neighbour_idx = grid_element(y - 1, x + 1);
+                std::shared_ptr<BaseSequence> neighbour = std::make_shared<Ket>(neighbour_idx);
+                context.learn(north_east_idx, element_idx, neighbour);
+            }
+            if (is_in_grid(x + 1, y, width, height)) {
+                ulong neighbour_idx = grid_element(y, x + 1);
+                std::shared_ptr<BaseSequence> neighbour = std::make_shared<Ket>(neighbour_idx);
+                context.learn(east_idx, element_idx, neighbour);
+            }
+            if (is_in_grid(x + 1, y + 1, width, height)) {
+                ulong neighbour_idx = grid_element(y + 1, x + 1);
+                std::shared_ptr<BaseSequence> neighbour = std::make_shared<Ket>(neighbour_idx);
+                context.learn(south_east_idx, element_idx, neighbour);
+            }
+            if (is_in_grid(x, y + 1, width, height)) {
+                ulong neighbour_idx = grid_element(y + 1, x);
+                std::shared_ptr<BaseSequence> neighbour = std::make_shared<Ket>(neighbour_idx);
+                context.learn(south_idx, element_idx, neighbour);
+            }
+            if (is_in_grid(x - 1, y + 1, width, height)) {
+                ulong neighbour_idx = grid_element(y + 1, x - 1);
+                std::shared_ptr<BaseSequence> neighbour = std::make_shared<Ket>(neighbour_idx);
+                context.learn(south_west_idx, element_idx, neighbour);
+            }
+            if (is_in_grid(x - 1, y, width, height)) {
+                ulong neighbour_idx = grid_element(y, x - 1);
+                std::shared_ptr<BaseSequence> neighbour = std::make_shared<Ket>(neighbour_idx);
+                context.learn(west_idx, element_idx, neighbour);
+            }
+            if (is_in_grid(x - 1, y - 1, width, height)) {
+                ulong neighbour_idx = grid_element(y - 1, x - 1);
+                std::shared_ptr<BaseSequence> neighbour = std::make_shared<Ket>(neighbour_idx);
+                context.learn(north_west_idx, element_idx, neighbour);
+            }
+        }
+    }
+    return Ket("grid");
+}
