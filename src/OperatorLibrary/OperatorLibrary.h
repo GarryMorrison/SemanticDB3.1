@@ -48,5 +48,6 @@ Ket op_smerge1(const Sequence &seq, const std::vector<std::shared_ptr<CompoundCo
 
 // Not sure this is the best parameter structure for this function, but will do for now.
 Ket op_learn_grid(const Superposition &sp, ContextList &context, const std::vector<std::shared_ptr<CompoundConstant> > &parameters);
+Ket op_display_grid(const Superposition &sp, ContextList &context, const std::vector<std::shared_ptr<CompoundConstant> > &parameters);
 
 #endif //SDB3_1_OPERATORLIBRARY_H

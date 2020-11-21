@@ -238,7 +238,40 @@ OperatorUsageMap::OperatorUsageMap() {
             "        W |grid: 1: 1> => |grid: 1: 0>\n"
             "        NW |grid: 1: 1> => |grid: 0: 0>\n"
             "        ------------------------------------------\n\n"
-            "    see also:\n";
+            "    see also:\n"
+            "        display-grid";
+
+    operator_usage_map.map["display-grid"] =
+            "\ndisplay-grid:\n"
+            "    description:\n"
+            "        display-grid[width, height]\n"
+            "        display-grid[width, height, operator]\n"
+            "        display-grid[width, height, operator, empty-char]\n"
+            "        display a rectangular map of the given width and height\n"
+            "        where each cell is the value of \"operator\" applied to that cell (default operator is \"value\")\n"
+            "        where empty-char is printed for cells with value 0 (default value of empty-char is \".\")\n\n"
+            "    examples:\n"
+            "        -- learn a small grid first:\n"
+            "        learn-grid[9,5]\n\n"
+            "        -- learn some cell values:\n"
+            "        value |grid: 2: 2> => |H>\n"
+            "        value |grid: 2: 3> => |e>\n"
+            "        value |grid: 2: 4> => |l>\n"
+            "        value |grid: 2: 5> => |l>\n"
+            "        value |grid: 2: 6> => |o>\n\n"
+            "        -- display the resulting grid:\n"
+            "        display-grid[9, 5, value, \"*\"]\n"
+            "            width:  9\n"
+            "            height: 5\n"
+            "\n"
+            "            0      *   *   *   *   *   *   *   *   *\n"
+            "            1      *   *   *   *   *   *   *   *   *\n"
+            "            2      *   *   H   e   l   l   o   *   *\n"
+            "            3      *   *   *   *   *   *   *   *   *\n"
+            "            4      *   *   *   *   *   *   *   *   *\n\n"
+            "    see also:\n"
+            "        learn-grid";
+
 }
 
 std::string OperatorUsageMap::get_usage(const std::string &s) const {

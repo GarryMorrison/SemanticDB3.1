@@ -209,6 +209,10 @@ FunctionOperatorMap::FunctionOperatorMap() {
 
     idx = ket_map.get_idx("learn-grid");
     fn_map.compound_context_sp_fn.emplace(idx, &op_learn_grid);
+
+    idx = ket_map.get_idx("display-grid");
+    fn_map.compound_context_sp_fn.emplace(idx, &op_display_grid);
+
 }
 
 template <class T>

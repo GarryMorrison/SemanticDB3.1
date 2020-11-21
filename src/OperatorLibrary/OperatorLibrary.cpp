@@ -605,7 +605,6 @@ Ket op_learn_grid(const Superposition &sp, ContextList &context, const std::vect
     } else if (parameters.size() > 3) {  // later maybe handle more than one operator to zero out?
         return Ket("");
     }
-    std::cout << "operator: " << ket_map.get_str(op_idx) << std::endl;
     std::shared_ptr<BaseSequence> zero_seq = std::make_shared<Ket>("0");
 
     ulong north_idx = ket_map.get_idx("N");
@@ -663,5 +662,43 @@ Ket op_learn_grid(const Superposition &sp, ContextList &context, const std::vect
             }
         }
     }
-    return Ket("grid");
+    return Ket("learn-grid");
+}
+
+Ket op_display_grid(const Superposition &sp, ContextList &context, const std::vector<std::shared_ptr<CompoundConstant> > &parameters) {
+    if (parameters.size() < 2) { return Ket(""); }
+    unsigned int width = parameters[0]->get_int();
+    unsigned int height = parameters[1]->get_int();
+
+    ulong op_idx = ket_map.get_idx("value");
+    std::string empty_char = ".";
+    if (parameters.size() == 3) {
+        op_idx = parameters[2]->get_operator().get_idx();
+    } else if (parameters.size() == 4) {
+        empty_char = parameters[3]->get_string();
+    } else if (parameters.size() > 4) {
+        return Ket("");
+    }
+
+    std::string value_char;
+
+    std::cout << "width:  " << width << "\n";
+    std::cout << "height: " << height << "\n\n";
+    for (int y = 0; y < height; y++) {
+        std::cout << std::left << std::setw(4) << y;
+        for (int x = 0; x < width; x++) {
+            ulong element_idx = grid_element(y,x);
+            Ket cell_value = context.recall(op_idx, element_idx)->to_ket();
+            value_char = cell_value.label();
+            if (value_char == " ") {
+                value_char = float_to_int(cell_value.value(), default_decimal_places);
+            } else if (value_char == "0") {
+                value_char = empty_char;
+            }
+            std::cout << std::right << std::setw(4) << value_char;
+        }
+        std::cout << "\n";
+    }
+    std::cout << std::endl;  // Flush. Not sure if needed, but should be fine to leave it in.
+    return Ket("display-grid");
 }
