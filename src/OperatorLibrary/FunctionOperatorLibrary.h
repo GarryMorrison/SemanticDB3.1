@@ -17,5 +17,6 @@ Sequence op_simm2(const Sequence &input_seq, const Sequence &seq1, const Sequenc
 Superposition intersection(const Superposition &sp1, const Superposition &sp2);
 Sequence op_intersection2(const Sequence &input_seq, const Sequence &one, const Sequence &two);
 Sequence op_filter(ContextList &context, const Sequence &input_seq, const Sequence &one, const Sequence &two);
+Sequence op_apply(ContextList &context, const Sequence &input_seq, const Sequence &one, const Sequence &two);
 
 #endif //SDB3_1_FUNCTIONOPERATORLIBRARY_H

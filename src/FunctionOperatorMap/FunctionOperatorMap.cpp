@@ -191,6 +191,9 @@ FunctionOperatorMap::FunctionOperatorMap() {
     idx = ket_map.get_idx("filter");
     fn_map.context_whitelist_2.emplace(idx, &op_filter);
 
+    idx = ket_map.get_idx("apply");
+    fn_map.context_whitelist_2.emplace(idx, &op_apply);
+
 }
 
 template <class T>

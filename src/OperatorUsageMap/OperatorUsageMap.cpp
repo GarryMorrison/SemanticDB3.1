@@ -106,6 +106,34 @@ OperatorUsageMap::OperatorUsageMap() {
             "    TODO:\n"
             "        preserve sequence structure of input-seq, currently it is cast to superposition\n"
             "        currently coefficients of kets are ignored, maybe they should be preserved";
+
+    operator_usage_map.map["apply"] =
+            "\napply:\n"
+            "    description:\n"
+            "        apply(seq, seq)\n"
+            "        wrapper around apply op\n\n"
+            "    examples:\n"
+            "        -- learn some knowledge\n"
+            "        age |Fred> => |35>\n"
+            "        nick-name |Fred> => |Freddie>\n"
+            "        mother |Fred> => |Jude>\n"
+            "        father |Fred> => |Tom>\n\n"
+            "        -- implements: age |Fred>\n"
+            "        apply(|op: age>, |Fred>)\n"
+            "            |35>\n\n"
+            "        -- implements: age |Fred> + mother |Fred> + father |Fred>\n"
+            "        apply(|op: age> + |op: mother> + |op: father>, |Fred>)\n"
+            "            |35> + |Jude> + |Tom>\n\n"
+            "        -- implements: age |Fred> . mother |Fred> . father |Fred>\n"
+            "        apply(|op: age> . |op: mother> . |op: father>, |Fred>)\n"
+            "            |35> . |Jude> . |Tom>\n\n"
+            "        -- the star operator, which adds all the right hand rules together:\n"
+            "        star |*> #=> apply(supported-ops|_self>, |_self>) |>\n\n"
+            "        -- Eg, applied to Fred:\n"
+            "        star |Fred>\n"
+            "            |35> + |Freddie> + |Jude> + |Tom>\n\n"
+            "    see also:\n"
+            "        learn, add-learn, seq-learn";
 }
 
 std::string OperatorUsageMap::get_usage(const std::string &s) const {

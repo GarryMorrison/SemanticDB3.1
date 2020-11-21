@@ -269,3 +269,26 @@ Sequence op_filter(ContextList &context, const Sequence &input_seq, const Sequen
     }
     return result;
 }
+
+Sequence op_apply(ContextList &context, const Sequence &input_seq, const Sequence &one, const Sequence &two) {
+    Sequence result;
+    for (const auto &sp: one) {
+        Sequence r;
+        for (const auto &k_op: sp) {
+            auto k_vec = k_op.label_split_idx();
+            if (k_vec.size() < 2) {
+                continue;
+            }
+            if (k_vec[0] != ket_map.get_idx("op")) {
+                continue;
+            }
+            SimpleOperator op(k_vec[1]);
+            for (const auto &k: two.to_sp()) {
+                Sequence seq = op.Compile(context, k.to_seq());
+                r.add(seq);
+            }
+        }
+        result.append(r);
+    }
+    return result;
+}
