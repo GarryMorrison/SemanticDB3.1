@@ -280,3 +280,7 @@ std::string OperatorUsageMap::get_usage(const std::string &s) const {
     return it->second;
 }
 
+bool OperatorUsageMap::usage_is_defined(const std::string &s) const {
+    auto it = map.find(s);
+    return it != map.end();
+}

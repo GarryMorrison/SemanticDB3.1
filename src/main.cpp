@@ -175,6 +175,9 @@ int main(int argc, char** argv) {
                 std::cin.ignore();
                 context.set(history_index);
             } else if (shell_input == "usage") {
+                std::cout << "\nBelow is a list of known operators, and their invocation type." << std::endl;
+                std::cout << "Those marked with a * have more detailed usage information defined." << std::endl;
+                std::cout << "This is accessed using: usage op\n" << std::endl;
                 fn_map.print();
             } else if (shell_input.substr(0, 6) == "usage ") {
                 std::cout << operator_usage_map.get_usage(shell_input.substr(6)) << std::endl;

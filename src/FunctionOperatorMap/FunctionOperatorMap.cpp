@@ -8,7 +8,8 @@
 #include "../OperatorLibrary/SigmoidLibrary.h"
 #include "../OperatorLibrary/OperatorLibrary.h"
 #include "../OperatorLibrary/FunctionOperatorLibrary.h"
-
+#include "../OperatorUsageMap/OperatorUsageMap.h"
+extern OperatorUsageMap operator_usage_map;
 
 KetMap ket_map;
 FunctionOperatorMap fn_map;
@@ -224,7 +225,11 @@ void print_map(const std::string& s, T& our_map) {
     }
     std::sort(tmp_sorted.begin(), tmp_sorted.end());
     for (const auto &str: tmp_sorted) {
-        std::cout << "    " << str << std::endl;
+        std::string star;
+        if (operator_usage_map.usage_is_defined(str)) {
+            star = " * ";
+        }
+        std::cout << "    " << str << star << std::endl;
     }
 }
 

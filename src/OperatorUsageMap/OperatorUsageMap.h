@@ -15,6 +15,7 @@ public:
     std::map<std::string, std::string> map;
     OperatorUsageMap();
     std::string get_usage(const std::string &s) const;
+    bool usage_is_defined(const std::string &s) const;
 };
 
 #endif //SDB3_1_OPERATORUSAGEMAP_H
