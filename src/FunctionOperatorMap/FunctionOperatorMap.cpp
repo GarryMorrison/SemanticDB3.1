@@ -196,6 +196,13 @@ FunctionOperatorMap::FunctionOperatorMap() {
 
     idx = ket_map.get_idx("learn");
     fn_map.context_whitelist_3.emplace(idx, &op_learn);
+
+    idx = ket_map.get_idx("add-learn");
+    fn_map.context_whitelist_3.emplace(idx, &op_add_learn);
+
+    idx = ket_map.get_idx("seq-learn");
+    fn_map.context_whitelist_3.emplace(idx, &op_seq_learn);
+
 }
 
 template <class T>

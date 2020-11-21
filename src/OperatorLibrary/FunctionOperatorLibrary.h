@@ -19,5 +19,7 @@ Sequence op_intersection2(const Sequence &input_seq, const Sequence &one, const 
 Sequence op_filter(ContextList &context, const Sequence &input_seq, const Sequence &one, const Sequence &two);
 Sequence op_apply(ContextList &context, const Sequence &input_seq, const Sequence &one, const Sequence &two);
 Sequence op_learn(ContextList &context, const Sequence &input_seq, const Sequence &one, const Sequence &two, const Sequence &three);
+Sequence op_add_learn(ContextList &context, const Sequence &input_seq, const Sequence &one, const Sequence &two, const Sequence &three);
+Sequence op_seq_learn(ContextList &context, const Sequence &input_seq, const Sequence &one, const Sequence &two, const Sequence &three);
 
 #endif //SDB3_1_FUNCTIONOPERATORLIBRARY_H

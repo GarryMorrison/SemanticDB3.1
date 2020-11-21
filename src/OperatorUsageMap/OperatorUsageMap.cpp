@@ -150,6 +150,33 @@ OperatorUsageMap::OperatorUsageMap() {
             "        learn(|op: age>, |Fred>, |37>)\n\n"
             "    see also:\n"
             "         add-learn, seq-learn, apply";
+
+    operator_usage_map.map["add-learn"] =
+            "\nadd-learn:\n"
+            "    description:\n"
+            "        add-learn(sp, sp, seq)\n"
+            "        wrapper around an add-learn rule\n\n"
+            "    examples:\n"
+            "        -- implements: friend |Fred> +=> |Sam>\n"
+            "        -- implements: friend |Fred> +=> |Emma>\n"
+            "        add-learn(|op: friend>, |Fred>, |Sam>)\n"
+            "        add-learn(|op: friend>, |Fred>, |Emma>)\n\n"
+            "    see also:\n"
+            "         learn, seq-learn, apply";
+
+    operator_usage_map.map["seq-learn"] =
+            "\nseq-learn:\n"
+            "    description:\n"
+            "        seq-learn(sp, sp, seq)\n"
+            "        wrapper around a seq-learn rule\n\n"
+            "    examples:\n"
+            "        -- implements: friend |Fred> .=> |Sam>\n"
+            "        -- implements: friend |Fred> .=> |Emma>\n"
+            "        seq-learn(|op: friend>, |Fred>, |Sam>)\n"
+            "        seq-learn(|op: friend>, |Fred>, |Emma>)\n\n"
+            "    see also:\n"
+            "         learn, add-learn, apply";
+
 }
 
 std::string OperatorUsageMap::get_usage(const std::string &s) const {
