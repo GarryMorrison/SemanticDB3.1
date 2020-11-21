@@ -117,7 +117,8 @@ OperatorUsageMap::OperatorUsageMap() {
             "        age |Fred> => |35>\n"
             "        nick-name |Fred> => |Freddie>\n"
             "        mother |Fred> => |Jude>\n"
-            "        father |Fred> => |Tom>\n\n"
+            "        father |Fred> => |Tom>\n"
+            "        age |Jude> => |61>\n\n"
             "        -- implements: age |Fred>\n"
             "        apply(|op: age>, |Fred>)\n"
             "            |35>\n\n"
@@ -132,6 +133,10 @@ OperatorUsageMap::OperatorUsageMap() {
             "        -- Eg, applied to Fred:\n"
             "        star |Fred>\n"
             "            |35> + |Freddie> + |Jude> + |Tom>\n\n"
+            "        -- using an operator sequence instead:\n"
+            "        -- implements: age mother |Fred>\n"
+            "        apply(|ops: age mother>, |Fred>)\n"
+            "            |61>\n\n"
             "    see also:\n"
             "        learn, add-learn, seq-learn";
 }

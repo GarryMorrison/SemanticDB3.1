@@ -279,13 +279,26 @@ Sequence op_apply(ContextList &context, const Sequence &input_seq, const Sequenc
             if (k_vec.size() < 2) {
                 continue;
             }
-            if (k_vec[0] != ket_map.get_idx("op")) {
-                continue;
-            }
-            SimpleOperator op(k_vec[1]);
-            for (const auto &k: two.to_sp()) {
-                Sequence seq = op.Compile(context, k.to_seq());
-                r.add(seq);
+            if (k_vec[0] == ket_map.get_idx("op")) {
+                SimpleOperator op(k_vec[1]);
+                for (const auto &k: two.to_sp()) {
+                    Sequence seq = op.Compile(context, k.to_seq());
+                    r.add(seq);
+                }
+            } else if (k_vec[0] == ket_map.get_idx("ops")) {
+                std::vector<SimpleOperator> operators;
+                auto string_ops = split(ket_map.get_str(k_vec[1]), " ");
+                for (const auto &s: string_ops) {
+                    SimpleOperator op(s);
+                    operators.push_back(op);
+                }
+                for (const auto &k: two.to_sp()) {
+                    Sequence seq = k.to_seq();
+                    for (auto it = operators.rbegin(); it != operators.rend(); ++it) {
+                        seq = (*it).Compile(context, seq);
+                    }
+                    r.add(seq);
+                }
             }
         }
         result.append(r);
