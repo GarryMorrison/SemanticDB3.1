@@ -228,6 +228,7 @@ void FunctionOperatorMap::print() const { // Doesn't need to be optimized at all
     print_map("sp_fn:", sp_fn);
     print_map("compound_sp_fn:", compound_sp_fn);
     print_map("seq_fn:", seq_fn);
+    print_map("compound_seq_fn:", compound_seq_fn);
     print_map("compound_context_sp_fn:", compound_context_sp_fn);
     print_map("compound_context_seq_fn:", compound_context_seq_fn);
     print_map("function_1:", whitelist_1);
