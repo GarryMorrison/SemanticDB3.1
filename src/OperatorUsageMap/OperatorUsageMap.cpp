@@ -177,6 +177,20 @@ OperatorUsageMap::OperatorUsageMap() {
             "    see also:\n"
             "         learn, add-learn, apply";
 
+    operator_usage_map.map["smerge"] =
+            "\nsmerge:\n"
+            "    description:\n"
+            "        smerge seq\n"
+            "        smerge[\"str\"] seq\n"
+            "        merges a sequence into a single string, optionally separated by the str string\n\n"
+            "    examples:\n"
+            "        smerge (|F> . |r> . |e> . |d>)\n"
+            "            |Fred>\n\n"
+            "        smerge[\", \"] (|a> . |b> . |c> . |d>)\n"
+            "            |a, b, c, d>\n\n"
+            "    see also:\n"
+            "        ssplit, smap";
+
 }
 
 std::string OperatorUsageMap::get_usage(const std::string &s) const {

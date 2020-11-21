@@ -556,3 +556,32 @@ Ket op_transpose_table(const Superposition &sp, ContextList &context, const std:
 
     return Ket("table");
 }
+
+Ket op_smerge(const Sequence &seq) {
+    std::string s;
+    for (const auto &sp: seq) {
+        for (const auto &k: sp) {
+            s += k.label();
+        }
+    }
+    return Ket(s);
+}
+
+Ket op_smerge1(const Sequence &seq, const std::vector<std::shared_ptr<CompoundConstant> > &parameters) {
+    if (parameters.empty()) { return op_smerge(seq); }
+    std::string merge_str = parameters[0]->get_string();
+    std::string s;
+    bool first_pass = true;
+    for (const auto &sp: seq) {
+        for (const auto &k: sp) {
+            if (first_pass) {
+                s += k.label();
+                first_pass = false;
+            } else {
+                s += merge_str + k.label();
+            }
+        }
+    }
+    return Ket(s);
+}
+

@@ -203,6 +203,9 @@ FunctionOperatorMap::FunctionOperatorMap() {
     idx = ket_map.get_idx("seq-learn");
     fn_map.context_whitelist_3.emplace(idx, &op_seq_learn);
 
+    idx = ket_map.get_idx("smerge");
+    fn_map.seq_fn.emplace(idx, &op_smerge);
+    fn_map.compound_seq_fn.emplace(idx, &op_smerge1);
 }
 
 template <class T>
