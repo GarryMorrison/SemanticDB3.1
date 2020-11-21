@@ -188,6 +188,17 @@ OperatorUsageMap::OperatorUsageMap() {
             "            |Fred>\n\n"
             "        smerge[\", \"] (|a> . |b> . |c> . |d>)\n"
             "            |a, b, c, d>\n\n"
+            "        -- define the bracket operator:\n"
+            "        bracket (*) #=> |[> _ smerge[\", \"] |__self> _ |]>\n\n"
+            "        -- define the print-bracket operator:\n"
+            "        print-bracket (*) #=>  print bracket( |__self> ) |>\n\n"
+            "        -- quick test of the bracket operator:\n"
+            "        bracket(|F> . |r> . |e> . |d>)\n"
+            "            |[F, r, e, d]>\n\n"
+            "        -- quick test of the print-bracket operator:\n"
+            "        print-bracket(|F> . |r> . |e> . |d>)\n"
+            "            [F, r, e, d]\n"
+            "            |[F, r, e, d]>\n\n"
             "    see also:\n"
             "        ssplit, smap";
 
