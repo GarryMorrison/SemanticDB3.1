@@ -139,6 +139,17 @@ OperatorUsageMap::OperatorUsageMap() {
             "            |61>\n\n"
             "    see also:\n"
             "        learn, add-learn, seq-learn";
+
+    operator_usage_map.map["learn"] =
+            "\nlearn:\n"
+            "    description:\n"
+            "        learn(sp, sp, seq)\n"
+            "        wrapper around a learn rule\n\n"
+            "    examples:\n"
+            "        -- implements: age |Fred> => |37>\n"
+            "        learn(|op: age>, |Fred>, |37>)\n\n"
+            "    see also:\n"
+            "         add-learn, seq-learn, apply";
 }
 
 std::string OperatorUsageMap::get_usage(const std::string &s) const {

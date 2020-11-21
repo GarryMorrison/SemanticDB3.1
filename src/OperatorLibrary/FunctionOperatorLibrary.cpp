@@ -305,3 +305,20 @@ Sequence op_apply(ContextList &context, const Sequence &input_seq, const Sequenc
     }
     return result;
 }
+
+Sequence op_learn(ContextList &context, const Sequence &input_seq, const Sequence &one, const Sequence &two, const Sequence &three) {
+    std::shared_ptr<BaseSequence> bSeq = std::make_shared<Sequence>(three);
+    for (const auto &k_op: one.to_sp()) {
+        auto k_vec = k_op.label_split_idx();
+        if (k_vec.size() < 2) {
+            continue;
+        }
+        if (k_vec[0] != ket_map.get_idx("op")) {
+            continue;
+        }
+        for (const auto &k: two.to_sp()) {
+            context.learn(k_vec[1], k.label_idx(), bSeq);
+        }
+    }
+    return three;
+}
