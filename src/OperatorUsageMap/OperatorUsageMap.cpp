@@ -311,6 +311,28 @@ OperatorUsageMap::OperatorUsageMap() {
             "    see also:\n"
             "        how-many, show-many, clean";
 
+    operator_usage_map.map["reverse"] =
+            "\nreverse:\n"
+            "    description:\n"
+            "        reverse sp\n"
+            "        reverse the given superposition\n\n"
+            "    examples:\n"
+            "        reverse (5.1|a> + 3.7|b> + |c> - 2.1|d>)\n"
+            "            - 2.100000|d> + |c> + 3.700000|b> + 5.100000|a>\n\n"
+            "    see also:\n"
+            "        sreverse";
+
+    operator_usage_map.map["sreverse"] =
+            "\nsreverse:\n"
+            "    description:\n"
+            "        sreverse seq\n"
+            "        reverse the given sequence\n\n"
+            "    examples:\n"
+            "        sreverse (5.1|a> . 3.7|b> . |c>)\n"
+            "            |c> . 3.700000|b> . 5.100000|a>\n\n"
+            "    see also:\n"
+            "        reverse";
+
 }
 
 std::string OperatorUsageMap::get_usage(const std::string &s) const {
