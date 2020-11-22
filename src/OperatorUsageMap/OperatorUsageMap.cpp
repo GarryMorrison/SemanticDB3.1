@@ -610,6 +610,27 @@ OperatorUsageMap::OperatorUsageMap() {
             "    see also:\n"
             "        extract-category, extract-value, extract-head";
 
+    operator_usage_map.map["print"] =
+            "\nprint:\n"
+            "    description:\n"
+            "        print ket\n"
+            "        print the given ket to standard out, appending a new line\n"
+            "        often used with the infix operators _ and __ which join ket labels, where __ inserts an extra space\n"
+            "        also frequently used with the smerge[] operator\n"
+            "        print returns the input ket, so it can be chained with other operators\n\n"
+            "    examples:\n"
+            "        print |Just a short sentence.>\n"
+            "            Just a short sentence.\n"
+            "            |Just a short sentence.>\n"
+            "        print (|A> __ |short> __ |example> _ |.>)\n"
+            "            A short example.\n"
+            "            |A short example.>\n\n"
+            "        print smerge[\", \"] (|a> . |b> . |c>)\n"
+            "            a, b, c\n"
+            "            |a, b, c>\n\n"
+            "    see also:\n"
+            "        to-upper, to-lower, smerge";
+
 }
 
 std::string OperatorUsageMap::get_usage(const std::string &s) const {
