@@ -333,6 +333,28 @@ OperatorUsageMap::OperatorUsageMap() {
             "    see also:\n"
             "        reverse";
 
+    operator_usage_map.map["sp2seq"] =
+            "\nsp2seq:\n"
+            "    description:\n"
+            "        sp2seq sp\n"
+            "        convert the given superposition into a sequence\n\n"
+            "    examples:\n"
+            "        sp2seq (|a> + |b> + |c>)\n"
+            "            |a> . |b> . |c>\n\n"
+            "    see also:\n"
+            "        seq2sp";
+
+    operator_usage_map.map["seq2sp"] =
+            "\nseq2sp:\n"
+            "    description:\n"
+            "        seq2sp seq\n"
+            "        convert the given sequence into a superposition\n\n"
+            "    examples:\n"
+            "        seq2sp (|a> . |b> . |c>)\n"
+            "            |a> + |b> + |c>\n\n"
+            "    see also:\n"
+            "        sp2seq";
+
 }
 
 std::string OperatorUsageMap::get_usage(const std::string &s) const {
