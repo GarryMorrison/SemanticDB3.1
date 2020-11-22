@@ -469,6 +469,42 @@ OperatorUsageMap::OperatorUsageMap() {
             "    see also:\n"
             "        to-upper";
 
+    operator_usage_map.map["split"] =
+            "\nsplit:\n"
+            "    description:\n"
+            "        split ket\n"
+            "        splits the ket into a superposition\n\n"
+            "        split[\"str\"] ket\n"
+            "        splits the ket into a superposition, splitting on str\n\n"
+            "    examples:\n"
+            "        split |abcde>\n"
+            "            |a> + |b> + |c> + |d> + |e>\n\n"
+            "        split[\"d\"] |abcdef>\n"
+            "            |abc> + |ef>\n\n"
+            "        split[\"g\"] split[\"d\"] |abcdefghij>\n"
+            "            |abc> + |ef> + |hij>\n\n"
+            "    see also:\n"
+            "        ssplit";
+
+    operator_usage_map.map["ssplit"] =
+            "\nssplit:\n"
+            "    description:\n"
+            "        ssplit ket\n"
+            "        splits the ket into a sequence\n\n"
+            "        ssplit[\"str\"] ket\n"
+            "        splits the ket into a sequence, splitting on str\n\n"
+            "    examples:\n"
+            "        ssplit |abcde>\n"
+            "            |a> . |b> . |c> . |d> . |e>\n\n"
+            "        ssplit[\", \"] |a, b, c>\n"
+            "            |a> . |b> . |c>\n\n"
+            "        ssplit[\" and \"] |a, b, c and d>\n"
+            "            |a, b, c> . |d>\n\n"
+            "        ssplit[\", \"] ssplit[\" and \"] |a, b, c and d>\n"
+            "            |a> . |b> . |c> . |d>\n\n"
+            "    see also:\n"
+            "        split, smerge";
+
 }
 
 std::string OperatorUsageMap::get_usage(const std::string &s) const {
