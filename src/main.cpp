@@ -75,6 +75,8 @@ int main(int argc, char** argv) {
 
         if (!interactive_mode && file_names.empty()) {
             std::cout << standard_introduction_text;
+            std::cout << "Invoke the shell with: " << argv[0] << " --interactive\n";
+            std::cout << "Or print the help message: " << argv[0] << " --help\n\n";
             return 0;
         }
         if (!interactive_mode) {
