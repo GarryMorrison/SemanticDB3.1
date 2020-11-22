@@ -175,6 +175,12 @@ FunctionOperatorMap::FunctionOperatorMap() {
     idx = ket_map.get_idx("divide-by");
     fn_map.compound_ket_fn.emplace(idx, &op_divide_by);
 
+    idx = ket_map.get_idx("int-divide-by");
+    fn_map.compound_ket_fn.emplace(idx, &op_int_divide_by);
+
+    idx = ket_map.get_idx("round");
+    fn_map.compound_ket_fn.emplace(idx, &op_round);
+
     idx = ket_map.get_idx("mod");
     fn_map.compound_ket_fn.emplace(idx, &op_modulus);
 

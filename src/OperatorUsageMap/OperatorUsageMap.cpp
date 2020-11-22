@@ -355,6 +355,86 @@ OperatorUsageMap::OperatorUsageMap() {
             "    see also:\n"
             "        sp2seq";
 
+    operator_usage_map.map["plus"] =
+            "\nplus:\n"
+            "    description:\n"
+            "        plus[n] ket\n"
+            "        add n to the value in the ket, leaving the coefficient unchanged\n\n"
+            "    examples:\n"
+            "        plus[5] |3.1415>\n"
+            "            |8.1415>\n\n"
+            "    see also:\n"
+            "        minus, times-by, divide-by, int-divide-by, mod, round";
+
+    operator_usage_map.map["minus"] =
+            "\nminus:\n"
+            "    description:\n"
+            "        minus[n] ket\n"
+            "        subtract n from the value in the ket, leaving the coefficient unchanged\n\n"
+            "    examples:\n"
+            "        minus[2] |3.1415>\n"
+            "            |1.1415>\n"
+            "    see also:\n"
+            "        plus, times-by, divide-by, int-divide-by, mod, round";
+
+    operator_usage_map.map["times-by"] =
+            "\ntimes-by:\n"
+            "    description:\n"
+            "        times-by[n] ket\n"
+            "        times the value in the ket by n, leaving the coefficient unchanged\n\n"
+            "    examples:\n"
+            "        times-by[5] |6.1>\n"
+            "            |30.5>\n\n"
+            "    see also:\n"
+            "        plus, minus, divide-by, int-divide-by, mod, round\n"
+            "        temperature-conversion.sw3";
+
+    operator_usage_map.map["divide-by"] =
+            "\ndivide-by:\n"
+            "    description:\n"
+            "        divide-by[n] ket\n"
+            "        divide the value in the ket by n, leaving the coefficient unchanged\n\n"
+            "    examples:\n"
+            "        divide-by[5] |625.5>\n"
+            "            |125.1>\n\n"
+            "    see also:\n"
+            "        plus, minus, times-by, int-divide-by, mod, round";
+
+    operator_usage_map.map["int-divide-by"] =
+            "\nint-divide-by:\n"
+            "    description:\n"
+            "        int-divide-by[n] ket\n"
+            "        integer divide the value in the ket by n, leaving the coefficient unchanged\n\n"
+            "    examples:\n"
+            "        int-divide-by[1000] |123456>\n"
+            "            |123>\n\n"
+            "    see also:\n"
+            "        plus, minus, times-by, divide-by, mod, round";
+
+    operator_usage_map.map["mod"] =
+            "\nmod:\n"
+            "    description:\n"
+            "        mod[n] ket\n"
+            "        apply mod n to the value in the ket by n, leaving the coefficient unchanged\n\n"
+            "    examples:\n"
+            "        mod[1000] |1234567>\n"
+            "            |567>\n\n"
+            "    see also:\n"
+            "        plus, minus, times-by, divide-by, int-divide-by, round";
+
+    operator_usage_map.map["round"] =
+            "\nround:\n"
+            "    description:\n"
+            "        round[n] ket\n"
+            "        round the value in the ket to n places, leaving the coefficient unchanged\n"
+            "        If you need more decimal places in your kets, use the --places command line option.\n"
+            "        The default is currently set to 5\n\n"
+            "    examples:\n"
+            "        round[3] |3.14159>\n"
+            "            |3.142>\n\n"
+            "    see also:\n"
+            "        plus, minus, times-by, divide-by, int-divide-by, mod";
+
 }
 
 std::string OperatorUsageMap::get_usage(const std::string &s) const {
