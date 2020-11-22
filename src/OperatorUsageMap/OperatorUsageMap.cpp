@@ -18,10 +18,14 @@ OperatorUsageMap::OperatorUsageMap() {
             "    description:\n"
             "        clean ket\n"
             "        clean the coefficients of the given superposition\n"
-            "        if x < 0, return 0, else return 1\n\n"
+            "        if x < 0, return 0, else return 1\n"
+            "        The combination: drop clean sp\n"
+            "        converts the given superposition into a \"clean\" superposition\n\n"
             "    examples:\n"
+            "        -- clean a superposition:\n"
             "        clean (3|a> + 2.2|b> - 3 |c> + |d>)\n"
             "            |a> + |b> + 0|c> + |d>\n\n"
+            "        -- generate a \"clean\" superposition from an arbitrary superposition:\n"
             "        drop clean (3|a> + 2.2|b> - 3 |c> + |d>)\n"
             "            |a> + |b> + |d>\n\n"
             "    see also:\n"
@@ -271,6 +275,41 @@ OperatorUsageMap::OperatorUsageMap() {
             "            4      *   *   *   *   *   *   *   *   *\n\n"
             "    see also:\n"
             "        learn-grid";
+
+    operator_usage_map.map["how-many"] =
+            "\nhow-many:\n"
+            "    description:\n"
+            "        how-many sp\n"
+            "        counts the number of kets in a superposition\n\n"
+            "    examples:\n"
+            "        how-many split |abcdef>\n"
+            "            |number: 6>\n\n"
+            "    see also:\n"
+            "        measure-currency, show-many";
+
+    operator_usage_map.map["show-many"] =
+            "\nshow-many:\n"
+            "    description:\n"
+            "        show-many seq\n"
+            "        counts the number of superpositions in a sequence\n\n"
+            "    examples:\n"
+            "        show-many ssplit |abcdef>\n"
+            "            |number: 6>\n\n"
+            "    see also:\n"
+            "        how-many, measure-currency, how-many";
+
+    operator_usage_map.map["measure-currency"] =
+            "\nmeasure-currency:\n"
+            "    description:\n"
+            "        measure-currency sp\n"
+            "        measures the \"currency\" used by a superposition\n"
+            "        Ie, the sum of the coefficients of all the kets in the given superposition\n"
+            "        If the superposition is \"clean\" then measure-currency is the same as the how-many operator\n\n"
+            "    examples:\n"
+            "        measure-currency (3|a> + 1.2|b> + 0.1|c>)\n"
+            "            |number: 4.3>\n\n"
+            "    see also:\n"
+            "        how-many, show-many, clean";
 
 }
 

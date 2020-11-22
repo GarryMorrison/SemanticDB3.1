@@ -281,6 +281,10 @@ Sequence Sequence::measure_currency() const {
     return result;
 }
 
+Sequence Sequence::show_many() const {
+    return Sequence("number: " + std::to_string(seq.size()));
+}
+
 Sequence Sequence::rescale(const double t) const {
     Sequence result;
     for (const auto &sp: seq) {

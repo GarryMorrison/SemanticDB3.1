@@ -97,6 +97,9 @@ FunctionOperatorMap::FunctionOperatorMap() {
     idx = ket_map.get_idx("measure-currency");
     fn_map.built_in.emplace(idx, &Sequence::measure_currency);
 
+    idx = ket_map.get_idx("show-many");
+    fn_map.built_in.emplace(idx, &Sequence::show_many);
+
     idx = ket_map.get_idx("rescale");
     fn_map.built_in.emplace(idx, &Sequence::op_rescale0);
     fn_map.compound_built_in.emplace(idx, &Sequence::op_rescale1);
