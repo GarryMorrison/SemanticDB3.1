@@ -435,6 +435,40 @@ OperatorUsageMap::OperatorUsageMap() {
             "    see also:\n"
             "        plus, minus, times-by, divide-by, int-divide-by, mod";
 
+    operator_usage_map.map["to-upper"] =
+            "\nto-upper:\n"
+            "    description:\n"
+            "        to-upper ket\n"
+            "        set all characters to upper case\n\n"
+            "        to-upper[i1, i2, ..., in] ket\n"
+            "        change i'th characters to upper case\n\n"
+            "    examples:\n"
+            "        to-upper |fred>\n"
+            "            |FRED>\n\n"
+            "        to-upper[1] |fred>\n"
+            "            |Fred>\n\n"
+            "        to-upper[1,3,5] |abcdefg>\n"
+            "            |AbCdEfg>\n\n"
+            "    see also:\n"
+            "        to-lower";
+
+    operator_usage_map.map["to-lower"] =
+            "\nto-lower:\n"
+            "    description:\n"
+            "        to-lower ket\n"
+            "        set all characters to lower case\n\n"
+            "        to-lower[i1, i2, ..., in] ket\n"
+            "        change i'th characters to lower case\n\n"
+            "    examples:\n"
+            "        to-lower |FRED>\n"
+            "            |fred>\n\n"
+            "        to-lower[1] |FRED>\n"
+            "            |fRED>\n\n"
+            "        to-lower[1,3,5] |ABCDEFG>\n"
+            "            |aBcDeFG>\n\n"
+            "    see also:\n"
+            "        to-upper";
+
 }
 
 std::string OperatorUsageMap::get_usage(const std::string &s) const {
