@@ -631,6 +631,43 @@ OperatorUsageMap::OperatorUsageMap() {
             "    see also:\n"
             "        to-upper, to-lower, smerge";
 
+    operator_usage_map.map["threshold-filter"] =
+            "\nthreshold-filter:\n"
+            "    description:\n"
+            "        threshold-filter[t] ket\n"
+            "        if x < t, return 0, else return x\n"
+            "        combined with drop, eg: drop threshold-filter[t] sp\n"
+            "        filter the given superposition to only those with coefficients >= t.\n\n"
+            "    examples:\n"
+            "        threshold-filter[2] (3|a> + 2.2|b> - 3 |c> + |d>)\n"
+            "            3|a> + 2.200000|b> + 0|c> + 0|d>\n\n"
+            "        drop threshold-filter[2] (3|a> + 2.2|b> - 3 |c> + |d>)\n"
+            "            3|a> + 2.200000|b>\n\n"
+            "    see also:\n"
+            "        not-threshold-filter";
+
+    operator_usage_map.map["not-threshold-filter"] =
+            "\nnot-threshold-filter:\n"
+            "    description:\n"
+            "        not-threshold-filter[t] ket\n"
+            "        if x <= t, return x, else return 0\n\n"
+            "    examples:\n"
+            "        not-threshold-filter[2] (3|a> + 2.2|b> - 3 |c> + |d>)\n"
+            "            0|a> + 0|b> - 3|c> + |d>\n\n"
+            "    see also:\n"
+            "        threshold-filter";
+
+    operator_usage_map.map["sigmoid-in-range"] =
+            "\nsigmoid-in-range:\n"
+            "    description:\n"
+            "        sigmoid-in-range[a, b] ket\n"
+            "        if a <= x <= b, return x, else return 0\n\n"
+            "    examples:\n"
+            "        sigmoid-in-range[2,4] (|a> + 2|b> + 3|c> + 4|d> + 5|e>)\n"
+            "            0|a> + 2|b> + 3|c> + 4|d> + 0|e>\n\n"
+            "    see also:\n"
+            "        threshold-filter";
+
 }
 
 std::string OperatorUsageMap::get_usage(const std::string &s) const {
