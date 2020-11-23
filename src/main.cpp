@@ -45,12 +45,15 @@ int main(int argc, char** argv) {
     try {
         TCLAP::CmdLine cmd("The Semantic DB 3.1 shell", ' ', "3.1");
 
-        TCLAP::ValueArg<unsigned int> decimal_places_arg("p", "places", "Ket decimal places", false, 5, "integer");
+        // TCLAP::SwitchArg generate_docs_switch("g", "generate", "Generate html documentation (currently unimplemented).", cmd, false);
+        TCLAP::ValueArg<std::string> generate_docs_arg("g", "generate", "Generate html documentation in the given directory (currently unimplemented).", false, "", "directory");
+        cmd.add(generate_docs_arg);
+        TCLAP::ValueArg<unsigned int> decimal_places_arg("p", "places", "Set the default number of decimal places used in kets.", false, 5, "integer");
         cmd.add( decimal_places_arg );
-        TCLAP::SwitchArg quiet_switch("q","quiet","Switch to quiet mode", cmd, false);
-        TCLAP::SwitchArg dump_switch("d","dump","Dump context", cmd, false);
-        TCLAP::SwitchArg interactive_switch("i","interactive","Enter interactive mode", cmd, false);
-        TCLAP::UnlabeledMultiArg<std::string> multi("f", "List of file names", false, "file names", cmd);
+        TCLAP::SwitchArg quiet_switch("q","quiet","Switch to quiet mode. Ie, switch off time-taken messages.", cmd, false);
+        TCLAP::SwitchArg dump_switch("d","dump","Dump context list after file(s) are loaded.", cmd, false);
+        TCLAP::SwitchArg interactive_switch("i","interactive","Enter interactive mode. Ie, enter the SDB shell.", cmd, false);
+        TCLAP::UnlabeledMultiArg<std::string> multi("f", "List of file names to load.", false, "file names", cmd);
 
         cmd.parse( argc, argv ); // parse the commandline input
 
@@ -58,6 +61,8 @@ int main(int argc, char** argv) {
         bool dump_context = dump_switch.getValue();
         bool quiet_mode = quiet_switch.getValue();
         default_decimal_places = decimal_places_arg.getValue();
+        // bool generate_docs = generate_docs_switch.getValue();
+        std::string generate_docs_starting_directory = generate_docs_arg.getValue();
         std::vector<std::string> file_names = multi.getValue();
 
         if (show_command_line_parse_details) {
@@ -65,12 +70,23 @@ int main(int argc, char** argv) {
             std::cout << "dump context: " << dump_context << std::endl;
             std::cout << "quiet mode: " << quiet_mode << std::endl;
             std::cout << "default_decimal_places: " << default_decimal_places << std::endl;
+            std::cout << "generate_docs_starting_directory: " << generate_docs_starting_directory << std::endl;
 
             int k = 0;
             for (const auto file_name: file_names) {
                 k++;
                 std::cout << "file name " << k << ": " << file_name << std::endl;
             }
+        }
+
+        if (!generate_docs_starting_directory.empty()) {
+            std::cout << "\n    About to generate html documentation in directory: " << generate_docs_starting_directory << "\n    Do you wish to proceed? (y/n): ";
+            char answer;
+            std::cin >> answer;
+            if (answer == 'y') {
+                std::cout << "\n    Working ... \n" << std::endl;
+            }
+            return 0;
         }
 
         if (!interactive_mode && file_names.empty()) {
