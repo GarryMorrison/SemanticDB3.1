@@ -225,6 +225,9 @@ FunctionOperatorMap::FunctionOperatorMap() {
 
     idx = ket_map.get_idx("op-zip");
     fn_map.context_whitelist_1.emplace(idx, &op_zip);
+
+    idx = ket_map.get_idx("if");
+    fn_map.context_whitelist_3.emplace(idx, &op_if);
 }
 
 template <class T>

@@ -376,3 +376,37 @@ Sequence op_zip(ContextList &context, const Sequence &input_seq, const Sequence 
     }
     return result;
 }
+
+Sequence op_if(ContextList &context, const Sequence &input_seq, const Sequence &one, const Sequence &two, const Sequence &three) {
+    std::string str_condition = one.to_ket().label();
+    Sequence result;
+    if (str_condition == "yes" || str_condition == "true") {
+        for (const auto &k: two.to_sp()) {
+            auto k_vec = k.label_split_idx();
+            if (k_vec.size() < 2) {
+                continue;
+            }
+            if (k_vec[0] != ket_map.get_idx("op")) {
+                continue;
+            }
+            SimpleOperator op(k_vec[1]);
+            Sequence seq = op.Compile(context, input_seq);
+            result.add(seq);
+        }
+        return result;
+    } else {
+        for (const auto &k: three.to_sp()) {
+            auto k_vec = k.label_split_idx();
+            if (k_vec.size() < 2) {
+                continue;
+            }
+            if (k_vec[0] != ket_map.get_idx("op")) {
+                continue;
+            }
+            SimpleOperator op(k_vec[1]);
+            Sequence seq = op.Compile(context, input_seq);
+            result.add(seq);
+        }
+        return result;
+    }
+}
