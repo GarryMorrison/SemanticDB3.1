@@ -111,6 +111,7 @@
 %token          POWER           "power"
 %token          QUOTE           "quotation symbol"
 %token          STAR            "*"
+%token          DIVIDE          "divide symbol"
 %token          EOL_SPACE4      "end of line with space 4"
 
 
@@ -315,6 +316,9 @@ constant : STRING { $$ = new ConstantString(*$1); }
          | OP_LABEL { $$ = new ConstantOperator($1); }
          | INTEGER { $$ = new ConstantInteger($1); }
          | DOUBLE { $$ = new ConstantFloat($1); }
+         | INTEGER DIVIDE INTEGER { $$ = new ConstantFloat((double)$1 / (double)$3); }
+         | INTEGER DIVIDE DOUBLE { $$ = new ConstantFloat((double)$1 / $3); }
+         | DOUBLE DIVIDE INTEGER { $$ = new ConstantFloat($1 / (double)$3); }
          ;
 
 parameters : constant { $$ = new std::vector<std::shared_ptr<CompoundConstant>>;

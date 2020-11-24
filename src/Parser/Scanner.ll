@@ -112,6 +112,7 @@ yylloc->step();
 "^" { return token::POWER; }
 "\"" { return token::QUOTE; }
 "\*" { return token::STAR; }
+"/"  { return token::DIVIDE; }
 
 "\n    " { return token::EOL_SPACE4; }
 
