@@ -3,6 +3,7 @@
 //
 
 #include <memory>
+#include <iostream>
 #include "FunctionOperator.h"
 #include "../FunctionOperatorMap/FunctionOperatorMap.h"
 
@@ -55,6 +56,9 @@ Sequence FunctionOperator::Compile(NewContext& context, const Sequence& seq) con
 
 Sequence FunctionOperator::Compile(ContextList& context, const Sequence& seq) const {
     if (seq_vec.empty()) { return seq; }  // Maybe return |> instead??
+    // std::cout << "FunctionOperator::Compile(context, seq):" << std::endl;
+    // std::cout << "    seq: " << seq.to_string() << std::endl;
+
     // Compile the sequences:
     std::vector<Sequence> args; // specify size of args here. Ie, seq_vec.size(). Or maybe something more efficient?
     args.push_back(seq);

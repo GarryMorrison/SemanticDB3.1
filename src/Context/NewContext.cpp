@@ -429,7 +429,7 @@ void NewContext::fn_learn(const ulong op_idx, const int param_size, std::shared_
     if (fn_rules_dict.find(param_size) == fn_rules_dict.end()) {
         fn_rules_dict[param_size] = frame;
     }
-    fn_rules_dict[param_size].learn(op_idx, bSeq);
+    fn_rules_dict[param_size].stored_learn(op_idx, bSeq);
 }
 
 std::shared_ptr<BaseSequence> NewContext::fn_recall(const ulong op_idx, const int param_size) {
@@ -443,7 +443,7 @@ unsigned int NewContext::fn_recall_type(const ulong op_idx, const int param_size
     if (fn_rules_dict.find(param_size) == fn_rules_dict.end()) {
         return RULEUNDEFINED;
     }
-    return RULESTORED;
+    return fn_rules_dict[param_size].recall_type(op_idx);
 }
 
 void NewContext::print_universe(bool clean) const {

@@ -668,6 +668,30 @@ OperatorUsageMap::OperatorUsageMap() {
             "    see also:\n"
             "        threshold-filter";
 
+    operator_usage_map.map["op-zip"] =
+            "\nop-zip:\n"
+            "    description:\n"
+            "        op-zip(seq) input-seq\n"
+            "        zip together a sequence of operators with a sequence of superpositions (given by input-seq)\n"
+            "        stops at the shorter of the two sequences\n"
+            "        NB: it is invoked slightly differently from the python version\n"
+            "        where it was: op-zip(seq, seq)\n\n"
+            "    examples:\n"
+            "        -- define some for-example operators:\n"
+            "        -- but keep it abstract for now:\n"
+            "        op1 (*) #=> |op1:> __ |__self>\n"
+            "        op2 (*) #=> |op2:> __ |__self>\n"
+            "        op3 (*) #=> |op3:> __ |__self>\n\n"
+            "        -- define the corresponding operator sequence:\n"
+            "        op |seq> => |op: op1> . |op: op2> . |op: op3>\n\n"
+            "        -- define a for-example sequence, again, just something abstract:\n"
+            "        the |input seq> => |a> . |b> . |c> . |d> . |e>\n\n"
+            "        -- now apply it:\n"
+            "        op-zip(op |seq>) the |input seq>\n"
+            "            |op1: a> . |op2: b> . |op3: c>\n\n"
+            "    see also:\n"
+            "        numbers-to-words.sw3";
+
 }
 
 std::string OperatorUsageMap::get_usage(const std::string &s) const {

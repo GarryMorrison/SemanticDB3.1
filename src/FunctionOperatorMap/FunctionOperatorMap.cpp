@@ -223,6 +223,8 @@ FunctionOperatorMap::FunctionOperatorMap() {
     idx = ket_map.get_idx("display-grid");
     fn_map.compound_context_sp_fn.emplace(idx, &op_display_grid);
 
+    idx = ket_map.get_idx("op-zip");
+    fn_map.context_whitelist_1.emplace(idx, &op_zip);
 }
 
 template <class T>

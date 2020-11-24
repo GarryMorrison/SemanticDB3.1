@@ -356,3 +356,23 @@ Sequence op_seq_learn(ContextList &context, const Sequence &input_seq, const Seq
     }
     return three;
 }
+
+Sequence op_zip(ContextList &context, const Sequence &input_seq, const Sequence &one) {
+    Sequence result;
+    auto input_seq_iter = input_seq.cbegin();
+    auto one_iter = one.cbegin();
+    for (; input_seq_iter != input_seq.cend() && one_iter != one.cend(); ++input_seq_iter, ++one_iter) {
+        Sequence seq;
+        auto op_vec = (*one_iter).to_ket().label_split_idx();  // Is op_vec.size() always >= 1? Is it ever 0??
+        if (op_vec.size() < 2) {
+            result.append(seq);
+        } else if (op_vec[0] != ket_map.get_idx("op")) {
+            result.append(seq);
+        } else {
+            SimpleOperator op(op_vec[1]);
+            seq = op.Compile(context, (*input_seq_iter).to_seq());
+            result.append(seq);
+        }
+    }
+    return result;
+}
