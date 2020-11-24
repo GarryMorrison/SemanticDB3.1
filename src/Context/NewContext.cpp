@@ -496,8 +496,10 @@ void NewContext::print_universe(bool clean) const {
         }
         if (fn_rules_dict.find(param_size) != fn_rules_dict.end()) {
             frame = fn_rules_dict.at(param_size);
-            rule = frame.recall(supported_ops_idx);
-            s += "supported-ops " + label + " => " + rule->to_string() + "\n";
+            if (!clean) {
+                rule = frame.recall(supported_ops_idx);
+                s += "supported-ops " + label + " => " + rule->to_string() + "\n";
+            }
             for (const ulong op_idx : frame.supported_ops()) {
                 s += ket_map.get_str(op_idx) + " " + label + " #=> " + frame.recall(op_idx)->to_string() + "\n";
             }
