@@ -1,4 +1,6 @@
 -- convert numbers to words:
+-- usage: n2w |12345>
+
 
 ones |1> => |one>
 ones |2> => |two>
@@ -52,6 +54,9 @@ trillions |*> #=> hundreds-rule |_self> __ |trillion>
 n2w |0> => |zero>
 
 op |seq> => |op: hundreds-rule> . |op: thousands> . |op: millions> . |op: billions> . |op: trillions>
+
+
+-- our numbers to words operator:
 n2w |*> #=> smerge[", "] sreverse op-zip(op |seq>) split-num |_self>
 
 
