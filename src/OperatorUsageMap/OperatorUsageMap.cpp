@@ -709,6 +709,123 @@ OperatorUsageMap::OperatorUsageMap() {
             "        if(|no>, |op: op1>, |op: op2>) ssplit |abc>\n"
             "            |op2: a, b, c>\n\n"
             "    see also:\n";
+
+    operator_usage_map.map["is-less-than"] =
+            "\nis-less-than:\n"
+            "    description:\n"
+            "        is-less-than[value] ket\n"
+            "        returns yes/no if the value in ket < value\n\n"
+            "    examples:\n"
+            "        is-less-than[1000] |987>\n"
+            "            |yes>\n\n"
+            "        is-less-than[80] |age: 76>\n"
+            "            |yes>\n\n"
+            "        is-less-than[2000] |year: 2018>\n"
+            "            |no>\n\n"
+            "        -- if the ket has no float value then return the empty ket |>\n"
+            "        is-less-than[13] |the cat>\n"
+            "            |>\n\n"
+            "    see also:\n"
+            "        is-less-equal-than, is-equal, is-greater-than, is-greater-equal-than, is-in-range";
+
+    operator_usage_map.map["is-less-equal-than"] =
+            "\nis-less-equal-than:\n"
+            "    description:\n"
+            "        is-less-equal-than[value] ket\n"
+            "        returns yes/no if the value in ket <= value\n\n"
+            "    examples:\n"
+            "        is-less-equal-than[80] |age: 76>\n"
+            "            |yes>\n\n"
+            "        is-less-equal-than[2010] |year: 2010>\n"
+            "            |yes>\n\n"
+            "        -- if the ket has no float value then return the empty ket |>\n"
+            "        is-less-equal-than[13] |the cat>\n"
+            "            |>\n\n"
+            "    see also:\n"
+            "        is-less-than, is-equal, is-greater-than, is-greater-equal-than, is-in-range";
+
+    operator_usage_map.map["is-equal"] =
+            "\nis-equal:\n"
+            "    description:\n"
+            "        is-equal[value] ket\n"
+            "        returns yes/no if the value in ket == value\n\n"
+            "    examples:\n"
+            "        is-equal[80] |age: 76>\n"
+            "            |no>\n\n"
+            "        is-equal[2010] |year: 2010>\n"
+            "            |yes>\n\n"
+            "        -- if the ket has no float value then return the empty ket |>\n"
+            "        is-equal[13] |the cat>\n"
+            "            |>\n\n"
+            "    see also:\n"
+            "        is-less-than, is-less-equal-than, is-greater-than, is-greater-equal-than, is-in-range";
+
+    operator_usage_map.map["is-greater-than"] =
+            "\nis-greater-than:\n"
+            "    description:\n"
+            "        is-greater-than[value] ket\n"
+            "        returns yes/no if the value in ket > value\n\n"
+            "    examples:\n"
+            "        is-greater-than[5] |7>\n"
+            "            |yes>\n\n"
+            "        is-greater-than[3] |price: 3.50>\n"
+            "            |yes>\n\n"
+            "        is-greater-than[26] |number: 25>\n"
+            "            |no>\n\n"
+            "        -- if the ket has no float value then return the empty ket |>\n"
+            "        is-greater-than[13] |the cat>\n"
+            "            |>\n\n"
+            "    see also:\n"
+            "        is-less-than, is-less-equal-than, is-equal, is-greater-equal-than, is-in-range";
+
+    operator_usage_map.map["is-greater-equal-than"] =
+            "\nis-greater-equal-than:\n"
+            "    description:\n"
+            "        is-greater-equal-than[value] ket\n"
+            "        returns yes/no if the value in ket >= value\n\n"
+            "    examples:\n"
+            "        is-greater-equal-than[13] |number: 13>\n"
+            "            |yes>\n\n"
+            "        is-greater-equal-than[21] |age: 23>\n"
+            "            |yes>\n\n"
+            "        is-greater-equal-than[1980] |year: 1977>\n"
+            "            |no>\n\n"
+            "        -- if the ket has no float value then return the empty ket |>\n"
+            "        is-greater-equal-than[13] |the cat>\n"
+            "            |>\n\n"
+            "    see also:\n"
+            "        is-greater-than, is-less-than, is-less-equal-than, is-equal, is-in-range";
+
+    operator_usage_map.map["is-in-range"] =
+            "\nis-in-range:\n"
+            "    description:\n"
+            "        is-in-range[value1, value2] ket\n"
+            "        returns yes/no if value1 <= the value in ket <= value2\n\n"
+            "    examples:\n"
+            "        is-in-range[2,4] ssplit |0123456>\n"
+            "            |no> . |no> . |yes> . |yes> . |yes> . |no> . |no>\n\n"
+            "        not |yes> => |no>\n"
+            "        not |no> => |yes>\n"
+            "        is-a-child |*> #=> is-in-range[0,17] age |_self>\n"
+            "        is-a-teenager |*> #=> is-in-range[13,19] age |_self>\n"
+            "        is-an-adult |*> #=> not is-in-range[0,17] age |_self>\n"
+            "        age |Emma> => |14>\n"
+            "        age |Bella> => |18>\n"
+            "        age |Fred> => |34>\n\n"
+            "        table[person, age, is-a-child, is-a-teenager, is-an-adult] split[\" \"] |Emma Bella Fred>\n"
+            "            +--------+-----+------------+---------------+-------------+\n"
+            "            | person | age | is-a-child | is-a-teenager | is-an-adult |\n"
+            "            +--------+-----+------------+---------------+-------------+\n"
+            "            | Emma   | 14  | yes        | yes           | no          |\n"
+            "            | Bella  | 18  | no         | yes           | yes         |\n"
+            "            | Fred   | 34  | no         | no            | yes         |\n"
+            "            +--------+-----+------------+---------------+-------------+\n\n"
+            "        -- if the ket has no float value then return the empty ket |>\n"
+            "        is-in-range[13, 17] |the cat>\n"
+            "            |>\n\n"
+            "    see also:\n"
+            "        is-less-than, is-less-equal-than, is-equal, is-greater-than, is-greater-equal-than";
+
 }
 
 std::string OperatorUsageMap::get_usage(const std::string &s) const {

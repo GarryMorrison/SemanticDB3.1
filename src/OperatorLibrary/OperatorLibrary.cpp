@@ -733,3 +733,101 @@ Ket op_display_grid(const Superposition &sp, ContextList &context, const std::ve
     std::cout << std::endl;  // Flush. Not sure if needed, but should be fine to leave it in.
     return Ket("display-grid");
 }
+
+
+Ket op_is_less_than(const Ket k, const std::vector<std::shared_ptr<CompoundConstant> > &parameters) {
+    if (parameters.empty()) { return k; }  // Maybe something different here.
+    long double value = parameters[0]->get_float();
+    auto k_vec = k.label_split_idx();
+    if (k_vec.empty()) { return Ket(); }
+    try {
+        long double ket_value = std::stold(ket_map.get_str(k_vec.back()));
+        if (ket_value < value) {
+            return Ket("yes");
+        }
+        return Ket("no");
+    } catch (const std::invalid_argument& e) {
+        return Ket("");
+    }
+}
+
+Ket op_is_less_equal_than(const Ket k, const std::vector<std::shared_ptr<CompoundConstant> > &parameters) {
+    if (parameters.empty()) { return k; }  // Maybe something different here.
+    long double value = parameters[0]->get_float();
+    auto k_vec = k.label_split_idx();
+    if (k_vec.empty()) { return Ket(); }
+    try {
+        long double ket_value = std::stold(ket_map.get_str(k_vec.back()));
+        if (ket_value <= value) {
+            return Ket("yes");
+        }
+        return Ket("no");
+    } catch (const std::invalid_argument& e) {
+        return Ket("");
+    }
+}
+
+Ket op_is_equal(const Ket k, const std::vector<std::shared_ptr<CompoundConstant> > &parameters) {
+    if (parameters.empty()) { return k; }  // Maybe something different here.
+    long double value = parameters[0]->get_float();
+    auto k_vec = k.label_split_idx();
+    if (k_vec.empty()) { return Ket(); }
+    try {
+        long double ket_value = std::stold(ket_map.get_str(k_vec.back()));
+        if ( long_double_eq(ket_value, value)) {
+            return Ket("yes");
+        }
+        return Ket("no");
+    } catch (const std::invalid_argument& e) {
+        return Ket("");
+    }
+}
+
+Ket op_is_greater_than(const Ket k, const std::vector<std::shared_ptr<CompoundConstant> > &parameters) {
+    if (parameters.empty()) { return k; }  // Maybe something different here.
+    long double value = parameters[0]->get_float();
+    auto k_vec = k.label_split_idx();
+    if (k_vec.empty()) { return Ket(); }
+    try {
+        long double ket_value = std::stold(ket_map.get_str(k_vec.back()));
+        if (ket_value > value) {
+            return Ket("yes");
+        }
+        return Ket("no");
+    } catch (const std::invalid_argument& e) {
+        return Ket("");
+    }
+}
+
+Ket op_is_greater_equal_than(const Ket k, const std::vector<std::shared_ptr<CompoundConstant> > &parameters) {
+    if (parameters.empty()) { return k; }  // Maybe something different here.
+    long double value = parameters[0]->get_float();
+    auto k_vec = k.label_split_idx();
+    if (k_vec.empty()) { return Ket(); }
+    try {
+        long double ket_value = std::stold(ket_map.get_str(k_vec.back()));
+        if (ket_value >= value) {
+            return Ket("yes");
+        }
+        return Ket("no");
+    } catch (const std::invalid_argument& e) {
+        return Ket("");
+    }
+}
+
+Ket op_is_in_range(const Ket k, const std::vector<std::shared_ptr<CompoundConstant> > &parameters) {
+    if (parameters.size() < 2) { return k; }  // Maybe something different here.
+    long double value1 = parameters[0]->get_float();
+    long double value2 = parameters[1]->get_float();
+    auto k_vec = k.label_split_idx();
+    if (k_vec.empty()) { return Ket(); }
+    try {
+        long double ket_value = std::stold(ket_map.get_str(k_vec.back()));
+        if (value1 <= ket_value && ket_value <= value2) {
+            return Ket("yes");
+        }
+        return Ket("no");
+    } catch (const std::invalid_argument& e) {
+        return Ket("");
+    }
+}

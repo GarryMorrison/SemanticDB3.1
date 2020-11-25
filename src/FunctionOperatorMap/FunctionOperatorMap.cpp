@@ -228,6 +228,25 @@ FunctionOperatorMap::FunctionOperatorMap() {
 
     idx = ket_map.get_idx("if");
     fn_map.context_whitelist_3.emplace(idx, &op_if);
+
+    idx = ket_map.get_idx("is-less-than");
+    fn_map.compound_ket_fn.emplace(idx, &op_is_less_than);
+
+    idx = ket_map.get_idx("is-less-equal-than");
+    fn_map.compound_ket_fn.emplace(idx, &op_is_less_equal_than);
+
+    idx = ket_map.get_idx("is-equal");
+    fn_map.compound_ket_fn.emplace(idx, &op_is_equal);
+
+    idx = ket_map.get_idx("is-greater-than");
+    fn_map.compound_ket_fn.emplace(idx, &op_is_greater_than);
+
+    idx = ket_map.get_idx("is-greater-equal-than");
+    fn_map.compound_ket_fn.emplace(idx, &op_is_greater_equal_than);
+
+    idx = ket_map.get_idx("is-in-range");
+    fn_map.compound_ket_fn.emplace(idx, &op_is_in_range);
+
 }
 
 template <class T>
