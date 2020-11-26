@@ -446,7 +446,7 @@ unsigned int NewContext::fn_recall_type(const ulong op_idx, const int param_size
     return fn_rules_dict[param_size].recall_type(op_idx);
 }
 
-void NewContext::print_universe(bool clean) const {
+void NewContext::print_universe(bool clean, std::ostream& out) const {
     std::string s, op, label;
     ulong supported_ops_idx;
     Frame frame;
@@ -508,5 +508,5 @@ void NewContext::print_universe(bool clean) const {
     }
 
     s += "------------------------------------------\n";
-    std::cout << s;
+    out << s;
 }

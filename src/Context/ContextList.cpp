@@ -292,13 +292,13 @@ unsigned int ContextList::fn_recall_type(const ulong op_idx, const int param_siz
 }
 
 
-void ContextList::print_multiverse(bool clean) const {
+void ContextList::print_multiverse(bool clean, std::ostream& out) const {
     for (const auto &context: data) {
-        context.print_universe(clean);
+        context.print_universe(clean, out);
         std::cout << std::endl;
     }
 }
 
-void ContextList::print_universe(bool clean) const {
-    data[index].print_universe(clean);
+void ContextList::print_universe(bool clean, std::ostream& out) const {
+    data[index].print_universe(clean, out);
 }

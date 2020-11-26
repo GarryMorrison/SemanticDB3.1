@@ -1,4 +1,6 @@
 #include <iostream>
+#include <fstream>
+#include <sstream>
 #include <memory>
 #include <deque>
 
@@ -7,7 +9,7 @@
 
 
 std::string standard_introduction_text = "Welcome to the Semantic DB version 3.1\n";
-std::string interactive_introduction_text = "\nWelcome to the Semantic DB version 3.1 shell.\nLast updated 22nd November 2020.\nType h for help.\n";
+std::string interactive_introduction_text = "\nWelcome to the Semantic DB version 3.1 shell.\nLast updated 26th November 2020.\nType h for help.\n";
 
 std::string help_string = "\n    q, quit, exit        quit the semantic agent\n"
                           "    h, help              print this message\n"
@@ -16,6 +18,8 @@ std::string help_string = "\n    q, quit, exit        quit the semantic agent\n"
                           "    dump verbose         print current context including supported-ops\n"
                           "    dump multi verbose   print context list including supported-ops\n"
                           "    load file.sw3        load the given file\n"
+                          "    save file.sw3        save the current context to file\n"
+                          "    save multi file.sw3  save context list to file\n"
                           "    context              show known context's\n"
                           "    context string       set context to string\n"
                           "    icontext             interactively choose context\n"
@@ -169,6 +173,18 @@ int main(int argc, char** argv) {
                 if (!parse_success) {
                     std::cout << "Parse failed for file: " << file_name << std::endl;
                 }
+            } else if (shell_input.substr(0, 11) == "save multi ") {
+                file_name = shell_input.substr(11);
+                std::ofstream file(file_name.c_str());
+                std::cout << "\n    Writing context list to file: " << file_name;
+                Timer_ms timer("    Time taken", quiet_mode);  // Time the save time.
+                context.print_multiverse(true, file);
+            } else if (shell_input.substr(0, 5) == "save ") {
+                file_name = shell_input.substr(5);
+                std::ofstream file(file_name.c_str());
+                std::cout << "\n    Writing context to file: " << file_name << std::endl;  // I don't understand why this needs extra new lines
+                Timer_ms timer("\n    Time taken", quiet_mode);  // Time the save time.    // that "save multi" does not.
+                context.print_universe(true, file);
             } else if (shell_input.substr(0, 2) == "--") {
                 continue;
             } else if (shell_input == "history") {

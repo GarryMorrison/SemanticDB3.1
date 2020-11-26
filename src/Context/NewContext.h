@@ -5,6 +5,7 @@
 #ifndef SDB3_1_NEWCONTEXT_H
 #define SDB3_1_NEWCONTEXT_H
 
+#include <iostream>
 #include <string>
 #include <vector>
 #include <unordered_map>
@@ -86,7 +87,8 @@ public:
     std::shared_ptr<BaseSequence> fn_recall(const ulong op_idx, const int param_size);
     unsigned int fn_recall_type(const ulong op_idx, const int param_size);
 
-    void print_universe(bool clean = true) const;
+    void print_universe(bool clean = true, std::ostream& out = std::cout) const;
+
 };
 
 
