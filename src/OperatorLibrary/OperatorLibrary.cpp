@@ -5,6 +5,7 @@
 #include <iostream>
 #include <string>
 #include <iomanip>
+#include <cmath>
 #include "OperatorLibrary.h"
 #include "../CompoundConstant/ConstantString.h"
 #include "../Function/misc.h"
@@ -829,5 +830,67 @@ Ket op_is_in_range(const Ket k, const std::vector<std::shared_ptr<CompoundConsta
         return Ket("no");
     } catch (const std::invalid_argument& e) {
         return Ket("");
+    }
+}
+
+bool is_prime(const long long p) {  // Just a naive is_prime() function.
+    bool is_prime = true;
+    if (p == 0 || p == 1) {
+        is_prime = false;
+    } else {
+        for (long long i = 2; i <= p / 2; ++i) {
+            if (p % i == 0) {
+                is_prime = false;
+                break;
+            }
+        }
+    }
+    return is_prime;
+}
+
+Ket op_is_prime(const Ket k) {
+    auto k_vec = k.label_split_idx();
+    if (k_vec.empty()) { return Ket(""); }
+    try {
+        long long ket_value = std::stoll(ket_map.get_str(k_vec.back()));  // Would be nice to not have to use try/catch here.
+        if (is_prime(ket_value)) {
+            return Ket("yes");
+        }
+        return Ket("no");
+    } catch (const std::invalid_argument& e) {
+        return Ket("");
+    }
+}
+
+Superposition op_prime_factors(const Ket k) {  // Just a naive prime_factors() function.
+    Superposition result;
+    auto k_vec = k.label_split_idx();
+    if (k_vec.empty()) { return Ket(""); }
+    std::string ket_label = ket_map.get_str(k_vec.back());
+    k_vec.pop_back();
+    std::string category = ket_map.get_str(k_vec);
+    if (!category.empty()) {
+        category += ": ";
+    }
+    try {
+        long long p = std::stoll(ket_label);  // Would be nice to not have to use try/catch here.
+        while (p % 2 == 0) {
+            result.add(category + "2");
+            p /= 2;
+        }
+        for (long long i = 3; i <= sqrt(p); i += 2)
+        {
+            while (p % i == 0)
+            {
+                result.add(category + std::to_string(i));
+                p /= i;
+            }
+        }
+        if (p > 2) {
+            result.add(category + std::to_string(p));
+        }
+        return result;
+    } catch (const std::invalid_argument& e) {
+        return Superposition("");
     }
 }

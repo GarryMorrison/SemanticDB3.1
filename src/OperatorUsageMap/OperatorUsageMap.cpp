@@ -826,6 +826,30 @@ OperatorUsageMap::OperatorUsageMap() {
             "    see also:\n"
             "        is-less-than, is-less-equal-than, is-equal, is-greater-than, is-greater-equal-than";
 
+    operator_usage_map.map["is-prime"] =
+            "\nis-prime:\n"
+            "    description:\n"
+            "        is-prime ket\n"
+            "        return |yes> or |no> if the given ket is prime or not\n\n"
+            "    examples:\n"
+            "        is-prime |379721>\n"
+            "            |yes>\n"
+            "    see also:\n"
+            "        prime-factors";
+
+    operator_usage_map.map["prime-factors"] =
+            "\nprime-factors:\n"
+            "    description:\n"
+            "        prime-factors ket\n"
+            "        returns a list/superposition of prime factors\n\n"
+            "    examples:\n"
+            "        prime-factors |987654321>\n"
+            "            2|3> + 2|17> + |379721>\n\n"
+            "        prime-factors |number: 123456789>\n"
+            "            2|number: 3> + |number: 3607> + |number: 3803>\n\n"
+            "    see also:\n"
+            "        is-prime";
+
 }
 
 std::string OperatorUsageMap::get_usage(const std::string &s) const {

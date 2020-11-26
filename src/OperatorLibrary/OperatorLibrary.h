@@ -57,5 +57,7 @@ Ket op_is_equal(const Ket k, const std::vector<std::shared_ptr<CompoundConstant>
 Ket op_is_greater_than(const Ket k, const std::vector<std::shared_ptr<CompoundConstant> > &parameters);
 Ket op_is_greater_equal_than(const Ket k, const std::vector<std::shared_ptr<CompoundConstant> > &parameters);
 Ket op_is_in_range(const Ket k, const std::vector<std::shared_ptr<CompoundConstant> > &parameters);
+Ket op_is_prime(const Ket k);
+Superposition op_prime_factors(const Ket k);
 
 #endif //SDB3_1_OPERATORLIBRARY_H

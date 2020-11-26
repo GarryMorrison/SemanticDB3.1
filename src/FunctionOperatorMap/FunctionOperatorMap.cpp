@@ -247,6 +247,11 @@ FunctionOperatorMap::FunctionOperatorMap() {
     idx = ket_map.get_idx("is-in-range");
     fn_map.compound_ket_fn.emplace(idx, &op_is_in_range);
 
+    idx = ket_map.get_idx("is-prime");
+    fn_map.ket_fn.emplace(idx, &op_is_prime);
+
+    idx = ket_map.get_idx("prime-factors");
+    fn_map.ket_fn.emplace(idx, &op_prime_factors);
 }
 
 template <class T>
