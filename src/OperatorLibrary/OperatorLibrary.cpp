@@ -894,3 +894,20 @@ Superposition op_prime_factors(const Ket k) {  // Just a naive prime_factors() f
         return Superposition("");
     }
 }
+
+Sequence op_such_that(const Sequence &seq, ContextList &context, const std::vector<std::shared_ptr<CompoundConstant> > &parameters) {
+   if (parameters.empty()) { return Sequence(""); }
+   SimpleOperator op = parameters[0]->get_operator();
+   Sequence result;
+   for (const auto &sp: seq) {
+       Sequence tmp;
+       for (const auto &k: sp) {
+           std::string value = op.Compile(context, k.to_seq()).to_ket().label();
+           if (value == "yes" || value == "true") {
+               tmp.add(k);
+           }
+       }
+       result.append(tmp);
+   }
+   return result;
+}

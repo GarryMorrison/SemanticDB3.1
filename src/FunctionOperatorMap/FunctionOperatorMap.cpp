@@ -252,6 +252,9 @@ FunctionOperatorMap::FunctionOperatorMap() {
 
     idx = ket_map.get_idx("prime-factors");
     fn_map.ket_fn.emplace(idx, &op_prime_factors);
+
+    idx = ket_map.get_idx("such-that");
+    fn_map.compound_context_seq_fn.emplace(idx, &op_such_that);
 }
 
 template <class T>

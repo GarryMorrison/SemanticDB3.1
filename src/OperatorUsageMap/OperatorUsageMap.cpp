@@ -106,7 +106,8 @@ OperatorUsageMap::OperatorUsageMap() {
             "        -- NB: will be faster if you apply the most strict condition(s) first.\n"
             "        -- Eg, in this case, politician first, then American, then human.\n"
             "        filter(|op: is-human>, |yes>) filter(|op: is-american>, |yes>) filter(|op: occupation>, |politician>) rel-kets[*]\n\n"
-            "    see also:\n\n"
+            "    see also:\n"
+            "        such-that\n\n"
             "    TODO:\n"
             "        preserve sequence structure of input-seq, currently it is cast to superposition\n"
             "        currently coefficients of kets are ignored, maybe they should be preserved";
@@ -850,6 +851,22 @@ OperatorUsageMap::OperatorUsageMap() {
             "    see also:\n"
             "        is-prime";
 
+    operator_usage_map.map["such-that"] =
+            "\nsuch-that:\n"
+            "    description:\n"
+            "        such-that[op] seq\n"
+            "        filters the given sequence to those elements that return |yes> or |true> for op applied to that element\n\n"
+            "    examples:\n"
+            "        is-hungry |Fred> => |no>\n"
+            "        is-hungry |Sam> => |yes>\n"
+            "        is-hungry |Emma> => |yes>\n"
+            "        is-hungry |Liz> => |no>\n"
+            "        such-that[is-hungry] rel-kets[*]\n"
+            "            |Sam> + |Emma>\n\n"
+            "        such-that[is-prime] srange(|1>, |20>)\n"
+            "            |2> . |3> . |5> . |7> . |11> . |13> . |17> . |19>\n\n"
+            "    see also:\n"
+            "        filter";
 }
 
 std::string OperatorUsageMap::get_usage(const std::string &s) const {
