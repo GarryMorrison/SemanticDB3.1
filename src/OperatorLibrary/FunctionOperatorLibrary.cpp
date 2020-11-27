@@ -194,24 +194,28 @@ Sequence op_intersection2(const Sequence &input_seq, const Sequence &one, const 
 // Filter could do with some optimization!
 Sequence op_filter(ContextList &context, const Sequence &input_seq, const Sequence &one, const Sequence &two) {
 
-    Superposition result;
+    Sequence result;
     // First branch:
     // NB: Can be expensive! Especially if rel-kets[*] is large, or supported-ops is large.
     // Eg: filter(|*>, |doctor> + |nurse>) rel-kets[*]
     if (one.to_ket().label_idx() == ket_map.get_idx("*")) {
         ulong supported_ops_idx = ket_map.get_idx("supported-ops");
-        for (const auto &k: input_seq.to_sp()) {
-            Superposition s_ops = context.recall(supported_ops_idx, k.label_idx())->to_sp();
-            for (const auto &s_op: s_ops) {
-                ulong result_idx = context.recall(s_op.label_split_idx()[1], k.label_idx())->to_ket().label_idx();
-                for (const auto &k2: two.to_sp()) {
-                    if (result_idx == k2.label_idx()) {
-                        result.add(k.label_idx());
-                        goto break_loop;
+        for (const auto &sp: input_seq) {
+            Sequence tmp;
+            for (const auto &k: sp) {
+                Superposition s_ops = context.recall(supported_ops_idx, k.label_idx())->to_sp();
+                for (const auto &s_op: s_ops) {
+                    ulong result_idx = context.recall(s_op.label_split_idx()[1], k.label_idx())->to_ket().label_idx();
+                    for (const auto &k2: two.to_sp()) {
+                        if (result_idx == k2.label_idx()) {
+                            tmp.add(k);
+                            goto break_loop;
+                        }
                     }
                 }
+                break_loop:;
             }
-            break_loop:;
+            result.append(tmp);
         }
         return result;
     }
@@ -238,33 +242,41 @@ Sequence op_filter(ContextList &context, const Sequence &input_seq, const Sequen
     ulong star_idx = ket_map.get_idx("*");
 
     if (two_idx == star_idx) {
-        for (const auto &k: input_seq.to_sp()) {
-            Sequence seq = k.to_seq();
-            bool match = true;
-            for (auto it = operators.rbegin(); it != operators.rend(); ++it) {
-                if (context.recall_type((*it).get_idx(), seq.to_ket().label_idx()) != RULENORMAL) {
-                    match = false;
-                    break;
+        for (const auto &sp: input_seq) {
+            Sequence tmp;
+            for (const auto &k: sp) {
+                Sequence seq = k.to_seq();
+                bool match = true;
+                for (auto it = operators.rbegin(); it != operators.rend(); ++it) {
+                    if (context.recall_type((*it).get_idx(), seq.to_ket().label_idx()) != RULENORMAL) {
+                        match = false;
+                        break;
+                    }
+                    seq = (*it).Compile(context, seq);
                 }
-                seq = (*it).Compile(context, seq);
+                if (match) {
+                    tmp.add(k);
+                }
             }
-            if (match) {
-                result.add(k.label_idx());
-            }
+            result.append(tmp);
         }
     } else {
-        for (const auto &k: input_seq.to_sp()) {
-            Sequence seq = k.to_seq();
-            for (auto it = operators.rbegin(); it != operators.rend(); ++it) {
-                seq = (*it).Compile(context, seq);
-            }
-            ulong result_idx = seq.to_ket().label_idx();
-            for (const auto &k2: two.to_sp()) {
-                if (result_idx == k2.label_idx()) {
-                    result.add(k.label_idx());
-                    break;
+        for (const auto &sp: input_seq) {
+            Sequence tmp;
+            for (const auto &k: sp) {
+                Sequence seq = k.to_seq();
+                for (auto it = operators.rbegin(); it != operators.rend(); ++it) {
+                    seq = (*it).Compile(context, seq);
+                }
+                ulong result_idx = seq.to_ket().label_idx();
+                for (const auto &k2: two.to_sp()) {
+                    if (result_idx == k2.label_idx()) {
+                        tmp.add(k);
+                        break;
+                    }
                 }
             }
+            result.append(tmp);
         }
     }
     return result;

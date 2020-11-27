@@ -47,9 +47,8 @@ OperatorUsageMap::OperatorUsageMap() {
             "    description:\n"
             "        filter(operators, conditions) input-seq\n"
             "        Filters the input sequence to only those elements that satisfy the operator/condition pair\n"
-            "        It is more powerful than the such-that[] operator\n"
-            "        Currently input-seq is converted to superposition, so sequence structure is ignored\n"
-            "        Will probably change this behaviour later\n\n"
+            "        It is more powerful than the such-that[] operator, but probably slower\n"
+            "        NB: input-seq structure is now preserved\n\n"
             "    examples:\n"
             "        -- learn some knowledge\n"
             "        is-food |bread> => |yes>\n"
@@ -107,10 +106,7 @@ OperatorUsageMap::OperatorUsageMap() {
             "        -- Eg, in this case, politician first, then American, then human.\n"
             "        filter(|op: is-human>, |yes>) filter(|op: is-american>, |yes>) filter(|op: occupation>, |politician>) rel-kets[*]\n\n"
             "    see also:\n"
-            "        such-that\n\n"
-            "    TODO:\n"
-            "        preserve sequence structure of input-seq, currently it is cast to superposition\n"
-            "        currently coefficients of kets are ignored, maybe they should be preserved";
+            "        such-that\n";
 
     operator_usage_map.map["apply"] =
             "\napply:\n"
@@ -855,7 +851,8 @@ OperatorUsageMap::OperatorUsageMap() {
             "\nsuch-that:\n"
             "    description:\n"
             "        such-that[op] seq\n"
-            "        filters the given sequence to those elements that return |yes> or |true> for op applied to that element\n\n"
+            "        filters the given sequence to those elements that return |yes> or |true> for op applied to that element\n"
+            "        it is less powerful than filter() but on the other hand, it should be faster\n\n"
             "    examples:\n"
             "        is-hungry |Fred> => |no>\n"
             "        is-hungry |Sam> => |yes>\n"
