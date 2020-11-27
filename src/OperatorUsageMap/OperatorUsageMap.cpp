@@ -106,7 +106,7 @@ OperatorUsageMap::OperatorUsageMap() {
             "        -- Eg, in this case, politician first, then American, then human.\n"
             "        filter(|op: is-human>, |yes>) filter(|op: is-american>, |yes>) filter(|op: occupation>, |politician>) rel-kets[*]\n\n"
             "    see also:\n"
-            "        such-that\n";
+            "        such-that, rel-kets\n";
 
     operator_usage_map.map["apply"] =
             "\napply:\n"
@@ -864,6 +864,55 @@ OperatorUsageMap::OperatorUsageMap() {
             "            |2> . |3> . |5> . |7> . |11> . |13> . |17> . |19>\n\n"
             "    see also:\n"
             "        filter";
+
+    operator_usage_map.map["is-mbr"] =
+            "\nis-mbr:\n"
+            "    description:\n"
+            "        is-mbr(ket) seq\n"
+            "        returns |yes> if ket is in seq, else |no>\n"
+            "        just a standard, set membership test\n"
+            "        ie, is the given ket a member of the given set represented by seq\n\n"
+            "    examples:\n"
+            "        is-mbr(|b>) split |abc>\n"
+            "            |yes>\n\n"
+            "        is-mbr(|c>) (0.3|a> + 2|b> + 9.7|c> + 13|d>)\n"
+            "            |yes>\n\n"
+            "        is-mbr(|x>) (0.3|a> + 2|b> + 9.7|c> + 13|d>)\n"
+            "            |no>\n\n"
+            "        friends |Fred> => |Jack> + |Harry> + |Ed> + |Mary> + |Rob> + |Patrick> + |Emma> + |Charlie>\n\n"
+            "        -- is Ed one of Fred's friends?\n"
+            "        is-mbr(|Ed>) friends |Fred>\n"
+            "            |yes>\n\n"
+            "        -- is Jane one of Fred's friends?\n"
+            "        is-mbr(|Jane>) friends |Fred>\n"
+            "            |no>\n\n"
+            "    see also:\n"
+            "        is-subset";
+
+    operator_usage_map.map["is-subset"] =
+            "\nis-subset:\n"
+            "    description:\n"
+            "        is-subset(seq) input-seq\n"
+            "        returns |yes> if seq is a \"subset\" of input-seq, else |no>\n"
+            "        where subset means: for all kets in seq, they have value <= the value in input-seq\n"
+            "        it generalizes the idea of sets and their subsets, since it allows elements to have corresponding coefficients\n"
+            "        so for example: asking if {a,c} is a subset of {a,b,c,d,e}\n"
+            "        is equivalent to: is-subset(|a> + |c>) (|a> + |b> + |c> + |d> + |e>)\n"
+            "        or more compactly: is-subset(split |ac>) split |abcde>\n"
+            "        this extends the notion that sets can be represented by \"clean\" superpositions\n"
+            "        and non-clean superpositions represent fuzzy sets\n"
+            "        where \"clean\" means all coefficients of kets are either 0 or 1\n\n"
+            "    examples:\n"
+            "        is-subset(|b>) split |abc>\n"
+            "            |yes>\n\n"
+            "        is-subset(split |bd>) split |abc>\n"
+            "            |no>\n\n"
+            "        -- note, the order of the elements in the superpositions do not matter:\n"
+            "        is-subset(8|c> + 13|d> + 0.2|a>) (0.3|a> + 2|b> + 9.7|c> + 13|d>)\n"
+            "            |yes>\n\n"
+            "    see also:\n"
+            "        is-mbr";
+
 }
 
 std::string OperatorUsageMap::get_usage(const std::string &s) const {
