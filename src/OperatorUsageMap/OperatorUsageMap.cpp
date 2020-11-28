@@ -955,6 +955,22 @@ OperatorUsageMap::OperatorUsageMap() {
             "            5: [b, c, d, e]\n"
             "            6: [c, d, e, f]\n\n"
             "    see also:\n";
+
+    operator_usage_map.map["Gaussian"] =
+            "\nGaussian:\n"
+            "    description:\n"
+            "        Gaussian[sigma] ket\n"
+            "        Gaussian[sigma, dx] ket\n"
+            "        implements a Gaussian superposition centred on ket, with sigma the standard deviation\n"
+            "        if dx is not specified, it defaults to 1\n"
+            "        where dx is step size\n\n"
+            "    the algorithm:\n"
+            "        exp( - ED(x, y) / (2 * sigma ^ 2))\n"
+            "        where ED(x, y) is the Euclidean distance between x and y\n\n"
+            "    examples:\n"
+            "        Gaussian[0.7] |40>\n"
+            "            0.016880|36> + 0.046830|37> + 0.129923|38> + 0.360448|39> + |40> + 0.360448|41> + 0.129923|42> + 0.046830|43> + 0.016880|44>\n\n"
+            "    see also:\n";
 }
 
 std::string OperatorUsageMap::get_usage(const std::string &s) const {

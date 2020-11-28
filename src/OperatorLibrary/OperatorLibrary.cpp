@@ -947,3 +947,65 @@ Sequence op_smap(const Sequence &seq, ContextList &context, const std::vector<st
     }
     return result;
 }
+
+// Maybe shift to Function/misc.cpp
+bool is_number(const std::string &str) {  // a quick check if a string is a number or not. NB: not perfect, since invalid numbers will return true.
+    return !str.empty() && str.find_first_not_of("-.0123456789") == std::string::npos;
+}
+
+long double Gaussian1(long double x, long double y, long double sigma) {
+    long double ED = std::sqrt((x - y) * (x - y));  // Euclidean distance for a 1D "vector"
+    return std::exp(- ED / (2 * sigma * sigma));
+}
+
+long double Gaussian2(long double x1, long double x2, long double y1, long double y2, long double sigma) {
+    long double ED = std::sqrt((x1 - y1) * (x1 - y1) + (x2 - y2) * (x2 - y2));  // Euclidean distance for a 2D vector
+    return std::exp(- ED / (2 * sigma * sigma));
+}
+
+
+Superposition op_Gaussian(const Ket k, const std::vector<std::shared_ptr<CompoundConstant> > &parameters) {
+    if (parameters.empty()) { return Superposition(""); }
+
+    double sigma = parameters[0]->get_float();
+    double dx = 1.0;
+    if (parameters.size() == 2) {
+        dx = parameters[1]->get_float();
+        if (double_eq(dx, 0)) { return Superposition(""); }
+    }
+    auto k_vec = k.label_split_idx();
+    std::string categories;
+    std::vector<long double> values;
+    bool first_pass = true;
+    for (const auto idx: k_vec) {
+        std::string label = ket_map.get_str(idx);
+        if (!is_number(label)) {
+            if (first_pass) {
+                categories += label + ": ";
+            } else {
+                break;
+            }
+        } else {
+            long double value = std::stold(label);
+            values.push_back(value);
+            first_pass = false;
+        }
+    }
+    if (values.empty()) { return Superposition(""); }
+    double gauss_width = 9 * sigma * sigma;
+    Superposition result;
+    if (values.size() == 1) {
+        long double x = values[0];
+        long double start = std::ceil((x - gauss_width)/dx) * dx;
+        long double finish = std::floor((x + gauss_width) / dx) * dx;
+        unsigned int step_count = std::floor((finish - start + dx) / dx);  // clunky! Tidy later!
+        long double y = start;
+        for (unsigned int i = 0; i < step_count; i++) {
+            long double value = Gaussian1(x, y, sigma);
+            result.add(categories + float_to_int(y, default_decimal_places), value * k.value());
+            y += dx;
+        }
+        return result;
+    }
+    return result;
+}
