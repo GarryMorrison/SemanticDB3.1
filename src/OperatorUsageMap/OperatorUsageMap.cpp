@@ -910,6 +910,15 @@ OperatorUsageMap::OperatorUsageMap() {
             "        -- note, the order of the elements in the superpositions do not matter:\n"
             "        is-subset(8|c> + 13|d> + 0.2|a>) (0.3|a> + 2|b> + 9.7|c> + 13|d>)\n"
             "            |yes>\n\n"
+            "        friends |Fred> => |Sam> + |Emma> + |Rob> + |Liz> + |Harold> + |Tom>\n"
+            "        friends |Sam> => |Emma> + |Tom> + |Liz>\n"
+            "        friends |Harold> => |Rob> + |Liz> + |Tom> + |Beth>\n\n"
+            "        -- are Sam's friends a subset of Fred's friends?\n"
+            "        is-subset(friends |Sam>) friends |Fred>\n"
+            "            |yes>\n\n"
+            "        -- are Harold's friends a subset of Fred's friends?\n"
+            "        is-subset(friends |Harold>) friends |Fred>\n"
+            "            |no>\n\n"
             "    see also:\n"
             "        is-mbr";
 

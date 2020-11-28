@@ -98,7 +98,7 @@ yylloc->step();
 "(*,*,*,*)" { yylval->integerVal = 4; return token::FN_SYM; }
 
 "+" { yylval->integerVal = SPLUS; return token::INFIX_OP; }
-"-" { yylval->integerVal = SMINUS; return token::INFIX_OP; }
+"-" { yylval->integerVal = SMINUS; return token::MINUS_OP; }
 "." { yylval->integerVal = SSEQ; return token::INFIX_OP; }
 "__" { yylval->integerVal = SMERGE2; return token::INFIX_OP; }
 "_" { yylval->integerVal = SMERGE; return token::INFIX_OP; }

@@ -98,6 +98,7 @@
 // %token          LEARN_SYM       "learn symbol"
 %token <integerVal> FN_SYM      "function rule symbol"
 %token <integerVal> INFIX_OP    "infix operator"
+%token <integerVal> MINUS_OP    "minus operator"
 // %token          PLUS_OP         "infix plus operator"
 // %token          MINUS_OP         "infix minus operator"
 // %token          SEQ_OP         "infix sequence operator"
@@ -308,6 +309,7 @@ general_operator : operator { $$ = $1; }
 
 general_sequence : operator_with_sequence { $$ = $1; }
                  | general_sequence INFIX_OP operator_with_sequence { $$ = $1; $$->append($2, *$3); }
+                 | general_sequence operator_with_sequence { $$ = $1; $$->append(SPLUS, *$2); }
                  | LPAREN general_sequence RPAREN { $$ = $2; }
                  ;
 
@@ -319,6 +321,11 @@ constant : STRING { $$ = new ConstantString(*$1); }
          | INTEGER DIVIDE INTEGER { $$ = new ConstantFloat((double)$1 / (double)$3); }
          | INTEGER DIVIDE DOUBLE { $$ = new ConstantFloat((double)$1 / $3); }
          | DOUBLE DIVIDE INTEGER { $$ = new ConstantFloat($1 / (double)$3); }
+         | MINUS_OP INTEGER { $$ = new ConstantInteger(- $2); }
+         | MINUS_OP DOUBLE { $$ = new ConstantFloat(- $2); }
+         | MINUS_OP INTEGER DIVIDE INTEGER { $$ = new ConstantFloat(- (double)$2 / (double)$4); }
+         | MINUS_OP INTEGER DIVIDE DOUBLE { $$ = new ConstantFloat(- (double)$2 / $4); }
+         | MINUS_OP DOUBLE DIVIDE INTEGER { $$ = new ConstantFloat(- $2 / (double)$4); }
          ;
 
 parameters : constant { $$ = new std::vector<std::shared_ptr<CompoundConstant>>;
