@@ -1007,5 +1007,28 @@ Superposition op_Gaussian(const Ket k, const std::vector<std::shared_ptr<Compoun
         }
         return result;
     }
+    if (values.size() == 2) {
+        long double x1 = values[0];
+        long double x2 = values[1];
+        long double start1 = std::ceil((x1 - gauss_width)/dx) * dx;
+        long double finish1 = std::floor((x1 + gauss_width) / dx) * dx;
+        unsigned int step_count1 = std::floor((finish1 - start1 + dx) / dx);  // clunky! Tidy later!
+
+        long double start2 = std::ceil((x2 - gauss_width)/dx) * dx;
+        long double finish2 = std::floor((x2 + gauss_width) / dx) * dx;
+        unsigned int step_count2 = std::floor((finish2 - start2 + dx) / dx);  // clunky! Tidy later!
+
+        long double y1 = start1;
+        for (unsigned int i = 0; i < step_count1; i++) {
+            long double y2 = start2;
+            for (unsigned int j = 0; j < step_count2; j++) {
+                long double value = Gaussian2(x1, x2, y1, y2, sigma);
+                result.add(categories + float_to_int(y1, default_decimal_places) + ": " + float_to_int(y2, default_decimal_places), value * k.value());
+                y2 += dx;
+            }
+            y1 += dx;
+        }
+        return result;
+    }
     return result;
 }
