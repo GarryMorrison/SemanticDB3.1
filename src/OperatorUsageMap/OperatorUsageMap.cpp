@@ -929,7 +929,7 @@ OperatorUsageMap::OperatorUsageMap() {
             "        partition seq into ngrams of size ranging from min to max, then apply op to those ngrams\n"
             "        in the background, we have a variable that keeps track of the current position in the sequence:\n"
             "        the |smap pos>\n"
-            "        NB: the indexing starts from 1 not 0.\n\n"
+            "        NB: the indexing for the smap position starts from 1 not 0.\n\n"
             "    examples:\n"
             "        -- just an abstract test:\n"
             "        bracket (*) #=> |[> _ smerge[\", \"] |__self> _ |]>\n"

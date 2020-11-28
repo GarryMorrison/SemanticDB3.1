@@ -132,7 +132,8 @@ int main(int argc, char** argv) {
                     continue;
                 }
                 shell_input = sa_history.back();
-                sa_history.emplace_back(".");
+                // sa_history.emplace_back(".");       // This bugs out if . is invoked twice in a row.
+                sa_history.emplace_back(shell_input);  // This solves the bug, but . will now not be recorded in the history. Instead it will be the full command.
             } else {
                 sa_history.emplace_back(shell_input);
             }

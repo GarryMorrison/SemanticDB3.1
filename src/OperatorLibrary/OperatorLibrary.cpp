@@ -926,6 +926,8 @@ Sequence op_smap(const Sequence &seq, ContextList &context, const std::vector<st
     for (int i = 0; i < width; i++) {  // Pad the result sequence with empty superpositions.
         result.append(empty);          // This is needed so that result.set() works.
     }
+    ulong the_idx = ket_map.get_idx("the");
+    ulong smap_pos_idx = ket_map.get_idx("smap pos");
     for (unsigned int size = min_ngram_size; size <= max_ngram_size; size++ ) {
         for (unsigned int start = 0; start < width - size + 1; start++ ){
             auto start_iter = seq.cbegin() + (size_t)start;
@@ -934,7 +936,9 @@ Sequence op_smap(const Sequence &seq, ContextList &context, const std::vector<st
             for (auto iter = start_iter; iter != stop_iter; ++iter) {
                 patch.append(*iter);
             }
-            context.learn("the", "smap pos", std::to_string(start + size));  // Should we optimise this?
+            // context.learn("the", "smap pos", std::to_string(start + size));  // Should we optimise this? Ie, convert "the" and "smap pos" to ulong indices?
+            std::shared_ptr<BaseSequence> bSeq = std::make_shared<Ket>(std::to_string(start + size));
+            context.learn(the_idx, smap_pos_idx, bSeq);
             Superposition patch_result = op.Compile(context, patch).to_sp();
             Superposition new_patch_result = result.get(start + size - 1);
             new_patch_result.add(patch_result);
