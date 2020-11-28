@@ -61,5 +61,6 @@ Ket op_is_prime(const Ket k);
 Superposition op_prime_factors(const Ket k);
 // Ket op_such_that(const Ket k, ContextList &context, const std::vector<std::shared_ptr<CompoundConstant> > &parameters); // We don't have the backend to use this function prototype.
 Sequence op_such_that(const Sequence &seq, ContextList &context, const std::vector<std::shared_ptr<CompoundConstant> > &parameters);
+Sequence op_smap(const Sequence &seq, ContextList &context, const std::vector<std::shared_ptr<CompoundConstant> > &parameters);
 
 #endif //SDB3_1_OPERATORLIBRARY_H

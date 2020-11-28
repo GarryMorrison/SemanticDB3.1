@@ -173,8 +173,8 @@ void Sequence::append(const Ket& k) {
 }
 
 void Sequence::append(const Superposition& sp) {
-    Superposition tmp(sp);
-    seq.push_back(tmp);
+    // Superposition tmp(sp);
+    seq.push_back(sp);
 }
 
 void Sequence::append(const Sequence& seq2) {
@@ -197,6 +197,11 @@ void Sequence::append(const std::string& s, const double v) {
 Superposition Sequence::get(ulong idx) const {
     if (idx >= seq.size() ) { return Superposition(); }
     return seq[idx];
+}
+
+void Sequence::set(ulong idx, const Superposition &sp) {
+    if (idx >= seq.size()) { return; }
+    seq[idx] = sp;
 }
 
 /*

@@ -74,6 +74,8 @@ public:
     const_iterator end() const {return seq.end();}
     const_iterator cend() const {return seq.cend();}
 
+    void set(ulong idx, const Superposition &sp);
+
     Sequence apply_sigmoid(const std::function<double(double)> &sigmoid) const;
     Sequence apply_sigmoid(const std::function<double(double,double)> &sigmoid, const double t) const;
     Sequence apply_sigmoid(const std::function<double(double,double,double)> &sigmoid, const double t1, const double t2) const;

@@ -911,3 +911,35 @@ Sequence op_such_that(const Sequence &seq, ContextList &context, const std::vect
    }
    return result;
 }
+
+Sequence op_smap(const Sequence &seq, ContextList &context, const std::vector<std::shared_ptr<CompoundConstant> > &parameters) {
+    if (seq.size() == 0 || parameters.size() < 3) { return Sequence(""); }
+    unsigned int min_ngram_size = parameters[0]->get_int();
+    unsigned int max_ngram_size = parameters[1]->get_int();
+    unsigned int width = seq.size();
+    min_ngram_size = std::min(min_ngram_size, width);
+    max_ngram_size = std::min(max_ngram_size, width);
+    if (min_ngram_size <= 0 || max_ngram_size <= 0 || max_ngram_size < min_ngram_size) { return Sequence(""); }
+    SimpleOperator op = parameters[2]->get_operator();
+    Sequence result;
+    Superposition empty("");
+    for (int i = 0; i < width; i++) {  // Pad the result sequence with empty superpositions.
+        result.append(empty);          // This is needed so that result.set() works.
+    }
+    for (unsigned int size = min_ngram_size; size <= max_ngram_size; size++ ) {
+        for (unsigned int start = 0; start < width - size + 1; start++ ){
+            auto start_iter = seq.cbegin() + (size_t)start;
+            auto stop_iter = seq.cbegin() + (size_t)(start + size);
+            Sequence patch;
+            for (auto iter = start_iter; iter != stop_iter; ++iter) {
+                patch.append(*iter);
+            }
+            context.learn("the", "smap pos", std::to_string(start + size));  // Should we optimise this?
+            Superposition patch_result = op.Compile(context, patch).to_sp();
+            Superposition new_patch_result = result.get(start + size - 1);
+            new_patch_result.add(patch_result);
+            result.set(start + size - 1, new_patch_result);
+        }
+    }
+    return result;
+}

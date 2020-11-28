@@ -922,6 +922,39 @@ OperatorUsageMap::OperatorUsageMap() {
             "    see also:\n"
             "        is-mbr";
 
+    operator_usage_map.map["smap"] =
+            "\nsmap:\n"
+            "    description:\n"
+            "        smap[min, max, op] seq\n"
+            "        partition seq into ngrams of size ranging from min to max, then apply op to those ngrams\n"
+            "        in the background, we have a variable that keeps track of the current position in the sequence:\n"
+            "        the |smap pos>\n"
+            "        NB: the indexing starts from 1 not 0.\n\n"
+            "    examples:\n"
+            "        -- just an abstract test:\n"
+            "        bracket (*) #=> |[> _ smerge[\", \"] |__self> _ |]>\n"
+            "        print-bracket (*) #=> print bracket |__self>\n"
+            "        print-smap-bracket (*) #=> print (the |smap pos> _ |:> __ bracket |__self>)\n"
+            "        smap[1, 4, print-smap-bracket] ssplit |abcdef>\n"
+            "            1: [a]\n"
+            "            2: [b]\n"
+            "            3: [c]\n"
+            "            4: [d]\n"
+            "            5: [e]\n"
+            "            6: [f]\n"
+            "            2: [a, b]\n"
+            "            3: [b, c]\n"
+            "            4: [c, d]\n"
+            "            5: [d, e]\n"
+            "            6: [e, f]\n"
+            "            3: [a, b, c]\n"
+            "            4: [b, c, d]\n"
+            "            5: [c, d, e]\n"
+            "            6: [d, e, f]\n"
+            "            4: [a, b, c, d]\n"
+            "            5: [b, c, d, e]\n"
+            "            6: [c, d, e, f]\n\n"
+            "    see also:\n";
 }
 
 std::string OperatorUsageMap::get_usage(const std::string &s) const {

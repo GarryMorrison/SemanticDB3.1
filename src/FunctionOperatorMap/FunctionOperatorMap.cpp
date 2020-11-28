@@ -262,6 +262,8 @@ FunctionOperatorMap::FunctionOperatorMap() {
     idx = ket_map.get_idx("is-subset");
     fn_map.whitelist_1.emplace(idx, &op_is_subset);
 
+    idx = ket_map.get_idx("smap");
+    fn_map.compound_context_seq_fn.emplace(idx, &op_smap);
 }
 
 template <class T>
