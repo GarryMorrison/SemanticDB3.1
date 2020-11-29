@@ -183,7 +183,7 @@ const std::string BracketOperator::to_string() const {
            ++sign_vec_iter, ++op_seq_vec_iter) {
         switch (*sign_vec_iter) {
             case SPLUS:
-                s += " + ";
+                if (sign_vec_iter == sign_vec.cbegin()) { s += " "; } else { s += " + "; }
                 break;
             case SMINUS:
                 s += " - ";
