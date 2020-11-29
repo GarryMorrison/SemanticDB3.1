@@ -449,3 +449,84 @@ Sequence op_is_subset(const Sequence &input_seq, const Sequence &one) {
     }
     return Ket("yes");
 }
+
+Sequence op_and2(const Sequence &input_seq, const Sequence &one, const Sequence &two) {
+    ulong yes_idx = ket_map.get_idx("yes");
+    if (one.to_ket().label_idx() == yes_idx && two.to_ket().label_idx() == yes_idx) {
+        return Sequence("yes");
+    }
+    return Sequence("no");
+}
+
+Sequence op_or2(const Sequence &input_seq, const Sequence &one, const Sequence &two) {
+    ulong yes_idx = ket_map.get_idx("yes");
+    if (one.to_ket().label_idx() == yes_idx || two.to_ket().label_idx() == yes_idx) {
+        return Sequence("yes");
+    }
+    return Sequence("no");
+}
+
+Sequence op_xor2(const Sequence &input_seq, const Sequence &one, const Sequence &two) {
+    ulong yes_idx = ket_map.get_idx("yes");
+    if (!(one.to_ket().label_idx() == yes_idx) != !(two.to_ket().label_idx() == yes_idx)) {
+        return Sequence("yes");
+    }
+    return Sequence("no");
+}
+
+Sequence op_and1(const Sequence &input_seq, const Sequence &one) {
+    ulong yes_idx = ket_map.get_idx("yes");
+    ulong no_idx = ket_map.get_idx("no");
+    bool one_is_yes = one.to_ket().label_idx() == yes_idx;
+    Sequence result;
+    for (const auto &sp: input_seq) {
+        Sequence tmp;
+        for (const auto &k: sp) {
+            if (k.label_idx() == yes_idx && one_is_yes) {
+                tmp.add(yes_idx);  // should we keep the coefficient of k in the result?
+            } else {
+                tmp.add(no_idx);
+            }
+        }
+        result.append(tmp);
+    }
+    return result;
+}
+
+Sequence op_or1(const Sequence &input_seq, const Sequence &one) {
+    ulong yes_idx = ket_map.get_idx("yes");
+    ulong no_idx = ket_map.get_idx("no");
+    bool one_is_yes = one.to_ket().label_idx() == yes_idx;
+    Sequence result;
+    for (const auto &sp: input_seq) {
+        Sequence tmp;
+        for (const auto &k: sp) {
+            if (k.label_idx() == yes_idx || one_is_yes) {
+                tmp.add(yes_idx);
+            } else {
+                tmp.add(no_idx);
+            }
+        }
+        result.append(tmp);
+    }
+    return result;
+}
+
+Sequence op_xor1(const Sequence &input_seq, const Sequence &one) {
+    ulong yes_idx = ket_map.get_idx("yes");
+    ulong no_idx = ket_map.get_idx("no");
+    bool one_is_yes = one.to_ket().label_idx() == yes_idx;
+    Sequence result;
+    for (const auto &sp: input_seq) {
+        Sequence tmp;
+        for (const auto &k: sp) {
+            if (!(k.label_idx() == yes_idx) != !one_is_yes) {
+                tmp.add(yes_idx);
+            } else {
+                tmp.add(no_idx);
+            }
+        }
+        result.append(tmp);
+    }
+    return result;
+}

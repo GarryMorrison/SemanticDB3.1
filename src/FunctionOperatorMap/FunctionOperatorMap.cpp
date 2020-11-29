@@ -267,6 +267,19 @@ FunctionOperatorMap::FunctionOperatorMap() {
 
     idx = ket_map.get_idx("Gaussian");
     fn_map.compound_ket_fn.emplace(idx, &op_Gaussian);
+
+    idx = ket_map.get_idx("and");
+    fn_map.whitelist_1.emplace(idx, &op_and1);
+    fn_map.whitelist_2.emplace(idx, &op_and2);
+
+    idx = ket_map.get_idx("or");
+    fn_map.whitelist_1.emplace(idx, &op_or1);
+    fn_map.whitelist_2.emplace(idx, &op_or2);
+
+    idx = ket_map.get_idx("xor");
+    fn_map.whitelist_1.emplace(idx, &op_xor1);
+    fn_map.whitelist_2.emplace(idx, &op_xor2);
+
 }
 
 template <class T>

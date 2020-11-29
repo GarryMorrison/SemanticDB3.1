@@ -42,6 +42,7 @@ public:
     Superposition to_sp() const;
     Sequence to_seq() const;
 
+    void add(const ulong idx);
     void add(const Ket& k);
     void add(const Superposition& sp);
     void add(const Sequence& seq);

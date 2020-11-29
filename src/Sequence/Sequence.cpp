@@ -102,6 +102,16 @@ Sequence Sequence::to_seq() const {
     return *this;
 }
 
+void Sequence::add(const ulong idx) {
+    if ( seq.empty() ) {
+        Superposition tmp(idx);
+        seq.push_back(tmp);
+    }
+    else {
+        seq.back().add(idx);
+    }
+}
+
 void Sequence::add(const Ket& k) {
     if ( seq.empty() ) {
         Superposition tmp(k);

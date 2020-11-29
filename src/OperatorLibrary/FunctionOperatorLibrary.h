@@ -25,6 +25,12 @@ Sequence op_zip(ContextList &context, const Sequence &input_seq, const Sequence 
 Sequence op_if(ContextList &context, const Sequence &input_seq, const Sequence &one, const Sequence &two, const Sequence &three);
 Sequence op_is_mbr(const Sequence &input_seq, const Sequence &one);
 Sequence op_is_subset(const Sequence &input_seq, const Sequence &one);
+Sequence op_and1(const Sequence &input_seq, const Sequence &one);
+Sequence op_or1(const Sequence &input_seq, const Sequence &one);
+Sequence op_xor1(const Sequence &input_seq, const Sequence &one);
+Sequence op_and2(const Sequence &input_seq, const Sequence &one, const Sequence &two);
+Sequence op_or2(const Sequence &input_seq, const Sequence &one, const Sequence &two);
+Sequence op_xor2(const Sequence &input_seq, const Sequence &one, const Sequence &two);
 
 
 #endif //SDB3_1_FUNCTIONOPERATORLIBRARY_H
