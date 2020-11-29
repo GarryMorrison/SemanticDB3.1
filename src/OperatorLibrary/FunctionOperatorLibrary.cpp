@@ -530,3 +530,55 @@ Sequence op_xor1(const Sequence &input_seq, const Sequence &one) {
     }
     return result;
 }
+
+Sequence op_smap3(ContextList &context, const Sequence &input_seq, const Sequence &one, const Sequence &two, const Sequence &three) {
+    if (input_seq.size() == 0) { return Sequence(""); }
+    try {
+        unsigned int min_ngram_size = std::stoi(one.to_ket().label());
+        unsigned int max_ngram_size = std::stoi(two.to_ket().label());
+        unsigned int width = input_seq.size();
+        min_ngram_size = std::min(min_ngram_size, width);
+        max_ngram_size = std::min(max_ngram_size, width);
+        if (min_ngram_size <= 0 || max_ngram_size <= 0 || max_ngram_size < min_ngram_size) { return Sequence(""); }
+        std::vector<SimpleOperator> operators;
+        for (const auto &k: three.to_sp()) {
+            auto k_vec = k.label_split_idx();
+            if (k_vec.size() < 2) {
+                continue;
+            }
+            if (k_vec[0] != ket_map.get_idx("op")) {
+                continue;
+            }
+            SimpleOperator op(k_vec[1]);
+            operators.push_back(op);
+        }
+        Sequence result;
+        Superposition empty("");
+        for (int i = 0; i < width; i++) {  // Pad the result sequence with empty superpositions.
+            result.append(empty);          // This is needed so that result.set() works.
+        }
+        ulong the_idx = ket_map.get_idx("the");
+        ulong smap_pos_idx = ket_map.get_idx("smap pos");
+        for (const auto &op: operators) {
+            for (unsigned int size = min_ngram_size; size <= max_ngram_size; size++) {
+                for (unsigned int start = 0; start < width - size + 1; start++) {
+                    auto start_iter = input_seq.cbegin() + (size_t) start;
+                    auto stop_iter = input_seq.cbegin() + (size_t) (start + size);
+                    Sequence patch;
+                    for (auto iter = start_iter; iter != stop_iter; ++iter) {
+                        patch.append(*iter);
+                    }
+                    std::shared_ptr<BaseSequence> bSeq = std::make_shared<Ket>(std::to_string(start + size));
+                    context.learn(the_idx, smap_pos_idx, bSeq);
+                    Superposition patch_result = op.Compile(context, patch).to_sp();
+                    Superposition new_patch_result = result.get(start + size - 1);
+                    new_patch_result.add(patch_result);
+                    result.set(start + size - 1, new_patch_result);
+                }
+            }
+        }
+        return result;
+    } catch (const std::invalid_argument& e) {
+        return Sequence("");
+    }
+}

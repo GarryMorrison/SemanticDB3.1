@@ -936,6 +936,7 @@ OperatorUsageMap::OperatorUsageMap() {
             "\nsmap:\n"
             "    description:\n"
             "        smap[min, max, op] seq\n"
+            "        smap(min, max, op) seq\n"
             "        partition seq into ngrams of size ranging from min to max, then apply op to those ngrams\n"
             "        in the background, we have a variable that keeps track of the current position in the sequence:\n"
             "        the |smap pos>\n"
@@ -944,7 +945,8 @@ OperatorUsageMap::OperatorUsageMap() {
             "        -- just an abstract test:\n"
             "        bracket (*) #=> |[> _ smerge[\", \"] |__self> _ |]>\n"
             "        print-bracket (*) #=> print bracket |__self>\n"
-            "        print-smap-bracket (*) #=> print (the |smap pos> _ |:> __ bracket |__self>)\n"
+            "        print-smap-bracket (*) #=> print (the |smap pos> _ |:> __ bracket |__self>)\n\n"
+            "        -- the constant parameter version:\n"
             "        smap[1, 4, print-smap-bracket] ssplit |abcdef>\n"
             "            1: [a]\n"
             "            2: [b]\n"
@@ -964,6 +966,9 @@ OperatorUsageMap::OperatorUsageMap() {
             "            4: [a, b, c, d]\n"
             "            5: [b, c, d, e]\n"
             "            6: [c, d, e, f]\n\n"
+            "        -- the variable parameter version:\n"
+            "        -- probably a little slower, but more flexible\n"
+            "        smap(|1>, |4>, |op: print-smap-bracket>) ssplit |abcdef>\n\n"
             "    see also:\n";
 
     operator_usage_map.map["Gaussian"] =

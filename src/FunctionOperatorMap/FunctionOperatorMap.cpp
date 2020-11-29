@@ -264,6 +264,7 @@ FunctionOperatorMap::FunctionOperatorMap() {
 
     idx = ket_map.get_idx("smap");
     fn_map.compound_context_seq_fn.emplace(idx, &op_smap);
+    fn_map.context_whitelist_3.emplace(idx, &op_smap3);
 
     idx = ket_map.get_idx("Gaussian");
     fn_map.compound_ket_fn.emplace(idx, &op_Gaussian);

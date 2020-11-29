@@ -147,7 +147,7 @@ Ket pop_float(const Ket k) {
         k_vec.pop_back();
         ulong label_idx = ket_map.get_idx(k_vec);
         return Ket(label_idx, value * k.value());
-    } catch (std::invalid_argument) {
+    } catch (const std::invalid_argument& e) {
         return k;
     }
 }
