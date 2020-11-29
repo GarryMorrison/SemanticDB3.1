@@ -1041,3 +1041,62 @@ Ket op_find_inverse(const Sequence &seq, ContextList &context, const std::vector
     }
     return Ket("find-inverse");
 }
+
+Ket op_remove_suffix(const Ket k, const std::vector<std::shared_ptr<CompoundConstant> > &parameters) {  // Optimise this!!
+    if (parameters.empty()) { return k; }
+    std::string suffix = parameters[0]->get_string();
+    if (suffix.empty()) { return k; }
+    size_t suffix_width = suffix.size();
+    size_t label_width = k.label().size();
+    if (suffix_width > label_width) { return k; }
+    std::string label_suffix = k.label().substr(label_width - suffix_width);
+    if (label_suffix == suffix) {
+        std::string label_front = k.label().substr(0, label_width - suffix_width);
+        return Ket(label_front, k.value());
+    }
+    return k;
+}
+
+Ket op_has_suffix(const Ket k, const std::vector<std::shared_ptr<CompoundConstant> > &parameters) {  // Optimise this!!
+    if (parameters.empty()) { return Ket("no"); }
+    std::string suffix = parameters[0]->get_string();
+    if (suffix.empty()) { return Ket("no"); }
+    size_t suffix_width = suffix.size();
+    size_t label_width = k.label().size();
+    if (suffix_width > label_width) { return Ket("no"); }
+    std::string label_suffix = k.label().substr(label_width - suffix_width);
+    if (label_suffix == suffix) {
+        return Ket("yes");
+    }
+    return Ket("no");
+}
+
+Ket op_remove_prefix(const Ket k, const std::vector<std::shared_ptr<CompoundConstant> > &parameters) {  // Optimise this!!
+    if (parameters.empty()) { return k; }
+    std::string prefix = parameters[0]->get_string();
+    if (prefix.empty()) { return k; }
+    size_t prefix_width = prefix.size();
+    size_t label_width = k.label().size();
+    if (prefix_width > label_width) { return k; }
+    std::string label_prefix = k.label().substr(0, prefix_width);
+    if (label_prefix == prefix) {
+        std::string label_back = k.label().substr(prefix_width);
+        return Ket(label_back, k.value());
+    }
+    return k;
+}
+
+Ket op_has_prefix(const Ket k, const std::vector<std::shared_ptr<CompoundConstant> > &parameters) {  // Optimise this!!
+    if (parameters.empty()) { return Ket("no"); }
+    std::string prefix = parameters[0]->get_string();
+    if (prefix.empty()) { return Ket("no"); }
+    size_t prefix_width = prefix.size();
+    size_t label_width = k.label().size();
+    if (prefix_width > label_width) { return Ket("no"); }
+    std::string label_prefix = k.label().substr(0, prefix_width);
+    if (label_prefix == prefix) {
+        return Ket("yes");
+    }
+    return Ket("no");
+}
+

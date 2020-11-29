@@ -282,6 +282,19 @@ FunctionOperatorMap::FunctionOperatorMap() {
 
     idx = ket_map.get_idx("find-inverse");
     fn_map.compound_context_seq_fn.emplace(idx, &op_find_inverse);
+
+    idx = ket_map.get_idx("remove-suffix");
+    fn_map.compound_ket_fn.emplace(idx, &op_remove_suffix);
+
+    idx = ket_map.get_idx("has-suffix");
+    fn_map.compound_ket_fn.emplace(idx, &op_has_suffix);
+
+    idx = ket_map.get_idx("remove-prefix");
+    fn_map.compound_ket_fn.emplace(idx, &op_remove_prefix);
+
+    idx = ket_map.get_idx("has-prefix");
+    fn_map.compound_ket_fn.emplace(idx, &op_has_prefix);
+
 }
 
 template <class T>

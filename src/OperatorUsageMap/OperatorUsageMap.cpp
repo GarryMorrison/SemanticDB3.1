@@ -1117,6 +1117,59 @@ OperatorUsageMap::OperatorUsageMap() {
             "            ------------------------------------------\n\n"
             "    see also:\n";
 
+    operator_usage_map.map["has-suffix"] =
+            "\nhas-suffix:\n"
+            "    description:\n"
+            "        has-suffix[\"str\"] ket\n"
+            "        returns |yes> if the ket has the given suffix\n\n"
+            "    examples:\n"
+            "        has-suffix[\"day\"] |Tuesday>\n"
+            "            |yes>\n\n"
+            "        has-suffix[\"str\"] |Tuesday>\n"
+            "            |no>\n"
+            "    see also:\n"
+            "        has-prefix, remove-suffix, remove-prefix";
+
+    operator_usage_map.map["remove-suffix"] =
+            "\nremove-suffix:\n"
+            "    description:\n"
+            "        remove-suffix[\"str\"] ket\n"
+            "        if ket has suffix str then remove it\n\n"
+            "    examples:\n"
+            "        remove-suffix[\"day\"] |Tuesday>\n"
+            "            |Tues>\n\n"
+            "        remove-suffix[\"str\"] |Tuesday>\n"
+            "            |Tuesday>\n\n"
+            "    see also:\n"
+            "        remove-prefix, has-suffix, has-prefix";
+
+    operator_usage_map.map["has-prefix"] =
+            "\nhas-prefix:\n"
+            "    description:\n"
+            "        has-prefix[\"str\"] ket\n"
+            "        returns |yes> if the ket has the given prefix\n\n"
+            "    examples:\n"
+            "        has-prefix[\"not \"] |not sitting at the beach>\n"
+            "            |yes>\n\n"
+            "        has-prefix[\"not \"] |sitting at the beach>\n"
+            "            |no>\n\n"
+            "    see also:\n"
+            "        has-suffix, remove-suffix, remove-prefix";
+
+    operator_usage_map.map["remove-prefix"] =
+            "\nremove-prefix:\n"
+            "    description:\n"
+            "        remove-prefix[\"str\"] ket\n"
+            "        if ket has prefix str then remove it\n\n"
+            "    examples:\n"
+            "        remove-prefix[\"not \"] |not sitting at the beach>\n"
+            "            |sitting at the beach>\n\n"
+            "        remove-prefix[\"word: \"] |word: table>\n"
+            "            |table>\n\n"
+            "        remove-prefix[\"food: \"] |word: chair>\n"
+            "            |word: chair>\n\n"
+            "    see also:\n"
+            "        remove-suffix, has-suffix, has-prefix";
 }
 
 std::string OperatorUsageMap::get_usage(const std::string &s) const {
