@@ -270,6 +270,7 @@ Sequence Sequence::sdrop() const {
 }
 
 Sequence Sequence::do_you_know() const {
+    if (seq.empty()) { return Sequence("no"); }
     Sequence result;
     for (const auto &sp: seq) {
         Superposition r = sp.do_you_know();

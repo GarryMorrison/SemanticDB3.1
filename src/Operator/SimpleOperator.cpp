@@ -56,6 +56,7 @@ Sequence SimpleOperator::Compile(ContextList& context, const Sequence& seq) cons
         auto sigmoid = fn_map.sigmoids[op_idx];
         return seq.apply_sigmoid(sigmoid);
     } else if (fn_map.built_in.find(op_idx) != fn_map.built_in.end()) {
+        // std::cout << "    built_in_fn: " << ket_map.get_str(op_idx) << std::endl;
         auto fn = fn_map.built_in[op_idx];
         return fn(&seq);
     } else if (fn_map.ket_fn.find(op_idx) != fn_map.ket_fn.end()) {
