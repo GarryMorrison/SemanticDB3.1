@@ -70,6 +70,9 @@ public:
     std::vector<ulong> relevant_kets(const ulong op_idx);
     std::vector<ulong> relevant_kets(const std::string &op);
 
+    void find_inverse(const ulong op_idx);
+    void find_multi_inverse(const ulong op_idx);
+
     Sequence active_recall(const std::string& op, const std::string& label);
     Sequence active_recall(const ulong op_idx, const ulong label_idx);
 

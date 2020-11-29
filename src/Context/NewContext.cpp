@@ -424,6 +424,38 @@ std::vector<ulong> NewContext::relevant_kets(const std::string &op) {
     return this->relevant_kets(op_idx);
 }
 
+void NewContext::find_inverse(const ulong op_idx) {
+    if (op_idx == ket_map.get_idx("*")) {
+        std::vector<ulong> starting_sort_order(sort_order);  // So we don't stomp on loop condition.
+        for (const auto &label_idx: starting_sort_order) {
+            std::shared_ptr<BaseSequence> bSeq = std::make_shared<Ket>(label_idx);
+            Frame frame = rules_dict.at(label_idx);
+            for (const ulong working_op_idx: frame.supported_ops()) {
+                ulong new_op_idx = ket_map.get_idx("inverse-" + ket_map.get_str(working_op_idx));
+                if (frame.recall_type(working_op_idx) == RULENORMAL) {
+                    Superposition rule = frame.recall(working_op_idx)->to_sp();
+                    for (const auto &k: rule) {
+                        this->add_learn(new_op_idx, k.label_idx(), bSeq);
+                    }
+                }
+            }
+        }
+    } else {
+        ulong new_op_idx = ket_map.get_idx("inverse-" + ket_map.get_str(op_idx));
+        std::vector<ulong> starting_sort_order(sort_order);  // So we don't stomp on loop condition.
+        for (const auto &the_label_idx: starting_sort_order) {
+            std::shared_ptr<BaseSequence> bSeq = std::make_shared<Ket>(the_label_idx);
+            Frame frame = rules_dict.at(the_label_idx);
+            if (frame.recall_type(op_idx) == RULENORMAL) {
+                Superposition rule = frame.recall(op_idx)->to_sp();
+                for (const auto &k: rule) {
+                    this->add_learn(new_op_idx, k.label_idx(), bSeq);
+                }
+            }
+        }
+    }
+}
+
 void NewContext::fn_learn(const ulong op_idx, const int param_size, std::shared_ptr<BaseSequence> bSeq) {
     Frame frame;
     if (fn_rules_dict.find(param_size) == fn_rules_dict.end()) {

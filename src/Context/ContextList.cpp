@@ -226,6 +226,15 @@ std::vector<ulong> ContextList::relevant_kets(const std::string &op) {
     return data[index].relevant_kets(op_idx);
 }
 
+void ContextList::find_inverse(const ulong op_idx) {
+    data[index].find_inverse(op_idx);
+}
+
+void ContextList::find_multi_inverse(const ulong op_idx) {
+    for (unsigned int idx = 0; idx < max_index; idx++) {
+        data[idx].find_inverse(op_idx);
+    }
+}
 
 Sequence ContextList::active_recall(const std::string& op, const std::string& label) {
     // return data[index].recall(op, label)->Compile(this->data[index]);  // replace with label_idx version
@@ -294,7 +303,7 @@ unsigned int ContextList::fn_recall_type(const ulong op_idx, const int param_siz
 
 void ContextList::print_multiverse(bool clean, std::ostream& out) const {
     for (const auto &context: data) {
-        context.print_universe(clean, out);
+        context.print_universe(clean, out);  // Maybe loop over index instead?
         std::cout << std::endl;
     }
 }

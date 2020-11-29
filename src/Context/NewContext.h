@@ -79,6 +79,7 @@ public:
     std::vector<ulong> relevant_kets(const ulong op_idx);
     std::vector<ulong> relevant_kets(const std::string &op);
 
+    void find_inverse(const ulong op_idx);
 
     // void fn_learn(const ulong op_idx, const ulong param_size, BaseRule* brule);
     // BaseRule* fn_recall(const ulong op_idx, const ulong param_size);

@@ -1032,3 +1032,12 @@ Superposition op_Gaussian(const Ket k, const std::vector<std::shared_ptr<Compoun
     }
     return result;
 }
+
+Ket op_find_inverse(const Sequence &seq, ContextList &context, const std::vector<std::shared_ptr<CompoundConstant> > &parameters) {
+    if (parameters.empty()) { return Ket(""); }
+    for (const auto &param: parameters) {
+        ulong idx = param->get_operator().get_idx();
+        context.find_inverse(idx);
+    }
+    return Ket("find-inverse");
+}

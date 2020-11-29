@@ -280,6 +280,8 @@ FunctionOperatorMap::FunctionOperatorMap() {
     fn_map.whitelist_1.emplace(idx, &op_xor1);
     fn_map.whitelist_2.emplace(idx, &op_xor2);
 
+    idx = ket_map.get_idx("find-inverse");
+    fn_map.compound_context_seq_fn.emplace(idx, &op_find_inverse);
 }
 
 template <class T>

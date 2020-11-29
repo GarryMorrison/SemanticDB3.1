@@ -17,6 +17,8 @@ std::string help_string = "\n    q, quit, exit        quit the semantic agent\n"
                           "    dump multi           print context list\n"
                           "    dump verbose         print current context including supported-ops\n"
                           "    dump multi verbose   print context list including supported-ops\n"
+                          "    create inverse       create inverse for current context\n"
+                          "    create multi inverse create inverse for all context's\n"
                           "    load file.sw3        load the given file\n"
                           "    save file.sw3        save the current context to file\n"
                           "    save multi file.sw3  save context list to file\n"
@@ -167,6 +169,12 @@ int main(int argc, char** argv) {
                 context.print_universe(false);
             } else if (shell_input == "dump multi verbose") {
                 context.print_multiverse(false);
+            } else if (shell_input == "create inverse") {
+                ulong star_idx = ket_map.get_idx("*");
+                context.find_inverse(star_idx);
+            } else if (shell_input == "create multi inverse") {
+                ulong star_idx = ket_map.get_idx("*");
+                context.find_multi_inverse(star_idx);
             } else if (shell_input.substr(0, 5) == "load ") {
                 file_name = shell_input.substr(5);
                 Timer_ms timer("\n    Time taken", quiet_mode);  // Time the load time.
