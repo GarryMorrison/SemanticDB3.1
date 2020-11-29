@@ -104,9 +104,19 @@ OperatorUsageMap::OperatorUsageMap() {
             "        -- Eg, To find all kets that are human, American and are politicians:\n"
             "        -- NB: will be faster if you apply the most strict condition(s) first.\n"
             "        -- Eg, in this case, politician first, then American, then human.\n"
-            "        filter(|op: is-human>, |yes>) filter(|op: is-american>, |yes>) filter(|op: occupation>, |politician>) rel-kets[*]\n\n"
+            "        filter(|op: is-human>, |yes>) filter(|op: is-american>, |yes>) filter(|op: occupation>, |politician>) rel-kets[*]\n\n\n"
+            "        -- What if we want to find all the known words that are their own plural?\n"
+            "        -- first, load some knowledge about words and their plurals:\n"
+            "        load plural.sw3\n\n"
+            "        -- now the required operator:\n"
+            "        -- which returns the input ket if its' plural equals itself, else the empty ket |>\n"
+            "        equal-plural |*> #=> filter(|op: plural>, |_self>) |_self>\n\n"
+            "        -- now apply it to all known kets:\n"
+            "        equal-plural rel-kets[*]\n"
+            "            |fish> + |sheep> + |series> + |shrimp> + |species> + |swine> + |trout> + |tuna>\n\n"
             "    see also:\n"
-            "        such-that, rel-kets\n";
+            "        such-that, rel-kets\n"
+            "        plural.sw3";
 
     operator_usage_map.map["apply"] =
             "\napply:\n"
