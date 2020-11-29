@@ -996,10 +996,10 @@ Superposition op_Gaussian(const Ket k, const std::vector<std::shared_ptr<Compoun
     Superposition result;
     if (values.size() == 1) {
         long double x = values[0];
-        long double start = std::ceil((x - gauss_width)/dx) * dx;
-        long double finish = std::floor((x + gauss_width) / dx) * dx;
-        unsigned int step_count = std::floor((finish - start + dx) / dx);  // clunky! Tidy later!
-        long double y = start;
+        long double start = std::ceil((x - gauss_width) / dx);
+        long double finish = std::floor((x + gauss_width) / dx);
+        unsigned int step_count = std::floor(finish - start + 1);
+        long double y = start * dx;
         for (unsigned int i = 0; i < step_count; i++) {
             long double value = Gaussian1(x, y, sigma);
             result.add(categories + float_to_int(y, default_decimal_places), value * k.value());
@@ -1010,17 +1010,17 @@ Superposition op_Gaussian(const Ket k, const std::vector<std::shared_ptr<Compoun
     if (values.size() == 2) {
         long double x1 = values[0];
         long double x2 = values[1];
-        long double start1 = std::ceil((x1 - gauss_width)/dx) * dx;
-        long double finish1 = std::floor((x1 + gauss_width) / dx) * dx;
-        unsigned int step_count1 = std::floor((finish1 - start1 + dx) / dx);  // clunky! Tidy later!
+        long double start1 = std::ceil((x1 - gauss_width) / dx);
+        long double finish1 = std::floor((x1 + gauss_width) / dx);
+        unsigned int step_count1 = std::floor(finish1 - start1 + 1);
 
-        long double start2 = std::ceil((x2 - gauss_width)/dx) * dx;
-        long double finish2 = std::floor((x2 + gauss_width) / dx) * dx;
-        unsigned int step_count2 = std::floor((finish2 - start2 + dx) / dx);  // clunky! Tidy later!
+        long double start2 = std::ceil((x2 - gauss_width) / dx);
+        long double finish2 = std::floor((x2 + gauss_width) / dx);
+        unsigned int step_count2 = std::floor(finish2 - start2 + 1);
 
-        long double y1 = start1;
+        long double y1 = start1 * dx;
         for (unsigned int i = 0; i < step_count1; i++) {
-            long double y2 = start2;
+            long double y2 = start2 * dx;
             for (unsigned int j = 0; j < step_count2; j++) {
                 long double value = Gaussian2(x1, x2, y1, y2, sigma);
                 result.add(categories + float_to_int(y1, default_decimal_places) + ": " + float_to_int(y2, default_decimal_places), value * k.value());
