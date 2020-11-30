@@ -477,7 +477,7 @@ Sequence Sequence::natural_sort() const {
     return result;
 }
 
-/*
+
 Sequence Sequence::select(const int start, const int stop) const {
     Sequence result;
     for (const auto &sp: seq) {
@@ -486,20 +486,25 @@ Sequence Sequence::select(const int start, const int stop) const {
     }
     return result;
 }
-*/
+
 
 // Need to test which is faster, for loop, vs std::transform.
+/*
 Sequence Sequence::select(const int start, const int stop) const {
     Sequence result;
     std::transform(seq.begin(), seq.end(), std::back_inserter(result.seq),
                    [=] (const Superposition &sp) { return sp.select(start, stop); });
     return result;
 }
+*/
 
 Sequence Sequence::op_select2(const std::vector<std::shared_ptr<CompoundConstant>> &parameters) const {
     if (parameters.size() < 2) { return *this; }  // Return *this or Sequence()?
     int start = parameters[0]->get_int();
     int stop = parameters[1]->get_int();
+    // std::cout << "Sequence::op_select2:" << std::endl;
+    // std::cout << "    start: " << start << std::endl;
+    // std::cout << "    stop: " << stop << std::endl;
     return this->select(start, stop);
 }
 
@@ -507,13 +512,13 @@ Sequence Sequence::sselect(const int a, const int b) const {
     int start = a;
     int stop = b;
     if (start > 0) { start--; }
-    if (stop > 0) { stop--;}
-    if (start < 0) { start += (int)seq.size() + 1; }
+    // if (stop > 0) { stop--;}
+    if (start < 0) { start += (int)seq.size(); }
     if (stop < 0 ) { stop += (int)seq.size() + 1; }
     start = std::max((int)0, start);  // For style reasons, use static_cast<int> instead?
     stop = std::max((int)0, stop);
     start = std::min((int)seq.size(), start);
-    stop = std::min((int)seq.size(), stop);
+    stop = std::min((int)seq.size() + 1, stop);
     // std::cout << "start: " << start << std::endl;
     // std::cout << "stop: " << stop << std::endl;
 

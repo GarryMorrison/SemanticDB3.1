@@ -1235,6 +1235,36 @@ OperatorUsageMap::OperatorUsageMap() {
             "    see also:\n"
             "        union, is-subset, is-mbr, simm";
 
+    operator_usage_map.map["select"] =
+            "\nselect:\n"
+            "    description:\n"
+            "        select[k1, k2] sp\n"
+            "        select the k1'th to the k2'th elements from the given superposition\n"
+            "        indices start from 1, not 0\n"
+            "        also, final element has index -1, 2nd last element -2, and so on.\n\n"
+            "    examples:\n"
+            "        select[2, 4] split |abcdefg>\n"
+            "            |b> + |c> + |d>\n\n"
+            "        select[-3, -1] split |abcdefg>\n"
+            "            |e> + |f> + |g>\n\n"
+            "    see also:\n"
+            "        sselect";
+
+    operator_usage_map.map["sselect"] =
+            "\nsselect:\n"
+            "    description:\n"
+            "        sselect[k1, k2] seq\n"
+            "        select the k1'th to the k2'th elements from the given sequence\n"
+            "        indices start from 1, not 0\n"
+            "        also, final element has index -1, 2nd last element -2, and so on.\n\n"
+            "    examples:\n"
+            "        sselect[2, 4] ssplit |abcdefg>\n"
+            "            |b> . |c> . |d>\n\n"
+            "        sselect[-3, -1] ssplit |abcdefg>\n"
+            "            |e> . |f> . |g>\n\n"
+            "    see also:\n"
+            "        select";
+
 }
 
 std::string OperatorUsageMap::get_usage(const std::string &s) const {

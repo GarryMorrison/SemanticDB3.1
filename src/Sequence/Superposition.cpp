@@ -2,7 +2,7 @@
 // Created by Garry Morrison on 12/09/2020.
 //
 
-// #include <iostream>
+#include <iostream>
 #include <math.h>
 #include <cmath>
 #include <random>
@@ -341,18 +341,19 @@ Superposition Superposition::select(const int a, const int b) const {
     int start = a;
     int stop = b;
     if (start > 0) { start--; }
-    if (stop > 0) { stop--;}
-    if (start < 0) { start += (int)sort_order.size() + 1; }
+    // if (stop > 0) { stop--;}
+    if (start < 0) { start += (int)sort_order.size(); }
     if (stop < 0 ) { stop += (int)sort_order.size() + 1; }
     start = std::max((int)0, start);  // For style reasons, use static_cast<int> instead?
     stop = std::max((int)0, stop);
     start = std::min((int)sort_order.size(), start);
-    stop = std::min((int)sort_order.size(), stop);
-    // std::cout << "start: " << start << std::endl;
-    // std::cout << "stop: " << stop << std::endl;
+    stop = std::min((int)sort_order.size() + 1, stop);
+    // std::cout << "Superposition::select:" << std::endl;
+    // std::cout << "    start: " << start << std::endl;
+    // std::cout << "    stop: " << stop << std::endl;
 
-    auto start_iter = sort_order.begin() + (size_t)start;
-    auto stop_iter = sort_order.begin() + (size_t)stop;
+    auto start_iter = sort_order.cbegin() + (size_t)start;
+    auto stop_iter = sort_order.cbegin() + (size_t)stop;
     Superposition result;
     result.sort_order.insert(result.sort_order.begin(), start_iter, stop_iter);
     for (auto idx: result.sort_order) {
