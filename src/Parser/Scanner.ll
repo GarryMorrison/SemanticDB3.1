@@ -71,7 +71,7 @@ yylloc->step();
 %}
 
 "|context> => " { return token::CONTEXT; }
-"--".*"\n" { return token::COMMENT; }
+"--".* { return token::COMMENT; }
 
 "|_self>" { return token::SELF_KET; }
 "|__self>" { return token::MULTI_SELF_KET; }
