@@ -1100,8 +1100,8 @@ Ket op_has_prefix(const Ket k, const std::vector<std::shared_ptr<CompoundConstan
     return Ket("no");
 }
 
-Ket op_to_comma_number(const Ket k) {  // There must be a better way to implement this function!!!
-    auto k_vec = k.label_split_idx();  // I really, really hate the current implementation!
+Ket op_to_comma_number(const Ket k) {
+    auto k_vec = k.label_split_idx();
     std::string categories;
     long double value = 0;
     for (const auto idx: k_vec) {
@@ -1109,19 +1109,21 @@ Ket op_to_comma_number(const Ket k) {  // There must be a better way to implemen
         if (!is_number(label)) {  // maybe should relabel "is-number" to "is-probably-number" ?
                 categories += label + ": ";
         } else {
-            value = std::stold(label);
-            if (long_double_eq(value, 0.0)) { return k; }
-            std::string int_label = std::to_string((ulong)std::floor(value));
-            std::string decimal_label = float_to_int(value - std::floor(value), default_decimal_places);
+            std::string int_label;
+            std::string decimal_label;
+            size_t decimal_pos = label.find_last_of('.');
+            if (decimal_pos == std::string::npos) {
+                int_label = label;
+            } else {
+                int_label = label.substr(0, decimal_pos);
+                decimal_label = label.substr(decimal_pos);
+            }
             int n = (int)int_label.length() - 3;
             while (n > 0) {
                 int_label.insert(n, ",");
                 n -= 3;
             }
-            if (decimal_label == "0") {
-                return Ket(categories + int_label, k.value());
-            }
-            return Ket(categories + int_label + "." + decimal_label.substr(2), k.value());
+            return Ket(categories + int_label + decimal_label, k.value());
         }
     }
     return k;
