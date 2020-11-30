@@ -1200,6 +1200,41 @@ OperatorUsageMap::OperatorUsageMap() {
             "            |km: 22,956.53>\n\n"
             "    see also:\n"
             "        table, round";
+
+    operator_usage_map.map["union"] =
+            "\nunion:\n"
+            "    description:\n"
+            "        union(seq, seq)\n"
+            "        the union function, takes element-wise max of the coefficients\n"
+            "        it generalizes standard set union where the coefficients are either 0 or 1\n"
+            "        ie, it is a fuzzy set union\n\n"
+            "    examples:\n"
+            "        -- set union of {a,b,c,d} and {b,d,e,f,g}:\n"
+            "        union(split |abcd>, split |bdefg>)\n"
+            "            |a> + |b> + |c> + |d> + |e> + |f> + |g>\n\n"
+            "        -- fuzzy set union example:\n"
+            "        union(3|a> + 1.2|b>, 3.5|a> + 0.9|b> + 5.13|c>)\n"
+            "            3.500000|a> + 1.200000|b> + 5.130000|c>\n\n"
+            "    see also:\n"
+            "        intersection, is-subset, is-mbr";
+
+    operator_usage_map.map["intersection"] =
+            "\nintersection:\n"
+            "    description:\n"
+            "        intersection(seq, seq)\n"
+            "        the intersection function, takes element-wise min of the coefficients\n"
+            "        it generalizes standard set intersection where the coefficients are either 0 or 1\n"
+            "        ie, it is a fuzzy set intersection\n\n"
+            "    examples:\n"
+            "        -- set intersection of {a,b,c,d} and {b,d,e,f,g}:\n"
+            "        intersection(split |abcd>, split |bdefg>)\n"
+            "            |b> + |d>\n\n"
+            "        -- fuzzy set intersection example:\n"
+            "        intersection(3|a> + 1.2|b>, 3.5|a> + 0.9|b> + 5.13|c>)\n"
+            "            3|a> + 0.900000|b>\n\n"
+            "    see also:\n"
+            "        union, is-subset, is-mbr";
+
 }
 
 std::string OperatorUsageMap::get_usage(const std::string &s) const {

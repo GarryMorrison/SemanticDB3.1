@@ -191,6 +191,38 @@ Sequence op_intersection2(const Sequence &input_seq, const Sequence &one, const 
     return seq;
 }
 
+Superposition sp_union(const Superposition &sp1, const Superposition &sp2) {
+    if (sp1.size() == 0 || sp2.size() == 0) { return Superposition(); }  // Do we need this check for union() ?
+    std::set<ulong> merged;
+    for (const auto k : sp1) {
+        merged.insert(k.label_idx());
+    }
+    for (const auto k : sp2) {
+        merged.insert(k.label_idx());
+    }
+    Superposition result;
+    for (const auto idx: merged) {
+        double v1 = sp1.find_value(idx);
+        double v2 = sp2.find_value(idx);
+        double value = std::max(v1, v2);
+        if (value > 0) {
+            result.add(idx, value);
+        }
+    }
+    return result;
+}
+
+Sequence op_union2(const Sequence &input_seq, const Sequence &one, const Sequence &two) {
+    auto one_iter = one.cbegin();
+    auto two_iter = two.cbegin();
+    Sequence seq;
+    for (; one_iter != one.end() and two_iter != two.end(); ++one_iter, ++two_iter) {
+        seq.append(sp_union(*one_iter, *two_iter));
+    }
+    return seq;
+}
+
+
 // Filter could do with some optimization!
 Sequence op_filter(ContextList &context, const Sequence &input_seq, const Sequence &one, const Sequence &two) {
 

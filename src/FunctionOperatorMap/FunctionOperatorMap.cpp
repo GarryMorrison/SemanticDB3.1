@@ -151,6 +151,9 @@ FunctionOperatorMap::FunctionOperatorMap() {
     idx = ket_map.get_idx("intersection");
     fn_map.whitelist_2.emplace(idx, &op_intersection2);
 
+    idx = ket_map.get_idx("union");
+    fn_map.whitelist_2.emplace(idx, &op_union2);
+
     idx = ket_map.get_idx("select");
     fn_map.compound_built_in.emplace(idx, &Sequence::op_select2);
 
