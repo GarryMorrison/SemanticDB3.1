@@ -45,6 +45,12 @@ const bool Sequence::is_ket() const {
 }
 
 const size_t Sequence::size() const {
+    // if (seq.empty()) { return 0; }
+    if (seq.size() == 1) {
+        if (seq[0].size() == 0) {  // Do we need a similar check in Superposition::size() ?
+            return 0;
+        }
+    }
     return seq.size();
 }
 
