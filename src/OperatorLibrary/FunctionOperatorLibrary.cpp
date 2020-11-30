@@ -192,7 +192,7 @@ Sequence op_intersection2(const Sequence &input_seq, const Sequence &one, const 
 }
 
 Superposition sp_union(const Superposition &sp1, const Superposition &sp2) {
-    if (sp1.size() == 0 || sp2.size() == 0) { return Superposition(); }  // Do we need this check for union() ?
+    if (sp1.size() == 0 && sp2.size() == 0) { return Superposition(); }
     std::set<ulong> merged;
     for (const auto k : sp1) {
         merged.insert(k.label_idx());

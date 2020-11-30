@@ -897,7 +897,7 @@ OperatorUsageMap::OperatorUsageMap() {
             "        is-mbr(|Jane>) friends |Fred>\n"
             "            |no>\n\n"
             "    see also:\n"
-            "        is-subset";
+            "        is-subset, union, intersection";
 
     operator_usage_map.map["is-subset"] =
             "\nis-subset:\n"
@@ -930,7 +930,7 @@ OperatorUsageMap::OperatorUsageMap() {
             "        is-subset(friends |Harold>) friends |Fred>\n"
             "            |no>\n\n"
             "    see also:\n"
-            "        is-mbr";
+            "        is-mbr, union, intersection";
 
     operator_usage_map.map["smap"] =
             "\nsmap:\n"
@@ -1216,7 +1216,7 @@ OperatorUsageMap::OperatorUsageMap() {
             "        union(3|a> + 1.2|b>, 3.5|a> + 0.9|b> + 5.13|c>)\n"
             "            3.500000|a> + 1.200000|b> + 5.130000|c>\n\n"
             "    see also:\n"
-            "        intersection, is-subset, is-mbr";
+            "        intersection, is-subset, is-mbr, simm";
 
     operator_usage_map.map["intersection"] =
             "\nintersection:\n"
@@ -1233,7 +1233,7 @@ OperatorUsageMap::OperatorUsageMap() {
             "        intersection(3|a> + 1.2|b>, 3.5|a> + 0.9|b> + 5.13|c>)\n"
             "            3|a> + 0.900000|b>\n\n"
             "    see also:\n"
-            "        union, is-subset, is-mbr";
+            "        union, is-subset, is-mbr, simm";
 
 }
 
