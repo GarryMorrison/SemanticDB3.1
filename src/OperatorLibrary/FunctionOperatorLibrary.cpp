@@ -137,13 +137,14 @@ double scaled_simm(const Superposition &sp1, const Superposition &sp2) {
 }
 
 double simm(const Sequence &seq1, const Sequence &seq2) {
-    size_t size = std::min(seq1.size(), seq2.size());
+    size_t size = std::max(seq1.size(), seq2.size());
     if (size == 0) { return 0; }
     double r = 0;
     auto seq1_iter = seq1.cbegin();
     auto seq2_iter = seq2.cbegin();
     for (; seq1_iter != seq1.end() and seq2_iter != seq2.end(); ++seq1_iter, ++seq2_iter) {
-        r += simm(*seq1_iter, *seq2_iter);  // probably want scaled_simm() here instead.
+        // r += simm(*seq1_iter, *seq2_iter);  // probably want scaled_simm() here instead.
+        r += scaled_simm(*seq1_iter, *seq2_iter);
     }
     return r / size;
 }
