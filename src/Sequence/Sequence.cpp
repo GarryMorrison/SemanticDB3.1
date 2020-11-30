@@ -275,6 +275,7 @@ Sequence Sequence::sdrop() const {
     return result;
 }
 
+/*
 Sequence Sequence::do_you_know() const {
     if (seq.empty()) { return Sequence("no"); }
     Sequence result;
@@ -283,6 +284,13 @@ Sequence Sequence::do_you_know() const {
         result.seq.push_back(r);
     }
     return result;
+}
+*/
+
+Sequence Sequence::do_you_know() const {
+    if (seq.empty()) { return Sequence("no"); }
+    if (seq.size() == 1 && seq[0].size() == 0) { return Sequence("no"); }
+    return Sequence("yes");
 }
 
 Sequence Sequence::how_many() const {
