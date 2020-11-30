@@ -1185,6 +1185,21 @@ OperatorUsageMap::OperatorUsageMap() {
             "            |word: chair>\n\n"
             "    see also:\n"
             "        remove-suffix, has-suffix, has-prefix";
+
+    operator_usage_map.map["to-comma-number"] =
+            "\nto-comma-number:\n"
+            "    description:\n"
+            "        to-comma-number ket\n"
+            "        insert thousands commas into numbers\n\n"
+            "    examples:\n"
+            "        to-comma-number |8825>\n"
+            "            |8,825>\n\n"
+            "        to-comma-number |population: 2300000>\n"
+            "            |population: 2,300,000>\n\n"
+            "        to-comma-number |km: 22956.53>\n"
+            "            |km: 22,956.53>\n\n"
+            "    see also:\n"
+            "        table, round";
 }
 
 std::string OperatorUsageMap::get_usage(const std::string &s) const {

@@ -296,6 +296,8 @@ FunctionOperatorMap::FunctionOperatorMap() {
     idx = ket_map.get_idx("has-prefix");
     fn_map.compound_ket_fn.emplace(idx, &op_has_prefix);
 
+    idx = ket_map.get_idx("to-comma-number");
+    fn_map.ket_fn.emplace(idx, &op_to_comma_number);
 }
 
 template <class T>
