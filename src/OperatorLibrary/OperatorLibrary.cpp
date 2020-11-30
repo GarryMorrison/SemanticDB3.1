@@ -254,7 +254,7 @@ Superposition op_similar_input(const Sequence &seq, ContextList &context, const 
 
 // Wow! A lot of work just to subtract a number!!
 Ket op_minus(const Ket k, const std::vector<std::shared_ptr<CompoundConstant> > &parameters) {
-    if (parameters.empty()) { return Ket(); }  // Alternatively, return k.
+    if (k.size() == 0 || parameters.empty()) { return Ket(); }  // Alternatively, return k.
     long double value = parameters[0]->get_float();
     auto split_idx = k.label_split_idx();
     long double number = std::stold(ket_map.get_str(split_idx.back()));  // Possibly wrap this in a try/catch.
@@ -268,7 +268,7 @@ Ket op_minus(const Ket k, const std::vector<std::shared_ptr<CompoundConstant> > 
 }
 
 Ket op_plus(const Ket k, const std::vector<std::shared_ptr<CompoundConstant> > &parameters) {
-    if (parameters.empty()) { return Ket(); }  // Alternatively, return k.
+    if (k.size() == 0 || parameters.empty()) { return Ket(); }  // Alternatively, return k.
     long double value = parameters[0]->get_float();
     auto split_idx = k.label_split_idx();
     long double number = std::stold(ket_map.get_str(split_idx.back()));  // Possibly wrap this in a try/catch.
@@ -282,7 +282,7 @@ Ket op_plus(const Ket k, const std::vector<std::shared_ptr<CompoundConstant> > &
 }
 
 Ket op_times_by(const Ket k, const std::vector<std::shared_ptr<CompoundConstant> > &parameters) {
-    if (parameters.empty()) { return Ket(); }  // Alternatively, return k.
+    if (k.size() == 0 || parameters.empty()) { return Ket(); }  // Alternatively, return k.
     long double value = parameters[0]->get_float();
     auto split_idx = k.label_split_idx();
     long double number = std::stold(ket_map.get_str(split_idx.back()));  // Possibly wrap this in a try/catch.
@@ -296,7 +296,7 @@ Ket op_times_by(const Ket k, const std::vector<std::shared_ptr<CompoundConstant>
 }
 
 Ket op_divide_by(const Ket k, const std::vector<std::shared_ptr<CompoundConstant> > &parameters) {
-    if (parameters.empty()) { return Ket(); }  // Alternatively, return k.
+    if (k.size() == 0 || parameters.empty()) { return Ket(); }  // Alternatively, return k.
     long double value = parameters[0]->get_float();
     if (double_eq(value, 0)) { return k; } // prevent divide by zero.
     auto split_idx = k.label_split_idx();
@@ -311,7 +311,7 @@ Ket op_divide_by(const Ket k, const std::vector<std::shared_ptr<CompoundConstant
 }
 
 Ket op_int_divide_by(const Ket k, const std::vector<std::shared_ptr<CompoundConstant> > &parameters) {
-    if (parameters.empty()) { return Ket(); }  // Alternatively, return k.
+    if (k.size() == 0 || parameters.empty()) { return Ket(); }  // Alternatively, return k.
     long double value = parameters[0]->get_float();
     if (double_eq(value, 0)) { return k; } // prevent divide by zero.
     auto split_idx = k.label_split_idx();
@@ -326,7 +326,7 @@ Ket op_int_divide_by(const Ket k, const std::vector<std::shared_ptr<CompoundCons
 }
 
 Ket op_round(const Ket k, const std::vector<std::shared_ptr<CompoundConstant> > &parameters) {
-    if (parameters.empty()) { return Ket(); }  // Alternatively, return k.
+    if (k.size() == 0 || parameters.empty()) { return Ket(); }  // Alternatively, return k.
     unsigned int value = parameters[0]->get_int();
     if (double_eq(value, 0)) { return k; } // prevent divide by zero.
     auto split_idx = k.label_split_idx();
@@ -342,7 +342,7 @@ Ket op_round(const Ket k, const std::vector<std::shared_ptr<CompoundConstant> > 
 
 
 Ket op_modulus(const Ket k, const std::vector<std::shared_ptr<CompoundConstant> > &parameters) {
-    if (parameters.empty()) { return Ket(); }  // Alternatively, return k.
+    if (k.size() == 0 || parameters.empty()) { return Ket(); }  // Alternatively, return k.
     long double value = parameters[0]->get_float();
     auto split_idx = k.label_split_idx();
     long double number = std::stold(ket_map.get_str(split_idx.back()));  // Possibly wrap this in a try/catch.
@@ -357,7 +357,7 @@ Ket op_modulus(const Ket k, const std::vector<std::shared_ptr<CompoundConstant> 
 }
 
 Ket op_toupper(const Ket k, const std::vector<std::shared_ptr<CompoundConstant> > &parameters) {
-    if (parameters.empty()) { return k; }
+    if (k.size() == 0 || parameters.empty()) { return k; }
     std::string label = k.label();
     for (const auto &elt: parameters) {
         int idx = elt->get_int() - 1;  // to-upper[1] changes case of first char, not the second.
@@ -373,7 +373,7 @@ Ket op_toupper(const Ket k, const std::vector<std::shared_ptr<CompoundConstant> 
 }
 
 Ket op_tolower(const Ket k, const std::vector<std::shared_ptr<CompoundConstant> > &parameters) {
-    if (parameters.empty()) { return k; }
+    if (k.size() == 0 || parameters.empty()) { return k; }
     std::string label = k.label();
     for (const auto &elt: parameters) {
         int idx = elt->get_int() - 1;  // to-lower[1] changes case of first char, not the second.
