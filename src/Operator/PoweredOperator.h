@@ -21,9 +21,13 @@ public:
     PoweredOperator(std::shared_ptr<BaseOperator> base_op, const unsigned int power) {b_op = base_op; pow_ = power; };
     Sequence Compile(NewContext& context, const Sequence& seq) const;
     Sequence Compile(ContextList& context, const Sequence& seq) const;
-    Sequence Compile(ContextList& context, const Sequence& seq, const ulong label_idx) const;
-    Sequence Compile(ContextList& context, const Sequence& seq, const ulong label_idx, const ulong multi_label_idx) const;
-    Sequence Compile(ContextList& context, const Sequence& seq, const ulong label_idx, const std::vector<Sequence>& args) const;
+    // Sequence Compile(ContextList& context, const Sequence& seq, const ulong label_idx) const;
+    // Sequence Compile(ContextList& context, const Sequence& seq, const ulong label_idx, const ulong multi_label_idx) const;
+    // Sequence Compile(ContextList& context, const Sequence& seq, const ulong label_idx, const std::vector<Sequence>& args) const;
+
+    Sequence Compile(ContextList& context, const Sequence& seq, const Ket& label_ket) const;
+    Sequence Compile(ContextList& context, const Sequence& seq, const Ket& label_ket, const Ket& multi_label_ket) const;
+    Sequence Compile(ContextList& context, const Sequence& seq, const Ket& label_ket, const std::vector<Sequence>& args) const;
 
     const int type() const { return OPPOWER; }
     const ulong get_head_op_idx() const { return 0; }

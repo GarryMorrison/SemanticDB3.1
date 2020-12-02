@@ -48,32 +48,32 @@ Sequence OperatorSequence::Compile(ContextList& context, const Sequence& seq) co
     return result;
 }
 
-Sequence OperatorSequence::Compile(ContextList &context, const Sequence &seq, const ulong label_idx) const {
+Sequence OperatorSequence::Compile(ContextList &context, const Sequence &seq, const Ket& label_ket) const {
     Sequence result(seq);
     for (auto it = tail_op_seq.rbegin(); it != tail_op_seq.rend(); ++it) {
-        result = (*it)->Compile(context, result, label_idx);
+        result = (*it)->Compile(context, result, label_ket);
     }
-    result = head_op->Compile(context, result, label_idx);
+    result = head_op->Compile(context, result, label_ket);
     if (op_symbol == SMINUS) { result.multiply(-1); } // not 100% sure this should be here.
     return result;
 }
 
-Sequence OperatorSequence::Compile(ContextList &context, const Sequence &seq, const ulong label_idx, const ulong multi_label_idx) const {
+Sequence OperatorSequence::Compile(ContextList &context, const Sequence &seq, const Ket& label_ket, const Ket& multi_label_ket) const {
     Sequence result(seq);
     for (auto it = tail_op_seq.rbegin(); it != tail_op_seq.rend(); ++it) {
-        result = (*it)->Compile(context, result, label_idx, multi_label_idx);
+        result = (*it)->Compile(context, result, label_ket, multi_label_ket);
     }
-    result = head_op->Compile(context, result, label_idx, multi_label_idx);
+    result = head_op->Compile(context, result, label_ket, multi_label_ket);
     if (op_symbol == SMINUS) { result.multiply(-1); } // not 100% sure this should be here.
     return result;
 }
 
-Sequence OperatorSequence::Compile(ContextList &context, const Sequence &seq, const ulong label_idx, const std::vector<Sequence> &args) const {
+Sequence OperatorSequence::Compile(ContextList &context, const Sequence &seq, const Ket& label_ket, const std::vector<Sequence> &args) const {
     Sequence result(seq);
     for (auto it = tail_op_seq.rbegin(); it != tail_op_seq.rend(); ++it) {
-        result = (*it)->Compile(context, result, label_idx, args);
+        result = (*it)->Compile(context, result, label_ket, args);
     }
-    result = head_op->Compile(context, result, label_idx, args);
+    result = head_op->Compile(context, result, label_ket, args);
     if (op_symbol == SMINUS) { result.multiply(-1); } // not 100% sure this should be here.
     return result;
 }

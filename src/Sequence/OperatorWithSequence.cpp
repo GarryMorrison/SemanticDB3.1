@@ -158,7 +158,7 @@ Sequence OperatorWithSequence::Compile(ContextList& context) const {
 }
 
 // finish label_idx component!
-Sequence OperatorWithSequence::Compile(ContextList& context, const ulong label_idx) const {
+Sequence OperatorWithSequence::Compile(ContextList& context, const Ket& label_ket) const {
     Sequence result;
     if (sign_vec.empty()) { return result; }
 
@@ -170,8 +170,8 @@ Sequence OperatorWithSequence::Compile(ContextList& context, const ulong label_i
         // Sequence tmp_result;
         // tmp_result = op_vec.at(k)->Compile(context, seq_vec.at(k)->to_seq());
         // Sequence tmp_result = (*op_vec_iter)->Compile(context, (*seq_vec_iter)->Compile(context));
-        Sequence tmp_seq = (*seq_vec_iter)->Compile(context, label_idx);
-        Sequence tmp_result = (*op_vec_iter)->Compile(context, tmp_seq, label_idx);
+        Sequence tmp_seq = (*seq_vec_iter)->Compile(context, label_ket);
+        Sequence tmp_result = (*op_vec_iter)->Compile(context, tmp_seq, label_ket);
         // Sequence tmp_result;
         // std::cout << "\nop_vec_iter: " << (*op_vec_iter)->to_string() << std::endl;
         // std::cout << "seq_vec_iter: " << (*seq_vec_iter)->to_string() << std::endl;
@@ -192,7 +192,7 @@ Sequence OperatorWithSequence::Compile(ContextList& context, const ulong label_i
     return result;
 }
 
-Sequence OperatorWithSequence::Compile(ContextList &context, const ulong label_idx, const ulong multi_label_idx) const {
+Sequence OperatorWithSequence::Compile(ContextList &context, const Ket& label_ket, const Ket& multi_label_ket) const {
     Sequence result;
     if (sign_vec.empty()) { return result; }
 
@@ -204,9 +204,9 @@ Sequence OperatorWithSequence::Compile(ContextList &context, const ulong label_i
         // Sequence tmp_result;
         // tmp_result = op_vec.at(k)->Compile(context, seq_vec.at(k)->to_seq());
         // Sequence tmp_result = (*op_vec_iter)->Compile(context, (*seq_vec_iter)->Compile(context));
-        Sequence tmp_seq = (*seq_vec_iter)->Compile(context, label_idx, multi_label_idx);
+        Sequence tmp_seq = (*seq_vec_iter)->Compile(context, label_ket, multi_label_ket);
         // Sequence tmp_result = (*op_vec_iter)->Compile(context, tmp_seq);
-        Sequence tmp_result = (*op_vec_iter)->Compile(context, tmp_seq, label_idx, multi_label_idx);
+        Sequence tmp_result = (*op_vec_iter)->Compile(context, tmp_seq, label_ket, multi_label_ket);
         // Sequence tmp_result;
         // std::cout << "\nop_vec_iter: " << (*op_vec_iter)->to_string() << std::endl;
         // std::cout << "seq_vec_iter: " << (*seq_vec_iter)->to_string() << std::endl;
@@ -227,7 +227,7 @@ Sequence OperatorWithSequence::Compile(ContextList &context, const ulong label_i
 }
 
 
-Sequence OperatorWithSequence::Compile(ContextList& context, const ulong label_idx, const std::vector<Sequence>& args) const {
+Sequence OperatorWithSequence::Compile(ContextList& context, const Ket& label_ket, const std::vector<Sequence>& args) const {
     Sequence result;
     if (sign_vec.empty()) { return result; }
 
@@ -239,10 +239,10 @@ Sequence OperatorWithSequence::Compile(ContextList& context, const ulong label_i
         // Sequence tmp_result;
         // tmp_result = op_vec.at(k)->Compile(context, seq_vec.at(k)->to_seq());
         // Sequence tmp_result = (*op_vec_iter)->Compile(context, (*seq_vec_iter)->Compile(context));
-        Sequence tmp_seq = (*seq_vec_iter)->Compile(context, label_idx, args);
+        Sequence tmp_seq = (*seq_vec_iter)->Compile(context, label_ket, args);
         // Sequence tmp_result = (*op_vec_iter)->Compile(context, tmp_seq);
         // Sequence tmp_result = (*op_vec_iter)->Compile(context, tmp_seq, label_idx);
-        Sequence tmp_result = (*op_vec_iter)->Compile(context, tmp_seq, label_idx, args);
+        Sequence tmp_result = (*op_vec_iter)->Compile(context, tmp_seq, label_ket, args);
         // Sequence tmp_result;
         // std::cout << "\nop_vec_iter: " << (*op_vec_iter)->to_string() << std::endl;
         // std::cout << "seq_vec_iter: " << (*seq_vec_iter)->to_string() << std::endl;

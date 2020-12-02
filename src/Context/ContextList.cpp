@@ -111,7 +111,8 @@ void ContextList::learn(const ulong op_idx, const ulong label_idx, std::shared_p
         // Sequence result;
         // Sequence result = bSeq->Compile(this->data[index]);  // This seems to be bug free so far.
         // Sequence result = bSeq->Compile(this->data[index], label_idx);
-        Sequence result = bSeq->Compile(*this, label_idx);  // Maybe this should be in LearnRule instead??
+        Ket label_ket(label_idx);
+        Sequence result = bSeq->Compile(*this, label_ket);  // Maybe this should be in LearnRule instead??
         std::shared_ptr<BaseSequence> bSeq2 = std::make_shared<Sequence>(result);  // should we merge these two lines?
         data[index].learn(op_idx, label_idx, bSeq2);
     } else {
@@ -129,7 +130,8 @@ void ContextList::learn(const std::string& op, const std::string& label, std::sh
         // Sequence result = bSeq->Compile(*this, label_idx);
         // Sequence result = bSeq->Compile(this->data[index]);
         // Sequence result = bSeq->Compile(this->data[index], label_idx);
-        Sequence result = bSeq->Compile(*this, label_idx);
+        Ket label_ket(label_idx);
+        Sequence result = bSeq->Compile(*this, label_ket);
         //Sequence result;
         // std::shared_ptr<BaseSequence> bSeq2 = std::make_shared<Sequence>();
         std::shared_ptr<BaseSequence> bSeq2 = std::make_shared<Sequence>(result);  // should we merge these two lines?
@@ -264,7 +266,8 @@ Sequence ContextList::active_recall(const ulong op_idx, const ulong label_idx) {
 //     std::cout << "    label_idx: " << ket_map.get_str(label_idx) << std::endl;
 //     std::cout << "    recall_descent_type: " << the_recall_type << std::endl;
 
-    Sequence result = data[index].recall(op_idx, label_idx)->Compile(*this, label_idx);
+    Ket label_ket(label_idx);
+    Sequence result = data[index].recall(op_idx, label_idx)->Compile(*this, label_ket);
     if (the_recall_type == RULEMEMOIZE) {
     // if (the_recall_type == RULEMEMOIZE || the_recall_type == RULEUNDEFINED) {
         std::shared_ptr<BaseSequence> bSeq = std::make_shared<Sequence>(result);

@@ -103,14 +103,14 @@ Sequence SimpleOperator::Compile(ContextList& context, const Sequence& seq) cons
     return result;
 }
 
-Sequence SimpleOperator::Compile(ContextList &context, const Sequence &seq, const ulong label_idx) const {
+Sequence SimpleOperator::Compile(ContextList &context, const Sequence &seq, const Ket& label_ket) const {
     return this->Compile(context, seq);  // I presume simple operator has no label_idx dependence.
 }
 
-Sequence SimpleOperator::Compile(ContextList &context, const Sequence &seq, const ulong label_idx, const ulong multi_label_idx) const {
+Sequence SimpleOperator::Compile(ContextList &context, const Sequence &seq, const Ket& label_ket, const Ket& multi_label_ket) const {
     return this->Compile(context, seq);
 }
 
-Sequence SimpleOperator::Compile(ContextList &context, const Sequence &seq, const ulong label_idx, const std::vector<Sequence> &args) const {
+Sequence SimpleOperator::Compile(ContextList &context, const Sequence &seq, const Ket& label_ket, const std::vector<Sequence> &args) const {
     return this->Compile(context, seq);
 }

@@ -105,11 +105,11 @@ Sequence LearnRule::Compile(ContextList &context) const {  // Maybe we should co
     return _RHS_seq->to_seq();
 }
 
-Sequence LearnRule::Compile(ContextList &context, const ulong label_idx) const {
+Sequence LearnRule::Compile(ContextList &context, const Ket& label_ket) const {
     return this->Compile(context); // TODO: fill out later!
 }
 
-Sequence LearnRule::Compile(ContextList &context, const ulong label_idx1, const ulong multi_label_idx) const {
+Sequence LearnRule::Compile(ContextList &context, const Ket& label_ket1, const Ket& multi_label_ket) const {
     if (!_valid_learn_rule) { return Sequence(); }
 
 //     std::cout << "LearnRule:" << std::endl;
@@ -123,9 +123,11 @@ Sequence LearnRule::Compile(ContextList &context, const ulong label_idx1, const 
 
     if (_ket_op->type() == OPEMPTY) {
         if (_ket_like_seq->is_ket()) {  // Primary / most common branch
-            ulong label_idx = _ket_like_seq->to_ket().label_idx();    // Can we instead directly invoke .label_idx() ?
+            // ulong label_idx = _ket_like_seq->to_ket().label_idx();    // Can we instead directly invoke .label_idx() ?
+            Ket label_ket = _ket_like_seq->to_ket();
+            ulong label_idx = label_ket.label_idx();
             if (_rule_type == RULENORMAL || _rule_type == RULEADD || _rule_type == RULESEQ) {
-                Sequence RHS = _RHS_seq->Compile(context, label_idx, multi_label_idx);
+                Sequence RHS = _RHS_seq->Compile(context, label_ket, multi_label_ket);
                 bSeq2 = std::make_shared<Sequence>(RHS);
             }
 
@@ -142,7 +144,7 @@ Sequence LearnRule::Compile(ContextList &context, const ulong label_idx1, const 
             for (const auto k: _ket_like_seq->to_sp()) {  // Not sure this branch is ever triggered.
                 ulong label_idx = k.label_idx();
                 if (_rule_type == RULENORMAL || _rule_type == RULEADD || _rule_type == RULESEQ) {
-                    Sequence RHS = _RHS_seq->Compile(context, label_idx, multi_label_idx);
+                    Sequence RHS = _RHS_seq->Compile(context, k, multi_label_ket);
                     bSeq2 = std::make_shared<Sequence>(RHS);
                 }
 
@@ -162,7 +164,7 @@ Sequence LearnRule::Compile(ContextList &context, const ulong label_idx1, const 
     for (const auto k: indirect_sp) {
         ulong label_idx = k.label_idx();
         if (_rule_type == RULENORMAL || _rule_type == RULEADD || _rule_type == RULESEQ) {
-            Sequence RHS = _RHS_seq->Compile(context, label_idx, multi_label_idx);
+            Sequence RHS = _RHS_seq->Compile(context, k, multi_label_ket);
             bSeq2 = std::make_shared<Sequence>(RHS);
         }
 
@@ -178,7 +180,7 @@ Sequence LearnRule::Compile(ContextList &context, const ulong label_idx1, const 
     return bSeq2->to_seq();
 }
 
-Sequence LearnRule::Compile(ContextList &context, const ulong label_idx1, const std::vector<Sequence> &args) const {
+Sequence LearnRule::Compile(ContextList &context, const Ket& label_ket1, const std::vector<Sequence> &args) const {
     if (!_valid_learn_rule) { return Sequence(); }
 
 //     std::cout << "LearnRule:" << std::endl;
@@ -192,9 +194,10 @@ Sequence LearnRule::Compile(ContextList &context, const ulong label_idx1, const 
 
     if (_ket_op->type() == OPEMPTY) {
         if (_ket_like_seq->is_ket()) {  // Primary / most common branch
-            ulong label_idx = _ket_like_seq->to_ket().label_idx();    // Can we instead directly invoke .label_idx() ?
+            Ket label_ket = _ket_like_seq->to_ket();
+            ulong label_idx = label_ket.label_idx();    // Can we instead directly invoke .label_idx() ?
             if (_rule_type == RULENORMAL || _rule_type == RULEADD || _rule_type == RULESEQ) {
-                Sequence RHS = _RHS_seq->Compile(context, label_idx, args);
+                Sequence RHS = _RHS_seq->Compile(context, label_ket, args);
                 bSeq2 = std::make_shared<Sequence>(RHS);
             }
 
@@ -211,7 +214,7 @@ Sequence LearnRule::Compile(ContextList &context, const ulong label_idx1, const 
             for (const auto k: _ket_like_seq->to_sp()) {  // Not sure this branch is ever triggered.
                 ulong label_idx = k.label_idx();
                 if (_rule_type == RULENORMAL || _rule_type == RULEADD || _rule_type == RULESEQ) {
-                    Sequence RHS = _RHS_seq->Compile(context, label_idx, args);
+                    Sequence RHS = _RHS_seq->Compile(context, k, args);
                     bSeq2 = std::make_shared<Sequence>(RHS);
                 }
 
@@ -231,7 +234,7 @@ Sequence LearnRule::Compile(ContextList &context, const ulong label_idx1, const 
     for (const auto k: indirect_sp) {
         ulong label_idx = k.label_idx();
         if (_rule_type == RULENORMAL || _rule_type == RULEADD || _rule_type == RULESEQ) {
-            Sequence RHS = _RHS_seq->Compile(context, label_idx, args);
+            Sequence RHS = _RHS_seq->Compile(context, k, args);
             bSeq2 = std::make_shared<Sequence>(RHS);
         }
 

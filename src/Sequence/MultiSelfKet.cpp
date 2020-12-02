@@ -64,7 +64,7 @@ Sequence MultiSelfKet::Compile(ContextList& context) const {
     return this->to_seq();
 }
 
-Sequence MultiSelfKet::Compile(ContextList& context, const ulong label_idx) const {
+Sequence MultiSelfKet::Compile(ContextList& context, const Ket& label_ket) const {
 //     if (idx == 1) {
 //         Ket tmp(label_idx, value);
 //         return tmp.to_seq();
@@ -72,15 +72,16 @@ Sequence MultiSelfKet::Compile(ContextList& context, const ulong label_idx) cons
     return this->to_seq();
 }
 
-Sequence MultiSelfKet::Compile(ContextList &context, const ulong label_idx, const ulong multi_label_idx) const {
+Sequence MultiSelfKet::Compile(ContextList &context, const Ket& label_ket, const Ket& multi_label_ket) const {
     if (idx == 1) {
-        Ket tmp(multi_label_idx, value);
-        return tmp.to_seq();
+        // Ket tmp(multi_label_idx, value);
+        // return tmp.to_seq();
+        return multi_label_ket.to_seq();
     }
     return this->to_seq();
 }
 
-Sequence MultiSelfKet::Compile(ContextList& context, const ulong label_idx, const std::vector<Sequence>& args) const {
+Sequence MultiSelfKet::Compile(ContextList& context, const Ket& label_ket, const std::vector<Sequence>& args) const {
     if (idx < args.size()) {
         return args.at(idx);
     }

@@ -92,9 +92,13 @@ public:
     const std::string to_string() const;
     Sequence Compile(NewContext& context, const Sequence& seq) const { return seq; };
     Sequence Compile(ContextList& context, const Sequence& seq) const;
-    Sequence Compile(ContextList& context, const Sequence& seq, const ulong label_idx) const;
-    Sequence Compile(ContextList& context, const Sequence& seq, const ulong label_idx, const ulong multi_label_idx) const;
-    Sequence Compile(ContextList& context, const Sequence& seq, const ulong label_idx, const std::vector<Sequence>& args) const;
+    // Sequence Compile(ContextList& context, const Sequence& seq, const ulong label_idx) const;
+    // Sequence Compile(ContextList& context, const Sequence& seq, const ulong label_idx, const ulong multi_label_idx) const;
+    // Sequence Compile(ContextList& context, const Sequence& seq, const ulong label_idx, const std::vector<Sequence>& args) const;
+
+    Sequence Compile(ContextList& context, const Sequence& seq, const Ket& label_ket) const;
+    Sequence Compile(ContextList& context, const Sequence& seq, const Ket& label_ket, const Ket& multi_label_ket) const;
+    Sequence Compile(ContextList& context, const Sequence& seq, const Ket& label_ket, const std::vector<Sequence>& args) const;
 };
 
 

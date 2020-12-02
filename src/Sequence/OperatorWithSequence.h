@@ -79,9 +79,13 @@ public:
     Sequence Compile(NewContext& context, const ulong label_idx) const;
 
     Sequence Compile(ContextList& context) const;
-    Sequence Compile(ContextList& context, const ulong label_idx) const;
-    Sequence Compile(ContextList& context, const ulong label_idx, const ulong multi_label_idx) const;
-    Sequence Compile(ContextList& context, const ulong label_idx, const std::vector<Sequence>& args) const;
+    // Sequence Compile(ContextList& context, const ulong label_idx) const;
+    // Sequence Compile(ContextList& context, const ulong label_idx, const ulong multi_label_idx) const;
+    // Sequence Compile(ContextList& context, const ulong label_idx, const std::vector<Sequence>& args) const;
+
+    Sequence Compile(ContextList& context, const Ket& label_ket) const;
+    Sequence Compile(ContextList& context, const Ket& label_ket, const Ket& multi_label_ket) const;
+    Sequence Compile(ContextList& context, const Ket& label_ket, const std::vector<Sequence>& args) const;
 };
 
 

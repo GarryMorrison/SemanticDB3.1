@@ -132,9 +132,13 @@ public:
     Sequence Compile(NewContext& context, const ulong label_idx) const { return (*this); };
 
     Sequence Compile(ContextList& context) const { return (*this); };
-    Sequence Compile(ContextList& context, const ulong label_idx) const { return (*this); };
-    Sequence Compile(ContextList& context, const ulong label_idx, const ulong multi_label_idx) const { return *this; }
-    Sequence Compile(ContextList& context, const ulong label_idx, const std::vector<Sequence>& args) const { return (*this); };
+    // Sequence Compile(ContextList& context, const ulong label_idx) const { return (*this); };
+    // Sequence Compile(ContextList& context, const ulong label_idx, const ulong multi_label_idx) const { return *this; }
+    // Sequence Compile(ContextList& context, const ulong label_idx, const std::vector<Sequence>& args) const { return (*this); };
+
+    Sequence Compile(ContextList& context, const Ket& label_ket) const { return *this; };
+    Sequence Compile(ContextList& context, const Ket& label_ket, const Ket& multi_label_ket) const { return *this; };
+    Sequence Compile(ContextList& context, const Ket& label_ket, const std::vector<Sequence>& args) const { return *this; };
 };
 
 

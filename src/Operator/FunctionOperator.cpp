@@ -66,6 +66,7 @@ Sequence FunctionOperator::Compile(ContextList& context, const Sequence& seq) co
         Sequence tmp = param->Compile(context);
         args.push_back(std::move(tmp));  // Use std::move here?
     }
+    Ket empty_ket("");
     switch (seq_vec.size()) {
         case 1: { if (fn_map.whitelist_1.find(idx) != fn_map.whitelist_1.end()) {
                 auto our_fn = fn_map.whitelist_1[idx];
@@ -75,7 +76,7 @@ Sequence FunctionOperator::Compile(ContextList& context, const Sequence& seq) co
                 return our_fn(context, args[0], args[1]);
         } else if (context.fn_recall_type(idx, 1) == RULESTORED) {
                 auto rule = context.fn_recall(idx, 1);
-                return rule->Compile(context, 0, args);  // Currently set label_idx to 0. Not sure what else we can do.
+                return rule->Compile(context, empty_ket, args);  // Currently set label_idx to 0. Not sure what else we can do.
         }
         break;
         }
@@ -87,7 +88,7 @@ Sequence FunctionOperator::Compile(ContextList& context, const Sequence& seq) co
                 return our_fn(context, args[0], args[1], args[2]);
             } else if (context.fn_recall_type(idx, 2) == RULESTORED) {
                 auto rule = context.fn_recall(idx, 2);
-                return rule->Compile(context, 0, args);  // Currently set label_idx to 0. Not sure what else we can do.
+                return rule->Compile(context, empty_ket, args);  // Currently set label_idx to 0. Not sure what else we can do.
             }
             break;
         }
@@ -99,7 +100,7 @@ Sequence FunctionOperator::Compile(ContextList& context, const Sequence& seq) co
                 return our_fn(context, args[0], args[1], args[2], args[3]);
             } else if (context.fn_recall_type(idx, 3) == RULESTORED) {
                 auto rule = context.fn_recall(idx, 3);
-                return rule->Compile(context, 0, args);  // Currently set label_idx to 0. Not sure what else we can do.
+                return rule->Compile(context, empty_ket, args);  // Currently set label_idx to 0. Not sure what else we can do.
             }
             break;
         }
@@ -111,7 +112,7 @@ Sequence FunctionOperator::Compile(ContextList& context, const Sequence& seq) co
                 return our_fn(context, args[0], args[1], args[2], args[3], args[4]);
             } else if (context.fn_recall_type(idx, 4) == RULESTORED) {
                 auto rule = context.fn_recall(idx, 4);
-                return rule->Compile(context, 0, args);  // Currently set label_idx to 0. Not sure what else we can do.
+                return rule->Compile(context, empty_ket, args);  // Currently set label_idx to 0. Not sure what else we can do.
             }
             break;
         }
@@ -119,13 +120,13 @@ Sequence FunctionOperator::Compile(ContextList& context, const Sequence& seq) co
     return Sequence();
 }
 
-Sequence FunctionOperator::Compile(ContextList &context, const Sequence &seq, const ulong label_idx) const {
+Sequence FunctionOperator::Compile(ContextList &context, const Sequence &seq, const Ket& label_ket) const {
     if (seq_vec.empty()) { return seq; }  // Maybe return |> instead??
     // Compile the sequences:
     std::vector<Sequence> args; // specify size of args here. Ie, seq_vec.size(). Or maybe something more efficient?
     args.push_back(seq);
     for (const auto &param: seq_vec) {
-        Sequence tmp = param->Compile(context, label_idx);
+        Sequence tmp = param->Compile(context, label_ket);
         args.push_back(std::move(tmp));  // Use std::move here?
     }
     switch (seq_vec.size()) {
@@ -137,7 +138,7 @@ Sequence FunctionOperator::Compile(ContextList &context, const Sequence &seq, co
                 return our_fn(context, args[0], args[1]);
             } else if (context.fn_recall_type(idx, 1) == RULESTORED) {
                 auto rule = context.fn_recall(idx, 1);
-                return rule->Compile(context, label_idx, args);
+                return rule->Compile(context, label_ket, args);
             }
             break;
         }
@@ -149,7 +150,7 @@ Sequence FunctionOperator::Compile(ContextList &context, const Sequence &seq, co
                 return our_fn(context, args[0], args[1], args[2]);
             } else if (context.fn_recall_type(idx, 2) == RULESTORED) {
                 auto rule = context.fn_recall(idx, 2);
-                return rule->Compile(context, label_idx, args);
+                return rule->Compile(context, label_ket, args);
             }
             break;
         }
@@ -161,7 +162,7 @@ Sequence FunctionOperator::Compile(ContextList &context, const Sequence &seq, co
                 return our_fn(context, args[0], args[1], args[2], args[3]);
             } else if (context.fn_recall_type(idx, 3) == RULESTORED) {
                 auto rule = context.fn_recall(idx, 3);
-                return rule->Compile(context, label_idx, args);
+                return rule->Compile(context, label_ket, args);
             }
             break;
         }
@@ -173,7 +174,7 @@ Sequence FunctionOperator::Compile(ContextList &context, const Sequence &seq, co
                 return our_fn(context, args[0], args[1], args[2], args[3], args[4]);
             } else if (context.fn_recall_type(idx, 4) == RULESTORED) {
                 auto rule = context.fn_recall(idx, 4);
-                return rule->Compile(context, label_idx, args);
+                return rule->Compile(context, label_ket, args);
             }
             break;
         }
@@ -182,13 +183,13 @@ Sequence FunctionOperator::Compile(ContextList &context, const Sequence &seq, co
 }
 
 
-Sequence FunctionOperator::Compile(ContextList &context, const Sequence &seq, const ulong label_idx, const ulong multi_label_idx) const {
+Sequence FunctionOperator::Compile(ContextList &context, const Sequence &seq, const Ket& label_ket, const Ket& multi_label_ket) const {
     if (seq_vec.empty()) { return seq; }  // Maybe return |> instead??
     // Compile the sequences:
     std::vector<Sequence> args; // specify size of args here. Ie, seq_vec.size(). Or maybe something more efficient?
     args.push_back(seq);
     for (const auto &param: seq_vec) {
-        Sequence tmp = param->Compile(context, label_idx, multi_label_idx);
+        Sequence tmp = param->Compile(context, label_ket, multi_label_ket);
         args.push_back(std::move(tmp));  // Use std::move here?
     }
     switch (seq_vec.size()) {
@@ -200,7 +201,7 @@ Sequence FunctionOperator::Compile(ContextList &context, const Sequence &seq, co
                 return our_fn(context, args[0], args[1]);
             } else if (context.fn_recall_type(idx, 1) == RULESTORED) {
                 auto rule = context.fn_recall(idx, 1);
-                return rule->Compile(context, label_idx, args);
+                return rule->Compile(context, label_ket, args);
             }
             break;
         }
@@ -212,7 +213,7 @@ Sequence FunctionOperator::Compile(ContextList &context, const Sequence &seq, co
                 return our_fn(context, args[0], args[1], args[2]);
             } else if (context.fn_recall_type(idx, 2) == RULESTORED) {
                 auto rule = context.fn_recall(idx, 2);
-                return rule->Compile(context, label_idx, args);
+                return rule->Compile(context, label_ket, args);
             }
             break;
         }
@@ -224,7 +225,7 @@ Sequence FunctionOperator::Compile(ContextList &context, const Sequence &seq, co
                 return our_fn(context, args[0], args[1], args[2], args[3]);
             } else if (context.fn_recall_type(idx, 3) == RULESTORED) {
                 auto rule = context.fn_recall(idx, 3);
-                return rule->Compile(context, label_idx, args);
+                return rule->Compile(context, label_ket, args);
             }
             break;
         }
@@ -236,7 +237,7 @@ Sequence FunctionOperator::Compile(ContextList &context, const Sequence &seq, co
                 return our_fn(context, args[0], args[1], args[2], args[3], args[4]);
             } else if (context.fn_recall_type(idx, 4) == RULESTORED) {
                 auto rule = context.fn_recall(idx, 4);
-                return rule->Compile(context, label_idx, args);
+                return rule->Compile(context, label_ket, args);
             }
             break;
         }
@@ -244,13 +245,13 @@ Sequence FunctionOperator::Compile(ContextList &context, const Sequence &seq, co
     return Sequence();
 }
 
-Sequence FunctionOperator::Compile(ContextList &context, const Sequence &seq, const ulong label_idx, const std::vector<Sequence> &args1) const {
+Sequence FunctionOperator::Compile(ContextList &context, const Sequence &seq, const Ket& label_ket, const std::vector<Sequence> &args1) const {
     if (seq_vec.empty()) { return seq; }  // Maybe return |> instead??
     // Compile the sequences:
     std::vector<Sequence> args; // specify size of args here. Ie, seq_vec.size(). Or maybe something more efficient?
     args.push_back(seq);
     for (const auto &param: seq_vec) {
-        Sequence tmp = param->Compile(context, label_idx, args1);
+        Sequence tmp = param->Compile(context, label_ket, args1);
         args.push_back(std::move(tmp));  // Use std::move here?
     }
     switch (seq_vec.size()) {
@@ -262,7 +263,7 @@ Sequence FunctionOperator::Compile(ContextList &context, const Sequence &seq, co
                 return our_fn(context, args[0], args[1]);
             } else if (context.fn_recall_type(idx, 1) == RULESTORED) {
                 auto rule = context.fn_recall(idx, 1);
-                return rule->Compile(context, label_idx, args);
+                return rule->Compile(context, label_ket, args);
             }
             break;
         }
@@ -274,7 +275,7 @@ Sequence FunctionOperator::Compile(ContextList &context, const Sequence &seq, co
                 return our_fn(context, args[0], args[1], args[2]);
             } else if (context.fn_recall_type(idx, 2) == RULESTORED) {
                 auto rule = context.fn_recall(idx, 2);
-                return rule->Compile(context, label_idx, args);
+                return rule->Compile(context, label_ket, args);
             }
             break;
         }
@@ -286,7 +287,7 @@ Sequence FunctionOperator::Compile(ContextList &context, const Sequence &seq, co
                 return our_fn(context, args[0], args[1], args[2], args[3]);
             } else if (context.fn_recall_type(idx, 3) == RULESTORED) {
                 auto rule = context.fn_recall(idx, 3);
-                return rule->Compile(context, label_idx, args);
+                return rule->Compile(context, label_ket, args);
             }
             break;
         }
@@ -298,7 +299,7 @@ Sequence FunctionOperator::Compile(ContextList &context, const Sequence &seq, co
                 return our_fn(context, args[0], args[1], args[2], args[3], args[4]);
             } else if (context.fn_recall_type(idx, 4) == RULESTORED) {
                 auto rule = context.fn_recall(idx, 4);
-                return rule->Compile(context, label_idx, args);
+                return rule->Compile(context, label_ket, args);
             }
             break;
         }

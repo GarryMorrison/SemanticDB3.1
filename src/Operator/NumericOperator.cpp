@@ -20,19 +20,19 @@ Sequence NumericOperator::Compile(ContextList& context, const Sequence& seq) con
     return result;
 }
 
-Sequence NumericOperator::Compile(ContextList &context, const Sequence &seq, const ulong label_idx) const {
+Sequence NumericOperator::Compile(ContextList &context, const Sequence &seq, const Ket& label_ket) const {
     Sequence result(seq);
     result.multiply(value);
     return result;
 }
 
-Sequence NumericOperator::Compile(ContextList &context, const Sequence &seq, const ulong label_idx, const ulong multi_label_idx) const {
+Sequence NumericOperator::Compile(ContextList &context, const Sequence &seq, const Ket& label_ket, const Ket& multi_label_ket) const {
     Sequence result(seq);
     result.multiply(value);
     return result;
 }
 
-Sequence NumericOperator::Compile(ContextList &context, const Sequence &seq, const ulong label_idx, const std::vector<Sequence> &args) const {
+Sequence NumericOperator::Compile(ContextList &context, const Sequence &seq, const Ket& label_ket, const std::vector<Sequence> &args) const {
     Sequence result(seq);
     result.multiply(value);
     return result;

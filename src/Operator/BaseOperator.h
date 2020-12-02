@@ -30,9 +30,13 @@ public:
     virtual const std::string to_string() const = 0;
     virtual Sequence Compile(NewContext& context, const Sequence& seq) const = 0;  // will probably deprecate this one.
     virtual Sequence Compile(ContextList& context, const Sequence& seq) const = 0;
-    virtual Sequence Compile(ContextList& context, const Sequence& seq, const ulong label_idx) const = 0;
-    virtual Sequence Compile(ContextList& context, const Sequence& seq, const ulong label_idx, const ulong multi_label_idx) const = 0;
-    virtual Sequence Compile(ContextList& context, const Sequence& seq, const ulong label_idx, const std::vector<Sequence>& args) const = 0;
+    // virtual Sequence Compile(ContextList& context, const Sequence& seq, const ulong label_idx) const = 0;
+    // virtual Sequence Compile(ContextList& context, const Sequence& seq, const ulong label_idx, const ulong multi_label_idx) const = 0;
+    // virtual Sequence Compile(ContextList& context, const Sequence& seq, const ulong label_idx, const std::vector<Sequence>& args) const = 0;
+
+    virtual Sequence Compile(ContextList& context, const Sequence& seq, const Ket& label_ket) const = 0;
+    virtual Sequence Compile(ContextList& context, const Sequence& seq, const Ket& label_ket, const Ket& multi_label_ket) const = 0;
+    virtual Sequence Compile(ContextList& context, const Sequence& seq, const Ket& label_ket, const std::vector<Sequence>& args) const = 0;
 };
 
 #endif //SDB3_1_BASEOPERATOR_H

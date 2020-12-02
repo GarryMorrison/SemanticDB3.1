@@ -45,26 +45,26 @@ Sequence MultiLearnRule::Compile(ContextList &context) const {
     return result;
 }
 
-Sequence MultiLearnRule::Compile(ContextList &context, const ulong label_idx) const {
+Sequence MultiLearnRule::Compile(ContextList &context, const Ket& label_ket) const {
     Sequence result;
     for (const auto& rule: vec_rules) {
-        result = rule->Compile(context, label_idx, label_idx);  // May want to change the middle label_idx to something else.
+        result = rule->Compile(context, label_ket, label_ket);  // May want to change the middle label_ket to something else.
     }
     return result;
 }
 
-Sequence MultiLearnRule::Compile(ContextList &context, const ulong label_idx, const ulong multi_label_idx) const {
+Sequence MultiLearnRule::Compile(ContextList &context, const Ket& label_ket, const Ket& multi_label_ket) const {
     Sequence result;
     for (const auto& rule: vec_rules) {
-        result = rule->Compile(context, label_idx, multi_label_idx);
+        result = rule->Compile(context, label_ket, multi_label_ket);
     }
     return result;
 }
 
-Sequence MultiLearnRule::Compile(ContextList &context, const ulong label_idx, const std::vector<Sequence> &args) const {
+Sequence MultiLearnRule::Compile(ContextList &context, const Ket& label_ket, const std::vector<Sequence> &args) const {
     Sequence result;
     for (const auto& rule: vec_rules) {
-        result = rule->Compile(context, label_idx, args);
+        result = rule->Compile(context, label_ket, args);
     }
     return result;
 }

@@ -88,13 +88,13 @@ Sequence BracketOperator::Compile(ContextList &context, const Sequence &seq) con
     return seq2;
 }
 
-Sequence BracketOperator::Compile(ContextList &context, const Sequence &seq, const ulong label_idx) const {
+Sequence BracketOperator::Compile(ContextList &context, const Sequence &seq, const Ket& label_ket) const {
     Sequence seq2;
     auto sign_vec_iter = sign_vec.cbegin();
     auto op_seq_vec_iter = op_seq_vec.cbegin();
     for (; sign_vec_iter != sign_vec.end() and op_seq_vec_iter != op_seq_vec.end();
            ++sign_vec_iter, ++op_seq_vec_iter) {
-        Sequence compiled_seq = op_seq_vec_iter->Compile(context, seq, label_idx);
+        Sequence compiled_seq = op_seq_vec_iter->Compile(context, seq, label_ket);
         switch (*sign_vec_iter) {
             case SPLUS:
                 seq2.add(compiled_seq);  // use move semantics??
@@ -117,13 +117,13 @@ Sequence BracketOperator::Compile(ContextList &context, const Sequence &seq, con
     return seq2;
 }
 
-Sequence BracketOperator::Compile(ContextList &context, const Sequence &seq, const ulong label_idx, const ulong multi_label_idx) const {
+Sequence BracketOperator::Compile(ContextList &context, const Sequence &seq, const Ket& label_ket, const Ket& multi_label_ket) const {
     Sequence seq2;
     auto sign_vec_iter = sign_vec.cbegin();
     auto op_seq_vec_iter = op_seq_vec.cbegin();
     for (; sign_vec_iter != sign_vec.end() and op_seq_vec_iter != op_seq_vec.end();
            ++sign_vec_iter, ++op_seq_vec_iter) {
-        Sequence compiled_seq = op_seq_vec_iter->Compile(context, seq, label_idx, multi_label_idx);
+        Sequence compiled_seq = op_seq_vec_iter->Compile(context, seq, label_ket, multi_label_ket);
         switch (*sign_vec_iter) {
             case SPLUS:
                 seq2.add(compiled_seq);  // use move semantics??
@@ -146,13 +146,13 @@ Sequence BracketOperator::Compile(ContextList &context, const Sequence &seq, con
     return seq2;
 }
 
-Sequence BracketOperator::Compile(ContextList &context, const Sequence &seq, const ulong label_idx, const std::vector<Sequence> &args) const {
+Sequence BracketOperator::Compile(ContextList &context, const Sequence &seq, const Ket& label_ket, const std::vector<Sequence> &args) const {
     Sequence seq2;
     auto sign_vec_iter = sign_vec.cbegin();
     auto op_seq_vec_iter = op_seq_vec.cbegin();
     for (; sign_vec_iter != sign_vec.end() and op_seq_vec_iter != op_seq_vec.end();
            ++sign_vec_iter, ++op_seq_vec_iter) {
-        Sequence compiled_seq = op_seq_vec_iter->Compile(context, seq, label_idx, args);
+        Sequence compiled_seq = op_seq_vec_iter->Compile(context, seq, label_ket, args);
         switch (*sign_vec_iter) {
             case SPLUS:
                 seq2.add(compiled_seq);  // use move semantics??
