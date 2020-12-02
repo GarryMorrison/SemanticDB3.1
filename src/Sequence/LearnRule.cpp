@@ -63,6 +63,8 @@ Sequence LearnRule::Compile(NewContext &context, const ulong label_idx) const {
 
 Sequence LearnRule::Compile(ContextList &context) const {  // Maybe we should compile _RHS_seq before passing to context.learn() ??
     if (!_valid_learn_rule) { return Sequence(); }
+    // std::cout << "LearnRule::Compile(context):" << std::endl;
+
     if (_ket_op->type() == OPEMPTY) {
         if (_ket_like_seq->is_ket()) {  // Primary / most common branch
             ulong label_idx = _ket_like_seq->to_ket().label_idx();    // Can we instead directly invoke .label_idx() ?
@@ -106,18 +108,19 @@ Sequence LearnRule::Compile(ContextList &context) const {  // Maybe we should co
 }
 
 Sequence LearnRule::Compile(ContextList &context, const Ket& label_ket) const {
+    // std::cout << "LearnRule::Compile(context, label_ket)" << std::endl;
     return this->Compile(context); // TODO: fill out later!
 }
 
 Sequence LearnRule::Compile(ContextList &context, const Ket& label_ket1, const Ket& multi_label_ket) const {
     if (!_valid_learn_rule) { return Sequence(); }
 
-//     std::cout << "LearnRule:" << std::endl;
-//     std::cout << "    rule_type: " << _rule_type << std::endl;
-//     std::cout << "    RHS_seq: " << _RHS_seq->to_string() << std::endl;
-//     std::cout << "    RHS_seq.type: " << _RHS_seq->type() << std::endl;
-//     std::cout << "    label_idx1: " << ket_map.get_str(label_idx1) << std::endl;
-//     std::cout << "    multi_label_idx: " << ket_map.get_str(multi_label_idx) << std::endl;
+    // std::cout << "LearnRule:" << std::endl;
+    // std::cout << "    rule_type: " << _rule_type << std::endl;
+    // std::cout << "    RHS_seq: " << _RHS_seq->to_string() << std::endl;
+    // std::cout << "    RHS_seq.type: " << _RHS_seq->type() << std::endl;
+    // std::cout << "    label_ket1: " << label_ket1.to_string() << std::endl;
+    // std::cout << "    multi_label_ket: " << multi_label_ket.to_string() << std::endl;
 
     std::shared_ptr<BaseSequence> bSeq2 = _RHS_seq;
 
@@ -183,12 +186,12 @@ Sequence LearnRule::Compile(ContextList &context, const Ket& label_ket1, const K
 Sequence LearnRule::Compile(ContextList &context, const Ket& label_ket1, const std::vector<Sequence> &args) const {
     if (!_valid_learn_rule) { return Sequence(); }
 
-//     std::cout << "LearnRule:" << std::endl;
-//     std::cout << "    rule_type: " << _rule_type << std::endl;
-//     std::cout << "    RHS_seq: " << _RHS_seq->to_string() << std::endl;
-//     std::cout << "    RHS_seq.type: " << _RHS_seq->type() << std::endl;
-//     std::cout << "    label_idx1: " << ket_map.get_str(label_idx1) << std::endl;
-//     std::cout << "    args: ... " << std::endl;
+    // std::cout << "LearnRule::Compile(context, label_ket1, args):" << std::endl;
+    // std::cout << "    rule_type: " << _rule_type << std::endl;
+    // std::cout << "    RHS_seq: " << _RHS_seq->to_string() << std::endl;
+    // std::cout << "    RHS_seq.type: " << _RHS_seq->type() << std::endl;
+    // std::cout << "    label_ket1: " << label_ket1.to_string() << std::endl;
+    // std::cout << "    args: ... " << std::endl;
 
     std::shared_ptr<BaseSequence> bSeq2 = _RHS_seq;
 

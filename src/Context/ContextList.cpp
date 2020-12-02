@@ -261,10 +261,10 @@ Sequence ContextList::active_recall(const ulong op_idx, const ulong label_idx) {
     // unsigned int the_recall_type = data[index].recall_type(op_idx, label_idx);
     unsigned int the_recall_type = data[index].recall_descent_type(op_idx, label_idx);  // Probably slows things down quite a bit over .recall_type()!
 
-//     std::cout << "active_recall:" << std::endl;
-//     std::cout << "    op_idx: " << ket_map.get_str(op_idx) << std::endl;
-//     std::cout << "    label_idx: " << ket_map.get_str(label_idx) << std::endl;
-//     std::cout << "    recall_descent_type: " << the_recall_type << std::endl;
+    // std::cout << "ContextList::active_recall(op_idx, label_idx):" << std::endl;
+    // std::cout << "    op_idx: " << ket_map.get_str(op_idx) << std::endl;
+    // std::cout << "    label_idx: " << ket_map.get_str(label_idx) << std::endl;
+    // std::cout << "    recall_descent_type: " << the_recall_type << std::endl;
 
     Ket label_ket(label_idx);
     Sequence result = data[index].recall(op_idx, label_idx)->Compile(*this, label_ket);
@@ -290,6 +290,24 @@ Sequence ContextList::active_recall(const ulong op_idx, const ulong label_idx) {
         return data[index].recall(op_idx, label_idx)->to_seq();
     }
 }
+
+Sequence ContextList::active_recall(const ulong op_idx, const Ket& label_ket) {
+    unsigned int the_recall_type = data[index].recall_descent_type(op_idx, label_ket.label_idx());  // Probably slows things down quite a bit over .recall_type()!
+
+    // std::cout << "ContextList::active_recall(op_idx, label_ket):" << std::endl;
+    // std::cout << "    op_idx: " << ket_map.get_str(op_idx) << std::endl;
+    // std::cout << "    label_ket: " << label_ket.to_string() << std::endl;
+    // std::cout << "    recall_descent_type: " << the_recall_type << std::endl;
+
+    Sequence result = data[index].recall(op_idx, label_ket.label_idx())->Compile(*this, label_ket);
+    if (the_recall_type == RULEMEMOIZE) {
+        // if (the_recall_type == RULEMEMOIZE || the_recall_type == RULEUNDEFINED) {
+        std::shared_ptr<BaseSequence> bSeq = std::make_shared<Sequence>(result);
+        data[index].learn(op_idx, label_ket.label_idx(), bSeq);
+    }
+    return result;
+}
+
 
 void ContextList::fn_learn(const ulong op_idx, const int param_size, std::shared_ptr<BaseSequence> bSeq) {
     data[index].fn_learn(op_idx, param_size, bSeq);

@@ -47,7 +47,7 @@ Sequence SimpleOperator::Compile(NewContext& context, const Sequence& seq) const
 Sequence SimpleOperator::Compile(ContextList& context, const Sequence& seq) const {
     if (op_idx == ket_map.get_idx("")) { return seq; }  // Change later?
 
-    // std::cout << "SimpleOperator::Compile:" << std::endl;  // Later, if in debug mode, print this out.
+    // std::cout << "SimpleOperator::Compile(context, seq):" << std::endl;  // Later, if in debug mode, print this out.
     // std::cout << "    seq: " << seq.to_string() << std::endl;
     // std::cout << "    seq.size(): " << seq.size() << std::endl;
     // std::cout << "    seq.type(): " << seq.type() << std::endl;
@@ -74,7 +74,8 @@ Sequence SimpleOperator::Compile(ContextList& context, const Sequence& seq) cons
         Sequence empty("");
         args.push_back(empty);
         args.push_back(seq);
-        return rule->Compile(context, 0, args);  // Currently set label_idx to 0. Not sure what else we can do.
+        Ket empty_ket("");
+        return rule->Compile(context, empty_ket, args);  // Currently set label_idx to 0. Not sure what else we can do.
     }
 
     Sequence result;
@@ -92,8 +93,7 @@ Sequence SimpleOperator::Compile(ContextList& context, const Sequence& seq) cons
                 // std::cout << "b_rule: " << b_rule->to_string() << std::endl;
                 // std::cout << "b_rule type: " << b_rule->type() << std::endl;
                 // Sequence seq3 = b_rule->to_seq();  // Need to test these three lines are right ...
-                Sequence seq3 = context.active_recall(op_idx, k.label_idx());
-                seq3.multiply(k.value());
+                Sequence seq3 = context.active_recall(op_idx, k);
                 seq2.add(seq3);
             }
         }

@@ -75,6 +75,7 @@ public:
 
     Sequence active_recall(const std::string& op, const std::string& label);
     Sequence active_recall(const ulong op_idx, const ulong label_idx);
+    Sequence active_recall(const ulong op_idx, const Ket& label_ket);
 
     void fn_learn(const ulong op_idx, const int param_size, std::shared_ptr<BaseSequence> bSeq);
     std::shared_ptr<BaseSequence> fn_recall(const ulong op_idx, const int param_size);

@@ -173,10 +173,14 @@ Sequence OperatorWithSequence::Compile(ContextList& context, const Ket& label_ke
         Sequence tmp_seq = (*seq_vec_iter)->Compile(context, label_ket);
         Sequence tmp_result = (*op_vec_iter)->Compile(context, tmp_seq, label_ket);
         // Sequence tmp_result;
-        // std::cout << "\nop_vec_iter: " << (*op_vec_iter)->to_string() << std::endl;
-        // std::cout << "seq_vec_iter: " << (*seq_vec_iter)->to_string() << std::endl;
-        // std::cout << "tmp_seq: " << tmp_seq.to_string() << std::endl;
-        // std::cout << "tmp_result: " << tmp_result.to_string() << std::endl;
+
+        // std::cout << "OperatorWithSequence::Compile(context, label_ket):" << std::endl;
+        // std::cout << "    label_ket: " << label_ket.to_string() << std::endl;
+        // std::cout << "    op_vec_iter: " << (*op_vec_iter)->to_string() << std::endl;
+        // std::cout << "    seq_vec_iter: " << (*seq_vec_iter)->to_string() << std::endl;
+        // std::cout << "    tmp_seq: " << tmp_seq.to_string() << std::endl;
+        // std::cout << "    tmp_result: " << tmp_result.to_string() << std::endl;
+
         if ((*sign_vec_iter) == SMINUS) {
             tmp_result.multiply(-1);
         }
@@ -188,7 +192,6 @@ Sequence OperatorWithSequence::Compile(ContextList& context, const Ket& label_ke
             case SMERGE2: { result.merge(tmp_result, " "); break; }
         }
     }
-    // return Sequence();  // This causes a bug somewhere. Exit code 139 == seg fault.
     return result;
 }
 
@@ -208,10 +211,15 @@ Sequence OperatorWithSequence::Compile(ContextList &context, const Ket& label_ke
         // Sequence tmp_result = (*op_vec_iter)->Compile(context, tmp_seq);
         Sequence tmp_result = (*op_vec_iter)->Compile(context, tmp_seq, label_ket, multi_label_ket);
         // Sequence tmp_result;
-        // std::cout << "\nop_vec_iter: " << (*op_vec_iter)->to_string() << std::endl;
-        // std::cout << "seq_vec_iter: " << (*seq_vec_iter)->to_string() << std::endl;
-        // std::cout << "tmp_seq: " << tmp_seq.to_string() << std::endl;
-        // std::cout << "tmp_result: " << tmp_result.to_string() << std::endl;
+
+        // std::cout << "OperatorWithSequence::Compile(context, label_ket, multi_label_ket):" << std::endl;
+        // std::cout << "    label_ket: " << label_ket.to_string() << std::endl;
+        // std::cout << "    multi_label_ket: " << multi_label_ket.to_string() << std::endl;
+        // std::cout << "    op_vec_iter: " << (*op_vec_iter)->to_string() << std::endl;
+        // std::cout << "    seq_vec_iter: " << (*seq_vec_iter)->to_string() << std::endl;
+        // std::cout << "    tmp_seq: " << tmp_seq.to_string() << std::endl;
+        // std::cout << "    tmp_result: " << tmp_result.to_string() << std::endl;
+
         if ((*sign_vec_iter) == SMINUS) {
             tmp_result.multiply(-1);
         }
@@ -244,10 +252,14 @@ Sequence OperatorWithSequence::Compile(ContextList& context, const Ket& label_ke
         // Sequence tmp_result = (*op_vec_iter)->Compile(context, tmp_seq, label_idx);
         Sequence tmp_result = (*op_vec_iter)->Compile(context, tmp_seq, label_ket, args);
         // Sequence tmp_result;
-        // std::cout << "\nop_vec_iter: " << (*op_vec_iter)->to_string() << std::endl;
-        // std::cout << "seq_vec_iter: " << (*seq_vec_iter)->to_string() << std::endl;
-        // std::cout << "tmp_seq: " << tmp_seq.to_string() << std::endl;
-        // std::cout << "tmp_result: " << tmp_result.to_string() << std::endl;
+
+        // std::cout << "OperatorWithSequence::Compile(context, label_ket, args):" << std::endl;
+        // std::cout << "    label_ket: " << label_ket.to_string() << std::endl;
+        // std::cout << "    op_vec_iter: " << (*op_vec_iter)->to_string() << std::endl;
+        // std::cout << "    seq_vec_iter: " << (*seq_vec_iter)->to_string() << std::endl;
+        // std::cout << "    tmp_seq: " << tmp_seq.to_string() << std::endl;
+        // std::cout << "    tmp_result: " << tmp_result.to_string() << std::endl;
+
         if ((*sign_vec_iter) == SMINUS) {
             tmp_result.multiply(-1);
         }

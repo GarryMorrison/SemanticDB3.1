@@ -73,8 +73,9 @@ Superposition Ket::operator+(Ket& a) {
 }
 
 Ket Ket::to_ket() const {
-    Ket tmp(*this);
-    return tmp;
+    // Ket tmp(*this);
+    // return tmp;
+    return *this;
 }
 
 Superposition Ket::to_sp() const {
