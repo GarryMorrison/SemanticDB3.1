@@ -336,7 +336,7 @@ Ket op_round(const Ket k, const std::vector<std::shared_ptr<CompoundConstant> > 
         return Ket(float_to_int(number, value), k.value());
     } else {
         std::string category = ket_map.get_str(split_idx) + ": ";
-        return Ket(category + float_to_int(number / value, default_decimal_places), k.value());
+        return Ket(category + float_to_int(number, value), k.value());
     }
 }
 
