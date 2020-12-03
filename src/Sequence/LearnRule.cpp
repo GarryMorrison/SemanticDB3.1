@@ -96,9 +96,9 @@ Sequence LearnRule::Compile(ContextList &context) const {  // Maybe we should co
     for (const auto k: indirect_sp) {
         ulong label_idx = k.label_idx();
         switch (_rule_type) {
-            case RULENORMAL : { context.learn(_first_op_idx, label_idx, _RHS_seq); break; }
-            case RULEADD : { context.add_learn(_first_op_idx, label_idx, _RHS_seq); break; }
-            case RULESEQ : { context.seq_learn(_first_op_idx, label_idx, _RHS_seq); break; }
+            case RULENORMAL : { context.learn(_first_op_idx, k, _RHS_seq); break; }
+            case RULEADD : { context.add_learn(_first_op_idx, k, _RHS_seq); break; }
+            case RULESEQ : { context.seq_learn(_first_op_idx, k, _RHS_seq); break; }
             case RULESTORED : { context.stored_learn(_first_op_idx, label_idx, _RHS_seq); break; }
             case RULEMEMOIZE : { context.memoize_learn(_first_op_idx, label_idx, _RHS_seq); break; }
             default: break;
@@ -172,9 +172,9 @@ Sequence LearnRule::Compile(ContextList &context, const Ket& label_ket1, const K
         }
 
         switch (_rule_type) {
-            case RULENORMAL : { context.learn(_first_op_idx, label_idx, bSeq2); break; }
-            case RULEADD : { context.add_learn(_first_op_idx, label_idx, bSeq2); break; }
-            case RULESEQ : { context.seq_learn(_first_op_idx, label_idx, bSeq2); break; }
+            case RULENORMAL : { context.learn(_first_op_idx, k, bSeq2); break; }
+            case RULEADD : { context.add_learn(_first_op_idx, k, bSeq2); break; }
+            case RULESEQ : { context.seq_learn(_first_op_idx, k, bSeq2); break; }
             case RULESTORED : { context.stored_learn(_first_op_idx, label_idx, bSeq2); break; }
             case RULEMEMOIZE : { context.memoize_learn(_first_op_idx, label_idx, bSeq2); break; }
             default: break;
@@ -242,9 +242,9 @@ Sequence LearnRule::Compile(ContextList &context, const Ket& label_ket1, const s
         }
 
         switch (_rule_type) {
-            case RULENORMAL : { context.learn(_first_op_idx, label_idx, bSeq2); break; }
-            case RULEADD : { context.add_learn(_first_op_idx, label_idx, bSeq2); break; }
-            case RULESEQ : { context.seq_learn(_first_op_idx, label_idx, bSeq2); break; }
+            case RULENORMAL : { context.learn(_first_op_idx, k, bSeq2); break; }
+            case RULEADD : { context.add_learn(_first_op_idx, k, bSeq2); break; }
+            case RULESEQ : { context.seq_learn(_first_op_idx, k, bSeq2); break; }
             case RULESTORED : { context.stored_learn(_first_op_idx, label_idx, bSeq2); break; }
             case RULEMEMOIZE : { context.memoize_learn(_first_op_idx, label_idx, bSeq2); break; }
             default: break;
