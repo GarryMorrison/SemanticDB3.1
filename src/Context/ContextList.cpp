@@ -107,18 +107,25 @@ BaseSequence* ContextList::recall(const ulong op_idx, const ulong label_idx) {
 
 void ContextList::learn(const ulong op_idx, const ulong label_idx, std::shared_ptr<BaseSequence> bSeq) {
     if (bSeq->type() == OPERATORWITHSEQUENCE || bSeq->type() == SELFKET) {  // Probably need to add more types here.
-        // Sequence result = bSeq->Compile(*this);
-        // Sequence result;
-        // Sequence result = bSeq->Compile(this->data[index]);  // This seems to be bug free so far.
-        // Sequence result = bSeq->Compile(this->data[index], label_idx);
         Ket label_ket(label_idx);
-        Sequence result = bSeq->Compile(*this, label_ket);  // Maybe this should be in LearnRule instead??
-        std::shared_ptr<BaseSequence> bSeq2 = std::make_shared<Sequence>(result);  // should we merge these two lines?
+        Sequence result = bSeq->Compile(*this, label_ket);
+        std::shared_ptr<BaseSequence> bSeq2 = std::make_shared<Sequence>(result);
         data[index].learn(op_idx, label_idx, bSeq2);
     } else {
         data[index].learn(op_idx, label_idx, bSeq);
     }
 }
+
+void ContextList::learn(const ulong op_idx, const Ket& label_ket, std::shared_ptr<BaseSequence> bSeq) {
+    if (bSeq->type() == OPERATORWITHSEQUENCE || bSeq->type() == SELFKET) {  // Probably need to add more types here.
+        Sequence result = bSeq->Compile(*this, label_ket);
+        std::shared_ptr<BaseSequence> bSeq2 = std::make_shared<Sequence>(result);
+        data[index].learn(op_idx, label_ket.label_idx(), bSeq2);
+    } else {
+        data[index].learn(op_idx, label_ket.label_idx(), bSeq);
+    }
+}
+
 
 void ContextList::learn(const std::string& op, const std::string& label, std::shared_ptr<BaseSequence> bSeq) {
     ulong op_idx = ket_map.get_idx(op);
@@ -156,28 +163,82 @@ void ContextList::learn(const std::string& op, const std::string& label, const s
 
 
 void ContextList::add_learn(const ulong op_idx, const ulong label_idx, std::shared_ptr<BaseSequence> bSeq) {
-    data[index].add_learn(op_idx, label_idx, bSeq);
+    // data[index].add_learn(op_idx, label_idx, bSeq);
+    if (bSeq->type() == OPERATORWITHSEQUENCE || bSeq->type() == SELFKET) {  // Probably need to add more types here.
+        Ket label_ket(label_idx);
+        Sequence result = bSeq->Compile(*this, label_ket);
+        std::shared_ptr<BaseSequence> bSeq2 = std::make_shared<Sequence>(result);
+        data[index].add_learn(op_idx, label_idx, bSeq2);
+    } else {
+        data[index].add_learn(op_idx, label_idx, bSeq);
+    }
+}
+
+void ContextList::add_learn(const ulong op_idx, const Ket &label_ket, std::shared_ptr<BaseSequence> bSeq) {
+    if (bSeq->type() == OPERATORWITHSEQUENCE || bSeq->type() == SELFKET) {  // Probably need to add more types here.
+        Sequence result = bSeq->Compile(*this, label_ket);
+        std::shared_ptr<BaseSequence> bSeq2 = std::make_shared<Sequence>(result);
+        data[index].add_learn(op_idx, label_ket.label_idx(), bSeq2);
+    } else {
+        data[index].add_learn(op_idx, label_ket.label_idx(), bSeq);
+    }
 }
 
 void ContextList::add_learn(const std::string& op, const std::string& label, std::shared_ptr<BaseSequence> bSeq) {
-    data[index].add_learn(op, label, bSeq);
+    // data[index].add_learn(op, label, bSeq);
+    if (bSeq->type() == OPERATORWITHSEQUENCE || bSeq->type() == SELFKET) {  // Probably need to add more types here.
+        Ket label_ket(label);
+        Sequence result = bSeq->Compile(*this, label_ket);
+        std::shared_ptr<BaseSequence> bSeq2 = std::make_shared<Sequence>(result);
+        data[index].add_learn(op, label, bSeq2);
+    } else {
+        data[index].add_learn(op, label, bSeq);
+    }
 }
 
 void ContextList::add_learn(const std::string& op, const std::string& label, const std::string& srule) {
     data[index].add_learn(op, label, srule);
 }
 
+
 void ContextList::seq_learn(const ulong op_idx, const ulong label_idx, std::shared_ptr<BaseSequence> bSeq) {
-    data[index].seq_learn(op_idx, label_idx, bSeq);
+    // data[index].seq_learn(op_idx, label_idx, bSeq);
+    if (bSeq->type() == OPERATORWITHSEQUENCE || bSeq->type() == SELFKET) {  // Probably need to add more types here.
+        Ket label_ket(label_idx);
+        Sequence result = bSeq->Compile(*this, label_ket);
+        std::shared_ptr<BaseSequence> bSeq2 = std::make_shared<Sequence>(result);
+        data[index].seq_learn(op_idx, label_idx, bSeq2);
+    } else {
+        data[index].seq_learn(op_idx, label_idx, bSeq);
+    }
+}
+
+void ContextList::seq_learn(const ulong op_idx, const Ket &label_ket, std::shared_ptr<BaseSequence> bSeq) {
+    if (bSeq->type() == OPERATORWITHSEQUENCE || bSeq->type() == SELFKET) {  // Probably need to add more types here.
+        Sequence result = bSeq->Compile(*this, label_ket);
+        std::shared_ptr<BaseSequence> bSeq2 = std::make_shared<Sequence>(result);
+        data[index].seq_learn(op_idx, label_ket.label_idx(), bSeq2);
+    } else {
+        data[index].seq_learn(op_idx, label_ket.label_idx(), bSeq);
+    }
 }
 
 void ContextList::seq_learn(const std::string& op, const std::string& label, std::shared_ptr<BaseSequence> bSeq) {
-    data[index].seq_learn(op, label, bSeq);
+    // data[index].seq_learn(op, label, bSeq);
+    if (bSeq->type() == OPERATORWITHSEQUENCE || bSeq->type() == SELFKET) {  // Probably need to add more types here.
+        Ket label_ket(label);
+        Sequence result = bSeq->Compile(*this, label_ket);
+        std::shared_ptr<BaseSequence> bSeq2 = std::make_shared<Sequence>(result);
+        data[index].seq_learn(op, label, bSeq2);
+    } else {
+        data[index].seq_learn(op, label, bSeq);
+    }
 }
 
 void ContextList::seq_learn(const std::string& op, const std::string& label, const std::string& srule) {
     data[index].seq_learn(op, label, srule);
 }
+
 
 void ContextList::stored_learn(const ulong op_idx, const ulong label_idx, std::shared_ptr<BaseSequence> bSeq) {
     data[index].stored_learn(op_idx, label_idx, bSeq);
