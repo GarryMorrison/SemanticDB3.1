@@ -136,9 +136,9 @@ public:
     // Sequence Compile(ContextList& context, const ulong label_idx, const ulong multi_label_idx) const { return *this; }
     // Sequence Compile(ContextList& context, const ulong label_idx, const std::vector<Sequence>& args) const { return (*this); };
 
-    Sequence Compile(ContextList& context, const Ket& label_ket) const { return *this; };
-    Sequence Compile(ContextList& context, const Ket& label_ket, const Ket& multi_label_ket) const { return *this; };
-    Sequence Compile(ContextList& context, const Ket& label_ket, const std::vector<Sequence>& args) const { return *this; };
+    Sequence Compile(ContextList& context, const Ket& label_ket) const;
+    Sequence Compile(ContextList& context, const Ket& label_ket, const Ket& multi_label_ket) const { return *this; };  // These two probably not correct now.
+    Sequence Compile(ContextList& context, const Ket& label_ket, const std::vector<Sequence>& args) const { return *this; }; // Need to take into account label_ket.value().
 };
 
 

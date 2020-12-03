@@ -659,3 +659,9 @@ void Sequence::dummy2(std::vector<std::shared_ptr<CompoundConstant> > &const_vec
     }
     return;
 }
+
+Sequence Sequence::Compile(ContextList &context, const Ket &label_ket) const {
+    Sequence tmp(*this);
+    tmp.multiply(label_ket.value());  // Is this correct?
+    return tmp;
+}

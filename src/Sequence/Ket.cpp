@@ -130,7 +130,10 @@ Sequence Ket::Compile(ContextList& context) const {
 }
 
 Sequence Ket::Compile(ContextList& context, const Ket& label_ket) const {
-    return this->to_seq();
+    // return this->to_seq();
+    Sequence tmp(*this);
+    tmp.multiply(label_ket.value());
+    return tmp;
 }
 
 Sequence Ket::Compile(ContextList &context, const Ket& label_ket, const Ket& multi_label_ket) const {
