@@ -746,8 +746,13 @@ Ket op_display_grid(const Superposition &sp, ContextList &context, const std::ve
 
     std::cout << "width:  " << width << "\n";
     std::cout << "height: " << height << "\n\n";
+    std::cout << std::left << std::setw(3) << " ";
+    for (int x = 0; x < width; x++) {
+        std::cout << std::right << std::setw(4) << x;
+    }
+    std::cout << "\n\n";
     for (int y = 0; y < height; y++) {
-        std::cout << std::left << std::setw(4) << y;
+        std::cout << std::left << std::setw(3) << y;
         for (int x = 0; x < width; x++) {
             ulong element_idx = grid_element(y,x);
             if (element_idx == ant_location) {
