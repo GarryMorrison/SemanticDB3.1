@@ -161,7 +161,12 @@ print-next |*> #=>
 
 
 -- define the fuzzy-predict-next operator:
-fuzzy-predict-nodes |*> #=> drop-below[0.5] similar-input[fuzzy-pattern] integer-encoder ssplit[" "] |_self>
+-- fuzzy-predict version that matches sequences even if they are different lengths:
+-- fuzzy-predict-nodes |*> #=> drop-below[0.5] similar-input[fuzzy-pattern] integer-encoder ssplit[" "] |_self>
+
+-- fuzzy-predict version that only matches sequences of exactly the same length:
+fuzzy-predict-nodes |*> #=> drop-below[0.5] strict-similar-input[fuzzy-pattern] integer-encoder ssplit[" "] |_self>
+
 do-you-know-fuzzy-prediction |*> #=> do-you-know fuzzy-predict-nodes |_self>
 
 fuzzy-predict-next |*> #=>
