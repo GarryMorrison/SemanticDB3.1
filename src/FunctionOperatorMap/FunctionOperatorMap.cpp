@@ -246,6 +246,7 @@ FunctionOperatorMap::FunctionOperatorMap() {
 
     idx = ket_map.get_idx("is-equal");
     fn_map.compound_ket_fn.emplace(idx, &op_is_equal);
+    fn_map.whitelist_2.emplace(idx, &op_is_equal2);
 
     idx = ket_map.get_idx("is-greater-than");
     fn_map.compound_ket_fn.emplace(idx, &op_is_greater_than);

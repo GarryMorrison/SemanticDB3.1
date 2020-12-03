@@ -765,7 +765,22 @@ OperatorUsageMap::OperatorUsageMap() {
             "        is-equal[13] |the cat>\n"
             "            |>\n\n"
             "    see also:\n"
-            "        is-less-than, is-less-equal-than, is-greater-than, is-greater-equal-than, is-in-range";
+            "        is-less-than, is-less-equal-than, is-greater-than, is-greater-equal-than, is-in-range\n\n"
+            "\nis-equal:\n"
+            "    description:\n"
+            "        is-equal(one, two)\n"
+            "        returns |yes> if one == two, else |no>\n"
+            "        Note, both the labels, and the coefficients must be equal\n"
+            "        Be aware that currently one and two are converted to kets\n"
+            "        So if one, and/or two are superpositions or sequences, it will not work as expected\n"
+            "        Perhaps later will swap to using our similarity measure instead as a test of equality\n\n"
+            "    examples:\n"
+            "        is-equal(|a>, |a>)\n"
+            "            |yes>\n\n"
+            "        is-equal(|a>, |b>)\n"
+            "            |no>\n\n"
+            "    see also:\n"
+            "        simm, strict-simm";
 
     operator_usage_map.map["is-greater-than"] =
             "\nis-greater-than:\n"
