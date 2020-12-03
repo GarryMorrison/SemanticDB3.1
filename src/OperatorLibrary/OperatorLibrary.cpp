@@ -740,6 +740,8 @@ Ket op_display_grid(const Superposition &sp, ContextList &context, const std::ve
         return Ket("");
     }
 
+    ulong ant_location = context.recall("location", "ant")->to_ket().label_idx();
+    std::string the_ant = context.recall("the", "ant")->to_ket().label();
     std::string value_char;
 
     std::cout << "width:  " << width << "\n";
@@ -748,14 +750,18 @@ Ket op_display_grid(const Superposition &sp, ContextList &context, const std::ve
         std::cout << std::left << std::setw(4) << y;
         for (int x = 0; x < width; x++) {
             ulong element_idx = grid_element(y,x);
-            Ket cell_value = context.recall(op_idx, element_idx)->to_ket();
-            value_char = cell_value.label();
-            if (value_char == " ") {
-                value_char = float_to_int(cell_value.value(), default_decimal_places);
-            } else if (value_char == "0") {
-                value_char = empty_char;
+            if (element_idx == ant_location) {
+                std::cout << std::right << std::setw(4) << the_ant;
+            } else {
+                Ket cell_value = context.recall(op_idx, element_idx)->to_ket();
+                value_char = cell_value.label();
+                if (value_char == " ") {
+                    value_char = float_to_int(cell_value.value(), default_decimal_places);
+                } else if (value_char == "0") {
+                    value_char = empty_char;
+                }
+                std::cout << std::right << std::setw(4) << value_char;
             }
-            std::cout << std::right << std::setw(4) << value_char;
         }
         std::cout << "\n";
     }
