@@ -424,6 +424,15 @@ std::vector<ulong> NewContext::relevant_kets(const std::string &op) {
     return this->relevant_kets(op_idx);
 }
 
+std::vector<ulong> NewContext::supported_ops(const ulong label_idx) {
+    if (rules_dict.find(label_idx) != rules_dict.end()) {
+        return rules_dict[label_idx].supported_ops();
+    }
+    std::vector<ulong> result;
+    return result;
+}
+
+
 void NewContext::find_inverse(const ulong op_idx) {
     if (op_idx == ket_map.get_idx("*")) {
         std::vector<ulong> starting_sort_order(sort_order);  // So we don't stomp on loop condition.

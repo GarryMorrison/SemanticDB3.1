@@ -289,6 +289,10 @@ std::vector<ulong> ContextList::relevant_kets(const std::string &op) {
     return data[index].relevant_kets(op_idx);
 }
 
+std::vector<ulong> ContextList::supported_ops(const ulong label_idx) {
+    return data[index].supported_ops(label_idx);
+}
+
 void ContextList::find_inverse(const ulong op_idx) {
     data[index].find_inverse(op_idx);
 }

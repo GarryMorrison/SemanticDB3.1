@@ -72,6 +72,7 @@ public:
 
     std::vector<ulong> relevant_kets(const ulong op_idx);
     std::vector<ulong> relevant_kets(const std::string &op);
+    std::vector<ulong> supported_ops(const ulong label_idx);
 
     void find_inverse(const ulong op_idx);
     void find_multi_inverse(const ulong op_idx);
