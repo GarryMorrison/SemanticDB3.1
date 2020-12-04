@@ -1,0 +1,283 @@
+-- learn and randomly walk a grid
+-- keep a record of the pathway home, so we can walk directly towards home
+-- if find food return home, leaving a scent trail
+-- once home, follow scent trail back to food (approximately)
+-- if find food again, return home, adding to the scent trail
+-- when reach home, store the food, switch off scent trail, and start randomly walking again
+
+
+-- define our ant symbol:
+-- the |ant> => |###>
+the |ant> => |@##@>
+
+
+-- learn the grid:
+learn-grid[30, 30]
+
+-- define max steps per invocation of "walk":
+max |steps> => |400>
+
+
+-- learn current location:
+current |cell> => |grid: 10: 22>
+
+-- learn home location:
+home |cell> => current |cell>
+
+-- learn ant location:
+location |ant> => home |cell>
+
+
+-- start with no food at home:
+stored-food home |cell> => |0>
+
+-- learn the list of directions:
+list-of |directions> => |op: N> + |op: NE> + |op: E> + |op: SE> + |op: S> + |op: SW> + |op: W> + |op: NW>
+
+
+-- the learn path home operator:
+-- NB: we use add-learn instead of seq-learn so that directions can add up
+-- Ie, a type of path integration
+store-direction (*) #=>
+    path |home> +=> |__self>
+
+-- find return path:
+-- "invert-direction" and "expand" operators are defined down lower:
+return-path |home> #=>
+    invert-direction expand path |home>
+
+
+-- choose a heading when leaving the nest:
+heading |ops> => pick-elt list-of |directions>
+
+-- start by not carrying any food:
+carry |food> => |0>
+
+-- start with scent trail off:
+lay |scent> => |no>
+
+-- start with random walk type:
+type |walk> => |op: random-walk>
+
+
+-- place some food:
+food |grid: 2: 2> => |3>
+food |grid: 2: 3> => |3>
+food |grid: 2: 4> => |3>
+food |grid: 2: 5> => |3>
+food |grid: 3: 5> => |3>
+food |grid: 4: 5> => |3>
+food |grid: 5: 6> => |3>
+food |grid: 6: 6> => |3>
+food |grid: 29: 29> => |20>
+food |grid: 28: 3> => |20>
+
+
+-- show food operator:
+show-food |*> #=>
+    display-grid[30, 30, food] |>
+
+-- show stored-food operator:
+show-stored-food |*> #=>
+    display-grid[30, 30, stored-food] |>
+
+-- show grid operator:
+-- dg |*> #=> display-grid[30, 30] |>
+dg |*> #=> display-grid[30, 30, value, " "] |>
+
+
+-- define a collection of direction related operators:
+-- define identity direction operator:
+id |*> #=> |_self>
+
+-- define no operation operator:
+nop |*> #=> |>
+
+-- define negate direction operator:
+negate |*> #=> -1 |_self>
+
+-- define turn-right operators:
+turn-right |op: S> => |op: SW>
+turn-right |op: SW> => |op: W>
+turn-right |op: W> => |op: NW>
+turn-right |op: NW> => |op: N>
+turn-right |op: N> => |op: NE>
+turn-right |op: NE> => |op: E>
+turn-right |op: E> => |op: SE>
+turn-right |op: SE> => |op: S>
+
+-- define turn-left operators:
+turn-left |op: S> => |op: SE>
+turn-left |op: SW> => |op: S>
+turn-left |op: W> => |op: SW>
+turn-left |op: NW> => |op: W>
+turn-left |op: N> => |op: NW>
+turn-left |op: NE> => |op: N>
+turn-left |op: E> => |op: NE>
+turn-left |op: SE> => |op: E>
+
+-- define reverse operators:
+reverse-dir |op: S> => |op: N>
+reverse-dir |op: SW> => |op: NE>
+reverse-dir |op: W> => |op: E>
+reverse-dir |op: NW> => |op: SE>
+reverse-dir |op: N> => |op: S>
+reverse-dir |op: NE> => |op: SW>
+reverse-dir |op: E> => |op: W>
+reverse-dir |op: SE> => |op: NW>
+
+-- define expand operators:
+expand |op: S> => -1 |op: N>
+expand |op: SW> => -1 |op: N> -1 |op: E>
+expand |op: W> => -1 |op: E>
+expand |op: NW> => |op: N> -1 |op: E>
+expand |op: N> => |op: N>
+expand |op: NE> => |op: N> + |op: E>
+expand |op: E> => |op: E>
+expand |op: SE> => -1 |op: N> + |op: E>
+
+
+-- invert the given direction:
+invert-direction |*> #=>
+    if(is-less-than[0] push-float |__self>, |op: negate>, |op: reverse-dir>) |__self>
+
+
+
+-- not sure we use carry-the |food> and drop-the |food> anywhere
+-- So potentially delete them
+-- carry the food operator:
+carry-the |food> #=>
+    food current |cell> => minus[1] food current |cell>
+    carry |food> => plus[1] carry |food>
+
+
+-- drop the food operator:
+drop-the |food> #=>
+    stored-food current |cell> => arithmetic(stored-food |_self>, |+>, carry |food>) |>
+    carry |food> => |0>
+
+
+-- if there is food at the current cell, and not already carry food, then apply |op: found-food>, else do nothing:
+if-find-food |*> #=>
+    if( and(is-greater-than[0] food current |cell>, is-equal[0] carry |food>) |>, |op: found-food>, |op: not-found-food>) |>
+
+found-food |*> #=>
+    food current |cell> => minus[1] food current |cell>
+    carry |food> => plus[1] carry |food>
+    lay |scent> => |yes>
+    type |walk> => |op: return-home>
+
+not-found-food |*> #=> |>
+
+
+-- the if-reach-home operator:
+-- if current cell is home cell then apply |op: reached-home>, else do nothing:
+if-reach-home |*> #=>
+    if( is-equal(current |cell>, home |cell>) |>, |op: reached-home>, |op: not-reached-home>) |>
+
+
+-- drop and store any food you are carrying:
+reached-home |*> #=>
+    stored-food current |cell> => arithmetic(stored-food |_self>, |+>, carry |food>) |>
+    carry |food> => |0>
+    lay |scent> => |no>
+    type |walk> => |op: random-walk>
+    path |home> => |home>
+
+not-reached-home |*> #=> |>
+
+
+record-scent |*> #=>
+    if(lay |scent>, |op: apply-scent>, |op: nop>) |>
+
+apply-scent |*> #=>
+    value current |cell> => plus[1] value current |cell>
+
+
+
+if-find-scent-change-heading |*> #=>
+    if(is-greater-than[0] value |__self>, |op: found-scent>, |op: nop>) |>
+
+found-scent |*> #=>
+    heading |ops> => random-if-zero reverse-dir return-path |home>
+
+random-if-zero (*) #=>
+    if(do-you-know sdrop |__self>, |op: id>, |op: pick-random-direction>) |__self>
+
+pick-random-direction |*> #=> pick-elt list-of |directions>
+
+
+
+switch-on-random |*> #=>
+    type |walk> => |op: random-walk>
+
+switch-on-return |*> #=>
+    type |walk> => |op: return-home>
+
+
+take-a-step |*> #=>
+    current |direction> => apply( type |walk>, current |cell>) |>
+    path |home> +=> current |direction>
+    current |cell> => apply( current |direction>, current |cell>) |>
+    location |ant> => current |cell>
+    if-find-food |>
+    if-reach-home |>
+
+
+-- random-walk input is a grid location:
+-- random-walk has to return a direction:
+random-walk |*> #=>
+    if-find-scent-change-heading |__self>
+    --
+    -- blur heading:
+    heading |ops> => normalize ( 0.1 turn-left^2 + 0.25 turn-left + 15 + 0.25 turn-right + 0.1 turn-right^2 ) heading |ops>
+    --
+    -- try a direction:
+    try |direction> => clean weighted-pick-elt heading |ops>
+    --
+    -- if valid direction, step, else turn right:
+    if( do-you-know apply(try |direction>, |__self>) |>, |op: valid-step>, |op: not-valid-step>) |>
+
+valid-step |*> #=>
+    try |direction>
+
+not-valid-step |*> #=>
+    heading |ops> => pick-elt ( turn-right + turn-right^2 ) heading |ops>
+    |op: id>
+
+
+-- return-home input is a grid location (which we ignore, instead making use of return-path |home>):
+-- return-home returns a direction one step closer to home:
+return-home |*> #=> clean weighted-pick-elt return-path |home>
+
+
+-- single map update:
+update |*> #=>
+    record-scent |>
+    take-a-step |>
+    dg |>
+    |>
+
+-- walk max steps:
+walk |*> #=> sdrop update srange(|1>, max |steps>) |>
+
+
+print-usage |*> #=>
+    print | >
+    print |    Usage:>
+    print |        make the ant walk max steps:>
+    print |        walk>
+    print | >
+    print |        show all the available food:>
+    print |        show-food>
+    print | >
+    print |        show all the stored food:>
+    print |        show-stored-food>
+    print | >
+    print |        display grid:>
+    print |        dg>
+    print | >
+
+print-usage |>
+
+
