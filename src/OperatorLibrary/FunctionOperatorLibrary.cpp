@@ -685,12 +685,15 @@ Sequence op_find_path_between(ContextList &context, const Sequence &input_seq, c
         std::vector<ulong> s_ops = context.supported_ops(u);
 
         for (const ulong s_op: s_ops) {
-            ulong v = context.recall(s_op, u)->to_ket().label_idx();
-            if (Q.find(v) != Q.end()) {
-                unsigned int alt = dist[u] + 1;  // all neighbours are 1 step away.
-                if (alt < dist[v]) {
-                    dist[v] = alt;
-                    prev[v] = u;
+            Superposition neighbours = context.recall(s_op, u)->to_sp();
+            for (const auto &k: neighbours) {
+                ulong v = k.label_idx();
+                if (Q.find(v) != Q.end()) {
+                    unsigned int alt = dist[u] + 1;  // all neighbours are 1 step away.
+                    if (alt < dist[v]) {
+                        dist[v] = alt;
+                        prev[v] = u;
+                    }
                 }
             }
         }
@@ -741,13 +744,16 @@ Sequence op_find_operators_between(ContextList &context, const Sequence &input_s
         std::vector<ulong> s_ops = context.supported_ops(u);
 
         for (const ulong s_op: s_ops) {
-            ulong v = context.recall(s_op, u)->to_ket().label_idx();
-            if (Q.find(v) != Q.end()) {
-                unsigned int alt = dist[u] + 1;  // all neighbours are 1 step away.
-                if (alt < dist[v]) {
-                    dist[v] = alt;
-                    prev[v] = u;
-                    prev_op[v] = s_op;
+            Superposition neighbours = context.recall(s_op, u)->to_sp();
+            for (const auto &k: neighbours) {
+                ulong v = k.label_idx();
+                if (Q.find(v) != Q.end()) {
+                    unsigned int alt = dist[u] + 1;  // all neighbours are 1 step away.
+                    if (alt < dist[v]) {
+                        dist[v] = alt;
+                        prev[v] = u;
+                        prev_op[v] = s_op;
+                    }
                 }
             }
         }
