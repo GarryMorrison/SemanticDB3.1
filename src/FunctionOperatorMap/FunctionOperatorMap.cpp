@@ -308,6 +308,9 @@ FunctionOperatorMap::FunctionOperatorMap() {
 
     idx = ket_map.get_idx("to-comma-number");
     fn_map.ket_fn.emplace(idx, &op_to_comma_number);
+
+    idx = ket_map.get_idx("find-path-between");
+    fn_map.context_whitelist_2.emplace(idx, &op_find_path_between);
 }
 
 template <class T>
