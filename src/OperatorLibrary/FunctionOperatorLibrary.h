@@ -38,5 +38,6 @@ Sequence op_xor2(const Sequence &input_seq, const Sequence &one, const Sequence 
 Sequence op_smap3(ContextList &context, const Sequence &input_seq, const Sequence &one, const Sequence &two, const Sequence &three);
 Sequence op_is_equal2(const Sequence &input_seq, const Sequence &seq1, const Sequence &seq2);
 Sequence op_find_path_between(ContextList &context, const Sequence &input_seq, const Sequence &seq1, const Sequence &seq2);
+Sequence op_find_operators_between(ContextList &context, const Sequence &input_seq, const Sequence &seq1, const Sequence &seq2);
 
 #endif //SDB3_1_FUNCTIONOPERATORLIBRARY_H

@@ -709,3 +709,59 @@ Sequence op_find_path_between(ContextList &context, const Sequence &input_seq, c
     result.append(source_sp);
     return result.sreverse();
 }
+
+Sequence op_find_operators_between(ContextList &context, const Sequence &input_seq, const Sequence &seq1, const Sequence &seq2) {
+    ulong source = seq1.to_ket().label_idx();
+    ulong target = seq2.to_ket().label_idx();
+    std::vector<ulong> Q_vec = context.relevant_kets("*");
+    std::set<ulong> Q(Q_vec.begin(), Q_vec.end());
+    std::map<ulong, unsigned int> dist;
+    std::map<ulong, ulong> prev;
+    std::map<ulong, ulong> prev_op;
+
+    ulong u = source;
+
+    for (const ulong vertex: Q) {
+        dist[vertex] = std::numeric_limits<unsigned int>::max();
+    }
+    dist[source] = 0;
+
+    while (!Q.empty()) {
+        unsigned int min_dist = std::numeric_limits<unsigned int>::max();
+        for (const ulong vertex: Q) {
+            if (dist[vertex] < min_dist) {
+                u = vertex;
+                min_dist = dist[vertex];
+            }
+        }
+        if (u == target) {
+            break;
+        }
+        Q.erase(u);
+        std::vector<ulong> s_ops = context.supported_ops(u);
+
+        for (const ulong s_op: s_ops) {
+            ulong v = context.recall(s_op, u)->to_ket().label_idx();
+            if (Q.find(v) != Q.end()) {
+                unsigned int alt = dist[u] + 1;  // all neighbours are 1 step away.
+                if (alt < dist[v]) {
+                    dist[v] = alt;
+                    prev[v] = u;
+                    prev_op[v] = s_op;
+                }
+            }
+        }
+    }
+
+    Sequence result;
+    u = target;
+    if (prev.find(u) != prev.end() || u == source) {
+        while (prev.find(u) != prev.end()) {
+            ulong idx = ket_map.get_idx("op: " + ket_map.get_str(prev_op[u]));
+            Superposition tmp(idx);
+            result.append(tmp);
+            u = prev[u];
+        }
+    }
+    return result.sreverse();
+}

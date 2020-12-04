@@ -311,6 +311,10 @@ FunctionOperatorMap::FunctionOperatorMap() {
 
     idx = ket_map.get_idx("find-path-between");
     fn_map.context_whitelist_2.emplace(idx, &op_find_path_between);
+
+    idx = ket_map.get_idx("find-operators-between");
+    fn_map.context_whitelist_2.emplace(idx, &op_find_operators_between);
+
 }
 
 template <class T>
