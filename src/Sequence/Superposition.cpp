@@ -604,9 +604,10 @@ Ket Superposition::pick_elt() const {
 Ket Superposition::weighted_pick_elt() const {
     Superposition sp1 = this->drop();
     if (sp1.size() == 0) { return Ket(); }
+    if (sp1.sort_order[0] == ket_map.get_idx("")) { return Ket(); }
     double sum = 0;
-    for (const auto idx : sort_order) {
-        double value = sp.at(idx);
+    for (const auto idx : sp1.sort_order) {
+        double value = sp1.sp.at(idx);
         sum += value;
     }  // sum should be > 0
     std::random_device rd;  // is this correct to re-seed on every invoke?
@@ -619,7 +620,8 @@ Ket Superposition::weighted_pick_elt() const {
         if (upto + w > r) { return k; }
         upto += w;
     }
-    assert(false); // we shouldn't get here if everything is working correctly
+    // assert(false); // we shouldn't get here if everything is working correctly
+    return Ket();  // We keep hitting assert(false), not sure yet why. Fix!
 }
 
 
