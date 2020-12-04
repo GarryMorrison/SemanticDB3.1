@@ -146,15 +146,15 @@ invert-direction |*> #=>
 -- not sure we use carry-the |food> and drop-the |food> anywhere
 -- So potentially delete them
 -- carry the food operator:
-carry-the |food> #=>
-    food current |cell> => minus[1] food current |cell>
-    carry |food> => plus[1] carry |food>
+-- carry-the |food> #=>
+--     food current |cell> => minus[1] food current |cell>
+--     carry |food> => plus[1] carry |food>
 
 
 -- drop the food operator:
-drop-the |food> #=>
-    stored-food current |cell> => arithmetic(stored-food |_self>, |+>, carry |food>) |>
-    carry |food> => |0>
+-- drop-the |food> #=>
+--     stored-food current |cell> => arithmetic(stored-food |_self>, |+>, carry |food>) |>
+--     carry |food> => |0>
 
 
 -- if there is food at the current cell, and not already carry food, then apply |op: found-food>, else do nothing:
@@ -261,12 +261,18 @@ update |*> #=>
 -- walk max steps:
 walk |*> #=> sdrop update srange(|1>, max |steps>) |>
 
+-- walk given steps:
+walk-steps |*> #=> sdrop update srange(|1>, |_self>) |>
+
 
 print-usage |*> #=>
     print | >
     print |    Usage:>
     print |        make the ant walk max steps:>
     print |        walk>
+    print | >
+    print |        make the ant walk the given number of steps:>
+    print |        walk-steps ket(500)>
     print | >
     print |        show all the available food:>
     print |        show-food>
