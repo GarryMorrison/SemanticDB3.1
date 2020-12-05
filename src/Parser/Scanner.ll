@@ -81,8 +81,8 @@ yylloc->step();
 
 "|"[^<|>]*">" { yylval->ulongVal = get_ket_idx(yytext, yyleng); return token::KET_LABEL; }
 
-[a-zA-Z!][a-zA-Z0-9\-\+!\?\.:]+ { yylval->ulongVal = get_op_idx(yytext, yyleng); return token::OP_LABEL; }
-[a-zA-Z!][a-zA-Z0-9\-\+!\?\.:]+"(" { yylval->ulongVal = get_op_idx(yytext, yyleng - 1); return token::FN_LPAREN; }
+[a-zA-Z!][a-zA-Z0-9\-\+!\?\.:]* { yylval->ulongVal = get_op_idx(yytext, yyleng); return token::OP_LABEL; }
+[a-zA-Z!][a-zA-Z0-9\-\+!\?\.:]*"(" { yylval->ulongVal = get_op_idx(yytext, yyleng - 1); return token::FN_LPAREN; }
 
 "\""[^\"\[\]<|>]*"\"" { yylval->stringVal = new std::string(++yytext, yyleng - 2); return token::STRING; }
 
