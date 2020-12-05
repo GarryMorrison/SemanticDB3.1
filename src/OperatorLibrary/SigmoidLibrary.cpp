@@ -52,3 +52,8 @@ double op_sigmoid_in_range(const double x, const std::vector<std::shared_ptr<Com
     if (a <= x && x <= b) { return x; }
     return 0.0;
 }
+
+double ReLU(const double x) {
+    if (x <= 0) { return 0.0; }
+    return x;
+}

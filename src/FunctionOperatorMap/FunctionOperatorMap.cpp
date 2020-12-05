@@ -20,6 +20,8 @@ FunctionOperatorMap::FunctionOperatorMap() {
     idx = ket_map.get_idx("clean");
     fn_map.sigmoids.emplace(idx, &clean);
 
+    idx = ket_map.get_idx("ReLU");
+    fn_map.sigmoids.emplace(idx, &ReLU);
 
     idx = ket_map.get_idx("shuffle");
     fn_map.built_in.emplace(idx, &Sequence::shuffle);

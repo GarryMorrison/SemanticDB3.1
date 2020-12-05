@@ -29,7 +29,19 @@ OperatorUsageMap::OperatorUsageMap() {
             "        drop clean (3|a> + 2.2|b> - 3 |c> + |d>)\n"
             "            |a> + |b> + |d>\n\n"
             "    see also:\n"
-            "        drop\n";
+            "        drop, ReLU\n";
+
+    operator_usage_map.map["ReLU"] =
+            "\nReLU:\n"
+            "    description:\n"
+            "        ReLU ket\n"
+            "        if x <= 0, return 0, else return x\n"
+            "        see: https://en.wikipedia.org/wiki/Rectifier_(neural_networks)\n\n"
+            "    examples:\n"
+            "        ReLU (3|a> + 2.2|b> - 3 |c> + |d>)\n"
+            "            3|a> + 2.200000|b> + 0|c> + |d>\n\n"
+            "    see also:\n"
+            "        clean\n";
 
     operator_usage_map.map["drop"] =
             "\ndrop:\n"
@@ -1308,7 +1320,7 @@ OperatorUsageMap::OperatorUsageMap() {
             "        find-operators-between(|grid: 0: 0>, |grid: 5: 6>)\n"
             "            |op: E> . |op: SE> . |op: SE> . |op: SE> . |op: SE> . |op: SE>\n\n"
             "        -- a quick demonstration that this is correct:\n"
-            "        E SE SE SE SE SE |grid: 0: 0>\n"
+            "        SE SE SE SE SE E |grid: 0: 0>\n"
             "            |grid: 5: 6>\n\n\n"
             "        -- find pathway through a friend network:\n"
             "        -- first define some friends:\n"

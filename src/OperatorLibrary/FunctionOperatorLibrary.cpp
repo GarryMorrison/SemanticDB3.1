@@ -655,6 +655,7 @@ Sequence op_is_equal2(const Sequence &input_seq, const Sequence &seq1, const Seq
 }
 
 // Implement Dijkstra's algorithm:
+// Currently infinite loop if there is no pathway. Fix!
 Sequence op_find_path_between(ContextList &context, const Sequence &input_seq, const Sequence &seq1, const Sequence &seq2) {
     ulong source = seq1.to_ket().label_idx();
     ulong target = seq2.to_ket().label_idx();
@@ -713,6 +714,7 @@ Sequence op_find_path_between(ContextList &context, const Sequence &input_seq, c
     return result.sreverse();
 }
 
+// Currently infinite loop if there is no pathway. Fix!
 Sequence op_find_operators_between(ContextList &context, const Sequence &input_seq, const Sequence &seq1, const Sequence &seq2) {
     ulong source = seq1.to_ket().label_idx();
     ulong target = seq2.to_ket().label_idx();
@@ -745,9 +747,11 @@ Sequence op_find_operators_between(ContextList &context, const Sequence &input_s
 
         for (const ulong s_op: s_ops) {
             Superposition neighbours = context.recall(s_op, u)->to_sp();
+            // bool found_neighbour = false;
             for (const auto &k: neighbours) {
                 ulong v = k.label_idx();
                 if (Q.find(v) != Q.end()) {
+                    // found_neighbour = true;
                     unsigned int alt = dist[u] + 1;  // all neighbours are 1 step away.
                     if (alt < dist[v]) {
                         dist[v] = alt;
@@ -756,6 +760,9 @@ Sequence op_find_operators_between(ContextList &context, const Sequence &input_s
                     }
                 }
             }
+            // if (!found_neighbour) {
+            //     return Sequence("path not found");
+            // }
         }
     }
 
