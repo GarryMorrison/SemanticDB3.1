@@ -1280,6 +1280,54 @@ OperatorUsageMap::OperatorUsageMap() {
             "    see also:\n"
             "        select";
 
+    operator_usage_map.map["find-path-between"] =
+            "\nfind-path-between:\n"
+            "    description:\n"
+            "        find-path-between(ket1, ket2)\n"
+            "        Use Dijkstra's algorithm to find the shortest path between ket1 and ket2\n"
+            "        See: https://en.wikipedia.org/wiki/Dijkstra%27s_algorithm\n"
+            "        To instead find the operators required to get from ket1 to ket2 see find-operators-between().\n\n"
+            "    examples:\n"
+            "        -- learn a grid, then find a path:\n"
+            "        learn-grid[10, 10]\n"
+            "        find-path-between(|grid: 0: 0>, |grid: 5: 5>)\n"
+            "            |grid: 0: 0> . |grid: 1: 1> . |grid: 2: 2> . |grid: 3: 3> . |grid: 4: 4> . |grid: 5: 5>\n\n"
+            "    see also:\n"
+            "        find-operators-between";
+
+    operator_usage_map.map["find-operators-between"] =
+            "\nfind-operators-between:\n"
+            "    description:\n"
+            "        find-operators-between(ket1, ket2)\n"
+            "        Use Dijkstra's algorithm to find the shortest path between ket1 and ket2\n"
+            "        See: https://en.wikipedia.org/wiki/Dijkstra%27s_algorithm\n"
+            "        Same as find-path-between(), except we instead return the operator sequence required to get from ket1 to ket2\n\n"
+            "    examples:\n"
+            "        -- learn a grid, then find a path:\n"
+            "        learn-grid[10, 10]\n"
+            "        find-operators-between(|grid: 0: 0>, |grid: 5: 5>)\n"
+            "            |op: SE> . |op: SE> . |op: SE> . |op: SE> . |op: SE>\n\n"
+            "        -- a quick demonstration that this is correct:\n"
+            "        SE SE SE SE SE |grid: 0: 0>\n"
+            "            |grid: 5: 5>\n\n\n"
+            "        -- find pathway through a friend network:\n"
+            "        -- first define some friends:\n"
+            "        friends |Fred> => |Jack> + |Harry> + |Ed> + |Mary> + |Rob> + |Patrick> + |Emma> + |Charlie>\n"
+            "        friends |Sam> => |Charlie> + |George> + |Emma> + |Jack> + |Robert> + |Frank> + |Julie>\n\n"
+            "        -- find inverse friends links:\n"
+            "        find-inverse[friends]\n\n"
+            "        -- find friend pathway from Fred to Sam:\n"
+            "        find-operators-between(|Fred>, |Sam>)\n"
+            "            |op: friends> . |op: inverse-friends>\n\n"
+            "        -- find friend pathway from Fred to Julie:\n"
+            "        find-operators-between(|Fred>, |Julie>)\n"
+            "            |op: friends> . |op: inverse-friends> . |op: friends>\n\n"
+            "        -- verify we reach Julie using this operator sequence:\n"
+            "        friends inverse-friends friends |Fred>\n"
+            "            11|Jack> + 8|Harry> + 8|Ed> + 8|Mary> + 8|Rob> + 8|Patrick> + 11|Emma> + 11|Charlie> + 3|George> + 3|Robert> + 3|Frank> + 3|Julie>\n\n"
+            "    see also:\n"
+            "        find-path-between, find-inverse";
+
 }
 
 std::string OperatorUsageMap::get_usage(const std::string &s) const {
