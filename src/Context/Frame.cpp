@@ -149,7 +149,7 @@ std::shared_ptr<BaseSequence> Frame::recall(const ulong op_idx) {
     if (ptr_rules.find(op_idx) == ptr_rules.end()) {
         // std::shared_ptr<BaseSequence> result = std::make_shared<Superposition>();  // Maybe we should be returning Sequence instead.
         // return result;
-        return std::make_shared<Sequence>();
+        return std::make_shared<Sequence>("");
     }
     // std::shared_ptr<BaseSequence> result = ptr_rules[op_idx];  // Can we merge this into one line?
     // return result;

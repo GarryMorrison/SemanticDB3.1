@@ -340,6 +340,10 @@ std::shared_ptr<BaseSequence> NewContext::recall(const ulong op_idx, const ulong
         if (result->size() != 0) { return result; };
     }
 
+    if (op_idx == ket_map.get_idx("supported-ops")) {  // We should have found supported-ops by now.
+        return std::make_shared<Sequence>("");            // We don't want label descent for this case.
+    }
+
     ulong star_idx = ket_map.get_idx("*");  // implement label descent, not sure cost of this vs just splitting strings approach
     auto label_split_idx = ket_map.get_split_idx(trial_label_idx);  // Maybe use recall_type() before jumping into label descent?
     while (!label_split_idx.empty()) {
@@ -358,7 +362,7 @@ std::shared_ptr<BaseSequence> NewContext::recall(const ulong op_idx, const ulong
     // std::shared_ptr<BaseSequence> result2;  // Caused a memory access bug!
     // std::shared_ptr<BaseSequence> result2 = std::make_shared<Sequence>();
     // return result2;
-    return std::make_shared<Sequence>();
+    return std::make_shared<Sequence>("");
 }
 
 unsigned int NewContext::recall_type(const std::string& op, const std::string& label) {

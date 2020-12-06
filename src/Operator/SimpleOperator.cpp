@@ -36,7 +36,7 @@ Sequence SimpleOperator::Compile(NewContext& context, const Sequence& seq) const
             // std::cout << "b_rule: " << b_rule->to_string() << std::endl;
             // std::cout << "b_rule type: " << b_rule->type() << std::endl;
             Sequence seq3 = b_rule->to_seq();  // Need to test these three lines are right ...
-            seq3.multiply(k.value());
+            // seq3.multiply(k.value());
             seq2.add(seq3);
         }
         result.append(seq2);
