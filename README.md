@@ -123,7 +123,7 @@ friends |Tim> => |Fred> . |Beth> . |Mary>
 Though I'm not sure why friends would be time ordered. Maybe we need a better example.
 
 **Stored-learn-rule**:
-Stores the right hand side in memory (in a compact form, after it has been parsed), and only evaluates it on invoke time. Most of the interesting user defined operators are of this type.
+Stores the right hand side in memory (in a compact form, after it has been parsed), and only evaluates it at invoke time. Most of the interesting user defined operators are of this type.
 
 **Memoizing-learn-rule**:
 Very similar to stored-learn-rule but with one big difference. Once the right hand side is evaluated, it is then written in place, or [memoized](https://en.wikipedia.org/wiki/Memoization). This is used when you don't want to calculate a value over and over again. A good use case is the Fibonacci sequence, or factorial:
@@ -240,7 +240,7 @@ Given an input sequence, `similar-input` looks for all kets that have `pattern` 
 If-Then Machines
 ----------------
 
-Next, we will describe if-then machines, a simplified model of a neuron. The general idea is for each `neuron` we have a collection of patterns defined, where those patterns are sequences. When we invoke our if-then machines, if the input sequence matches one of those patterns with sufficiently high similarity (specified using drop-below), then the `neuron` fires, and the output pattern is returned. In practice it seems the best results are when the output pattern is a ket or a superposition, rather than a sequence of length greater than 1. An abstract example of a single if-then machine looks like:
+Next, we will describe if-then machines, a simplified model of a neuron. The general idea is for each `neuron` we have a collection of patterns defined, where those patterns are sequences. When we invoke our if-then machines, if the input sequence matches one of those patterns with sufficiently high similarity (specified using `drop-below[]`), then the `neuron` fires, and the output pattern is returned. In practice it seems the best results are when the output pattern is a ket or a superposition, rather than a sequence of length greater than 1. An abstract example of a single if-then machine looks like:
 ```
 pattern |node: 1: 1> => seq1
 pattern |node: 1: 2> => seq2
@@ -288,3 +288,8 @@ Semantic DB Shell
 
 Once the main project is compiled (hopefully it is not too difficult to do so), we interact with the system by way of the SDB shell. This is where we load, type, interact and then save knoweldge. Invoke on the command line with `--help` to see brief usage information. Invoke with `-i` or `--interactive` to enter the shell. Once in the shell, type `help` to see the inline help message. Type `usage` to see a list of operators available in our operator library. Type `usage op` to see the specific usage information for the specified operator (note that currently some operators do not have usage information defined, but that will slowly improve).
 
+---
+
+contact: garry -at- semantic-db.org
+
+Last updated: 7th December 2020

@@ -121,7 +121,7 @@ const std::string Superposition::to_string() const {
 }
 
 const std::string Superposition::readable_display() const {
-    if (sp.empty()) { return "|>"; }
+    if (sp.empty()) { return ""; }
 
     std::string s;
     std::string label;
