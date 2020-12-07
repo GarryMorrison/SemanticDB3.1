@@ -317,6 +317,9 @@ FunctionOperatorMap::FunctionOperatorMap() {
     idx = ket_map.get_idx("find-operators-between");
     fn_map.context_whitelist_2.emplace(idx, &op_find_operators_between);
 
+    idx = ket_map.get_idx("digit2sp");
+    fn_map.sp_fn.emplace(idx, &digit2sp);
+
 }
 
 template <class T>

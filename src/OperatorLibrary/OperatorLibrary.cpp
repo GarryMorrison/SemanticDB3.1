@@ -6,6 +6,7 @@
 #include <string>
 #include <iomanip>
 #include <cmath>
+#include <set>
 #include "OperatorLibrary.h"
 #include "../CompoundConstant/ConstantString.h"
 #include "../Function/misc.h"
@@ -1166,4 +1167,126 @@ Ket op_to_comma_number(const Ket k) {
         }
     }
     return k;
+}
+
+
+// if (t1, t2) is a grid-neighbour of (s1,s2) of distance k, return true, else false
+bool is_grid_neighbour(int s1, int s2, int t1, int t2, int k) {
+    bool is_full_neighbour = (s1 - k <= t1 && t1 <= s1 + k) && (s2 - k <= t2 && t2 <= s2 + k);
+    bool is_inner_neighbour = (s1 - k + 1 <= t1 && t1 <= s1 + k - 1) && (s2 - k + 1 <= t2 && t2 <= s2 + k - 1);
+    return is_full_neighbour && !is_inner_neighbour;
+}
+
+// Is there a smarter way to implement this function?
+unsigned int grid_distance(int s1, int s2, int t1, int t2, int max_k) {
+    for (int k = 0; k < max_k; k++) {
+        if (is_grid_neighbour(s1, s2, t1, t2, k)) { return k; }
+    }
+    return max_k;
+}
+
+Superposition digit2sp(const Superposition &sp) {
+    if (sp.size() == 0) { return Superposition(""); }
+    std::cout << "sp: " << sp.to_string() << std::endl;
+    int max_k = 5;  // In practice, this needs to be larger. For MNIST, somewhere around 28.
+
+    std::set<ulong> Q;
+    std::map<ulong, unsigned int> dist;
+    std::map<ulong, ulong> prev;
+    std::map<ulong, std::set<ulong>> nghbrs;
+    std::map<std::pair<ulong, ulong>, unsigned int> the_grid_distances;
+    std::map<std::pair<ulong, ulong>, unsigned int> the_operator_distances;
+
+    for (const auto &k1: sp) {
+        auto k1_vec = k1.label_split_idx();
+        if (k1_vec.size() < 2) {
+            continue;
+        }
+        ulong vertex1 = k1.label_idx();
+        int s0 = std::stoi(ket_map.get_str(k1_vec[0]));
+        int s1 = std::stoi(ket_map.get_str(k1_vec[1]));
+        for (const auto &k2: sp) {
+            auto k2_vec = k2.label_split_idx();
+            if (k2_vec.size() < 2) {
+                continue;
+            }
+            ulong vertex2 = k2.label_idx();
+            int t0 = std::stoi(ket_map.get_str(k2_vec[0]));
+            int t1 = std::stoi(ket_map.get_str(k2_vec[1]));
+            if (vertex1 == vertex2) {
+                continue;
+            }
+            unsigned int grid_dist = grid_distance(s0, s1, t0, t1, max_k);
+            std::cout << "(" << s0 << ", " << s1 << ") (" << t0 << ", " << t1 << ") grid-distance: " << grid_dist << std::endl;
+            the_grid_distances[std::make_pair(vertex1,vertex2)] = grid_dist;
+            if (grid_dist == 1) {  // Add to the neighbours set:
+                nghbrs[vertex1].emplace(vertex2);
+            }
+        }
+    }
+    for (const auto &k: sp) {  // print out the neighbours map to check for correctness.
+        ulong vertex = k.label_idx();
+        std::cout << "vertex: " << k.to_string() << " nghbrs: ";
+        for (const auto &v: nghbrs[vertex]) {
+            std::cout << ket_map.get_str(v) << ", ";
+        }
+        std::cout << std::endl;
+    }
+
+    for (const auto &k1: sp) {
+        ulong u = k1.label_idx();
+        Q.clear();
+        prev.clear();
+        for (const auto &k2: sp) {  // populate the the_operator_distances map:
+            ulong vertex2 = k2.label_idx();
+            Q.emplace(vertex2);
+            dist[vertex2] = std::numeric_limits<unsigned int>::max();
+        }
+        dist[u] = 0;
+        while (!Q.empty()) {
+            unsigned int min_dist = std::numeric_limits<unsigned int>::max();
+            for (const ulong vertex: Q) {
+                if (dist[vertex] < min_dist) {
+                    u = vertex;
+                    min_dist = dist[vertex];
+                }
+            }
+            Q.erase(u);
+            for (const auto &v: nghbrs[u]) {
+                if (Q.find(v) != Q.end()) {
+                    unsigned int alt = dist[u] + 1;  // all neighbours are 1 step away.
+                    if (alt < dist[v]) {
+                        dist[v] = alt;
+                        prev[v] = u;
+                    }
+                }
+            }
+        }
+        for (const auto &k2: sp) {
+            ulong v = k2.label_idx();
+            unsigned int op_dist = 0;
+            if (prev.find(v) != prev.end() || v == k1.label_idx()) {
+                while (prev.find(v) != prev.end()) {
+                    op_dist++;
+                    v = prev[v];
+                }
+            }
+            the_operator_distances[std::make_pair(k1.label_idx(), k2.label_idx())] = op_dist;
+            std::cout << "op_dist: " << k1.to_string() << " " << k2.to_string() << ": " << op_dist << std::endl;
+        }
+    }
+    // Finally, calculate the result:
+    Superposition result;
+    for (const auto &k1: sp) {
+        ulong vertex1 = k1.label_idx();
+        for (const auto &k2: sp) {
+            ulong vertex2 = k2.label_idx();
+            if (vertex1 != vertex2) {
+                unsigned int dist_delta = the_operator_distances[std::make_pair(vertex1, vertex2)] - the_grid_distances[std::make_pair(vertex1, vertex2)];
+                Ket delta_ket(std::to_string(dist_delta));
+                result.add(delta_ket);
+            }
+        }
+    }
+    return result;
 }
