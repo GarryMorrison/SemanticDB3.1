@@ -1185,10 +1185,17 @@ unsigned int grid_distance(int s1, int s2, int t1, int t2, int max_k) {
     return max_k;
 }
 
-Superposition digit2sp(const Superposition &sp) {
+Superposition digit2sp(const Superposition &sp, const std::vector<std::shared_ptr<CompoundConstant> > &parameters) {
     if (sp.size() == 0) { return Superposition(""); }
     std::cout << "sp: " << sp.to_string() << std::endl;
-    int max_k = 5;  // In practice, this needs to be larger. For MNIST, somewhere around 28.
+    int max_k = 28;  // In practice, this needs to be larger. For MNIST, somewhere around 28.
+    unsigned int min_grid_dist = 1;
+    if (parameters.size() == 1) {
+        int tmp = parameters[0]->get_int();
+        if (tmp > 0) {
+            min_grid_dist = tmp;
+        }
+    }
 
     std::set<ulong> Q;
     std::map<ulong, unsigned int> dist;
@@ -1243,7 +1250,7 @@ Superposition digit2sp(const Superposition &sp) {
             dist[vertex2] = std::numeric_limits<unsigned int>::max();
         }
         dist[u] = 0;
-        while (!Q.empty()) {
+        while (!Q.empty()) {  // Currently an infinite loop if there are objects in Q that can not be reached from u. I don't yet know how to fix!
             unsigned int min_dist = std::numeric_limits<unsigned int>::max();
             for (const ulong vertex: Q) {
                 if (dist[vertex] < min_dist) {
@@ -1282,9 +1289,13 @@ Superposition digit2sp(const Superposition &sp) {
         for (const auto &k2: sp) {
             ulong vertex2 = k2.label_idx();
             if (vertex1 != vertex2) {
-                unsigned int dist_delta = the_operator_distances[std::make_pair(vertex1, vertex2)] - the_grid_distances[std::make_pair(vertex1, vertex2)];
-                Ket delta_ket(std::to_string(dist_delta));
-                result.add(delta_ket);
+                unsigned int the_grid_dist = the_grid_distances[std::make_pair(vertex1, vertex2)];
+                unsigned int the_op_dist = the_operator_distances[std::make_pair(vertex1, vertex2)];
+                unsigned int dist_delta = the_op_dist - the_grid_dist;  // NB: the operator distance should always be longer than the grid distance!
+                if (the_grid_dist >= min_grid_dist) {
+                    Ket delta_ket(std::to_string(dist_delta));
+                    result.add(delta_ket);
+                }
             }
         }
     }
