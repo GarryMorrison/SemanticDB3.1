@@ -4,6 +4,7 @@
 
 #include "SigmoidLibrary.h"
 #include "../CompoundConstant/ConstantFloat.h"
+#include "../Function/misc.h"
 
 double clean(const double x) {
     if (x <= 0) { return 0.0; }
@@ -56,4 +57,9 @@ double op_sigmoid_in_range(const double x, const std::vector<std::shared_ptr<Com
 double ReLU(const double x) {
     if (x <= 0) { return 0.0; }
     return x;
+}
+
+double op_invert(const double x) {
+    if (double_eq(x, 0.0)) { return 0.0; }
+    return 1 / x;
 }

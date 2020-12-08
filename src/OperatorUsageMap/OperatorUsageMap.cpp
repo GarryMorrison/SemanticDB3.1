@@ -29,7 +29,7 @@ OperatorUsageMap::OperatorUsageMap() {
             "        drop clean (3|a> + 2.2|b> - 3 |c> + |d>)\n"
             "            |a> + |b> + |d>\n\n"
             "    see also:\n"
-            "        drop, ReLU\n";
+            "        drop, ReLU, invert\n";
 
     operator_usage_map.map["ReLU"] =
             "\nReLU:\n"
@@ -41,7 +41,19 @@ OperatorUsageMap::OperatorUsageMap() {
             "        ReLU (3|a> + 2.2|b> - 3 |c> + |d>)\n"
             "            3|a> + 2.200000|b> + 0|c> + |d>\n\n"
             "    see also:\n"
-            "        clean\n";
+            "        clean, invert\n";
+
+    operator_usage_map.map["invert"] =
+            "\ninvert:\n"
+            "    description:\n"
+            "        invert ket\n"
+            "        if x approx == 0, return 0, else return 1 / x\n\n"
+            "    examples:\n"
+            "        invert (3|a> + 2.2|b> - 3 |c> + |d>)\n"
+            "            0.333333|a> + 0.454545|b> - 0.333333|c> + |d>\n\n"
+            "    see also:\n"
+            "        clean, ReLU\n";
+
 
     operator_usage_map.map["drop"] =
             "\ndrop:\n"

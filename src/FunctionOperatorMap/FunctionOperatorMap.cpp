@@ -320,6 +320,9 @@ FunctionOperatorMap::FunctionOperatorMap() {
     idx = ket_map.get_idx("digit2sp");
     fn_map.compound_sp_fn.emplace(idx, &digit2sp);
 
+    idx = ket_map.get_idx("invert");
+    fn_map.sigmoids.emplace(idx, &op_invert);
+
 }
 
 template <class T>

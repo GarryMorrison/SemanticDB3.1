@@ -1187,7 +1187,7 @@ unsigned int grid_distance(int s1, int s2, int t1, int t2, int max_k) {
 
 Superposition digit2sp(const Superposition &sp, const std::vector<std::shared_ptr<CompoundConstant> > &parameters) {
     if (sp.size() == 0) { return Superposition(""); }
-    std::cout << "sp: " << sp.to_string() << std::endl;
+    // std::cout << "sp: " << sp.to_string() << std::endl;
     int max_k = 28;  // In practice, this needs to be larger. For MNIST, somewhere around 28.
     unsigned int min_grid_dist = 1;
     if (parameters.size() == 1) {
@@ -1224,13 +1224,14 @@ Superposition digit2sp(const Superposition &sp, const std::vector<std::shared_pt
                 continue;
             }
             unsigned int grid_dist = grid_distance(s0, s1, t0, t1, max_k);
-            std::cout << "(" << s0 << ", " << s1 << ") (" << t0 << ", " << t1 << ") grid-distance: " << grid_dist << std::endl;
+            // std::cout << "(" << s0 << ", " << s1 << ") (" << t0 << ", " << t1 << ") grid-distance: " << grid_dist << std::endl;
             the_grid_distances[std::make_pair(vertex1,vertex2)] = grid_dist;
             if (grid_dist == 1) {  // Add to the neighbours set:
                 nghbrs[vertex1].emplace(vertex2);
             }
         }
     }
+    /*
     for (const auto &k: sp) {  // print out the neighbours map to check for correctness.
         ulong vertex = k.label_idx();
         std::cout << "vertex: " << k.to_string() << " nghbrs: ";
@@ -1239,6 +1240,7 @@ Superposition digit2sp(const Superposition &sp, const std::vector<std::shared_pt
         }
         std::cout << std::endl;
     }
+    */
 
     for (const auto &k1: sp) {
         ulong u = k1.label_idx();
@@ -1279,7 +1281,7 @@ Superposition digit2sp(const Superposition &sp, const std::vector<std::shared_pt
                 }
             }
             the_operator_distances[std::make_pair(k1.label_idx(), k2.label_idx())] = op_dist;
-            std::cout << "op_dist: " << k1.to_string() << " " << k2.to_string() << ": " << op_dist << std::endl;
+            // std::cout << "op_dist: " << k1.to_string() << " " << k2.to_string() << ": " << op_dist << std::endl;
         }
     }
     // Finally, calculate the result:
@@ -1293,8 +1295,7 @@ Superposition digit2sp(const Superposition &sp, const std::vector<std::shared_pt
                 unsigned int the_op_dist = the_operator_distances[std::make_pair(vertex1, vertex2)];
                 unsigned int dist_delta = the_op_dist - the_grid_dist;  // NB: the operator distance should always be longer than the grid distance!
                 if (the_grid_dist >= min_grid_dist) {
-                    Ket delta_ket(std::to_string(dist_delta));
-                    result.add(delta_ket);
+                    result.add(std::to_string(dist_delta));
                 }
             }
         }
