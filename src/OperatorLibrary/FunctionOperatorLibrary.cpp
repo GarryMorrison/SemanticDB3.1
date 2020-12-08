@@ -487,12 +487,19 @@ Sequence op_if(ContextList &context, const Sequence &input_seq, const Sequence &
 Sequence op_is_mbr(const Sequence &input_seq, const Sequence &one) {
     if (input_seq.size() == 0 || one.size() == 0) { return Ket("no"); }
     ulong ket_idx = one.to_ket().label_idx();
-    for (const auto &k: input_seq.to_sp()) {
+    for (const auto &k: input_seq.to_sp()) {  // could probably tighten this up using sp.find_value(ket).
         if (k.label_idx() == ket_idx) {
             return Ket("yes");
         }
     }
     return Ket("no");
+}
+
+Sequence op_mbr(const Sequence &input_seq, const Sequence &one) {
+    if (input_seq.size() == 0 || one.size() == 0) { return Ket(""); }
+    Ket one_ket = one.to_ket();
+    double value = input_seq.to_sp().find_value(one_ket);
+    return Ket(one_ket.label_idx(), value);
 }
 
 Sequence op_is_subset(const Sequence &input_seq, const Sequence &one) {

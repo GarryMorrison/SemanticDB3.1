@@ -938,6 +938,22 @@ OperatorUsageMap::OperatorUsageMap() {
             "    see also:\n"
             "        is-subset, union, intersection";
 
+    operator_usage_map.map["mbr"] =
+            "\nmbr:\n"
+            "    description:\n"
+            "        mbr(ket) sp\n"
+            "        returns the coeff of ket in the given superposition\n"
+            "        if ket is not in the sp then the returned coeff is 0\n\n"
+            "    examples:\n"
+            "        mbr(|b>) (|a> + |b> + |c>)\n"
+            "            |b>\n\n"
+            "        mbr(|c>) (0.3|a> + 2|b> + 9.7|c> + 13|d>)\n"
+            "            9.700000|c>\n\n"
+            "        mbr(|x>) (0.3|a> + 2|b> + 9.7|c> + 13|d>)\n"
+            "            0|x>\n\n"
+            "    see also:\n"
+            "        is-mbr";
+
     operator_usage_map.map["is-subset"] =
             "\nis-subset:\n"
             "    description:\n"

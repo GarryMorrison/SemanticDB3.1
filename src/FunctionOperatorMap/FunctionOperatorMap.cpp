@@ -271,6 +271,9 @@ FunctionOperatorMap::FunctionOperatorMap() {
     idx = ket_map.get_idx("is-mbr");
     fn_map.whitelist_1.emplace(idx, &op_is_mbr);
 
+    idx = ket_map.get_idx("mbr");
+    fn_map.whitelist_1.emplace(idx, &op_mbr);
+
     idx = ket_map.get_idx("is-subset");
     fn_map.whitelist_1.emplace(idx, &op_is_subset);
 
