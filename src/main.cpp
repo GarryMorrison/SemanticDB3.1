@@ -116,14 +116,17 @@ int main(int argc, char** argv) {
 
         // Start the semantic agent:
         std::cout << interactive_introduction_text;
-        for (const auto file_name: file_names) {  // load up the files specified on the command line:
-            parse_success = driver.parse_file(file_name);
-            if (!parse_success) {
-                std::cout << "Parse failed for file: " << file_name << std::endl;
+        {
+            Timer_ms timer("\n    Time taken", quiet_mode);  // Time the load time.
+            for (const auto file_name: file_names) {  // load up the files specified on the command line:
+                parse_success = driver.parse_file(file_name);
+                if (!parse_success) {
+                    std::cout << "Parse failed for file: " << file_name << std::endl;
+                }
             }
-        }
-        if (dump_context) {  // if dump specified, then do the context dump:
-            context.print_multiverse();
+            if (dump_context) {  // if dump specified, then do the context dump:
+                context.print_multiverse();
+            }
         }
         std::string shell_input;
         while (true) {

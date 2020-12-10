@@ -358,7 +358,7 @@ Superposition Superposition::select(const int a, const int b) const {
     result.sort_order.insert(result.sort_order.begin(), start_iter, stop_iter);
     for (auto idx: result.sort_order) {
         // result.sp[idx] = sp[idx];  // If we make this function const, then need to use sp.at(idx) instead.
-        result.sp[idx] = sp.at(idx);
+        result.sp[idx] = sp.at(idx);  // Currently bugs out if stop is too large. Fix!
     }
     return result;
 }

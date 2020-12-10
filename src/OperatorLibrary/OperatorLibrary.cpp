@@ -247,7 +247,7 @@ Superposition op_similar_input(const Sequence &seq, ContextList &context, const 
         case 3: {
             int start = parameters[1]->get_int();
             int stop = parameters[2]->get_int();
-            return result.select(start, stop);
+            return result.select(start, stop);  // Bug here if stop > len(result)
         }
         default: return Superposition();  // Alternatively, we could return seq.
     }
@@ -1185,9 +1185,11 @@ unsigned int grid_distance(int s1, int s2, int t1, int t2, int max_k) {
     return max_k;
 }
 
+// Nope. This idea is dead! It gives terrible results on MNIST.
 Superposition digit2sp(const Superposition &sp, const std::vector<std::shared_ptr<CompoundConstant> > &parameters) {
     if (sp.size() == 0) { return Superposition(""); }
     // std::cout << "sp: " << sp.to_string() << std::endl;
+    unsigned int break_from_loop = 10000;  // I have no idea how big this needs to be.
     int max_k = 28;  // In practice, this needs to be larger. For MNIST, somewhere around 28.
     unsigned int min_grid_dist = 1;
     if (parameters.size() == 1) {
@@ -1200,6 +1202,7 @@ Superposition digit2sp(const Superposition &sp, const std::vector<std::shared_pt
     std::set<ulong> Q;
     std::map<ulong, unsigned int> dist;
     std::map<ulong, ulong> prev;
+    std::map<ulong, bool> is_valid;
     std::map<ulong, std::set<ulong>> nghbrs;
     std::map<std::pair<ulong, ulong>, unsigned int> the_grid_distances;
     std::map<std::pair<ulong, ulong>, unsigned int> the_operator_distances;
@@ -1244,12 +1247,14 @@ Superposition digit2sp(const Superposition &sp, const std::vector<std::shared_pt
 
     for (const auto &k1: sp) {
         ulong u = k1.label_idx();
+        unsigned int loop_count = 0;
         Q.clear();
         prev.clear();
         for (const auto &k2: sp) {  // populate the the_operator_distances map:
             ulong vertex2 = k2.label_idx();
             Q.emplace(vertex2);
             dist[vertex2] = std::numeric_limits<unsigned int>::max();
+            is_valid[vertex2] = true;
         }
         dist[u] = 0;
         while (!Q.empty()) {  // Currently an infinite loop if there are objects in Q that can not be reached from u. I don't yet know how to fix!
@@ -1261,6 +1266,11 @@ Superposition digit2sp(const Superposition &sp, const std::vector<std::shared_pt
                 }
             }
             Q.erase(u);
+            if (loop_count >= break_from_loop) {
+                is_valid[k1.label_idx()] = false;
+                break;
+            }
+            loop_count++;
             for (const auto &v: nghbrs[u]) {
                 if (Q.find(v) != Q.end()) {
                     unsigned int alt = dist[u] + 1;  // all neighbours are 1 step away.
@@ -1285,6 +1295,8 @@ Superposition digit2sp(const Superposition &sp, const std::vector<std::shared_pt
         }
     }
     // Finally, calculate the result:
+    // version 1, gives terrible results!
+    /*
     Superposition result;
     for (const auto &k1: sp) {
         ulong vertex1 = k1.label_idx();
@@ -1296,6 +1308,33 @@ Superposition digit2sp(const Superposition &sp, const std::vector<std::shared_pt
                 unsigned int dist_delta = the_op_dist - the_grid_dist;  // NB: the operator distance should always be longer than the grid distance!
                 if (the_grid_dist >= min_grid_dist) {
                     result.add(std::to_string(dist_delta));
+                }
+            }
+        }
+    }
+    */
+    // version 2, gives better results:
+    unsigned int max_int = std::numeric_limits<unsigned int>::max();
+    Superposition result;
+    for (const auto &k1: sp) {
+        std::string label = k1.label() + ": ";
+        ulong vertex1 = k1.label_idx();
+        if (!is_valid[vertex1]) {
+            result.add(k1);
+            continue;
+        }
+        for (const auto &k2: sp) {
+            ulong vertex2 = k2.label_idx();
+            if (vertex1 != vertex2) {
+                unsigned int the_grid_dist = the_grid_distances[std::make_pair(vertex1, vertex2)];
+                unsigned int the_op_dist = the_operator_distances[std::make_pair(vertex1, vertex2)];
+                unsigned int dist_delta = the_op_dist - the_grid_dist;  // NB: the operator distance should always be longer than the grid distance!
+                if (the_grid_dist >= min_grid_dist) {
+                    if (dist_delta < 500) {
+                        result.add(label + std::to_string(dist_delta), k1.value());
+                    } else {
+                        result.add(k1);
+                    }
                 }
             }
         }
