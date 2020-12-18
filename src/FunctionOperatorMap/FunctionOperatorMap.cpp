@@ -326,6 +326,9 @@ FunctionOperatorMap::FunctionOperatorMap() {
     idx = ket_map.get_idx("invert");
     fn_map.sigmoids.emplace(idx, &op_invert);
 
+    idx = ket_map.get_idx("unlearn");
+    fn_map.compound_context_sp_fn.emplace(idx, &op_unlearn);
+
 }
 
 template <class T>

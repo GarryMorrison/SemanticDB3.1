@@ -1348,3 +1348,15 @@ Superposition digit2sp(const Superposition &sp, const std::vector<std::shared_pt
     }
     return result;
 }
+
+Ket op_unlearn(const Superposition &sp, ContextList &context, const std::vector<std::shared_ptr<CompoundConstant> > &parameters) {
+    if (parameters.empty() || sp.size() == 0) { return Ket(); }
+    for (const auto &param: parameters) {
+        ulong op_idx = param->get_operator().get_idx();
+        for (const auto &k: sp) {
+            ulong label_idx = k.label_idx();
+            context.unlearn(op_idx, label_idx);
+        }
+    }
+    return Ket("unlearned");
+}
