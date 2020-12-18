@@ -64,6 +64,8 @@ public:
     void memoize_learn(const std::string& op, const std::string& label, std::shared_ptr<BaseSequence> bSeq);
     void memoize_learn(const std::string& op, const std::string& label, const std::string& srule);
 
+    void unlearn(const ulong op_idx, const ulong label_idx);
+
     std::shared_ptr<BaseSequence> recall(const std::string& op, const std::string& label);
     std::shared_ptr<BaseSequence> recall(const ulong op_idx, const ulong label_idx);
 

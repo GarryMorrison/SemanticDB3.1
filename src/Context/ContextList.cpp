@@ -264,6 +264,10 @@ void ContextList::memoize_learn(const std::string& op, const std::string& label,
     data[index].memoize_learn(op, label, srule);
 }
 
+void ContextList::unlearn(const ulong op_idx, const ulong label_idx) {
+    data[index].unlearn(op_idx, label_idx);
+}
+
 std::shared_ptr<BaseSequence> ContextList::recall(const std::string& op, const std::string& label) {
     return data[index].recall(op, label);
 }

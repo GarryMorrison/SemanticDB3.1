@@ -229,15 +229,21 @@ Superposition op_similar_input(const Sequence &seq, ContextList &context, const 
     if (parameters.empty()) { return Superposition(); }  // Alternatively, return seq.
     ulong op_idx = parameters[0]->get_operator().get_idx();
     std::vector<ulong> ket_vec = context.relevant_kets(op_idx);
+    double min_score = 0;
+    if (parameters.size() == 2) {
+        min_score = parameters[1]->get_float();  // Caused a seg-fault at train-image: 282. digit2sp[4].
+    }
     Superposition result;
     for (const ulong label_idx : ket_vec) {
         Sequence pattern = context.recall(op_idx, label_idx)->to_seq();  // active recall? Would that stomp on memoize rules too?
         double score = simm(seq, pattern);
-        if (score > 0) {
+        if (score > min_score) {
             result.add(label_idx, score);
         }
     }
     result.coeff_sort();
+    return result;
+    /*
     switch (parameters.size()) {
         case 1: { return result; }
         case 2: {
@@ -251,6 +257,7 @@ Superposition op_similar_input(const Sequence &seq, ContextList &context, const 
         }
         default: return Superposition();  // Alternatively, we could return seq.
     }
+    */
 }
 
 Superposition op_strict_similar_input(const Sequence &seq, ContextList &context, const std::vector<std::shared_ptr<CompoundConstant> > &parameters) {

@@ -161,6 +161,17 @@ unsigned int Frame::recall_type(const ulong op_idx) {
     return rule_types[op_idx];
 }
 
+void Frame::unlearn(const ulong op_idx) {
+    auto supported_ops_iter = find(supported_operators.begin(), supported_operators.end(), op_idx);
+    if (supported_ops_iter == supported_operators.end()) { return; }
+    if (ptr_rules.find(op_idx) == ptr_rules.end()) { return; }
+    if (rule_types.find(op_idx) == rule_types.end()) { return; }
+
+    supported_operators.erase(supported_ops_iter);
+    ptr_rules.erase(op_idx);
+    rule_types.erase(op_idx);
+}
+
 void Frame::print() {
     std::cout << "supported_operators:" << std::endl;
     for (const ulong op_idx: supported_operators) {

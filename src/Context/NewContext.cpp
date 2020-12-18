@@ -324,6 +324,11 @@ void NewContext::memoize_learn(const std::string& op, const std::string& label, 
     this->memoize_learn(op_idx, label_idx, bSeq);
 }
 
+void NewContext::unlearn(const ulong op_idx, const ulong label_idx) {
+    if (rules_dict.find(label_idx) == rules_dict.end()) { return; }
+    rules_dict[label_idx].unlearn(op_idx);
+}
+
 std::shared_ptr<BaseSequence> NewContext::recall(const std::string& op, const std::string& label) {
     // ulong op_idx = ket_map.get_idx("op: " + op);
     ulong op_idx = ket_map.get_idx(op);

@@ -42,6 +42,7 @@ public:
     void memoize_learn(const ulong op_idx, std::shared_ptr<BaseSequence> bSeq);
     std::shared_ptr<BaseSequence> recall(const ulong op_idx);
     unsigned int recall_type(const ulong op_idx);
+    void unlearn(const ulong op_idx);
 
     void print();
 
