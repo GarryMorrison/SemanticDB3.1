@@ -1413,6 +1413,29 @@ OperatorUsageMap::OperatorUsageMap() {
             "            ------------------------------------------\n\n"
             "    see also:\n";
 
+    operator_usage_map.map["sshuffle"] =
+            "\nsshuffle:\n"
+            "    description:\n"
+            "        sshuffle seq\n"
+            "        randomly shuffle the input sequence\n\n"
+            "    examples:\n"
+            "        sshuffle (|one> . |two> . |three> . |four> . |five>)\n"
+            "            |two> . |four> . |five> . |three> . |one>\n\n"
+            "    see also:\n"
+            "        shuffle";
+
+    operator_usage_map.map["shuffle"] =
+            "\nshuffle:\n"
+            "    description:\n"
+            "        shuffle seq\n"
+            "        randomly shuffle each superposition in the input sequence\n\n"
+            "    examples:\n"
+            "        shuffle (|one> + |two> + |three> + |four> + |five> . |x> + |y> + |z>)\n"
+            "            |one> + |four> + |two> + |three> + |five> . |z> + |x> + |y>\n\n"
+            "    see also:\n"
+            "        sshuffle";
+
+
 }
 
 std::string OperatorUsageMap::get_usage(const std::string &s) const {

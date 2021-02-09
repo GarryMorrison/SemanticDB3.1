@@ -5,6 +5,7 @@
 #include <iostream>
 #include <memory>
 #include <algorithm>
+#include <random>
 #include "Sequence.h"
 
 
@@ -253,6 +254,16 @@ Sequence Sequence::shuffle() const {
         Superposition r = sp.shuffle();
         result.seq.push_back(r);
     }
+    return result;
+}
+
+Sequence Sequence::sshuffle() const {
+    Sequence result(*this);
+
+    std::random_device rd; // code from here: https://en.cppreference.com/w/cpp/algorithm/random_shuffle
+    std::mt19937 g(rd());
+    std::shuffle(result.seq.begin(), result.seq.end(), g);
+
     return result;
 }
 

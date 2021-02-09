@@ -26,6 +26,9 @@ FunctionOperatorMap::FunctionOperatorMap() {
     idx = ket_map.get_idx("shuffle");
     fn_map.built_in.emplace(idx, &Sequence::shuffle);
 
+    idx = ket_map.get_idx("sshuffle");
+    fn_map.built_in.emplace(idx, &Sequence::sshuffle);
+
     idx = ket_map.get_idx("sreverse");
     fn_map.built_in.emplace(idx, &Sequence::sreverse);
 

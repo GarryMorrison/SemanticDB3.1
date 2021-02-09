@@ -90,6 +90,7 @@ public:
 
     // A collection of built in operators:
     Sequence shuffle() const;
+    Sequence sshuffle() const;
     Sequence sreverse() const;
     Sequence sdrop() const;
     // double find_value(const Ket &k) const;
