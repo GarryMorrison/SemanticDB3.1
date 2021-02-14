@@ -21,6 +21,7 @@ Sequence op_intersection2(const Sequence &input_seq, const Sequence &one, const 
 Superposition sp_union(const Superposition &sp1, const Superposition &sp2);
 Sequence op_union2(const Sequence &input_seq, const Sequence &one, const Sequence &two);
 Sequence op_filter(ContextList &context, const Sequence &input_seq, const Sequence &one, const Sequence &two);
+Sequence op_not_filter(ContextList &context, const Sequence &input_seq, const Sequence &one, const Sequence &two);
 Sequence op_apply(ContextList &context, const Sequence &input_seq, const Sequence &one, const Sequence &two);
 Sequence op_learn(ContextList &context, const Sequence &input_seq, const Sequence &one, const Sequence &two, const Sequence &three);
 Sequence op_add_learn(ContextList &context, const Sequence &input_seq, const Sequence &one, const Sequence &two, const Sequence &three);

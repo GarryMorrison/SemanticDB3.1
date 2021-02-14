@@ -343,6 +343,103 @@ Sequence op_filter(ContextList &context, const Sequence &input_seq, const Sequen
     return result;
 }
 
+// Filter could do with some optimization!
+Sequence op_not_filter(ContextList &context, const Sequence &input_seq, const Sequence &one, const Sequence &two) {
+
+    Sequence result;
+    Superposition two_sp = two.to_sp();
+    ulong two_idx = two.to_ket().label_idx();
+    ulong star_idx = ket_map.get_idx("*");
+    ulong supported_ops_idx = ket_map.get_idx("supported-ops");
+
+    // First branch:
+    // NB: Can be expensive! Especially if rel-kets[*] is large, or supported-ops is large.
+    // Eg: not-filter(|*>, |doctor> + |nurse>) rel-kets[*]
+    if (one.to_ket().label_idx() == star_idx) {
+        for (const auto &sp: input_seq) {
+            Sequence tmp;
+            for (const auto &k: sp) {
+                Superposition s_ops = context.recall(supported_ops_idx, k.label_idx())->to_sp();
+                for (const auto &s_op: s_ops) {
+                    ulong result_idx = context.recall(s_op.label_split_idx()[1], k.label_idx())->to_ket().label_idx();
+                    for (const auto &k2: two_sp) {
+                        if (result_idx == k2.label_idx()) {
+                            goto break_loop;
+                        }
+                    }
+                }
+                tmp.add(k);
+                break_loop:;
+            }
+            result.append(tmp);
+        }
+        return result;
+    }
+
+    // General branch:
+    auto one_vec = one.to_ket().label_split_idx();
+    if (one_vec.size() < 2) { return Ket(""); }
+
+    std::vector<SimpleOperator> operators;
+    if (one_vec[0] == ket_map.get_idx("op")) {
+        SimpleOperator op(one_vec[1]);
+        operators.push_back(op);
+    } else if (one_vec[0] == ket_map.get_idx("ops")) {
+        auto string_ops = split(ket_map.get_str(one_vec[1]), " ");
+        for (const auto &s: string_ops) {
+            SimpleOperator op(s);
+            operators.push_back(op);
+        }
+    } else {
+        return Ket("");
+    }
+
+    if (two_idx == star_idx) {  // Need to verify this branch is correct!
+        for (const auto &sp: input_seq) {
+            Sequence tmp;
+            for (const auto &k: sp) {
+                bool match = false;
+                Sequence seq = k.to_seq();
+                for (auto it = operators.rbegin(); it != operators.rend(); ++it) {
+                    if (context.recall_type((*it).get_idx(), seq.to_ket().label_idx()) == RULENORMAL) {
+                        match = true;
+                        break;
+                    }
+                    seq = (*it).Compile(context, seq);
+                }
+                if (!match) {
+                    tmp.add(k);
+                }
+            }
+            result.append(tmp);
+        }
+    } else {
+        for (const auto &sp: input_seq) {
+            Sequence tmp;
+            for (const auto &k: sp) {
+                bool match = false;
+                Sequence seq = k.to_seq();
+                for (auto it = operators.rbegin(); it != operators.rend(); ++it) {
+                    seq = (*it).Compile(context, seq);
+                }
+                ulong result_idx = seq.to_ket().label_idx();
+                for (const auto &k2: two_sp) {
+                    if (result_idx == k2.label_idx()) {
+                        match = true;
+                        break;
+                    }
+                }
+                if (!match) {
+                    tmp.add(k);
+                }
+            }
+            result.append(tmp);
+        }
+    }
+
+    return result;
+}
+
 Sequence op_apply(ContextList &context, const Sequence &input_seq, const Sequence &one, const Sequence &two) {
     Sequence result;
     for (const auto &sp: one) {

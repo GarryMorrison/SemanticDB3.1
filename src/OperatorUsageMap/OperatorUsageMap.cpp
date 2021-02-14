@@ -139,8 +139,35 @@ OperatorUsageMap::OperatorUsageMap() {
             "        equal-plural rel-kets[*]\n"
             "            |fish> + |sheep> + |series> + |shrimp> + |species> + |swine> + |trout> + |tuna>\n\n"
             "    see also:\n"
-            "        such-that, rel-kets\n"
+            "        not-filter, such-that, rel-kets\n"
             "        plural.sw3";
+
+    operator_usage_map.map["not-filter"] =
+            "\nnot-filter:\n"
+            "    description:\n"
+            "        not-filter(operators, conditions) input-seq\n"
+            "        Filters the input sequence to only those elements that don't satisfy the operator/condition pair\n"
+            "        It is the brother of filter()\n\n"
+            "    examples:\n"
+            "        -- First, learn some knowledge:\n"
+            "        father |John> => |Fred>\n"
+            "        occupation |Fred> => |politician>\n\n"
+            "        father |Sam> => |Robert>\n"
+            "        occupation |Robert> => |doctor>\n\n"
+            "        father |Emma> => |Jack>\n"
+            "        occupation |Jack> => |nurse>\n\n\n"
+            "        -- filter to those that don't have a rule of any type that is doctor or nurse:\n"
+            "        -- NB: if rel-kets[*] is large, or supported-ops is large, this may be slow.\n"
+            "        not-filter(|*>, |doctor> + |nurse>) rel-kets[*]\n"
+            "            |John> + |Fred> + |Sam> + |Emma>\n\n\n"
+            "        -- find people that don't have the father operator defined:\n"
+            "        not-filter(|op: father>, |*>) rel-kets[*]\n"
+            "            |Fred> + |Robert> + |Jack>\n\n\n"
+            "        -- filter to people that don't have a father with occupation of either doctor or nurse:\n"
+            "        not-filter(|ops: occupation father>, |doctor> + |nurse>) rel-kets[*]\n"
+            "            |John> + |Fred> + |Robert> + |Jack>\n\n"
+            "    see also:\n"
+            "        filter";
 
     operator_usage_map.map["apply"] =
             "\napply:\n"
