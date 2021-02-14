@@ -326,6 +326,14 @@ Sequence Sequence::show_many() const {
     return Sequence("number: " + std::to_string(seq.size()));
 }
 
+Sequence Sequence::sidx() const {
+    Sequence result;
+    for (ulong idx = 0; idx < seq.size(); idx++) {
+        result.append(std::to_string(idx + 1));
+    }
+    return result;
+}
+
 Sequence Sequence::rescale(const double t) const {
     Sequence result;
     for (const auto &sp: seq) {

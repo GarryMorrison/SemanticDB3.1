@@ -1462,6 +1462,17 @@ OperatorUsageMap::OperatorUsageMap() {
             "    see also:\n"
             "        sshuffle";
 
+    operator_usage_map.map["sidx"] =
+            "\nsidx:\n"
+            "    description:\n"
+            "        sidx input-seq\n"
+            "        map superpositions in a sequence to their index number\n"
+            "        NB: counting starts from 1 not 0\n"
+            "        The original use case for this operator failed, so may delete this operator in the future\n\n"
+            "    examples:\n"
+            "        sidx (|a> . |b> . |c> . |d> . |e>)\n"
+            "            |1> . |2> . |3> . |4> . |5>\n\n"
+            "    see also:\n";
 
 }
 

@@ -98,6 +98,7 @@ public:
     Sequence how_many() const;
     Sequence measure_currency() const;
     Sequence show_many() const;
+    Sequence sidx() const;
     // double find_min_coeff() const;
     // double find_max_coeff() const;
     Sequence rescale(const double t) const;
