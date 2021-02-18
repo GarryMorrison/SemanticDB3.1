@@ -407,11 +407,10 @@ Superposition Superposition::operator+(Superposition& sp) {
 
 // SuperpositionIter:
 Ket Superposition::get(ulong idx) const {
-    if (idx >= sort_order.size() ) { Ket tmp; return tmp; }
+    if (idx >= sort_order.size() ) { return Ket(); }
     ulong sp_idx = sort_order[idx];
     double value = sp.at(sp_idx);
-    Ket tmp(sp_idx, value);
-    return tmp;
+    return Ket(sp_idx, value);
 }
 
 SuperpositionIter Superposition::begin () const {

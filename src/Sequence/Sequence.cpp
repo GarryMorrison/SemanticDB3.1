@@ -32,9 +32,10 @@ Sequence::Sequence(const Superposition& sp) {
 }
 
 Sequence::Sequence(const Sequence& seq2) {
-    for (const auto &sp: seq2.seq) {
-        seq.push_back(sp);
-    }
+    // for (const auto &sp: seq2.seq) {
+    //     seq.push_back(sp);
+    // }
+    seq.assign(seq2.seq.begin(), seq2.seq.end());  // Is this faster or slower than the for loop version??
 }
 
 const bool Sequence::is_ket() const {
