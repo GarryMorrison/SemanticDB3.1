@@ -98,6 +98,8 @@ public:
     Ket pick_elt() const;
     Ket weighted_pick_elt() const;
     Superposition select(const int start, const int stop) const;
+    Superposition rotate_left(const int n) const;
+    Superposition rotate_right(const int n) const;
 
     Superposition apply_sigmoid(const std::function<double(double)> &sigmoid) const;
     Superposition apply_sigmoid(const std::function<double(double,double)> &sigmoid, const double t) const;

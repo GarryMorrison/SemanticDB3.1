@@ -598,6 +598,40 @@ Sequence Sequence::op_srotate_right1(const std::vector<std::shared_ptr<CompoundC
     return result;
 }
 
+Sequence Sequence::op_rotate_left() const {
+    Sequence result(*this);
+    // std::transform(s.begin(), s.end(), s.begin(),
+    //                [](unsigned char c) -> unsigned char { return std::toupper(c); });
+    std::transform(result.seq.begin(), result.seq.end(), result.seq.begin(),
+                   [](const Superposition &sp) -> Superposition { return sp.rotate_left(1); });  // Testing a new way to transforming sequences. Instead of using for loops and push_back.
+    return result;
+}
+
+Sequence Sequence::op_rotate_right() const {
+    Sequence result(*this);
+    std::transform(result.seq.begin(), result.seq.end(), result.seq.begin(),
+                   [](const Superposition &sp) -> Superposition { return sp.rotate_right(1); });  // Testing a new way to transforming sequences.
+    return result;
+}
+
+Sequence Sequence::op_rotate_left1(const std::vector<std::shared_ptr<CompoundConstant>> &parameters) const {
+    Sequence result(*this);
+    if (parameters.empty()) { return result; }
+    int n = parameters[0]->get_int();
+    std::transform(result.seq.begin(), result.seq.end(), result.seq.begin(),
+                   [n](const Superposition &sp) -> Superposition { return sp.rotate_left(n); });  // Testing a new way to transforming sequences.
+    return result;
+}
+
+Sequence Sequence::op_rotate_right1(const std::vector<std::shared_ptr<CompoundConstant>> &parameters) const {
+    Sequence result(*this);
+    if (parameters.empty()) { return result; }
+    int n = parameters[0]->get_int();
+    std::transform(result.seq.begin(), result.seq.end(), result.seq.begin(),
+                   [n](const Superposition &sp) -> Superposition { return sp.rotate_right(n); });  // Testing a new way to transforming sequences.
+    return result;
+}
+
 
 Sequence Sequence::apply_sigmoid(const std::function<double(double)> &sigmoid) const {
     Sequence result;

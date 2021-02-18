@@ -1490,7 +1490,7 @@ OperatorUsageMap::OperatorUsageMap() {
             "        srotate-left[11] (|one> . |two> . |three> . |four> . |five>)\n"
             "            |two> . |three> . |four> . |five> . |one>\n\n"
             "    see also:\n"
-            "        srotate-right";
+            "        srotate-right, rotate-right, rotate-left";
 
     operator_usage_map.map["srotate-right"] =
             "\nsrotate-right:\n"
@@ -1508,7 +1508,37 @@ OperatorUsageMap::OperatorUsageMap() {
             "        srotate-right[11] (|one> . |two> . |three> . |four> . |five>)\n"
             "            |five> . |one> . |two> . |three> . |four>\n\n"
             "    see also:\n"
-            "        srotate-left";
+            "        srotate-left, rotate-right, rotate-left";
+
+    operator_usage_map.map["rotate-right"] =
+            "\nrotate-right:\n"
+            "    description:\n"
+            "        rotate-right input-seq\n"
+            "        rotate each superposition in input-seq right by 1 step\n\n"
+            "        rotate-right[n] input-seq\n"
+            "        rotate each superposition in input-seq right by n steps, modulus by the size of the corresponding superposition\n\n"
+            "    examples:\n"
+            "        rotate-right (|one> + |two> + |three> + |four> + |five> + |six> + |seven>)\n"
+            "            |seven> + |one> + |two> + |three> + |four> + |five> + |six>\n\n"
+            "        rotate-right[3] (|one> + |two> + |three> + |four> + |five> + |six> + |seven>)\n"
+            "            |five> + |six> + |seven> + |one> + |two> + |three> + |four>\n\n"
+            "    see also:\n"
+            "        rotate-left, srotate-right, srotate-left";
+
+    operator_usage_map.map["rotate-left"] =
+            "\nrotate-left:\n"
+            "    description:\n"
+            "        rotate-left input-seq\n"
+            "        rotate each superposition in input-seq left by 1 step\n\n"
+            "        rotate-left[n] input-seq\n"
+            "        rotate each superposition in input-seq left by n steps, modulus by the size of the corresponding superposition\n\n"
+            "    examples:\n"
+            "        rotate-left (|one> + |two> + |three> + |four> + |five> + |six> + |seven>)\n"
+            "            |two> + |three> + |four> + |five> + |six> + |seven> + |one>\n\n"
+            "        rotate-left[3] (|one> + |two> + |three> + |four> + |five> + |six> + |seven>)\n"
+            "            |four> + |five> + |six> + |seven> + |one> + |two> + |three>\n\n"
+            "    see also:\n"
+            "        rotate-right, srotate-right, srotate-left";
 
 }
 
