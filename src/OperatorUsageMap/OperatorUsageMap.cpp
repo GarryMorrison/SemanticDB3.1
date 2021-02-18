@@ -1474,6 +1474,28 @@ OperatorUsageMap::OperatorUsageMap() {
             "            |1> . |2> . |3> . |4> . |5>\n\n"
             "    see also:\n";
 
+    operator_usage_map.map["srotate-left"] =
+            "\nsrotate-left:\n"
+            "    description:\n"
+            "        srotate-left input-seq\n"
+            "        rotate the input sequence left one step\n\n"
+            "    examples:\n"
+            "        srotate-left (|one> . |two> . |three> . |four> . |five>)\n"
+            "            |two> . |three> . |four> . |five> . |one>\n\n"
+            "    see also:\n"
+            "        srotate-right";
+
+    operator_usage_map.map["srotate-right"] =
+            "\nsrotate-right:\n"
+            "    description:\n"
+            "        srotate-right input-seq\n"
+            "        rotate the input sequence right one step\n\n"
+            "    examples:\n"
+            "        srotate-right (|one> . |two> . |three> . |four> . |five>)\n"
+            "            |five> . |one> . |two> . |three> . |four>\n\n"
+            "    see also:\n"
+            "        srotate-left";
+
 }
 
 std::string OperatorUsageMap::get_usage(const std::string &s) const {

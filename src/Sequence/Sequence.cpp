@@ -564,6 +564,17 @@ Sequence Sequence::op_sselect2(const std::vector<std::shared_ptr<CompoundConstan
     return this->sselect(start, stop);
 }
 
+Sequence Sequence::op_srotate_left() const {
+    Sequence result(*this);
+    std::rotate(result.seq.begin(), result.seq.begin() + 1, result.seq.end());
+    return result;
+}
+
+Sequence Sequence::op_srotate_right() const {
+    Sequence result(*this);
+    std::rotate(result.seq.rbegin(), result.seq.rbegin() + 1, result.seq.rend());
+    return result;
+}
 
 Sequence Sequence::apply_sigmoid(const std::function<double(double)> &sigmoid) const {
     Sequence result;
