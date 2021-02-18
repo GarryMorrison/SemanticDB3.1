@@ -580,7 +580,9 @@ Sequence Sequence::op_srotate_left1(const std::vector<std::shared_ptr<CompoundCo
     Sequence result(*this);
     if (parameters.empty()) { return result; }
     int pos = parameters[0]->get_int();
-    if (pos < 0 || pos >= result.seq.size()) { return result; }  // Should we instead return an empty ket?
+    // if (pos < 0 || pos >= result.seq.size()) { return result; }  // Should we instead return an empty ket?
+    // if (pos < 0) { pos = 0; }
+    pos %= result.seq.size();
     std::rotate(result.seq.begin(), result.seq.begin() + pos, result.seq.end());
     return result;
 }
@@ -589,7 +591,9 @@ Sequence Sequence::op_srotate_right1(const std::vector<std::shared_ptr<CompoundC
     Sequence result(*this);
     if (parameters.empty()) { return result; }
     int pos = parameters[0]->get_int();
-    if (pos < 0 || pos >= result.seq.size()) { return result; }  // Should we instead return an empty ket?
+    // if (pos < 0 || pos >= result.seq.size()) { return result; }  // Should we instead return an empty ket?
+    // if (pos < 0) { pos = 0; }
+    pos %= result.seq.size();
     std::rotate(result.seq.rbegin(), result.seq.rbegin() + pos, result.seq.rend());
     return result;
 }
