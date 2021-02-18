@@ -38,6 +38,12 @@ FunctionOperatorMap::FunctionOperatorMap() {
     idx = ket_map.get_idx("srotate-right");
     fn_map.built_in.emplace(idx, &Sequence::op_srotate_right);
 
+    idx = ket_map.get_idx("srotate-left");
+    fn_map.compound_built_in.emplace(idx, &Sequence::op_srotate_left1);
+
+    idx = ket_map.get_idx("srotate-right");
+    fn_map.compound_built_in.emplace(idx, &Sequence::op_srotate_right1);
+
     idx = ket_map.get_idx("sdrop");
     fn_map.built_in.emplace(idx, &Sequence::sdrop);
 

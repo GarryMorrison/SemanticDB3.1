@@ -576,6 +576,25 @@ Sequence Sequence::op_srotate_right() const {
     return result;
 }
 
+Sequence Sequence::op_srotate_left1(const std::vector<std::shared_ptr<CompoundConstant>> &parameters) const {
+    Sequence result(*this);
+    if (parameters.empty()) { return result; }
+    int pos = parameters[0]->get_int();
+    if (pos < 0 || pos >= result.seq.size()) { return result; }  // Should we instead return an empty ket?
+    std::rotate(result.seq.begin(), result.seq.begin() + pos, result.seq.end());
+    return result;
+}
+
+Sequence Sequence::op_srotate_right1(const std::vector<std::shared_ptr<CompoundConstant>> &parameters) const {
+    Sequence result(*this);
+    if (parameters.empty()) { return result; }
+    int pos = parameters[0]->get_int();
+    if (pos < 0 || pos >= result.seq.size()) { return result; }  // Should we instead return an empty ket?
+    std::rotate(result.seq.rbegin(), result.seq.rbegin() + pos, result.seq.rend());
+    return result;
+}
+
+
 Sequence Sequence::apply_sigmoid(const std::function<double(double)> &sigmoid) const {
     Sequence result;
     for (const auto &sp: seq) {

@@ -128,6 +128,8 @@ public:
     Sequence op_sselect2(const std::vector<std::shared_ptr<CompoundConstant> > &parameters) const;
     Sequence op_srotate_left() const;
     Sequence op_srotate_right() const;
+    Sequence op_srotate_left1(const std::vector<std::shared_ptr<CompoundConstant> > &parameters) const;
+    Sequence op_srotate_right1(const std::vector<std::shared_ptr<CompoundConstant> > &parameters) const;
 
     void dummy1(std::shared_ptr<CompoundConstant> &constant);  // Delete these two later!
     void dummy2(std::vector<std::shared_ptr<CompoundConstant> > &const_vec);

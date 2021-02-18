@@ -1479,9 +1479,15 @@ OperatorUsageMap::OperatorUsageMap() {
             "    description:\n"
             "        srotate-left input-seq\n"
             "        rotate the input sequence left one step\n\n"
+            "        srotate-left[n] input-seq\n"
+            "        rotate the input sequence left n steps\n"
+            "        if n is out of range, leave input-seq unchanged\n"
+            "        Future: potentially change this to taking mod size(input-seq)\n\n"
             "    examples:\n"
             "        srotate-left (|one> . |two> . |three> . |four> . |five>)\n"
             "            |two> . |three> . |four> . |five> . |one>\n\n"
+            "        srotate-left[3] (|one> . |two> . |three> . |four> . |five>)\n"
+            "            |four> . |five> . |one> . |two> . |three>\n\n"
             "    see also:\n"
             "        srotate-right";
 
@@ -1490,9 +1496,15 @@ OperatorUsageMap::OperatorUsageMap() {
             "    description:\n"
             "        srotate-right input-seq\n"
             "        rotate the input sequence right one step\n\n"
+            "        srotate-right[n] input-seq\n"
+            "        rotate the input sequence right n steps\n"
+            "        if n is out of range, leave input-seq unchanged\n"
+            "        Future: potentially change this to taking mod size(input-seq)\n\n"
             "    examples:\n"
             "        srotate-right (|one> . |two> . |three> . |four> . |five>)\n"
             "            |five> . |one> . |two> . |three> . |four>\n\n"
+            "        srotate-right[3] (|one> . |two> . |three> . |four> . |five>)\n"
+            "            |three> . |four> . |five> . |one> . |two>\n\n"
             "    see also:\n"
             "        srotate-left";
 
