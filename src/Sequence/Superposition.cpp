@@ -623,14 +623,14 @@ Ket Superposition::weighted_pick_elt() const {
     return Ket();  // We keep hitting assert(false), not sure yet why. Fix!
 }
 
-Superposition Superposition::rotate_left(const int n) const {  // We use int for n instead of ulong because paramters[0] returns int not ulong.
+Superposition Superposition::rotate_left(const int n) const {  // We use int for n instead of ulong because parameters[0] returns int not ulong.
     Superposition result(*this);
     ulong pos = n % result.sort_order.size();
     std::rotate(result.sort_order.begin(), result.sort_order.begin() + pos, result.sort_order.end());
     return result;
 }
 
-Superposition Superposition::rotate_right(const int n) const {  // We use int for n instead of ulong because paramters[0] returns int not ulong.
+Superposition Superposition::rotate_right(const int n) const {  // We use int for n instead of ulong because parameters[0] returns int not ulong.
     Superposition result(*this);
     ulong pos = n % result.sort_order.size();
     std::rotate(result.sort_order.rbegin(), result.sort_order.rbegin() + pos, result.sort_order.rend());

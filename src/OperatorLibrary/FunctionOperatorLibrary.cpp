@@ -882,3 +882,24 @@ Sequence op_find_operators_between(ContextList &context, const Sequence &input_s
     }
     return result.sreverse();
 }
+
+Sequence op_sread(const Sequence &input_seq, const Sequence &one) {
+    Sequence result;
+    for (const auto &sp: one) {
+        Sequence tmp;
+        for (const auto &k: sp) {
+            try {
+                long long idx = std::stoll(k.label()) - 1;
+                if (idx < 0) {
+                    idx += input_seq.size() + 1;
+                }
+                tmp.add(input_seq.get((ulong)idx));
+            } catch (const std::invalid_argument &e) {
+                Superposition empty;
+                tmp.add(empty);
+            }
+        }
+        result.append(tmp);
+    }
+    return result;
+}

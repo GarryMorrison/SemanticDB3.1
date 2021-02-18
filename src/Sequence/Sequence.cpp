@@ -600,8 +600,6 @@ Sequence Sequence::op_srotate_right1(const std::vector<std::shared_ptr<CompoundC
 
 Sequence Sequence::op_rotate_left() const {
     Sequence result(*this);
-    // std::transform(s.begin(), s.end(), s.begin(),
-    //                [](unsigned char c) -> unsigned char { return std::toupper(c); });
     std::transform(result.seq.begin(), result.seq.end(), result.seq.begin(),
                    [](const Superposition &sp) -> Superposition { return sp.rotate_left(1); });  // Testing a new way to transforming sequences. Instead of using for loops and push_back.
     return result;

@@ -1540,6 +1540,30 @@ OperatorUsageMap::OperatorUsageMap() {
             "    see also:\n"
             "        rotate-right, srotate-right, srotate-left";
 
+    operator_usage_map.map["sread"] =
+            "\nsread:\n"
+            "    description:\n"
+            "        sread(positions) input-seq\n"
+            "        replace positions with their index in the input sequence\n"
+            "        we try to preseve the 'structure' of 'positions'\n"
+            "        index values start from 1, not 0\n"
+            "        negative values are also valid, so -1 is last element, -2 is second last element, etc\n"
+            "        if out of range, or not a number, return |> for that slot\n\n"
+            "    examples:\n"
+            "        -- preserve superposition structure of 'positions':\n"
+            "        sread(|1> + |3> + |5>) (|one> . |two> . |three> . |four> . |five> . |six> . |seven>)\n"
+            "            |one> + |three> + |five>\n\n"
+            "        -- preserve sequence structure of 'positions':\n"
+            "        sread(|1> . |3> . |5>) (|one> . |two> . |three> . |four> . |five> . |six> . |seven>)\n"
+            "            |one> . |three> . |five>\n\n"
+            "        -- handle negative indices:\n"
+            "        sread(|-1> . |-2> . |-3>) (|one> . |two> . |three> . |four> . |five> . |six> . |seven>)\n"
+            "            |seven> . |six> . |five>\n\n"
+            "        -- if out of range, or not a number, return |> for that slot:\n"
+            "        sread(|1> . |fish> . |11> . |4>) (|one> . |two> . |three> . |four> . |five> . |six> . |seven>)\n"
+            "            |one> . |> . |> . |four>\n\n"
+            "    see also:\n";
+
 }
 
 std::string OperatorUsageMap::get_usage(const std::string &s) const {
