@@ -903,3 +903,28 @@ Sequence op_sread(const Sequence &input_seq, const Sequence &one) {
     }
     return result;
 }
+
+Sequence op_not_sread(const Sequence &input_seq, const Sequence &one) {
+    std::set<ulong> index_set;
+    Superposition positions = one.to_sp();
+    for (const auto &k: positions) {
+        try {
+            long long idx = std::stoll(k.label()) - 1;
+            if (idx < 0) {
+                idx += input_seq.size() + 1;
+            }
+            index_set.insert((ulong)idx);
+        } catch (const std::invalid_argument &e) {
+            continue;
+        }
+    }
+    Sequence result;
+    ulong idx = 0;
+    for (const auto &sp: input_seq) {
+        if (index_set.find(idx) == index_set.end()) {
+            result.append(sp);
+        }
+        idx++;
+    }
+    return result;
+}

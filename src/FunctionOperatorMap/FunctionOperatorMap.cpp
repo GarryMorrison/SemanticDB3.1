@@ -364,6 +364,9 @@ FunctionOperatorMap::FunctionOperatorMap() {
 
     idx = ket_map.get_idx("sread");
     fn_map.whitelist_1.emplace(idx, &op_sread);
+
+    idx = ket_map.get_idx("not-sread");
+    fn_map.whitelist_1.emplace(idx, &op_not_sread);
 }
 
 template <class T>

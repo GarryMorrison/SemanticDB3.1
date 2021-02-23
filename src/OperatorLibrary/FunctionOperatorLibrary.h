@@ -42,6 +42,6 @@ Sequence op_is_equal2(const Sequence &input_seq, const Sequence &seq1, const Seq
 Sequence op_find_path_between(ContextList &context, const Sequence &input_seq, const Sequence &seq1, const Sequence &seq2);
 Sequence op_find_operators_between(ContextList &context, const Sequence &input_seq, const Sequence &seq1, const Sequence &seq2);
 Sequence op_sread(const Sequence &input_seq, const Sequence &one);
-
+Sequence op_not_sread(const Sequence &input_seq, const Sequence &one);
 
 #endif //SDB3_1_FUNCTIONOPERATORLIBRARY_H

@@ -1545,7 +1545,7 @@ OperatorUsageMap::OperatorUsageMap() {
             "    description:\n"
             "        sread(positions) input-seq\n"
             "        replace positions with their index in the input sequence\n"
-            "        we try to preseve the 'structure' of 'positions'\n"
+            "        we try to preserve the 'structure' of 'positions'\n"
             "        index values start from 1, not 0\n"
             "        negative values are also valid, so -1 is last element, -2 is second last element, etc\n"
             "        if out of range, or not a number, return |> for that slot\n\n"
@@ -1562,8 +1562,29 @@ OperatorUsageMap::OperatorUsageMap() {
             "        -- if out of range, or not a number, return |> for that slot:\n"
             "        sread(|1> . |fish> . |11> . |4>) (|one> . |two> . |three> . |four> . |five> . |six> . |seven>)\n"
             "            |one> . |> . |> . |four>\n\n"
-            "    see also:\n";
+            "    see also:\n"
+            "        not-sread";
 
+    operator_usage_map.map["not-sread"] =
+            "\nnot-sread:\n"
+            "    description:\n"
+            "        not-sread(positions) input-seq\n"
+            "        remove superpositions from the input sequence if they are in 'positions'\n"
+            "        index values start from 1, not 0\n"
+            "        negative values are also valid, so -1 is last element, -2 is second last element, etc\n"
+            "        if out of range, then ignore that index value\n"
+            "        'positions' can be a superposition or a sequence, it doesn't matter\n"
+            "        if it is a sequence, it is converted to a superposition anyway\n"
+            "        the order of the indices in 'positions' is ignored, since they are inserted into a set\n\n"
+            "    examples:\n"
+            "        -- remove the 1st, 3rd and 5th superpositions from the input sequence:\n"
+            "        not-sread(|1> + |3> + |5>) (|one> . |two> . |three> . |four> . |five> . |six> . |seven>)\n"
+            "            |two> . |four> . |six> . |seven>\n\n"
+            "        -- remove the 2nd last, and the 4th last superpositions from the input sequence:\n"
+            "        not-sread(|-2> + |-4>) (|one> . |two> . |three> . |four> . |five> . |six> . |seven>)\n"
+            "            |one> . |two> . |three> . |five> . |seven>\n\n"
+            "    see also:\n"
+            "        sread";
 }
 
 std::string OperatorUsageMap::get_usage(const std::string &s) const {
