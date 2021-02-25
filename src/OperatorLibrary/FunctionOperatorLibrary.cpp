@@ -905,7 +905,7 @@ Sequence op_sread(const Sequence &input_seq, const Sequence &one) {
 }
 
 Sequence op_not_sread(const Sequence &input_seq, const Sequence &one) {
-    std::set<ulong> index_set;
+    std::set<ulong> index_set;  // Any use in using unordered_set here?
     Superposition positions = one.to_sp();
     for (const auto &k: positions) {
         try {
@@ -920,7 +920,7 @@ Sequence op_not_sread(const Sequence &input_seq, const Sequence &one) {
     }
     Sequence result;
     ulong idx = 0;
-    for (const auto &sp: input_seq) {
+    for (const auto &sp: input_seq) {  // Can we improve the speed of this for loop?
         if (index_set.find(idx) == index_set.end()) {
             result.append(sp);
         }
