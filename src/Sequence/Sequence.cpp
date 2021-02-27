@@ -437,7 +437,8 @@ Sequence Sequence::op_drop_above1(const std::vector<std::shared_ptr<CompoundCons
 
 Sequence Sequence::op_pick1(const std::vector<std::shared_ptr<CompoundConstant> > &parameters) const {
     if (parameters.empty()) { return *this; }
-    ulong n = parameters[0]->get_int();
+    int n = parameters[0]->get_int();
+    if (n < 0) { return this->pick(0); }
     return this->pick(n);
 }
 

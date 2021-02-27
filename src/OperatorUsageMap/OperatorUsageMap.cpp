@@ -1585,6 +1585,20 @@ OperatorUsageMap::OperatorUsageMap() {
             "            |one> . |two> . |three> . |five> . |seven>\n\n"
             "    see also:\n"
             "        sread";
+
+    operator_usage_map.map["pick"] =
+            "\npick:\n"
+            "    description:\n"
+            "        pick[n] input-seq\n"
+            "        randomly pick n elements from each superposition in the input sequence\n"
+            "        if n is greater than the size of the superposition, then only return size(superposition) elements\n"
+            "        if n is less than or equal 0, return the empty ket\n\n"
+            "    examples:\n"
+            "        -- randomly pick three elements from the given superposition:\n"
+            "        pick[3] (|one> + |two> + |three> + |four> + |five> + |six> + |seven>)\n"
+            "            |three> + |seven> + |four>\n\n"
+            "    see also:\n"
+            "        pick-elt, weighted-pick-elt";
 }
 
 std::string OperatorUsageMap::get_usage(const std::string &s) const {

@@ -580,11 +580,12 @@ bidiiter random_unique(bidiiter begin, bidiiter end, size_t num_random) {
 
 Superposition Superposition::pick(const ulong n) const {
     std::vector<ulong> sort_order1 = sort_order;
-    random_unique(sort_order1.begin(), sort_order1.end(), n);
+    size_t min_size = std::min(sort_order.size(), (size_t)n);
+    random_unique(sort_order1.begin(), sort_order1.end(), min_size);
     Superposition result;
-    for (const auto idx: sort_order1 ) {
+    for (ulong k = 0; k < min_size; k++) {
+        ulong idx = sort_order1[k];
         double value = sp.at(idx);
-        // double value = sp[idx];
         result.add(idx, value);
     }
     return result;
