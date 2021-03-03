@@ -32,7 +32,10 @@
 %define api.namespace {SDB}
 
 /* set the parser's class identifier */
+// For Bison earlier than 3.3:
 %define "parser_class_name" {Parser}
+// For Bison 3.3 and later:
+// %define api.parser.class {Parser}
 
 // %glr-parser
 
