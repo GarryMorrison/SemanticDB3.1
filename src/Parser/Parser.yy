@@ -12,8 +12,8 @@
 
 /*** yacc/bison Declarations ***/
 
-/* Require bison 3.0 or later */
-%require "3.0"
+/* Require bison 3.3 or later */
+%require "3.3"
 
 /* add debug output code to generated parser. disable this for release
  * versions. */
@@ -33,11 +33,10 @@
 
 /* set the parser's class identifier */
 // For Bison earlier than 3.3:
-%define "parser_class_name" {Parser}
+// %define "parser_class_name" {Parser}
 // For Bison 3.3 and later:
-// %define api.parser.class {Parser}
+%define api.parser.class {Parser}
 
-// %glr-parser
 
 /* keep track of the current position within the input */
 %locations
@@ -53,8 +52,8 @@
 %parse-param { class Driver& driver }
 
 /* verbose error messages */
-%error-verbose
-
+// Switch off for release version:
+%define parse.error verbose
 
 
 %union {
