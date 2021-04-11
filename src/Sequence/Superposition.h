@@ -30,13 +30,15 @@ private:
 public:
     Superposition() {};
     ~Superposition() {};
-    Superposition(const ulong idx);
-    Superposition(const std::string& s);
-    Superposition(const std::string&s, const double v);
-    Superposition(const ulong idx, const double v);
+    Superposition(ulong idx);
+    Superposition(const std::string &s);
+    Superposition(const std::string &s, double v);
+    Superposition(ulong idx, double v);
     Superposition(Ket k);
     Superposition(const Superposition &other_sp) : sp(other_sp.sp), sort_order(other_sp.sort_order) {};
     Superposition(const std::vector<ulong> &vec);
+
+    bool operator==(const Superposition &other);
 
     const int type() const { return SUPERPOSITION; };
     const bool is_ket() const { if (sort_order.size() <= 1 ) { return true; } return false; }

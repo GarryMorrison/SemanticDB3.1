@@ -3,11 +3,9 @@
 //
 
 #include <iostream>
-#include <math.h>
 #include <cmath>
 #include <random>
 #include <algorithm>
-#include <assert.h>
 #include "Superposition.h"
 #include "../Function/misc.h"
 #include "../Function/NaturalSort.h"
@@ -21,7 +19,7 @@ Superposition::Superposition(const ulong idx) {
 }
 
 Superposition::Superposition(const std::string& s) {
-    if (s == "") {return; }
+    if (s.empty()) {return; }
 
     ulong idx = ket_map.get_idx(s);
     sp[idx] = 1.0;
@@ -29,7 +27,7 @@ Superposition::Superposition(const std::string& s) {
 }
 
 Superposition::Superposition(const std::string& s, const double v) {
-    if (s == "") {return; }
+    if (s.empty()) {return; }
 
     ulong idx = ket_map.get_idx(s);
     sp[idx] = v;
@@ -74,6 +72,22 @@ Superposition::Superposition(const std::vector<ulong> &vec) {
         }
     }
 }
+
+bool Superposition::operator==(const Superposition &other) {
+    if (sort_order.size() != other.sort_order.size()) { return false; }
+    for (const ulong &idx: sort_order) {
+        auto other_iter = other.sp.find(idx);
+        if (other_iter == other.sp.end()) {
+            return false;
+        }
+        double value = sp[idx];
+        if (!double_eq(value, other_iter->second)) {
+            return false;
+        }
+    }
+    return true;
+}
+
 
 const size_t Superposition::size() const {
     return sort_order.size();
