@@ -750,11 +750,12 @@ Sequence op_smap3(ContextList &context, const Sequence &input_seq, const Sequenc
 
 Sequence op_is_equal2(const Sequence &input_seq, const Sequence &seq1, const Sequence &seq2) {
     if (seq1.size() != seq2.size()) { return Sequence("no"); }
-    Ket one = seq1.to_ket();
-    Ket two = seq2.to_ket();
-    if (one.label_idx() == two.label_idx() && double_eq(one.value(), two.value())) {
-        return Sequence("yes");
-    }
+    // Ket one = seq1.to_ket();
+    // Ket two = seq2.to_ket();
+    // if (one.label_idx() == two.label_idx() && double_eq(one.value(), two.value())) {
+    //     return Sequence("yes");
+    // }
+    if (seq1 == seq2) { return Sequence("yes"); }  // Make use of our new operator== methods.
     return Sequence("no");
 }
 
