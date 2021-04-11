@@ -38,6 +38,18 @@ Sequence::Sequence(const Sequence& seq2) {
     seq.assign(seq2.seq.begin(), seq2.seq.end());  // Is this faster or slower than the for loop version??
 }
 
+bool Sequence::operator==(const Sequence &other) const {
+    if (seq.size() != other.seq.size()) { return false; }
+    auto seq_iter = seq.cbegin();
+    auto other_seq_iter = other.seq.cbegin();
+    for (; seq_iter != seq.cend() && other_seq_iter != other.seq.cend(); ++seq_iter, ++other_seq_iter) {
+        if (!(*seq_iter == *other_seq_iter)) {
+            return false;
+        }
+    }
+    return true;
+}
+
 const bool Sequence::is_ket() const {
     if (seq.empty()) { return true; }
     if (seq.size() == 1 ) {

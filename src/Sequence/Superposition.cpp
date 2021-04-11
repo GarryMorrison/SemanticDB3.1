@@ -73,14 +73,14 @@ Superposition::Superposition(const std::vector<ulong> &vec) {
     }
 }
 
-bool Superposition::operator==(const Superposition &other) {
+bool Superposition::operator==(const Superposition &other) const {
     if (sort_order.size() != other.sort_order.size()) { return false; }
     for (const ulong &idx: sort_order) {
         auto other_iter = other.sp.find(idx);
         if (other_iter == other.sp.end()) {
             return false;
         }
-        double value = sp[idx];
+        double value = sp.at(idx);  // We can't use sp[idx] because of 'const'.
         if (!double_eq(value, other_iter->second)) {
             return false;
         }

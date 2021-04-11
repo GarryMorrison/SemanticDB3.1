@@ -24,10 +24,12 @@ public:
     Sequence() {};
     ~Sequence() {};
     Sequence(const std::string& s);
-    Sequence(const std::string& s, const double d);
+    Sequence(const std::string& s, double d);
     Sequence(const Ket& k);
     Sequence(const Superposition& sp);
     Sequence(const Sequence& seq);
+
+    bool operator==(const Sequence& other) const;
 
     const int type() const { return SEQUENCE; };
     const bool is_ket() const;

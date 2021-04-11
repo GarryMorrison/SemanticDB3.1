@@ -38,7 +38,7 @@ public:
     Superposition(const Superposition &other_sp) : sp(other_sp.sp), sort_order(other_sp.sort_order) {};
     Superposition(const std::vector<ulong> &vec);
 
-    bool operator==(const Superposition &other);
+    bool operator==(const Superposition &other) const;
 
     const int type() const { return SUPERPOSITION; };
     const bool is_ket() const { if (sort_order.size() <= 1 ) { return true; } return false; }
