@@ -1,0 +1,24 @@
+# macOS Big Sur 11.2.3 (2021-04-14)
+
+xcode-select --install
+# install: homebrew https://brew.sh/
+brew install bison cmake flex git
+
+export CPPFLAGS="-I/usr/local/opt/flex/include $CPPFLAGS"
+export CXXFLAGS="-I/usr/local/opt/flex/include $CXXFLAGS"
+export LDFLAGS="-L/usr/local/opt/bison/lib $LDFLAGS"
+export LDFLAGS="-L/usr/local/opt/flex/lib $LDFLAGS"
+export PATH="/usr/local/sbin:$PATH"
+export PATH="/usr/local/opt/bison/bin:$PATH"
+export PATH="/usr/local/opt/flex/bin:$PATH"
+
+git clone https://github.com/GarryMorrison/SemanticDB3.1.git
+cd SemanticDB3.1
+mkdir build
+cd build
+cmake ..
+make
+
+./SDB3_1 -i
+
+

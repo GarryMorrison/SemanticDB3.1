@@ -1,0 +1,12 @@
+sudo apt install build-essential cmake bison flex
+wget https://github.com/GarryMorrison/SemanticDB3.1/archive/refs/heads/master.zip
+unzip master.zip
+mv SemanticDB3.1-master SemanticDB3.1
+cd SemanticDB3.1
+mkdir build
+cd build
+cmake ..
+make
+
+./SDB3_1 -i
+
