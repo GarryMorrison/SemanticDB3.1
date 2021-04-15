@@ -3,8 +3,8 @@
 #include <string>
 #include <memory>
 
-#include "src/Parser/Scanner.h"
 #include "src/SDB3_header.h"
+#include "src/Parser/Scanner.h"
 
 /* import the parser's token type into a local typedef */
 typedef SDB::Parser::token token;
