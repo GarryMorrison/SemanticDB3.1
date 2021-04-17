@@ -7,10 +7,12 @@
 #include <iomanip>
 #include <cmath>
 #include <set>
+#include <algorithm>
 #include "OperatorLibrary.h"
 #include "../CompoundConstant/ConstantString.h"
 #include "../Function/misc.h"
 #include "FunctionOperatorLibrary.h"
+#include "../Sequence/SelfKet.h"
 
 
 Superposition split(const Ket k) {
@@ -1359,4 +1361,152 @@ Ket op_unlearn(const Superposition &sp, ContextList &context, const std::vector<
         }
     }
     return Ket("unlearned");
+}
+
+Ket op_scompress(const Sequence &seq, ContextList &context, const std::vector<std::shared_ptr<CompoundConstant> > &parameters) {
+    if (parameters.size() != 2) { return Ket(); }
+    ulong source_op = parameters[0]->get_operator().get_idx(); // Do we need to check our operators are valid?
+    ulong dest_op = parameters[1]->get_operator().get_idx();
+    std::vector<ulong> source_kets = context.relevant_kets(source_op);
+    if (source_kets.empty()) { return Ket(); }
+    // std::unordered_map<unsigned int, Sequence> source_patterns;  // Should we use unordered_map or vector?
+    std::unordered_map<unsigned int, std::vector<Superposition>> source_patterns;
+    std::unordered_map<unsigned int, ulong> source_pattern_labels;
+    std::unordered_map<unsigned int, size_t> source_pattern_lengths;
+    size_t max_seq_len = 0;
+    unsigned int source_pattern_pos = 0;
+    for (ulong idx: source_kets) {
+        Sequence pattern = context.recall(source_op, idx)->to_seq();
+        if (pattern.size() > 0) {
+            max_seq_len = std::max(pattern.size(), max_seq_len);
+            source_pattern_lengths[source_pattern_pos] = pattern.size();
+            source_pattern_labels[source_pattern_pos] = idx;
+            std::vector<Superposition> vector_pattern;
+            vector_pattern.insert(vector_pattern.cbegin(), pattern.cbegin(), pattern.cend());
+            source_patterns[source_pattern_pos] = vector_pattern;
+            source_pattern_pos++;
+        }
+    }
+    if (max_seq_len == 0) { return Ket(); }
+    std::cout << "scompress: max_seq_len: " << max_seq_len << std::endl;
+
+    unsigned int compress_count = 0;
+    unsigned int working_ngram_len = max_seq_len;
+    // unsigned int working_ngram_len = 4;  // Just so we can test the ngram code.
+    while (working_ngram_len > 1) {
+
+        std::vector<std::vector<Superposition>> working_patterns;
+        std::unordered_map<unsigned int, unsigned int> working_patterns_count;
+        unsigned int max_pattern_count = 0;
+        unsigned int max_pattern_count_pos = 0;
+
+        for (const auto &iter: source_pattern_lengths) {
+            if (iter.second < working_ngram_len) { continue; }
+            std::vector<Superposition> source_pattern = source_patterns[iter.first];
+            for (unsigned int start_idx = 0; iter.second >= working_ngram_len + start_idx; start_idx++) {
+                std::vector<Superposition> vector_pattern;
+                vector_pattern.insert(vector_pattern.cbegin(), source_pattern.cbegin() + start_idx,
+                                      source_pattern.cbegin() + start_idx + working_ngram_len);
+                for (const auto &sp: vector_pattern) {
+                    std::cout << sp.to_string() << " . ";
+                }
+                std::cout << std::endl;
+                unsigned int pos = 0;
+                bool match = false;
+                for (const auto &working_pattern: working_patterns) {
+                    if (working_pattern ==
+                        vector_pattern) {  // Maybe later we could use simm() here for fuzzy matching?
+                        std::cout << "Found duplicate!\n";
+                        working_patterns_count[pos]++;
+                        if (working_patterns_count[pos] > max_pattern_count) {
+                            max_pattern_count = working_patterns_count[pos];
+                            max_pattern_count_pos = pos;
+                        }
+                        match = true;
+                        break;
+                    }
+                    pos++;
+                }
+                if (!match) {
+                    working_patterns.push_back(vector_pattern);
+                    working_patterns_count[pos] = 1;
+                    pos++;
+                }
+            }
+        }
+        if (max_pattern_count < 2) { working_ngram_len--; continue; }
+        unsigned int pos = 0;
+        std::cout << std::endl;
+        for (const auto &pattern: working_patterns) {
+            for (const auto &sp: pattern) {
+                std::cout << sp.to_string() << " . ";
+            }
+            std::cout << working_patterns_count[pos] << std::endl;
+            pos++;
+        }
+        std::vector<Superposition> best_pattern = working_patterns[max_pattern_count_pos];
+        Sequence best_matching_pattern(best_pattern);
+        std::cout << "max_pattern_count: " << max_pattern_count << std::endl;
+        std::cout << "max_pattern_count_pos: " << max_pattern_count_pos << std::endl;
+        std::cout << "best_matching_pattern: " << best_matching_pattern.to_string() << std::endl;
+
+        ulong ket_label_idx = ket_map.get_idx("scompress: " + std::to_string(compress_count));
+        Superposition ket_label_sp(ket_label_idx);
+
+        std::unordered_map<unsigned int, std::vector<Superposition>> new_source_patterns;  // I'm starting to think these should be vectors not unordered_maps.
+        std::unordered_map<unsigned int, ulong> new_source_pattern_labels;
+        std::unordered_map<unsigned int, size_t> new_source_pattern_lengths;
+
+        for (const auto &iter: source_pattern_lengths) {
+            if (iter.second < working_ngram_len) { continue; }
+            std::vector<Superposition> final_pattern;
+            std::vector<Superposition> source_pattern = source_patterns[iter.first];
+            ulong source_label_idx = source_pattern_labels[iter.first];
+            unsigned int final_idx = 0;
+            for (unsigned int start_idx = 0; iter.second >= working_ngram_len + start_idx; start_idx++) {
+                std::vector<Superposition> vector_pattern;
+                vector_pattern.insert(vector_pattern.cbegin(), source_pattern.cbegin() + start_idx,
+                                      source_pattern.cbegin() + start_idx + working_ngram_len);
+                bool match = false;
+                if (best_pattern == vector_pattern) {
+                    std::cout << "source_label: " << ket_map.get_str(source_label_idx) << ", start_idx: " << start_idx
+                              << std::endl;
+                    final_pattern.push_back(ket_label_sp);
+                    start_idx += working_ngram_len - 1;
+                    match = true;
+                }
+                if (!match) {
+                    final_pattern.push_back(source_pattern[start_idx]);
+                }
+                final_idx = start_idx;
+            }
+            final_idx++;
+            for (; final_idx < iter.second; final_idx++) {
+                final_pattern.push_back(source_pattern[final_idx]);
+            }
+            new_source_patterns[iter.first] = final_pattern;
+            new_source_pattern_labels[iter.first] = source_label_idx;
+            new_source_pattern_lengths[iter.first] = final_pattern.size();
+        }
+        unsigned int iter_pos = new_source_patterns.size();  // Careful, if size() is too large! And if iter_pos stomps on already defined patterns. Vector would be safer!
+        new_source_patterns[iter_pos] = best_pattern;
+        new_source_pattern_labels[iter_pos] = ket_label_idx;
+        new_source_pattern_lengths[iter_pos] = best_pattern.size();
+
+        source_patterns = std::move(new_source_patterns);
+        source_pattern_labels = std::move(new_source_pattern_labels);
+        source_pattern_lengths = std::move(new_source_pattern_lengths);
+        compress_count++;
+        working_ngram_len--;
+    }
+
+    // Now learn the final patterns:
+    for (const auto &iter: source_patterns) {
+        std::shared_ptr<BaseSequence> bSeq = std::make_shared<Sequence>(iter.second);
+        context.learn(dest_op, source_pattern_labels[iter.first], bSeq);
+    }
+    ulong star_idx = ket_map.get_idx("*");
+    std::shared_ptr<BaseSequence> bSeq = std::make_shared<SelfKet>();
+    context.stored_learn(dest_op, star_idx, bSeq);
+    return Ket("scompress");
 }

@@ -367,6 +367,9 @@ FunctionOperatorMap::FunctionOperatorMap() {
 
     idx = ket_map.get_idx("not-sread");
     fn_map.whitelist_1.emplace(idx, &op_not_sread);
+
+    idx = ket_map.get_idx("scompress");
+    fn_map.compound_context_seq_fn.emplace(idx, &op_scompress);
 }
 
 template <class T>

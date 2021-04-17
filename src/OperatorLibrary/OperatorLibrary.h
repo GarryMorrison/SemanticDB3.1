@@ -72,5 +72,6 @@ Ket op_has_prefix(const Ket k, const std::vector<std::shared_ptr<CompoundConstan
 Ket op_to_comma_number(const Ket k);
 Superposition digit2sp(const Superposition &sp, const std::vector<std::shared_ptr<CompoundConstant> > &parameters);
 Ket op_unlearn(const Superposition &sp, ContextList &context, const std::vector<std::shared_ptr<CompoundConstant> > &parameters);
+Ket op_scompress(const Sequence &seq, ContextList &context, const std::vector<std::shared_ptr<CompoundConstant> > &parameters);
 
 #endif //SDB3_1_OPERATORLIBRARY_H
