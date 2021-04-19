@@ -1528,8 +1528,10 @@ Ket op_scompress(const Sequence &seq, ContextList &context, const std::vector<st
     ulong dest_op = parameters[1]->get_operator().get_idx();
     std::vector<ulong> source_kets = context.relevant_kets(source_op);
     if (source_kets.empty()) { return Ket(); }
-    bool verbose = false;
-    // std::unordered_map<unsigned int, Sequence> source_patterns;  // Should we use unordered_map or vector?
+    std::string prefix = "scompress: ";  // Change this as desired.
+    bool verbose = false;                // Switch on/off verbose printing of processing.
+
+    // std::vector<Sequence> source_patterns;  // Should we use vectors of superpositions, or Sequences?
     std::vector<std::vector<Superposition>> source_patterns;
     std::vector<ulong> source_pattern_labels;
     std::vector<size_t> source_pattern_lengths;
@@ -1562,9 +1564,9 @@ Ket op_scompress(const Sequence &seq, ContextList &context, const std::vector<st
         unsigned int pos = 0;
         for (const auto len: source_pattern_lengths) {
             if (len < working_ngram_len) { pos++; continue; }
-            std::vector<Superposition> source_pattern = source_patterns[pos];
+            std::vector<Superposition> source_pattern(source_patterns[pos]);
             for (unsigned int start_idx = 0; len >= working_ngram_len + start_idx; start_idx++) {
-                std::vector<Superposition> vector_pattern;
+                std::vector<Superposition> vector_pattern;  // Is there a better way than building all these ngrams each time?
                 vector_pattern.insert(vector_pattern.cbegin(), source_pattern.cbegin() + start_idx,
                                       source_pattern.cbegin() + start_idx + working_ngram_len);
                 if (verbose) {
@@ -1591,7 +1593,7 @@ Ket op_scompress(const Sequence &seq, ContextList &context, const std::vector<st
                     pos2++;
                 }
                 if (!match) {
-                    working_patterns.push_back(vector_pattern);
+                    working_patterns.push_back(std::move(vector_pattern));
                     working_patterns_count[pos2] = 1;
                     pos2++;
                 }
@@ -1599,7 +1601,7 @@ Ket op_scompress(const Sequence &seq, ContextList &context, const std::vector<st
             pos++;
         }
         if (max_pattern_count < 2) { working_ngram_len--; continue; }
-        std::vector<Superposition> best_pattern = working_patterns[max_pattern_count_pos];
+        std::vector<Superposition> best_pattern(working_patterns[max_pattern_count_pos]);
         if (verbose) {
             pos = 0;
             std::cout << std::endl;
@@ -1617,7 +1619,7 @@ Ket op_scompress(const Sequence &seq, ContextList &context, const std::vector<st
             std::cout << "best_matching_pattern: " << best_matching_pattern.to_string() << std::endl;
         }
 
-        ulong ket_label_idx = ket_map.get_idx("scompress: " + std::to_string(compress_count));
+        ulong ket_label_idx = ket_map.get_idx(prefix + std::to_string(compress_count));
         Superposition ket_label_sp(ket_label_idx);
 
         std::vector<std::vector<Superposition>> new_source_patterns;
@@ -1627,7 +1629,7 @@ Ket op_scompress(const Sequence &seq, ContextList &context, const std::vector<st
         pos = 0;
         for (const auto len: source_pattern_lengths) {
             std::vector<Superposition> final_pattern;
-            std::vector<Superposition> source_pattern = source_patterns[pos];
+            std::vector<Superposition> source_pattern(source_patterns[pos]);
             ulong source_label_idx = source_pattern_labels[pos];
             if (len < working_ngram_len) {
                 new_source_patterns.push_back(source_pattern);
@@ -1638,11 +1640,12 @@ Ket op_scompress(const Sequence &seq, ContextList &context, const std::vector<st
             }
             unsigned int final_idx = 0;
             for (unsigned int start_idx = 0; len >= working_ngram_len + start_idx; start_idx++) {
-                std::vector<Superposition> vector_pattern;
-                vector_pattern.insert(vector_pattern.cbegin(), source_pattern.cbegin() + start_idx,
-                                      source_pattern.cbegin() + start_idx + working_ngram_len);
+                // std::vector<Superposition> vector_pattern;   // Is there a better way than building all these ngrams each time?
+                // vector_pattern.insert(vector_pattern.cbegin(), source_pattern.cbegin() + start_idx,
+                //                       source_pattern.cbegin() + start_idx + working_ngram_len);
                 bool match = false;
-                if (best_pattern == vector_pattern) {
+                // if (best_pattern == vector_pattern) {
+                if (std::equal(best_pattern.cbegin(), best_pattern.cend(), source_pattern.cbegin() + start_idx)) { // cbegin() and cend() or just begin() and end()?
                     if (verbose) {
                         std::cout << "source_label: " << ket_map.get_str(source_label_idx) << ", start_idx: " << start_idx << std::endl;
                     }
@@ -1659,9 +1662,9 @@ Ket op_scompress(const Sequence &seq, ContextList &context, const std::vector<st
             for (; final_idx < len; final_idx++) {
                 final_pattern.push_back(source_pattern[final_idx]);
             }
-            new_source_patterns.push_back(final_pattern);
-            new_source_pattern_labels.push_back(source_label_idx);
             new_source_pattern_lengths.push_back(final_pattern.size());
+            new_source_patterns.push_back(std::move(final_pattern));
+            new_source_pattern_labels.push_back(source_label_idx);
             pos++;
         }
         new_source_patterns.push_back(best_pattern);
