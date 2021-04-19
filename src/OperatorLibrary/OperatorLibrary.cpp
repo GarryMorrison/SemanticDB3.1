@@ -1363,6 +1363,7 @@ Ket op_unlearn(const Superposition &sp, ContextList &context, const std::vector<
     return Ket("unlearned");
 }
 
+/*
 Ket op_scompress_v1(const Sequence &seq, ContextList &context, const std::vector<std::shared_ptr<CompoundConstant> > &parameters) {
     if (parameters.size() != 2) { return Ket(); }
     ulong source_op = parameters[0]->get_operator().get_idx(); // Do we need to check our operators are valid?
@@ -1520,15 +1521,21 @@ Ket op_scompress_v1(const Sequence &seq, ContextList &context, const std::vector
     context.stored_learn(dest_op, star_idx, bSeq);
     return Ket("scompress");
 }
-
+*/
 
 Ket op_scompress(const Sequence &seq, ContextList &context, const std::vector<std::shared_ptr<CompoundConstant> > &parameters) {
-    if (parameters.size() != 2) { return Ket(); }
+    if (parameters.size() < 2) { return Ket(); }
     ulong source_op = parameters[0]->get_operator().get_idx(); // Do we need to check our operators are valid?
     ulong dest_op = parameters[1]->get_operator().get_idx();
     std::vector<ulong> source_kets = context.relevant_kets(source_op);
     if (source_kets.empty()) { return Ket(); }
-    std::string prefix = "scompress: ";  // Change this as desired.
+
+    std::string prefix;
+    if (parameters.size() == 3) {
+        prefix = parameters[2]->get_string();
+    } else {
+        prefix = "scompress: ";          // Change this as desired.
+    }
     bool verbose = false;                // Switch on/off verbose printing of processing.
 
     // std::vector<Sequence> source_patterns;  // Should we use vectors of superpositions, or Sequences?
@@ -1632,9 +1639,9 @@ Ket op_scompress(const Sequence &seq, ContextList &context, const std::vector<st
             std::vector<Superposition> source_pattern(source_patterns[pos]);
             ulong source_label_idx = source_pattern_labels[pos];
             if (len < working_ngram_len) {
-                new_source_patterns.push_back(source_pattern);
-                new_source_pattern_labels.push_back(source_label_idx);
                 new_source_pattern_lengths.push_back(source_pattern.size());
+                new_source_patterns.push_back(std::move(source_pattern));
+                new_source_pattern_labels.push_back(source_label_idx);
                 pos++;
                 continue;
             }
