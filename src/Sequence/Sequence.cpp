@@ -39,7 +39,8 @@ Sequence::Sequence(const Sequence& seq2) {
 }
 
 bool Sequence::operator==(const Sequence &other) const {
-    if (seq.size() != other.seq.size()) { return false; }
+    return seq == other.seq;
+    /*if (seq.size() != other.seq.size()) { return false; }
     auto seq_iter = seq.cbegin();
     auto other_seq_iter = other.seq.cbegin();
     for (; seq_iter != seq.cend() && other_seq_iter != other.seq.cend(); ++seq_iter, ++other_seq_iter) {
@@ -47,7 +48,7 @@ bool Sequence::operator==(const Sequence &other) const {
             return false;
         }
     }
-    return true;
+    return true;*/
 }
 
 const bool Sequence::is_ket() const {
