@@ -156,86 +156,27 @@ void DocsGenerator::generate(const std::string& dir) {
     std::string page = docs_header;
 
     // Generate sections:
-    std::string section = generate_operator_usage_docs("built in operators: ", dest_dir, "built-in", fn_map.built_in);
-    if (section.empty()) { return; } else { page += section; }
+    page += generate_operator_usage_docs("built in operators: ", dest_dir, "built-in", fn_map.built_in);
+    page += generate_operator_usage_docs("built in compound operators: ", dest_dir, "compound-built-in", fn_map.compound_built_in);
+    page += generate_operator_usage_docs("sigmoids: ", dest_dir, "sigmoid", fn_map.sigmoids);
+    page += generate_operator_usage_docs("compound sigmoids: ", dest_dir, "compound-sigmoid", fn_map.compound_sigmoids);
+    page += generate_operator_usage_docs("ket fn: ", dest_dir, "ket-fn", fn_map.ket_fn);
+    page += generate_operator_usage_docs("compound ket fn: ", dest_dir, "compound-ket-fn", fn_map.compound_ket_fn);
+    page += generate_operator_usage_docs("sp fn: ", dest_dir, "sp-fn", fn_map.sp_fn);
+    page += generate_operator_usage_docs("compound sp fn: ", dest_dir, "compound-sp-fn", fn_map.compound_sp_fn);
+    page += generate_operator_usage_docs("seq fn: ", dest_dir, "seq-fn", fn_map.seq_fn);
+    page += generate_operator_usage_docs("compound seq fn: ", dest_dir, "compound-seq-fn", fn_map.compound_seq_fn);
+    page += generate_operator_usage_docs("compound context sp fn: ", dest_dir, "compound-context-sp-fn", fn_map.compound_context_sp_fn);
+    page += generate_operator_usage_docs("compound context seq fn: ", dest_dir, "compound-context-seq-fn", fn_map.compound_context_seq_fn);
+    page += generate_operator_usage_docs("function 1: ", dest_dir, "function-1", fn_map.whitelist_1);
+    page += generate_operator_usage_docs("function 2: ", dest_dir, "function-2", fn_map.whitelist_2);
+    page += generate_operator_usage_docs("function 3: ", dest_dir, "function-3", fn_map.whitelist_3);
+    page += generate_operator_usage_docs("function 4: ", dest_dir, "function-4", fn_map.whitelist_4);
+    page += generate_operator_usage_docs("context function 1: ", dest_dir, "context-function-1", fn_map.context_whitelist_1);
+    page += generate_operator_usage_docs("context function 2: ", dest_dir, "context-function-2", fn_map.context_whitelist_2);
+    page += generate_operator_usage_docs("context function 3: ", dest_dir, "context-function-3", fn_map.context_whitelist_3);
+    page += generate_operator_usage_docs("context function 4: ", dest_dir, "context-function-4", fn_map.context_whitelist_4);
 
-    section = generate_operator_usage_docs("built in compound operators: ", dest_dir, "compound-built-in", fn_map.compound_built_in);
-    if (section.empty()) { return; } else { page += section; }
-
-    section = generate_operator_usage_docs("sigmoids: ", dest_dir, "sigmoid", fn_map.sigmoids);
-    if (section.empty()) { return; } else { page += section; }
-
-    section = generate_operator_usage_docs("compound sigmoids: ", dest_dir, "compound-sigmoid", fn_map.compound_sigmoids);
-    if (section.empty()) { return; } else { page += section; }
-
-    section = generate_operator_usage_docs("ket fn: ", dest_dir, "ket-fn", fn_map.ket_fn);
-    if (section.empty()) { return; } else { page += section; }
-
-    section = generate_operator_usage_docs("compound ket fn: ", dest_dir, "compound-ket-fn", fn_map.compound_ket_fn);
-    if (section.empty()) { return; } else { page += section; }
-
-    section = generate_operator_usage_docs("sp fn: ", dest_dir, "sp-fn", fn_map.sp_fn);
-    if (section.empty()) { return; } else { page += section; }
-
-    section = generate_operator_usage_docs("compound sp fn: ", dest_dir, "compound-sp-fn", fn_map.compound_sp_fn);
-    if (section.empty()) { return; } else { page += section; }
-
-    section = generate_operator_usage_docs("seq fn: ", dest_dir, "seq-fn", fn_map.seq_fn);
-    if (section.empty()) { return; } else { page += section; }
-
-    section = generate_operator_usage_docs("compound seq fn: ", dest_dir, "compound-seq-fn", fn_map.compound_seq_fn);
-    if (section.empty()) { return; } else { page += section; }
-
-    section = generate_operator_usage_docs("compound context sp fn: ", dest_dir, "compound-context-sp-fn", fn_map.compound_context_sp_fn);
-    if (section.empty()) { return; } else { page += section; }
-
-    section = generate_operator_usage_docs("compound context seq fn: ", dest_dir, "compound-context-seq-fn", fn_map.compound_context_seq_fn);
-    if (section.empty()) { return; } else { page += section; }
-
-    section = generate_operator_usage_docs("function 1: ", dest_dir, "function-1", fn_map.whitelist_1);
-    if (section.empty()) { return; } else { page += section; }
-
-    section = generate_operator_usage_docs("function 2: ", dest_dir, "function-2", fn_map.whitelist_2);
-    if (section.empty()) { return; } else { page += section; }
-
-    section = generate_operator_usage_docs("function 3: ", dest_dir, "function-3", fn_map.whitelist_3);
-    if (section.empty()) { return; } else { page += section; }
-
-    section = generate_operator_usage_docs("function 4: ", dest_dir, "function-4", fn_map.whitelist_4);
-    if (section.empty()) { return; } else { page += section; }
-
-    section = generate_operator_usage_docs("context function 1: ", dest_dir, "context-function-1", fn_map.context_whitelist_1);
-    if (section.empty()) { return; } else { page += section; }
-
-    section = generate_operator_usage_docs("context function 2: ", dest_dir, "context-function-2", fn_map.context_whitelist_2);
-    if (section.empty()) { return; } else { page += section; }
-
-    section = generate_operator_usage_docs("context function 3: ", dest_dir, "context-function-3", fn_map.context_whitelist_3);
-    if (section.empty()) { return; } else { page += section; }
-
-    section = generate_operator_usage_docs("context function 4: ", dest_dir, "context-function-4", fn_map.context_whitelist_4);
-    if (section.empty()) { return; } else { page += section; }
-
-    /*
-    print_map("sigmoid:", sigmoids);
-    print_map("compound_sigmoid:", compound_sigmoids);
-    print_map("ket_fn:", ket_fn);
-    print_map("compound_ket_fn:", compound_ket_fn);
-    print_map("sp_fn:", sp_fn);
-    print_map("compound_sp_fn:", compound_sp_fn);
-    print_map("seq_fn:", seq_fn);
-    print_map("compound_seq_fn:", compound_seq_fn);
-    print_map("compound_context_sp_fn:", compound_context_sp_fn);
-    print_map("compound_context_seq_fn:", compound_context_seq_fn);
-    print_map("function_1:", whitelist_1);
-    print_map("function_2:", whitelist_2);
-    print_map("function_3:", whitelist_3);
-    print_map("function_4:", whitelist_4);
-    print_map("context_function_1:", context_whitelist_1);
-    print_map("context_function_2:", context_whitelist_2);
-    print_map("context_function_3:", context_whitelist_3);
-    print_map("context_function_4:", context_whitelist_4);
-    */
 
     // Generate sw-examples section:
     if (!sw3_files.empty()) {
