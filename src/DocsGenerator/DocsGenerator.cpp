@@ -84,8 +84,62 @@ std::string generate_operator_usage_docs(const std::string &header, const std::s
     return section + "</dl>\n";
 }
 
+std::string generate_sw_section(const std::string &header, const std::string &dest_dir, const std::string &dir, std::vector<fs::path> &sw3_files) {
+    std::string section;
+
+    // Create destination directory:
+    std::string working_dir = dest_dir + dir;
+    try {
+        std::cout << "Creating: " << working_dir << std::endl;
+        fs::create_directories(working_dir);
+    } catch (std::exception& e) {
+        std::cout << "Failed to create: " << working_dir << std::endl;
+        std::cout << "Reason: " << e.what() << std::endl;
+        return section;
+    }
+
+    section = "<dl>\n    <dt><b>" + header + "</b></dt>\n";
+
+    std::vector<std::string> tmp_sorted;
+    std::map<std::string, fs::path> sw3_path_map;
+    for (const auto &file: sw3_files) {
+        std::string my_filename = file.filename().c_str();
+        tmp_sorted.push_back(my_filename);
+        sw3_path_map[my_filename] = file;
+    }
+    std::sort(tmp_sorted.begin(), tmp_sorted.end());
+    for (const auto &str: tmp_sorted) {
+        section += "        <dd><a href=\"" + dir + "/" + str + "\">" + str + "</a></dd>\n";
+        fs::path source_file = sw3_path_map[str];
+        fs::path target_file = working_dir + "/" + str;
+        fs::copy(source_file, target_file, fs::copy_options::overwrite_existing);
+    }
+    return section + "</dl>\n";
+}
+
 void DocsGenerator::generate(const std::string& dir) {
     std::cout << "Generating docs in: " << dir << std::endl;
+
+    // Find .sw3 files to include in the html documentation:
+    std::cout << "Would you like to include .sw3 files? (y/n): ";
+    std::vector<fs::path> sw3_files;
+    char answer;
+    std::cin >> answer;
+    if (answer == 'y') {
+        std::string sw3_dir;
+        std::cout << "Please enter the sw3 directory: ";
+        std::cin >> sw3_dir;
+
+        std::cout << "Found:" << std::endl;
+        for (const auto &entry: fs::directory_iterator(sw3_dir)) {
+            if (entry.path().extension() == ".sw3") {
+                std::cout << "    " << entry.path() << std::endl;
+                sw3_files.push_back(entry.path());
+            }
+        }
+        std::cout << std::endl;
+    }
+
     std::string dest_dir = dir + "/docs/usage3/";
 
     // Create destination directory:
@@ -184,7 +238,9 @@ void DocsGenerator::generate(const std::string& dir) {
     */
 
     // Generate sw-examples section:
-    // But first, we need to know where the sw3 files are!
+    if (!sw3_files.empty()) {
+        page += generate_sw_section("sw-examples: ", dest_dir, "sw-examples", sw3_files);
+    }
 
     page += docs_footer;
     page += "updated: ";
