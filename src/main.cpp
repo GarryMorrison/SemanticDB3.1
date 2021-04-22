@@ -37,6 +37,7 @@ std::string help_string = "\n    q, quit, exit        quit the semantic agent\n"
 
 unsigned int default_decimal_places;
 extern OperatorUsageMap operator_usage_map;
+extern DocsGenerator docs_generator;
 
 int main(int argc, char** argv) {
 
@@ -91,6 +92,7 @@ int main(int argc, char** argv) {
             std::cin >> answer;
             if (answer == 'y') {
                 std::cout << "\n    Working ... \n" << std::endl;
+                docs_generator.generate(generate_docs_starting_directory);
             }
             return 0;
         }
