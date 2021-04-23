@@ -38,8 +38,14 @@ std::string convert_usage_to_html(std::map<std::string, std::string> &operator_l
     html_usage = "<html>\n<head><title>" + header + operator_str + "</title></head>\n<body>\n";
     html_usage += "<h3>" + header + operator_str + "</h3>\n<pre>";
     std::string usage = operator_usage_map.get_usage(operator_str) + "\n";
+    std::string sw3_ext = ".sw3";
+    std::string html_link;
     for (const auto &iter: operator_locations) {
-        std::string html_link = "<a href=\"../" + iter.second + "/" + iter.first + ".html\">" + iter.first + "</a>";
+        if (std::equal(sw3_ext.rbegin(), sw3_ext.rend(), iter.first.rbegin())) {  // If the iter.first ends with .sw3 then it is an sw3 file, not an operator.
+            html_link = "<a href=\"../" + iter.second + "/" + iter.first + "\">" + iter.first + "</a>";
+        } else {
+            html_link = "<a href=\"../" + iter.second + "/" + iter.first + ".html\">" + iter.first + "</a>";
+        }
 
         std::string from = " " + iter.first + " ";  // Potentially add more of these later. Or do it in a more intelligent way?
         std::string to = " " + html_link + " ";
@@ -155,7 +161,7 @@ template <class T>
 void learn_locations(std::map<std::string, std::string> &operator_locations, const std::string &location, T& our_map) {
     for (const auto &iter: our_map) {
         std::string op = ket_map.get_str(iter.first);
-        if (operator_usage_map.usage_is_defined(op)) {
+        if (operator_usage_map.usage_is_defined(op)) {  // Only store locations of operators with usage info. This prevents links to 404 pages.
             operator_locations[op] = location;
         }
     }
@@ -167,6 +173,7 @@ void DocsGenerator::generate(const std::string& dir) {
     // Find .sw3 files to include in the html documentation:
     std::cout << "Would you like to include .sw3 files? (y/n): ";
     std::vector<fs::path> sw3_files;
+    std::map<std::string, std::string> operator_locations;
     char answer;
     std::cin >> answer;
     if (answer == 'y') {
@@ -179,6 +186,7 @@ void DocsGenerator::generate(const std::string& dir) {
             if (entry.path().extension() == ".sw3") {
                 std::cout << "    " << entry.path() << std::endl;
                 sw3_files.push_back(entry.path());
+                operator_locations[entry.path().filename().c_str()] = "sw-examples";
             }
         }
         std::cout << std::endl;
@@ -200,7 +208,8 @@ void DocsGenerator::generate(const std::string& dir) {
     std::string page = docs_header;
 
     // Learn operator locations:
-    std::map<std::string, std::string> operator_locations;
+    // NB: the locations must match those used in the next section.
+    // std::map<std::string, std::string> operator_locations;
     learn_locations(operator_locations, "built-in", fn_map.built_in);
     learn_locations(operator_locations, "compound-built-in", fn_map.compound_built_in);
     learn_locations(operator_locations, "sigmoid", fn_map.sigmoids);
