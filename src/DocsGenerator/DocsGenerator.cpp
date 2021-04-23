@@ -37,7 +37,7 @@ std::string convert_usage_to_html(std::map<std::string, std::string> &operator_l
     std::string html_usage;
     html_usage = "<html>\n<head><title>" + header + operator_str + "</title></head>\n<body>\n";
     html_usage += "<h3>" + header + operator_str + "</h3>\n<pre>";
-    std::string usage = operator_usage_map.get_usage(operator_str);
+    std::string usage = operator_usage_map.get_usage(operator_str) + "\n";
     for (const auto &iter: operator_locations) {
         std::string html_link = "<a href=\"../" + iter.second + "/" + iter.first + ".html\">" + iter.first + "</a>";
 
@@ -61,7 +61,7 @@ std::string convert_usage_to_html(std::map<std::string, std::string> &operator_l
         to = " " + html_link + ",";
         string_replace_all(usage, from, to);
 
-        from = " " + iter.first + "\n";  // This one doesn't work! Not yet sure why. Now it does ...
+        from = " " + iter.first + "\n";  // We need usage + "\n" for this to work consistently.
         to = " " + html_link + "\n";
         string_replace_all(usage, from, to);
 
@@ -154,7 +154,10 @@ std::string generate_sw_section(const std::string &header, const std::string &de
 template <class T>
 void learn_locations(std::map<std::string, std::string> &operator_locations, const std::string &location, T& our_map) {
     for (const auto &iter: our_map) {
-        operator_locations[ket_map.get_str(iter.first)] = location;
+        std::string op = ket_map.get_str(iter.first);
+        if (operator_usage_map.usage_is_defined(op)) {
+            operator_locations[op] = location;
+        }
     }
 }
 
