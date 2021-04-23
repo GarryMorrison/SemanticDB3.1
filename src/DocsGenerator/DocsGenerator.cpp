@@ -6,9 +6,11 @@
 #include <fstream>
 #include <time.h>
 #include <filesystem>
+#include <map>
 #include "DocsGenerator.h"
 #include "../FunctionOperatorMap/FunctionOperatorMap.h"
 #include "../OperatorUsageMap/OperatorUsageMap.h"
+#include "../Function/misc.h"
 
 
 namespace fs = std::filesystem;
@@ -31,17 +33,49 @@ const std::string docs_footer =
         "email: garry -at- semantic-db.org<br>\n";
 
 
-std::string convert_usage_to_html(const std::string &header, const std::string &operator_str) {  // Factor this out, to keep things tidy!
+std::string convert_usage_to_html(std::map<std::string, std::string> &operator_locations, const std::string &header, const std::string &operator_str) {  // We factored this out, to keep things tidy!
     std::string html_usage;
     html_usage = "<html>\n<head><title>" + header + operator_str + "</title></head>\n<body>\n";
     html_usage += "<h3>" + header + operator_str + "</h3>\n<pre>";
-    html_usage += operator_usage_map.get_usage(operator_str);
+    std::string usage = operator_usage_map.get_usage(operator_str);
+    for (const auto &iter: operator_locations) {
+        std::string html_link = "<a href=\"../" + iter.second + "/" + iter.first + ".html\">" + iter.first + "</a>";
+
+        std::string from = " " + iter.first + " ";  // Potentially add more of these later. Or do it in a more intelligent way?
+        std::string to = " " + html_link + " ";
+        string_replace_all(usage, from, to);
+
+        from = " " + iter.first + "[";
+        to = " " + html_link + "[";
+        string_replace_all(usage, from, to);
+
+        from = " " + iter.first + "(";
+        to = " " + html_link + "(";
+        string_replace_all(usage, from, to);
+
+        from = "(" + iter.first + " ";
+        to = "(" + html_link + " ";
+        string_replace_all(usage, from, to);
+
+        from = " " + iter.first + ",";
+        to = " " + html_link + ",";
+        string_replace_all(usage, from, to);
+
+        from = " " + iter.first + "\n";  // This one doesn't work! Not yet sure why. Now it does ...
+        to = " " + html_link + "\n";
+        string_replace_all(usage, from, to);
+
+        from = " " + iter.first + "^";
+        to = " " + html_link + "^";
+        string_replace_all(usage, from, to);
+    }
+    html_usage += usage;
     html_usage += "\n</pre>\n<hr>\n<a href=\"../index.html\">Home</a><br>\n</body>\n</html>\n";
     return html_usage;
 }
 
 template <class T>
-std::string generate_operator_usage_docs(const std::string &header, const std::string &dest_dir, const std::string &dir, T& our_map) {
+std::string generate_operator_usage_docs(std::map<std::string, std::string> &operator_locations, const std::string &header, const std::string &dest_dir, const std::string &dir, T& our_map) {
     std::string section;
 
     // Create destination directory:
@@ -72,7 +106,7 @@ std::string generate_operator_usage_docs(const std::string &header, const std::s
             std::ofstream myfile;
             myfile.open(dest_dir + operator_file);
             if (myfile.is_open()) {
-                myfile << convert_usage_to_html(header, str);
+                myfile << convert_usage_to_html(operator_locations, header, str);
                 myfile.close();
             } else {
                 std::cout << "Unable to open file: " << dest_dir + operator_file << std::endl;
@@ -117,6 +151,13 @@ std::string generate_sw_section(const std::string &header, const std::string &de
     return section + "</dl>\n";
 }
 
+template <class T>
+void learn_locations(std::map<std::string, std::string> &operator_locations, const std::string &location, T& our_map) {
+    for (const auto &iter: our_map) {
+        operator_locations[ket_map.get_str(iter.first)] = location;
+    }
+}
+
 void DocsGenerator::generate(const std::string& dir) {
     std::cout << "Generating docs in: " << dir << std::endl;
 
@@ -155,27 +196,50 @@ void DocsGenerator::generate(const std::string& dir) {
     // Generate html page:
     std::string page = docs_header;
 
+    // Learn operator locations:
+    std::map<std::string, std::string> operator_locations;
+    learn_locations(operator_locations, "built-in", fn_map.built_in);
+    learn_locations(operator_locations, "compound-built-in", fn_map.compound_built_in);
+    learn_locations(operator_locations, "sigmoid", fn_map.sigmoids);
+    learn_locations(operator_locations, "compound-sigmoid", fn_map.compound_sigmoids);
+    learn_locations(operator_locations, "ket-fn", fn_map.ket_fn);
+    learn_locations(operator_locations, "compound-ket-fn", fn_map.compound_ket_fn);
+    learn_locations(operator_locations, "sp-fn", fn_map.sp_fn);
+    learn_locations(operator_locations, "compound-sp-fn", fn_map.compound_sp_fn);
+    learn_locations(operator_locations, "seq-fn", fn_map.seq_fn);
+    learn_locations(operator_locations, "compound-seq-fn", fn_map.compound_seq_fn);
+    learn_locations(operator_locations, "compound-context-sp-fn", fn_map.compound_context_sp_fn);
+    learn_locations(operator_locations, "compound-context-seq-fn", fn_map.compound_context_seq_fn);
+    learn_locations(operator_locations, "function-1", fn_map.whitelist_1);
+    learn_locations(operator_locations, "function-2", fn_map.whitelist_2);
+    learn_locations(operator_locations, "function-3", fn_map.whitelist_3);
+    learn_locations(operator_locations, "function-4", fn_map.whitelist_4);
+    learn_locations(operator_locations, "context-function-1", fn_map.context_whitelist_1);
+    learn_locations(operator_locations, "context-function-2", fn_map.context_whitelist_2);
+    learn_locations(operator_locations, "context-function-3", fn_map.context_whitelist_3);
+    learn_locations(operator_locations, "context-function-4", fn_map.context_whitelist_4);
+
     // Generate sections:
-    page += generate_operator_usage_docs("built in operators: ", dest_dir, "built-in", fn_map.built_in);
-    page += generate_operator_usage_docs("built in compound operators: ", dest_dir, "compound-built-in", fn_map.compound_built_in);
-    page += generate_operator_usage_docs("sigmoids: ", dest_dir, "sigmoid", fn_map.sigmoids);
-    page += generate_operator_usage_docs("compound sigmoids: ", dest_dir, "compound-sigmoid", fn_map.compound_sigmoids);
-    page += generate_operator_usage_docs("ket fn: ", dest_dir, "ket-fn", fn_map.ket_fn);
-    page += generate_operator_usage_docs("compound ket fn: ", dest_dir, "compound-ket-fn", fn_map.compound_ket_fn);
-    page += generate_operator_usage_docs("sp fn: ", dest_dir, "sp-fn", fn_map.sp_fn);
-    page += generate_operator_usage_docs("compound sp fn: ", dest_dir, "compound-sp-fn", fn_map.compound_sp_fn);
-    page += generate_operator_usage_docs("seq fn: ", dest_dir, "seq-fn", fn_map.seq_fn);
-    page += generate_operator_usage_docs("compound seq fn: ", dest_dir, "compound-seq-fn", fn_map.compound_seq_fn);
-    page += generate_operator_usage_docs("compound context sp fn: ", dest_dir, "compound-context-sp-fn", fn_map.compound_context_sp_fn);
-    page += generate_operator_usage_docs("compound context seq fn: ", dest_dir, "compound-context-seq-fn", fn_map.compound_context_seq_fn);
-    page += generate_operator_usage_docs("function 1: ", dest_dir, "function-1", fn_map.whitelist_1);
-    page += generate_operator_usage_docs("function 2: ", dest_dir, "function-2", fn_map.whitelist_2);
-    page += generate_operator_usage_docs("function 3: ", dest_dir, "function-3", fn_map.whitelist_3);
-    page += generate_operator_usage_docs("function 4: ", dest_dir, "function-4", fn_map.whitelist_4);
-    page += generate_operator_usage_docs("context function 1: ", dest_dir, "context-function-1", fn_map.context_whitelist_1);
-    page += generate_operator_usage_docs("context function 2: ", dest_dir, "context-function-2", fn_map.context_whitelist_2);
-    page += generate_operator_usage_docs("context function 3: ", dest_dir, "context-function-3", fn_map.context_whitelist_3);
-    page += generate_operator_usage_docs("context function 4: ", dest_dir, "context-function-4", fn_map.context_whitelist_4);
+    page += generate_operator_usage_docs(operator_locations, "built in operators: ", dest_dir, "built-in", fn_map.built_in);
+    page += generate_operator_usage_docs(operator_locations, "built in compound operators: ", dest_dir, "compound-built-in", fn_map.compound_built_in);
+    page += generate_operator_usage_docs(operator_locations, "sigmoids: ", dest_dir, "sigmoid", fn_map.sigmoids);
+    page += generate_operator_usage_docs(operator_locations, "compound sigmoids: ", dest_dir, "compound-sigmoid", fn_map.compound_sigmoids);
+    page += generate_operator_usage_docs(operator_locations, "ket fn: ", dest_dir, "ket-fn", fn_map.ket_fn);
+    page += generate_operator_usage_docs(operator_locations, "compound ket fn: ", dest_dir, "compound-ket-fn", fn_map.compound_ket_fn);
+    page += generate_operator_usage_docs(operator_locations, "sp fn: ", dest_dir, "sp-fn", fn_map.sp_fn);
+    page += generate_operator_usage_docs(operator_locations, "compound sp fn: ", dest_dir, "compound-sp-fn", fn_map.compound_sp_fn);
+    page += generate_operator_usage_docs(operator_locations, "seq fn: ", dest_dir, "seq-fn", fn_map.seq_fn);
+    page += generate_operator_usage_docs(operator_locations, "compound seq fn: ", dest_dir, "compound-seq-fn", fn_map.compound_seq_fn);
+    page += generate_operator_usage_docs(operator_locations, "compound context sp fn: ", dest_dir, "compound-context-sp-fn", fn_map.compound_context_sp_fn);
+    page += generate_operator_usage_docs(operator_locations, "compound context seq fn: ", dest_dir, "compound-context-seq-fn", fn_map.compound_context_seq_fn);
+    page += generate_operator_usage_docs(operator_locations, "function 1: ", dest_dir, "function-1", fn_map.whitelist_1);
+    page += generate_operator_usage_docs(operator_locations, "function 2: ", dest_dir, "function-2", fn_map.whitelist_2);
+    page += generate_operator_usage_docs(operator_locations, "function 3: ", dest_dir, "function-3", fn_map.whitelist_3);
+    page += generate_operator_usage_docs(operator_locations, "function 4: ", dest_dir, "function-4", fn_map.whitelist_4);
+    page += generate_operator_usage_docs(operator_locations, "context function 1: ", dest_dir, "context-function-1", fn_map.context_whitelist_1);
+    page += generate_operator_usage_docs(operator_locations, "context function 2: ", dest_dir, "context-function-2", fn_map.context_whitelist_2);
+    page += generate_operator_usage_docs(operator_locations, "context function 3: ", dest_dir, "context-function-3", fn_map.context_whitelist_3);
+    page += generate_operator_usage_docs(operator_locations, "context function 4: ", dest_dir, "context-function-4", fn_map.context_whitelist_4);
 
 
     // Generate sw-examples section:
@@ -198,7 +262,8 @@ void DocsGenerator::generate(const std::string& dir) {
     // Add html footer:
     page += "\n</body>\n</html>\n";
 
-    std::cout << "\nPage:\n" << page << std::endl;
+    std::cout << "\nNew html index page:\n" << page << std::endl;
+
 
     // Write index page to file:
     std::ofstream myfile;
