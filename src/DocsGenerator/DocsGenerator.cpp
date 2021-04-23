@@ -30,7 +30,9 @@ const std::string docs_header =
 const std::string docs_footer =
         "<hr>\n"
         "by Garry Morrison<br>\n"
-        "email: garry -at- semantic-db.org<br>\n";
+        "email: garry -at- semantic-db.org<br>\n"
+        "updated: $datetime$\n"
+        "\n</body>\n</html>\n";
 
 
 std::string convert_usage_to_html(std::map<std::string, std::string> &operator_locations, const std::string &header, const std::string &operator_str) {  // We factored this out, to keep things tidy!
@@ -38,7 +40,7 @@ std::string convert_usage_to_html(std::map<std::string, std::string> &operator_l
     html_usage = "<html>\n<head><title>" + header + operator_str + "</title></head>\n<body>\n";
     html_usage += "<h3>" + header + operator_str + "</h3>\n<pre>";
     std::string usage = operator_usage_map.get_usage(operator_str) + "\n";
-    std::string sw3_ext = ".sw3";
+    std::string sw3_ext = ".sw3";  // Not ideal that we hardwire in the extension here.
     std::string html_link;
     for (const auto &iter: operator_locations) {
         if (std::equal(sw3_ext.rbegin(), sw3_ext.rend(), iter.first.rbegin())) {  // If the iter.first ends with .sw3 then it is an sw3 file, not an operator.
@@ -269,11 +271,11 @@ void DocsGenerator::generate(const std::string& dir) {
     time(&rawtime);
     timeinfo = localtime(&rawtime);
     strftime(buffer, 80, "%B %d, %G", timeinfo);
-    page += buffer;
 
-    // Add html footer:
-    page += "\n</body>\n</html>\n";
+    // Now sub it in:
+    string_replace_all(page, "$datetime$", buffer);
 
+    // Write index page to stdout:
     std::cout << "\nNew html index page:\n" << page << std::endl;
 
 
