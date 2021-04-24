@@ -27,6 +27,8 @@ public:
     std::unordered_map<ulong, std::function<Sequence(const Superposition&)> > sp_fn;
     std::unordered_map<ulong, std::function<Sequence(const Sequence&)> > seq_fn;
 
+    std::unordered_map<ulong, std::function<Sequence(const Ket&, ContextList&)> > context_ket_fn;
+
     std::unordered_map<ulong, std::function<double(const double, const std::vector<std::shared_ptr<CompoundConstant> >&) > > compound_sigmoids;
     std::unordered_map<ulong, std::function<Sequence(const Ket, const std::vector<std::shared_ptr<CompoundConstant> >&) > > compound_ket_fn;
     std::unordered_map<ulong, std::function<Sequence(const Superposition&, const std::vector<std::shared_ptr<CompoundConstant> >&) > > compound_sp_fn;

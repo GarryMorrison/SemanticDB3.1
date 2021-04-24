@@ -62,6 +62,9 @@ Sequence SimpleOperator::Compile(ContextList& context, const Sequence& seq) cons
     } else if (fn_map.ket_fn.find(op_idx) != fn_map.ket_fn.end()) {
         auto fn = fn_map.ket_fn[op_idx];
         return seq.apply_ket_fn(fn);
+    } else if (fn_map.context_ket_fn.find(op_idx) != fn_map.context_ket_fn.end()) {
+        auto fn = fn_map.context_ket_fn[op_idx];
+        return seq.apply_context_ket_fn(fn, context);
     } else if (fn_map.sp_fn.find(op_idx) != fn_map.sp_fn.end()) {
         auto fn = fn_map.sp_fn[op_idx];
         return seq.apply_sp_fn(fn);

@@ -217,6 +217,7 @@ void DocsGenerator::generate(const std::string& dir) {
     learn_locations(operator_locations, "sigmoid", fn_map.sigmoids);
     learn_locations(operator_locations, "compound-sigmoid", fn_map.compound_sigmoids);
     learn_locations(operator_locations, "ket-fn", fn_map.ket_fn);
+    learn_locations(operator_locations, "context-ket-fn", fn_map.context_ket_fn);
     learn_locations(operator_locations, "compound-ket-fn", fn_map.compound_ket_fn);
     learn_locations(operator_locations, "sp-fn", fn_map.sp_fn);
     learn_locations(operator_locations, "compound-sp-fn", fn_map.compound_sp_fn);
@@ -239,6 +240,7 @@ void DocsGenerator::generate(const std::string& dir) {
     page += generate_operator_usage_docs(operator_locations, "sigmoids: ", dest_dir, "sigmoid", fn_map.sigmoids);
     page += generate_operator_usage_docs(operator_locations, "compound sigmoids: ", dest_dir, "compound-sigmoid", fn_map.compound_sigmoids);
     page += generate_operator_usage_docs(operator_locations, "ket fn: ", dest_dir, "ket-fn", fn_map.ket_fn);
+    page += generate_operator_usage_docs(operator_locations, "context ket fn: ", dest_dir, "context-ket-fn", fn_map.context_ket_fn);
     page += generate_operator_usage_docs(operator_locations, "compound ket fn: ", dest_dir, "compound-ket-fn", fn_map.compound_ket_fn);
     page += generate_operator_usage_docs(operator_locations, "sp fn: ", dest_dir, "sp-fn", fn_map.sp_fn);
     page += generate_operator_usage_docs(operator_locations, "compound sp fn: ", dest_dir, "compound-sp-fn", fn_map.compound_sp_fn);

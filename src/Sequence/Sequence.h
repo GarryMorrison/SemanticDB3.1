@@ -87,6 +87,8 @@ public:
     Sequence apply_ket_fn(const std::function<Sequence(const Ket&)> &fn) const;
     Sequence apply_sp_fn(const std::function<Sequence(const Superposition&)> &fn) const;
 
+    Sequence apply_context_ket_fn(const std::function<Sequence(const Ket&, ContextList&)> &fn, ContextList &context) const;
+
     Sequence apply_compound_sigmoid(std::function<double(double, const std::vector<std::shared_ptr<CompoundConstant> >&)> fn, std::vector<std::shared_ptr<CompoundConstant> > parameters) const;
     Sequence apply_compound_ket_fn(std::function<Sequence(Ket, const std::vector<std::shared_ptr<CompoundConstant> >&)> fn, std::vector<std::shared_ptr<CompoundConstant> > parameters) const;
     Sequence apply_compound_sp_fn(std::function<Sequence(const Superposition&, const std::vector<std::shared_ptr<CompoundConstant> >&)> fn, std::vector<std::shared_ptr<CompoundConstant> > parameters) const;

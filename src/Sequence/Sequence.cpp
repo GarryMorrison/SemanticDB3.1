@@ -705,6 +705,28 @@ Sequence Sequence::apply_sp_fn(const std::function<Sequence(const Superposition&
     return result;
 }
 
+Sequence Sequence::apply_context_ket_fn(const std::function<Sequence(const Ket &, ContextList &)> &fn, ContextList &context) const {  // Test this code!
+    if (seq.empty() ) {
+        Ket k;
+        return fn(k, context);
+    }
+    Sequence result;
+    for (const auto &sp: seq) {
+        Sequence tmp;
+        if (sp.size() == 0 ) {
+            Ket k;
+            tmp.add(fn(k, context));
+        } else {
+            for (const auto k: sp) {
+                Sequence tmp2 = fn(k, context);
+                tmp.add(tmp2);
+            }
+        }
+        result.append(tmp);
+    }
+    return result;
+}
+
 Sequence Sequence::apply_compound_sigmoid(const std::function<double(double, const std::vector<std::shared_ptr<CompoundConstant> >&)> sigmoid, std::vector<std::shared_ptr<CompoundConstant> > parameters) const {
     Sequence result;
     for (const auto &sp: seq) {

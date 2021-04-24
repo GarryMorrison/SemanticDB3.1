@@ -1666,6 +1666,28 @@ OperatorUsageMap::OperatorUsageMap() {
             "        -- So that is the hierarchical depth of this system.\n\n"
             "    see also:\n";
 
+    operator_usage_map.map["starts-with"] =
+            "\nstarts-with:\n"
+            "    description:\n"
+            "        starts-with |prefix>\n"
+            "        returns all known kets that starts-with the prefix \"prefix\"\n\n"
+            "    examples:\n"
+            "        -- eg, find people with a given first name:\n"
+            "        -- learn some people:\n"
+            "        first-name |Fred Smith> => |Fred>\n"
+            "        last-name |Fred Roberts> => |Roberts>\n"
+            "        middle-name |Sam J. Gleeson> => |Jack>\n"
+            "        age |Sam O'Conner> => |age: 47>\n"
+            "        mother |Sam Tompson> => |Liz Tompson>\n\n"
+            "        -- now find all kets that starts-with |Fred >\n"
+            "        starts-with |Fred >\n"
+            "            |Fred Smith> + |Fred Roberts>\n\n"
+            "        -- now find all kets that starts-with |Sam >\n"
+            "        starts-with |Sam >\n"
+            "            |Sam J. Gleeson> + |Sam O'Conner> + |Sam Tompson>\n\n"
+            "    see also:\n"
+            "        rel-kets\n";
+
 }
 
 std::string OperatorUsageMap::get_usage(const std::string &s) const {

@@ -1722,3 +1722,17 @@ Ket op_scompress(const Sequence &seq, ContextList &context, const std::vector<st
     context.stored_learn(dest_op, star_idx, bSeq);
     return Ket("scompress");
 }
+
+Superposition starts_with(const Ket k, ContextList &context) {
+    ulong star_idx = ket_map.get_idx("*");
+    std::vector<ulong> rel_ket_vec = context.relevant_kets(star_idx);
+    std::string starts_with_text = k.label();
+    Superposition result;
+    for (const ulong idx: rel_ket_vec) {
+        std::string label = ket_map.get_str(idx);
+        if (std::equal(starts_with_text.begin(), starts_with_text.end(), label.begin())) {
+            result.add(idx);
+        }
+    }
+    return result;
+}
