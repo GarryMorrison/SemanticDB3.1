@@ -1110,6 +1110,11 @@ Ket op_has_suffix(const Ket k, const std::vector<std::shared_ptr<CompoundConstan
     if (parameters.empty()) { return Ket("no"); }
     std::string suffix = parameters[0]->get_string();
     if (suffix.empty()) { return Ket("no"); }
+    if (std::equal(suffix.rbegin(), suffix.rend(), k.label().rbegin())) {
+        return Ket("yes");
+    }
+    return Ket("no");
+    /*
     size_t suffix_width = suffix.size();
     size_t label_width = k.label().size();
     if (suffix_width > label_width) { return Ket("no"); }
@@ -1118,6 +1123,7 @@ Ket op_has_suffix(const Ket k, const std::vector<std::shared_ptr<CompoundConstan
         return Ket("yes");
     }
     return Ket("no");
+     */
 }
 
 Ket op_remove_prefix(const Ket k, const std::vector<std::shared_ptr<CompoundConstant> > &parameters) {  // Optimise this!!
@@ -1139,6 +1145,11 @@ Ket op_has_prefix(const Ket k, const std::vector<std::shared_ptr<CompoundConstan
     if (parameters.empty()) { return Ket("no"); }
     std::string prefix = parameters[0]->get_string();
     if (prefix.empty()) { return Ket("no"); }
+    if (std::equal(prefix.begin(), prefix.end(), k.label().begin())) {
+        return Ket("yes");
+    }
+    return Ket("no");
+    /*
     size_t prefix_width = prefix.size();
     size_t label_width = k.label().size();
     if (prefix_width > label_width) { return Ket("no"); }
@@ -1147,6 +1158,7 @@ Ket op_has_prefix(const Ket k, const std::vector<std::shared_ptr<CompoundConstan
         return Ket("yes");
     }
     return Ket("no");
+    */
 }
 
 Ket op_to_comma_number(const Ket k) {
