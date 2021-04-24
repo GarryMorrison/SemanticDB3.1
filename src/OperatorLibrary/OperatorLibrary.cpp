@@ -290,6 +290,20 @@ Superposition op_strict_similar_input(const Sequence &seq, ContextList &context,
     }
 }
 
+Superposition op_equal_input(const Sequence &seq, ContextList &context, const std::vector<std::shared_ptr<CompoundConstant> > &parameters) {
+    if (parameters.empty()) { return Superposition(); }  // Alternatively, return seq.
+    ulong op_idx = parameters[0]->get_operator().get_idx();
+    std::vector<ulong> ket_vec = context.relevant_kets(op_idx);
+    Superposition result;
+    for (const ulong label_idx: ket_vec) {
+        Sequence pattern = context.recall(op_idx, label_idx)->to_seq();  // active recall? Would that stomp on memoize rules too?
+        if (seq == pattern) {
+            result.add(label_idx);
+        }
+    }
+    return result;
+}
+
 // Wow! A lot of work just to subtract a number!!
 Ket op_minus(const Ket k, const std::vector<std::shared_ptr<CompoundConstant> > &parameters) {
     if (k.size() == 0 || parameters.empty()) { return Ket(); }  // Alternatively, return k.

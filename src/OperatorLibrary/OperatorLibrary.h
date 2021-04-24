@@ -33,6 +33,7 @@ Ket print_ket(const Ket k);
 Superposition op_relevant_kets(const Sequence &seq, ContextList &context, const std::vector<std::shared_ptr<CompoundConstant> > &parameters);
 Superposition op_similar_input(const Sequence &seq, ContextList &context, const std::vector<std::shared_ptr<CompoundConstant> > &parameters);
 Superposition op_strict_similar_input(const Sequence &seq, ContextList &context, const std::vector<std::shared_ptr<CompoundConstant> > &parameters);
+Superposition op_equal_input(const Sequence &seq, ContextList &context, const std::vector<std::shared_ptr<CompoundConstant> > &parameters);
 Ket op_minus(const Ket k, const std::vector<std::shared_ptr<CompoundConstant> > &parameters);
 Ket op_plus(const Ket k, const std::vector<std::shared_ptr<CompoundConstant> > &parameters);
 Ket op_times_by(const Ket k, const std::vector<std::shared_ptr<CompoundConstant> > &parameters);
