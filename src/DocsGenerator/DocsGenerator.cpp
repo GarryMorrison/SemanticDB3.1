@@ -264,7 +264,6 @@ void DocsGenerator::generate(const std::string& dir) {
     }
 
     page += docs_footer;
-    page += "updated: ";
 
     // Generate current date:
     time_t rawtime;
