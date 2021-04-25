@@ -929,3 +929,21 @@ Sequence op_not_sread(const Sequence &input_seq, const Sequence &one) {
     }
     return result;
 }
+
+Sequence op_string_replace(const Sequence &input_seq, const Sequence &one, const Sequence &two) {  // Could do with some optimization.
+    Sequence result;
+    Superposition from_patterns = one.to_sp();
+    std::string to_str = two.to_ket().label();
+    for (const auto &sp: input_seq) {
+        Superposition tmp_sp;
+        for (const auto &k: sp) {
+            std::string working_str = k.label();
+            for (const auto &k2: from_patterns) {
+                string_replace_all(working_str, k2.label(), to_str);
+            }
+            tmp_sp.add(working_str, k.value());
+        }
+        result.append(tmp_sp);
+    }
+    return result;
+}

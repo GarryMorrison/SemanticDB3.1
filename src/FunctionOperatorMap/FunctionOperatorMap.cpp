@@ -376,6 +376,9 @@ FunctionOperatorMap::FunctionOperatorMap() {
 
     idx = ket_map.get_idx("starts-with");
     fn_map.context_ket_fn.emplace(idx, &starts_with);
+
+    idx = ket_map.get_idx("string-replace");
+    fn_map.whitelist_2.emplace(idx, &op_string_replace);
 }
 
 template <class T>

@@ -1688,6 +1688,27 @@ OperatorUsageMap::OperatorUsageMap() {
             "    see also:\n"
             "        rel-kets\n";
 
+    operator_usage_map.map["string-replace"] =
+            "\nstring-replace:\n"
+            "    description:\n"
+            "        string-replace(source-sp, dest-ket) input-seq\n"
+            "        For all kets in source-sp, replace with dest-ket in input-seq\n\n"
+            "    examples:\n"
+            "        string-replace(|sad>, |happy>) (|a> . |sad> . |fellow>)\n"
+            "            |a> . |happy> . |fellow>\n\n"
+            "        -- remove \" chars operator:\n"
+            "        remove-quotes (*) #=> string-replace(|\">, |>) |__self>\n\n"
+            "        -- now put it to use:\n"
+            "        remove-quotes |text: \"some text\">\n\n"
+            "        -- remove punctuation chars:\n"
+            "        -- :;.,!?$-\"'\n"
+            "        remove-punctuation (*) #=> string-replace(split |:;.,!?$-\"'>, |>) |__self>\n\n"
+            "        -- now put it to use:\n"
+            "        remove-punctuation |some !$??..,:\"text>\n"
+            "            |some text>\n\n"
+            "    see also:\n"
+            "        char-replace\n";
+
 }
 
 std::string OperatorUsageMap::get_usage(const std::string &s) const {
