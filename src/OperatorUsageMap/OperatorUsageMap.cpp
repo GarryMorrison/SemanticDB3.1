@@ -766,7 +766,22 @@ OperatorUsageMap::OperatorUsageMap() {
             "            |op1: a, b, c>\n\n"
             "        if(|no>, |op: op1>, |op: op2>) ssplit |abc>\n"
             "            |op2: a, b, c>\n\n"
-            "    see also:\n";
+            "    see also:\n"
+            "        value-if\n";
+
+    operator_usage_map.map["value-if"] =
+            "\nvalue-if:\n"
+            "    description:\n"
+            "        value-if(condition, seq1, seq2) input-seq\n"
+            "        if condition evaluates to |yes> or |true> then return seq1, else return seq2\n"
+            "        input-seq is ignored\n\n"
+            "    examples:\n"
+            "        value-if( |yes>, |branch a>, |branch b>)\n"
+            "            |branch a>\n\n"
+            "        value-if( |no>, |branch a>, |branch b>)\n"
+            "            |branch b>\n\n"
+            "    see also:\n"
+            "        if\n";
 
     operator_usage_map.map["is-less-than"] =
             "\nis-less-than:\n"

@@ -276,6 +276,9 @@ FunctionOperatorMap::FunctionOperatorMap() {
     idx = ket_map.get_idx("if");
     fn_map.context_whitelist_3.emplace(idx, &op_if);
 
+    idx = ket_map.get_idx("value-if");
+    fn_map.whitelist_3.emplace(idx, &op_value_if);
+
     idx = ket_map.get_idx("is-less-than");
     fn_map.compound_ket_fn.emplace(idx, &op_is_less_than);
 

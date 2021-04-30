@@ -581,6 +581,14 @@ Sequence op_if(ContextList &context, const Sequence &input_seq, const Sequence &
     }
 }
 
+Sequence op_value_if(const Sequence &input_seq, const Sequence &one, const Sequence &two, const Sequence &three) {
+    std::string str_condition = one.to_ket().label();
+    if (str_condition == "yes" || str_condition == "true") {  // Should we instead cast "yes" and "true" to ulong using ket_map, and then do the compare?
+        return two;
+    }
+    return three;
+}
+
 Sequence op_is_mbr(const Sequence &input_seq, const Sequence &one) {
     if (input_seq.size() == 0 || one.size() == 0) { return Ket("no"); }
     ulong ket_idx = one.to_ket().label_idx();
