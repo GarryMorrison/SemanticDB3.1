@@ -176,8 +176,8 @@ line : item
 //      | learn_rule
 //      | operator_with_sequence
 
-item : operator_sequence EOL { Sequence seq(""); std::cout << "operator sequence:\n" << $1->Compile(driver.context, seq).to_string() << std::endl; }
-     | general_sequence EOL { std::cout << "general sequence:\n" << $1->Compile(driver.context).to_string() << std::endl; }
+item : general_sequence EOL { std::cout << "general sequence:\n" << $1->Compile(driver.context).to_string() << std::endl; }
+     | operator_sequence EOL { Sequence seq(""); std::cout << "operator sequence:\n" << $1->Compile(driver.context, seq).to_string() << std::endl; }
      | learn_rule EOL { std::cout << "learn rule: " << $1->to_string() << std::endl; $1->Compile(driver.context); }
      | general_learn_rule EOL { std::cout << "multi learn rule:\n" << $1->to_string() << std::endl; $1->Compile(driver.context); }
      | function_learn_rule EOL
@@ -220,6 +220,12 @@ learn_rule : OP_LABEL KET_LABEL LEARN_SYM general_sequence { driver.context.lear
 */
 
 learn_rule : operator_with_sequence LEARN_SYM general_sequence { $$ = new LearnRule(*$1, $2, *$3); }
+           | operator_with_sequence LEARN_SYM operator_sequence {
+               std::shared_ptr<BaseOperator> tmp_op_ptr($3);
+               std::shared_ptr<BaseSequence> tmp_seq_ptr = std::make_shared<Ket>();
+               auto tmp_op_with_seq = OperatorWithSequence(tmp_op_ptr, tmp_seq_ptr);
+               $$ = new LearnRule(*$1, $2, tmp_op_with_seq);
+           }
            ;
 
 general_learn_rule : operator_with_sequence LEARN_SYM multi_learn_rule { $$ = new LearnRule(*$1, $2, *$3); }
