@@ -124,7 +124,7 @@
 %type <bSeq> ket
 %type <opSeqVal> operator_sequence
 %type <baseOpVal> operator compound_operator function_operator general_operator
-%type <opWithSeqVal> operator_with_sequence general_sequence
+%type <opWithSeqVal> operator_with_sequence general_sequence operator_or_general_sequence
 %type <learnRuleVal> learn_rule general_learn_rule
 %type <constVal> constant
 %type <constVec> parameters
@@ -176,8 +176,9 @@ line : item
 //      | learn_rule
 //      | operator_with_sequence
 
-item : general_sequence EOL { std::cout << "general sequence:\n" << $1->Compile(driver.context).to_string() << std::endl; }
-     | operator_sequence EOL { Sequence seq(""); std::cout << "operator sequence:\n" << $1->Compile(driver.context, seq).to_string() << std::endl; }
+item : operator_or_general_sequence EOL { std::cout << "operator or general sequence:\n" << $1->Compile(driver.context).to_string() << std::endl; }
+//      | general_sequence EOL { std::cout << "general sequence:\n" << $1->Compile(driver.context).to_string() << std::endl; }
+//      | operator_sequence EOL { Sequence seq(""); std::cout << "operator sequence:\n" << $1->Compile(driver.context, seq).to_string() << std::endl; }
      | learn_rule EOL { std::cout << "learn rule: " << $1->to_string() << std::endl; $1->Compile(driver.context); }
      | general_learn_rule EOL { std::cout << "multi learn rule:\n" << $1->to_string() << std::endl; $1->Compile(driver.context); }
      | function_learn_rule EOL
@@ -219,13 +220,7 @@ learn_rule : OP_LABEL KET_LABEL LEARN_SYM general_sequence { driver.context.lear
            ;
 */
 
-learn_rule : operator_with_sequence LEARN_SYM general_sequence { $$ = new LearnRule(*$1, $2, *$3); }
-           | operator_with_sequence LEARN_SYM operator_sequence {
-               std::shared_ptr<BaseOperator> tmp_op_ptr($3);
-               std::shared_ptr<BaseSequence> tmp_seq_ptr = std::make_shared<Ket>();
-               auto tmp_op_with_seq = OperatorWithSequence(tmp_op_ptr, tmp_seq_ptr);
-               $$ = new LearnRule(*$1, $2, tmp_op_with_seq);
-           }
+learn_rule : operator_with_sequence LEARN_SYM operator_or_general_sequence { $$ = new LearnRule(*$1, $2, *$3); }
            ;
 
 general_learn_rule : operator_with_sequence LEARN_SYM multi_learn_rule { $$ = new LearnRule(*$1, $2, *$3); }
@@ -293,10 +288,10 @@ function_operator : OP_LABEL LPAREN general_sequence RPAREN { $$ = new FunctionO
                   ;
 */
 
-function_operator : FN_LPAREN general_sequence RPAREN { $$ = new FunctionOperator($1, *$2); }
-                  | FN_LPAREN general_sequence COMMA general_sequence RPAREN { $$ = new FunctionOperator($1, *$2, *$4); }
-                  | FN_LPAREN general_sequence COMMA general_sequence COMMA general_sequence RPAREN { $$ = new FunctionOperator($1, *$2, *$4, *$6); }
-                  | FN_LPAREN general_sequence COMMA general_sequence COMMA general_sequence COMMA general_sequence RPAREN { $$ = new FunctionOperator($1, *$2, *$4, *$6, *$8); }
+function_operator : FN_LPAREN operator_or_general_sequence RPAREN { $$ = new FunctionOperator($1, *$2); }
+                  | FN_LPAREN operator_or_general_sequence COMMA operator_or_general_sequence RPAREN { $$ = new FunctionOperator($1, *$2, *$4); }
+                  | FN_LPAREN operator_or_general_sequence COMMA operator_or_general_sequence COMMA operator_or_general_sequence RPAREN { $$ = new FunctionOperator($1, *$2, *$4, *$6); }
+                  | FN_LPAREN operator_or_general_sequence COMMA operator_or_general_sequence COMMA operator_or_general_sequence COMMA operator_or_general_sequence RPAREN { $$ = new FunctionOperator($1, *$2, *$4, *$6, *$8); }
                   ;
 
 operator : function_operator { $$ = $1; }
@@ -321,6 +316,14 @@ general_sequence : operator_with_sequence { $$ = $1; }
                  | general_sequence operator_with_sequence { $$ = $1; $$->append(SPLUS, *$2); }
                  | LPAREN general_sequence RPAREN { $$ = $2; }
                  ;
+
+operator_or_general_sequence : general_sequence { $$ = $1; }
+                             | operator_sequence {
+                                 std::shared_ptr<BaseOperator> tmp_op_ptr($1);
+                                 std::shared_ptr<BaseSequence> tmp_seq_ptr = std::make_shared<Ket>();
+                                 $$ = new OperatorWithSequence(tmp_op_ptr, tmp_seq_ptr);
+                             }
+                             ;
 
 constant : STRING { $$ = new ConstantString(*$1); }
          | STAR { $$ = new ConstantOperator("*"); }
