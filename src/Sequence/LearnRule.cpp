@@ -7,6 +7,8 @@
 #include "LearnRule.h"
 #include "src/Operator/NumericOperator.h"
 #include "MultiLearnRule.h"
+#include "MultiSelfKet.h"
+
 
 LearnRule::LearnRule(OperatorWithSequence &head, unsigned int rule_type, OperatorWithSequence &tail)  // Tidy this function!!!
     : _first_op_idx(0), _valid_learn_rule(false), _rule_type(rule_type) {
@@ -127,7 +129,8 @@ Sequence LearnRule::Compile(ContextList &context, const Ket& label_ket1, const K
     if (_ket_op->type() == OPEMPTY) {
         if (_ket_like_seq->is_ket()) {  // Primary / most common branch
             // ulong label_idx = _ket_like_seq->to_ket().label_idx();    // Can we instead directly invoke .label_idx() ?
-            Ket label_ket = _ket_like_seq->to_ket();
+            // Ket label_ket = _ket_like_seq->to_ket();
+            Ket label_ket = _ket_like_seq->Compile(context, label_ket1, multi_label_ket).to_ket();
             ulong label_idx = label_ket.label_idx();
             if (_rule_type == RULENORMAL || _rule_type == RULEADD || _rule_type == RULESEQ) {
                 Sequence RHS = _RHS_seq->Compile(context, label_ket, multi_label_ket);
@@ -163,7 +166,11 @@ Sequence LearnRule::Compile(ContextList &context, const Ket& label_ket1, const K
             return bSeq2->to_seq();
         }
     }
-    Superposition indirect_sp = _ket_op->Compile(context, _ket_like_seq->to_seq()).to_sp(); // A question remains, when should we compile this section?
+    // Superposition indirect_sp = _ket_op->Compile(context, _ket_like_seq->to_seq()).to_sp(); // A question remains, when should we compile this section?
+    // Superposition indirect_sp = _ket_op->Compile(context, _ket_like_seq->to_seq(), label_ket1, multi_label_ket).to_sp();
+    Sequence compiled_ket = _ket_like_seq->Compile(context, label_ket1, multi_label_ket);
+    Superposition indirect_sp = _ket_op->Compile(context, compiled_ket).to_sp();
+    // std::cout << "    indirect sp: " << indirect_sp.to_string() << std::endl;
     for (const auto k: indirect_sp) {
         ulong label_idx = k.label_idx();
         if (_rule_type == RULENORMAL || _rule_type == RULEADD || _rule_type == RULESEQ) {
@@ -195,7 +202,7 @@ Sequence LearnRule::Compile(ContextList &context, const Ket& label_ket1, const s
 
     std::shared_ptr<BaseSequence> bSeq2 = _RHS_seq;
 
-    if (_ket_op->type() == OPEMPTY) {
+    if (_ket_op->type() == OPEMPTY && (_ket_like_seq->type() != MULTISELFKET)) {  // MultiSelfKets can expand to Sequence's so we can't handle it on this branch.
         if (_ket_like_seq->is_ket()) {  // Primary / most common branch
             Ket label_ket = _ket_like_seq->to_ket();
             ulong label_idx = label_ket.label_idx();    // Can we instead directly invoke .label_idx() ?
@@ -233,7 +240,10 @@ Sequence LearnRule::Compile(ContextList &context, const Ket& label_ket1, const s
             return bSeq2->to_seq();
         }
     }
-    Superposition indirect_sp = _ket_op->Compile(context, _ket_like_seq->to_seq()).to_sp(); // A question remains, when should we compile this section?
+    // Superposition indirect_sp = _ket_op->Compile(context, _ket_like_seq->to_seq()).to_sp(); // A question remains, when should we compile this section?
+    Sequence compiled_ket = _ket_like_seq->Compile(context, label_ket1, args);
+    Superposition indirect_sp = _ket_op->Compile(context, compiled_ket).to_sp();
+    // std::cout << "    indirect sp: " << indirect_sp.to_string() << std::endl;
     for (const auto k: indirect_sp) {
         ulong label_idx = k.label_idx();
         if (_rule_type == RULENORMAL || _rule_type == RULEADD || _rule_type == RULESEQ) {
