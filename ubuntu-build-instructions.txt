@@ -1,4 +1,4 @@
-sudo apt install build-essential cmake bison flex
+sudo apt install build-essential cmake bison flex libfl-dev
 wget https://github.com/GarryMorrison/SemanticDB3.1/archive/refs/heads/master.zip
 unzip master.zip
 mv SemanticDB3.1-master SemanticDB3.1
