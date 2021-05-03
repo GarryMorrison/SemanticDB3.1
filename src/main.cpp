@@ -9,7 +9,7 @@
 
 
 std::string standard_introduction_text = "Welcome to the Semantic DB version 3.1\n";
-std::string interactive_introduction_text = "\nWelcome to the Semantic DB version 3.1 shell.\nLast updated 26th November 2020.\nType h for help.\n";
+std::string interactive_introduction_text = "\nWelcome to the Semantic DB version 3.1 shell.\nLast updated 3rd May 2021.\nType h for help.\n";
 
 std::string help_string = "\n    q, quit, exit        quit the semantic agent\n"
                           "    h, help              print this message\n"
@@ -80,7 +80,7 @@ int main(int argc, char** argv) {
             std::cout << "generate_docs_starting_directory: " << generate_docs_starting_directory << std::endl;
 
             int k = 0;
-            for (const auto file_name: file_names) {
+            for (const auto &file_name: file_names) {
                 k++;
                 std::cout << "file name " << k << ": " << file_name << std::endl;
             }
@@ -104,7 +104,7 @@ int main(int argc, char** argv) {
             return 0;
         }
         if (!interactive_mode) {
-            for (const auto file_name: file_names) {
+            for (const auto &file_name: file_names) {
                 parse_success = driver.parse_file(file_name);
                 if (!parse_success) {
                     std::cout << "Parse failed for file: " << file_name << std::endl;
@@ -119,8 +119,12 @@ int main(int argc, char** argv) {
         // Start the semantic agent:
         std::cout << interactive_introduction_text;
         {
-            Timer_ms timer("\n    Time taken", quiet_mode);  // Time the load time.
-            for (const auto file_name: file_names) {  // load up the files specified on the command line:
+            bool intro_quiet_mode = quiet_mode;
+            if (file_names.empty()) {  // Only time the load time if there are files to load.
+                intro_quiet_mode = true;
+            }
+            Timer_ms timer("\n    Time taken", intro_quiet_mode);  // Time the load time.
+            for (const auto &file_name: file_names) {  // load up the files specified on the command line:
                 parse_success = driver.parse_file(file_name);
                 if (!parse_success) {
                     std::cout << "Parse failed for file: " << file_name << std::endl;
@@ -131,23 +135,37 @@ int main(int argc, char** argv) {
             }
         }
         std::string shell_input;
+        std::string multi_line_suffix = "=>";  // String used to indicate the start of a multi line rule.
         while (true) {
             std::cout << "\nsa: ";
             getline(std::cin, shell_input);
+            if (std::equal(multi_line_suffix.rbegin(), multi_line_suffix.rend(), shell_input.rbegin())) {
+                std::string multi_line_shell_input = shell_input + "\n";
+                bool inside_multi_line = true;
+                while (inside_multi_line) {
+                    std::cout << "    : ";
+                    getline(std::cin, shell_input);
+                    if (!shell_input.empty()) {
+                        multi_line_shell_input += "    " + shell_input + "\n";
+                    } else {
+                        inside_multi_line = false;
+                    }
+                }
+                shell_input = multi_line_shell_input;
+            }
             if (shell_input == ".") {
                 if (sa_history.empty()) {
                     continue;
                 }
                 shell_input = sa_history.back();
                 // sa_history.emplace_back(".");       // This bugs out if . is invoked twice in a row.
-                sa_history.emplace_back(shell_input);  // This solves the bug, but . will now not be recorded in the history. Instead it will be the full command.
-            } else {
-                sa_history.emplace_back(shell_input);
+                // sa_history.emplace_back(shell_input);  // This solves the bug, but . will now not be recorded in the history. Instead it will be the full command.
             }
+            sa_history.emplace_back(shell_input);
             if (shell_input == "i") {
                 history_index = 0;
                 std::cout << "\nInteractive history:\n";
-                for (const auto line: sa_history) {
+                for (const auto &line: sa_history) {
                     std::cout << "    " << history_index << ")    " << line << std::endl;
                     history_index++;
                 }
@@ -203,7 +221,7 @@ int main(int argc, char** argv) {
                 continue;
             } else if (shell_input == "history") {
                 std::cout << "\nSemantic agent history:\n";
-                for (const auto line: sa_history) {
+                for (const auto &line: sa_history) {
                     std::cout << "    " << line << std::endl;
                 }
             } else if (shell_input == "quiet on") {
