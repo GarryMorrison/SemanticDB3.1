@@ -46,7 +46,7 @@ ulong get_op_idx(char *str, yy_size_t len) {
 
 /* enable scanner to generate debug output. disable this for release
  * versions. */
-%option debug
+/* %option debug */
 
 /* no support for include files is planned */
 %option yywrap nounput

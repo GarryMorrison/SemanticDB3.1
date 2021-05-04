@@ -17,7 +17,7 @@
 
 /* add debug output code to generated parser. disable this for release
  * versions. */
-%debug
+// %debug
 
 /* start symbol is named "start" */
 %start start
@@ -53,7 +53,7 @@
 
 /* verbose error messages */
 // Switch off for release version:
-%define parse.error verbose
+// %define parse.error verbose
 
 
 %union {
@@ -176,11 +176,11 @@ line : item
 //      | learn_rule
 //      | operator_with_sequence
 
-item : operator_or_general_sequence EOL { std::cout << "operator or general sequence:\n" << $1->Compile(driver.context).to_string() << std::endl; }
+item : operator_or_general_sequence EOL { std::cout << "\n" << $1->Compile(driver.context).to_string() << "\n"; }
 //      | general_sequence EOL { std::cout << "general sequence:\n" << $1->Compile(driver.context).to_string() << std::endl; }
 //      | operator_sequence EOL { Sequence seq(""); std::cout << "operator sequence:\n" << $1->Compile(driver.context, seq).to_string() << std::endl; }
-     | learn_rule EOL { std::cout << "learn rule: " << $1->to_string() << std::endl; $1->Compile(driver.context); }
-     | general_learn_rule EOL { std::cout << "multi learn rule:\n" << $1->to_string() << std::endl; $1->Compile(driver.context); }
+     | learn_rule EOL { /* std::cout << "learn rule: " << $1->to_string() << std::endl; */ $1->Compile(driver.context); }
+     | general_learn_rule EOL { /* std::cout << "multi learn rule:\n" << $1->to_string() << std::endl; */ $1->Compile(driver.context); }
      | function_learn_rule EOL
      | COMMENT EOL
      | CONTEXT KET_LABEL EOL { driver.context.set(ket_map.get_str($2)); }
@@ -233,18 +233,18 @@ multi_learn_rule : EOL_SPACE4 learn_rule { $$ = new MultiLearnRule(*$2); }
                  | multi_learn_rule EOL_SPACE4 COMMENT { }
                  ;
 
-function_learn_rule : OP_LABEL FN_SYM LEARN_SYM general_sequence { std::shared_ptr<BaseSequence> tmp_ptr($4); driver.context.fn_learn($1, $2, tmp_ptr); }
+function_learn_rule : OP_LABEL FN_SYM LEARN_SYM operator_or_general_sequence { std::shared_ptr<BaseSequence> tmp_ptr($4); driver.context.fn_learn($1, $2, tmp_ptr); }
                     | OP_LABEL FN_SYM LEARN_SYM multi_learn_rule { std::shared_ptr<BaseSequence> tmp_ptr($4); driver.context.fn_learn($1, $2, tmp_ptr); }
                     ;
 
 operator_with_sequence : ket {
-                            std::cout << "naked ket: " << $1->to_string() << std::endl;
+                            // std::cout << "naked ket: " << $1->to_string() << std::endl;
                             std::shared_ptr<BaseOperator> tmp_op_ptr = std::make_shared<SimpleOperator>("");
                             std::shared_ptr<BaseSequence> tmp_seq_ptr($1);
                             $$ = new OperatorWithSequence(tmp_op_ptr, tmp_seq_ptr);
                        }
                        | operator_sequence ket {
-                            std::cout << $1->to_string() << $2->to_string() << std::endl;
+                            // std::cout << $1->to_string() << $2->to_string() << std::endl;
                             std::shared_ptr<BaseOperator> tmp_op_ptr($1);
                             std::shared_ptr<BaseSequence> tmp_seq_ptr($2);
                             $$ = new OperatorWithSequence(tmp_op_ptr, tmp_seq_ptr);

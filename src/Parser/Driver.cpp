@@ -26,7 +26,7 @@ namespace SDB {
         this->lexer = &scanner;
 
         Parser parser(*this);
-        parser.set_debug_level(trace_parsing);
+        // parser.set_debug_level(trace_parsing);
         return (parser.parse() == 0);
     }
 
