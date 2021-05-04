@@ -119,11 +119,7 @@ int main(int argc, char** argv) {
         // Start the semantic agent:
         std::cout << interactive_introduction_text;
         {
-            bool intro_quiet_mode = quiet_mode;
-            if (file_names.empty()) {  // Only time the load time if there are files to load.
-                intro_quiet_mode = true;
-            }
-            Timer_ms timer("\n    Time taken", intro_quiet_mode);  // Time the load time.
+            Timer_ms timer("\n    Time taken", quiet_mode || file_names.empty());  // Time the load time, but only if there are files to load.
             for (const auto &file_name: file_names) {  // load up the files specified on the command line:
                 parse_success = driver.parse_file(file_name);
                 if (!parse_success) {
