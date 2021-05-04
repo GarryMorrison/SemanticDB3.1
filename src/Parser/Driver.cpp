@@ -22,11 +22,11 @@ namespace SDB {
         streamname = sname;
 
         Scanner scanner(&in);
-        scanner.set_debug(trace_scanning);
+        scanner.set_debug(trace_scanning);  // Switch this off too?
         this->lexer = &scanner;
 
         Parser parser(*this);
-        // parser.set_debug_level(trace_parsing);
+        // parser.set_debug_level(trace_parsing);  // No longer a valid option after switching off debug mode in Parser.yy
         return (parser.parse() == 0);
     }
 

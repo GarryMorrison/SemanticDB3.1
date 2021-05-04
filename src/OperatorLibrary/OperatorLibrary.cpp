@@ -211,7 +211,8 @@ Ket op_bar_chart(const Superposition &sp, const std::vector<std::shared_ptr<Comp
 
 
 Ket print_ket(const Ket k) {
-    std::cout << k.label() << std::endl;
+    // std::cout << k.label() << std::endl;
+    std::cout << k.label() << "\n";
     return k;
 }
 
