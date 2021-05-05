@@ -385,6 +385,9 @@ FunctionOperatorMap::FunctionOperatorMap() {
 
     idx = ket_map.get_idx("inherit");
     fn_map.compound_context_seq_fn.emplace(idx, &op_inherit);
+
+    idx = ket_map.get_idx("inherit-path");
+    fn_map.compound_context_seq_fn.emplace(idx, &op_inherit_path);
 }
 
 template <class T>

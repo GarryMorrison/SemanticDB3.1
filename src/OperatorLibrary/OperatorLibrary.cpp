@@ -1777,3 +1777,33 @@ Sequence op_inherit(const Sequence &seq, ContextList &context, const std::vector
     }
     return result;
 }
+
+Sequence op_inherit_path(const Sequence &seq, ContextList &context, const std::vector<std::shared_ptr<CompoundConstant> > &parameters) {
+    Sequence result;
+    if (parameters.empty()) { return result; }
+    SimpleOperator parent_type = parameters[0]->get_operator();
+    ulong empty_ket_idx = ket_map.get_idx("");
+    ulong parent_type_idx = parent_type.get_idx();
+    for (const auto &sp: seq) {
+        Sequence tmp_seq;
+        for (const auto &k: sp) {
+            ulong current_ket_idx = k.label_idx();
+            std::string inherit_path = k.label();
+            bool has_parent = true;
+            while (has_parent) {
+                ulong next_ket_idx = context.recall(parent_type_idx, current_ket_idx)->to_ket().label_idx();  // Maybe use context.recall_type() here.
+                if (next_ket_idx == empty_ket_idx) {
+                    has_parent = false;
+                } else {
+                    inherit_path = ket_map.get_str(next_ket_idx) + ": " + inherit_path;
+                    current_ket_idx = next_ket_idx;
+                }
+            }
+            Sequence tmp_result(inherit_path);
+            tmp_result.multiply(k.value());
+            tmp_seq.add(tmp_result);
+        }
+        result.append(tmp_seq);
+    }
+    return result;
+}

@@ -76,5 +76,6 @@ Ket op_unlearn(const Superposition &sp, ContextList &context, const std::vector<
 Ket op_scompress(const Sequence &seq, ContextList &context, const std::vector<std::shared_ptr<CompoundConstant> > &parameters);
 Superposition starts_with(const Ket k, ContextList &context);
 Sequence op_inherit(const Sequence &seq, ContextList &context, const std::vector<std::shared_ptr<CompoundConstant> > &parameters);
+Sequence op_inherit_path(const Sequence &seq, ContextList &context, const std::vector<std::shared_ptr<CompoundConstant> > &parameters);
 
 #endif //SDB3_1_OPERATORLIBRARY_H

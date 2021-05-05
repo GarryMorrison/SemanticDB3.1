@@ -1764,6 +1764,26 @@ OperatorUsageMap::OperatorUsageMap() {
             "    see also:\n"
             "        inherit-path\n";
 
+    operator_usage_map.map["inherit-path"] =
+            "\ninherit-path:\n"
+            "    description:\n"
+            "        inherit-path[parent-type] input-seq\n"
+            "        return the inherit path for the kets in input-seq\n\n"
+            "    examples:\n"
+            "        -- learn some inheritance paths:\n"
+            "        parent-type |trudy> => |cat>\n"
+            "        parent-type |cat> => |feline>\n"
+            "        parent-type |feline> => |mammal>\n"
+            "        parent-type |mammal> => |animal>\n\n"
+            "        parent-type |rex> => |dog>\n"
+            "        parent-type |dog> => |canine>\n"
+            "        parent-type |canine> => |mammal>\n\n"
+            "        -- now find the inheritance path for trudy and rex:\n"
+            "        inherit-path[parent-type] (|trudy> + |rex>)\n"
+            "            |animal: mammal: feline: cat: trudy> + |animal: mammal: canine: dog: rex>\n\n"
+            "    see also:\n"
+            "        inherit";
+
 }
 
 std::string OperatorUsageMap::get_usage(const std::string &s) const {
