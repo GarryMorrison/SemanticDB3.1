@@ -382,6 +382,9 @@ FunctionOperatorMap::FunctionOperatorMap() {
 
     idx = ket_map.get_idx("string-replace");
     fn_map.whitelist_2.emplace(idx, &op_string_replace);
+
+    idx = ket_map.get_idx("inherit");
+    fn_map.compound_context_seq_fn.emplace(idx, &op_inherit);
 }
 
 template <class T>

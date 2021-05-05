@@ -1737,3 +1737,43 @@ Superposition starts_with(const Ket k, ContextList &context) {
     }
     return result;
 }
+
+Sequence op_inherit(const Sequence &seq, ContextList &context, const std::vector<std::shared_ptr<CompoundConstant> > &parameters) {
+    Sequence result;
+    if (parameters.size() < 2) { return result; }
+    SimpleOperator parent_type = parameters[0]->get_operator();
+    SimpleOperator op = parameters[1]->get_operator();
+    ulong empty_ket_idx = ket_map.get_idx("");
+    ulong parent_type_idx = parent_type.get_idx();
+    ulong op_idx = op.get_idx();
+    std::vector<ulong> parent_list;
+    for (const auto &sp: seq) {
+        Sequence tmp_seq;
+        for (const auto &k: sp) {
+            Sequence tmp_result;
+            ulong current_ket_idx = k.label_idx();
+            parent_list.push_back(current_ket_idx);
+            bool has_parent = true;
+            while (has_parent) {
+                ulong next_ket_idx = context.recall(parent_type_idx, current_ket_idx)->to_ket().label_idx();  // Maybe use context.recall_type() here.
+                if (next_ket_idx == empty_ket_idx) {
+                    has_parent = false;
+                } else {
+                    parent_list.push_back(next_ket_idx);
+                    current_ket_idx = next_ket_idx;
+                }
+            }
+            for (auto iter = parent_list.rbegin(); iter != parent_list.rend(); ++iter) {
+                unsigned int result_type = context.recall_type(op_idx, *iter);
+                if (result_type == RULENORMAL) {  // Maybe later permit dynamic rules too, so RULESTORED and RULEMEMOIZE.
+                    tmp_result = context.recall(op_idx, *iter)->to_seq();
+                }
+            }
+            tmp_result.multiply(k.value());
+            tmp_seq.add(tmp_result);
+            parent_list.clear();
+        }
+        result.append(tmp_seq);
+    }
+    return result;
+}

@@ -1725,6 +1725,45 @@ OperatorUsageMap::OperatorUsageMap() {
             "    see also:\n"
             "        char-replace\n";
 
+    operator_usage_map.map["inherit"] =
+            "\ninherit:\n"
+            "    description:\n"
+            "        inherit[parent-type, op] input-seq\n"
+            "        inherit the given operator from the given parent-type\n"
+            "        We also try our best to maintain the \"structure\" of input-seq\n\n"
+            "    examples:\n"
+            "        -- learn the parent types for an old cat named trudy:\n"
+            "        parent-type |trudy> => |cat>\n"
+            "        parent-type |cat> => |feline>\n"
+            "        parent-type |feline> => |mammal>\n"
+            "        parent-type |mammal> => |animal>\n\n"
+            "        -- learn some features from parent types:\n"
+            "        has-fur |animal> => |yes>\n"
+            "        has-teeth |animal> => |yes>\n"
+            "        has-pointy-ears |feline> => |yes>\n\n"
+            "        -- Trudy is an old cat, so has no teeth left:\n"
+            "        has-teeth |trudy> => |no>\n\n"
+            "        -- now, we can ask some questions:\n"
+            "        -- does trudy have pointy ears? Which we expect to inherit from feline\n"
+            "        inherit[parent-type, has-pointy-ears] |trudy>\n"
+            "            |yes>\n\n"
+            "        -- does trudy have fur? Which we expect to inherit from animal\n"
+            "        inherit[parent-type, has-fur] |trudy>\n"
+            "            |yes>\n\n"
+            "        -- does trudy have teeth? Which we inherit from animal, but is over-ridden by trudy:\n"
+            "        inherit[parent-type, has-teeth] |trudy>\n"
+            "            |no>\n\n"
+            "        -- now, learn some info about a dog called rex:\n"
+            "        parent-type |rex> => |dog>\n"
+            "        parent-type |dog> => |canine>\n"
+            "        parent-type |canine> => |mammal>\n\n"
+            "        -- we already know the parent type of mammal is an animal\n\n"
+            "        -- do trudy and rex have teeth?\n"
+            "        inherit[parent-type, has-teeth] (|trudy> + |rex>)\n"
+            "            |no> + |yes>\n\n"
+            "    see also:\n"
+            "        inherit-path\n";
+
 }
 
 std::string OperatorUsageMap::get_usage(const std::string &s) const {
