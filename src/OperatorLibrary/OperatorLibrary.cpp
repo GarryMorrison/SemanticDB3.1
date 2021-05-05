@@ -1799,8 +1799,7 @@ Sequence op_inherit_path(const Sequence &seq, ContextList &context, const std::v
                     current_ket_idx = next_ket_idx;
                 }
             }
-            Sequence tmp_result(inherit_path);
-            tmp_result.multiply(k.value());
+            Ket tmp_result(inherit_path, k.value());
             tmp_seq.add(tmp_result);
         }
         result.append(tmp_seq);
