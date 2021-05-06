@@ -1782,7 +1782,23 @@ OperatorUsageMap::OperatorUsageMap() {
             "        inherit-path[parent-type] (|trudy> + |rex>)\n"
             "            |animal: mammal: feline: cat: trudy> + |animal: mammal: canine: dog: rex>\n\n"
             "    see also:\n"
-            "        inherit";
+            "        inherit, extract-value, extract-category";
+
+    operator_usage_map.map["sprint"] =
+            "\nsprint:\n"
+            "    description:\n"
+            "        sprint input-seq\n"
+            "        sprint[\"prefix\"] input-seq\n"
+            "        sprint[\"prefix\", \"suffix\"] input-seq\n"
+            "        print the input sequence\n"
+            "        if prefix and suffix are defined, then print them out too\n\n"
+            "    examples:\n"
+            "        sprint ssplit |ABCDEF>\n"
+            "            |A> . |B> . |C> . |D> . |E> . |F>\n\n"
+            "        sprint[\"pre: \", \" :post\"] ssplit |ABCD>\n"
+            "            pre: |A> . |B> . |C> . |D> :post\n\n"
+            "    see also:\n"
+            "        print";
 
 }
 

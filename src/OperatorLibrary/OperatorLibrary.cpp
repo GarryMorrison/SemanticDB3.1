@@ -1806,3 +1806,19 @@ Sequence op_inherit_path(const Sequence &seq, ContextList &context, const std::v
     }
     return result;
 }
+
+Sequence op_sprint(const Sequence &seq) {
+    std::cout << seq.to_string() << "\n";
+    return seq;
+}
+
+Sequence op_sprint1(const Sequence &seq, const std::vector<std::shared_ptr<CompoundConstant> > &parameters) {
+    if (parameters.empty()) {
+        std::cout << seq.to_string() << "\n";
+    } else if (parameters.size() == 1) {
+        std::cout << parameters[0]->get_string() << seq.to_string() << "\n";
+    } else if (parameters.size() == 2) {
+        std::cout << parameters[0]->get_string() << seq.to_string() << parameters[1]->get_string() << "\n";
+    }
+    return seq;
+}

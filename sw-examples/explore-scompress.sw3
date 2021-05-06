@@ -1,0 +1,77 @@
+-- Some code to explore the scompress operator:
+
+-- Define a set of patterns:
+learn-patterns |one> #=>
+    seq |one> => ssplit |ABCDEF>
+    seq |two> => ssplit |GBCHBCDXY>
+    |>
+
+learn-patterns |two> #=>
+    seq |one> => ssplit |ABCDEUVWXY>
+    seq |two> => ssplit |BCD>
+    seq |three> => ssplit |UVWZ>
+    |>
+
+
+-- Choose which set of patterns we want to use:
+learn-patterns |one>
+-- learn-patterns |two>
+
+
+-- Process the patterns with scompress:
+scompress[seq, cseq, "W: "]
+
+
+-- Just some operators:
+-- NB: in some cases 10 might not be enough, so change as required.
+filter-W |W: *> #=> |_self>
+expand-W |W: *> #=> smerge cseq^10 |_self>
+find |repeat patterns> #=> seq2sp expand-W cseq rel-kets[seq] |>
+
+
+
+-- The operators needed to find the system depth:
+find-depth (*) #=>
+    depth |system> => plus[1] depth |system>
+    if( is-equal(|__self>, the |input>), |op: display-depth>, |op: find-depth>) cseq |__self>
+
+display-depth (*) #=>
+    |system depth:> __ depth |system>
+
+find-system-depth |*> #=>
+    depth |system> => |0>
+    the |input> => seq |__self>
+    find-depth cseq |__self>
+
+
+
+-- The operators needed to display the results:
+display-pattern |*> #=>
+    |        > _ |__self> _ |: > _ smerge seq |__self>
+
+display-system-depth |*> #=>
+    |        > _ |__self> _ |: > _ find-system-depth |__self>
+
+
+print-usage |*> #=>
+    print |>
+    print |    A brief exploration of the scompress operator.>
+    print |>
+    print |        Here are our input sequences:>
+    print |>
+    print display-pattern rel-kets[seq] |>
+    print |>
+    print |>
+    print |        Here are the corresponding system depths:>
+    print |>
+    print display-system-depth rel-kets[seq] |>
+    print |>
+    print |>
+    print |        Here are the repeated patterns:>
+    print |>
+    sprint["        "] find |repeat patterns>
+    print |>
+
+
+print-usage
+
