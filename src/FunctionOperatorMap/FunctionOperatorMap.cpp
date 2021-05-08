@@ -170,6 +170,9 @@ FunctionOperatorMap::FunctionOperatorMap() {
     idx = ket_map.get_idx("natural-sort");
     fn_map.built_in.emplace(idx, &Sequence::natural_sort);
 
+    idx = ket_map.get_idx("sort-by");
+    fn_map.compound_context_built_in.emplace(idx, &Sequence::sort_by);
+
     idx = ket_map.get_idx("srange");
     fn_map.whitelist_2.emplace(idx, &op_srange2);
     fn_map.whitelist_3.emplace(idx, &op_srange3);
@@ -391,8 +394,6 @@ FunctionOperatorMap::FunctionOperatorMap() {
 
     idx = ket_map.get_idx("sprint");
     fn_map.seq_fn.emplace(idx, &op_sprint);
-
-    idx = ket_map.get_idx("sprint");
     fn_map.compound_seq_fn.emplace(idx, &op_sprint1);
 }
 
@@ -416,6 +417,7 @@ void print_map(const std::string& s, T& our_map) {
 void FunctionOperatorMap::print() const { // Doesn't need to be optimized at all.
     print_map("built_in:", built_in);
     print_map("compound_built_in:", compound_built_in);
+    print_map("compound_context_built_in:", compound_context_built_in);
     print_map("sigmoid:", sigmoids);
     print_map("compound_sigmoid:", compound_sigmoids);
     print_map("ket_fn:", ket_fn);

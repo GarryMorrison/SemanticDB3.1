@@ -214,6 +214,7 @@ void DocsGenerator::generate(const std::string& dir) {
     // std::map<std::string, std::string> operator_locations;
     learn_locations(operator_locations, "built-in", fn_map.built_in);
     learn_locations(operator_locations, "compound-built-in", fn_map.compound_built_in);
+    learn_locations(operator_locations, "compound-context-built-in", fn_map.compound_context_built_in);
     learn_locations(operator_locations, "sigmoid", fn_map.sigmoids);
     learn_locations(operator_locations, "compound-sigmoid", fn_map.compound_sigmoids);
     learn_locations(operator_locations, "ket-fn", fn_map.ket_fn);
@@ -237,6 +238,7 @@ void DocsGenerator::generate(const std::string& dir) {
     // Generate sections:
     page += generate_operator_usage_docs(operator_locations, "built in operators: ", dest_dir, "built-in", fn_map.built_in);
     page += generate_operator_usage_docs(operator_locations, "built in compound operators: ", dest_dir, "compound-built-in", fn_map.compound_built_in);
+    page += generate_operator_usage_docs(operator_locations, "built in compound context operators: ", dest_dir, "compound-context-built-in", fn_map.compound_context_built_in);
     page += generate_operator_usage_docs(operator_locations, "sigmoids: ", dest_dir, "sigmoid", fn_map.sigmoids);
     page += generate_operator_usage_docs(operator_locations, "compound sigmoids: ", dest_dir, "compound-sigmoid", fn_map.compound_sigmoids);
     page += generate_operator_usage_docs(operator_locations, "ket fn: ", dest_dir, "ket-fn", fn_map.ket_fn);

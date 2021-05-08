@@ -127,6 +127,7 @@ public:
     Sequence ket_sort() const;
     Sequence coeff_sort() const;
     Sequence natural_sort() const;
+    Sequence sort_by(ContextList& context, const std::vector<std::shared_ptr<CompoundConstant> > &parameters) const;
     Sequence select(const int start, const int stop) const;
     Sequence op_select2(const std::vector<std::shared_ptr<CompoundConstant> > &parameters) const;
     Sequence sselect(const int start, const int stop) const;

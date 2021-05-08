@@ -23,7 +23,10 @@ Sequence CompoundOperator::Compile(ContextList& context, const Sequence& seq) co
     if (fn_map.compound_built_in.find(op_idx) != fn_map.compound_built_in.end()) {
         auto fn = fn_map.compound_built_in[op_idx];
         return fn(&seq, const_vec);
-    }else if (fn_map.compound_ket_fn.find(op_idx) != fn_map.compound_ket_fn.end()) {
+    } else if(fn_map.compound_context_built_in.find(op_idx) != fn_map.compound_context_built_in.end()) {
+        auto fn = fn_map.compound_context_built_in[op_idx];
+        return fn(&seq, context, const_vec);
+    } else if (fn_map.compound_ket_fn.find(op_idx) != fn_map.compound_ket_fn.end()) {
         auto ket_fn = fn_map.compound_ket_fn[op_idx];
         return seq.apply_compound_ket_fn(ket_fn, const_vec);  // Change parameters to & later.
     } else if (fn_map.compound_sp_fn.find(op_idx) != fn_map.compound_sp_fn.end()) {

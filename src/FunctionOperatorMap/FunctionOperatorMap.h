@@ -21,6 +21,7 @@ public:
     // below are our tables:
     std::unordered_map<ulong, std::function<Sequence(const Sequence*)> > built_in;
     std::unordered_map<ulong, std::function<Sequence(const Sequence*, const std::vector<std::shared_ptr<CompoundConstant> >&)> > compound_built_in;
+    std::unordered_map<ulong, std::function<Sequence(const Sequence*, ContextList&, const std::vector<std::shared_ptr<CompoundConstant> >&)> > compound_context_built_in;
 
     std::unordered_map<ulong, std::function<double(const double)> > sigmoids;
     std::unordered_map<ulong, std::function<Sequence(const Ket&)> > ket_fn;

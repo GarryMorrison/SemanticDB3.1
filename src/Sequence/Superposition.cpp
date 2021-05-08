@@ -9,6 +9,7 @@
 #include "Superposition.h"
 #include "../Function/misc.h"
 #include "../Function/NaturalSort.h"
+#include "../Operator/SimpleOperator.h"
 
 
 Superposition::Superposition(const ulong idx) {
@@ -347,6 +348,21 @@ void Superposition::ket_sort() {
 void Superposition::natural_sort() {
     std::sort(sort_order.begin(), sort_order.end(), [] (ulong a, ulong b) {
         if (strnatcasecmp(ket_map.get_str(a).c_str(), ket_map.get_str(b).c_str()) == -1) { return true; }
+        return false;
+    });
+}
+
+void Superposition::sort_by(ContextList &context, const std::vector<std::shared_ptr<CompoundConstant>> &parameters) {
+    if (parameters.empty()) { return; }
+    SimpleOperator op = parameters[0]->get_operator();
+    std::unordered_map<ulong, std::string> sort_by_map;
+    for (const ulong idx: sort_order) {
+        Ket k(idx, sp[idx]);
+        std::string sort_by_str = op.Compile(context, k.to_seq()).to_ket().label();
+        sort_by_map[idx] = sort_by_str;
+    }
+    std::sort(sort_order.begin(), sort_order.end(), [sort_by_map] (ulong a, ulong b) {
+        if (strnatcasecmp(sort_by_map.at(a).c_str(), sort_by_map.at(b).c_str()) == -1) { return true; }
         return false;
     });
 }

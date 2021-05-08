@@ -1798,8 +1798,24 @@ OperatorUsageMap::OperatorUsageMap() {
             "        sprint[\"pre: \", \" :post\"] ssplit |ABCD>\n"
             "            pre: |A> . |B> . |C> . |D> :post\n\n"
             "    see also:\n"
-            "        print";
+            "        print\n";
 
+    operator_usage_map.map["sort-by"] =
+            "\nsort-by:\n"
+            "    description:\n"
+            "        sort-by[op] input-seq\n"
+            "        sort the superpositions in input-seq with respect to op applied to the kets in those superpositions\n\n"
+            "    examples:\n"
+            "        -- learn some knowledge:\n"
+            "        age |Fred> => |47>\n"
+            "        age |Sam> => |43>\n"
+            "        age |Rob> => |29>\n"
+            "        age |Emma> => |26>\n\n"
+            "        -- now sort them:\n"
+            "        sort-by[age] split[\" \"] |Rob Sam Emma Fred>\n"
+            "            |Emma> + |Rob> + |Sam> + |Fred>\n\n"
+            "    see also:\n"
+            "        ket-sort, coeff-sort, natural-sort\n";
 }
 
 std::string OperatorUsageMap::get_usage(const std::string &s) const {

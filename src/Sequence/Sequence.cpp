@@ -519,6 +519,14 @@ Sequence Sequence::natural_sort() const {
     return result;
 }
 
+Sequence Sequence::sort_by(ContextList &context, const std::vector<std::shared_ptr<CompoundConstant>> &parameters) const {
+    Sequence result;
+    for (auto sp: seq) {
+        sp.sort_by(context, parameters);
+        result.seq.push_back(std::move(sp));  // use std::move here? Is this correct?
+    }
+    return result;
+}
 
 Sequence Sequence::select(const int start, const int stop) const {
     Sequence result;

@@ -67,6 +67,7 @@ public:
     void coeff_sort();
     void ket_sort();
     void natural_sort();
+    void sort_by(ContextList& context, const std::vector<std::shared_ptr<CompoundConstant> > &parameters);
     // void select(const ulong start, const ulong stop);
 
     void merge(const Superposition& sp2, const std::string& s);
