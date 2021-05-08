@@ -22,6 +22,7 @@ Ket extract_head(const Ket k);
 Ket extract_tail(const Ket k);
 Ket extract_category(const Ket k);
 Ket extract_value(const Ket k);
+Ket ket_length(const Ket k);
 Ket push_float(const Ket k);
 Ket pop_float(const Ket k);
 Superposition rank(const Superposition& sp);

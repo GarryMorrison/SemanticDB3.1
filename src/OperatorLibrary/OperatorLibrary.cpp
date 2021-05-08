@@ -125,6 +125,11 @@ Ket extract_value(const Ket k) {
     return Ket(value_idx, k.value());
 }
 
+Ket ket_length(const Ket k) {
+    unsigned int len = k.label().size();
+    return Ket("number: " + std::to_string(len), k.value());
+}
+
 Ket push_float(const Ket k) {
     if (k.label_idx() == ket_map.get_idx("")) { return k;}
     std::string label = k.label();

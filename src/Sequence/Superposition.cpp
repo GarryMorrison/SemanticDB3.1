@@ -482,6 +482,7 @@ Ket Superposition::how_many() const {
     return result;
 }
 
+
 Ket Superposition::measure_currency() const {
     double sum = 0;
     for (const auto idx : sort_order) {

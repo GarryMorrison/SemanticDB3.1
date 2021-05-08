@@ -1816,7 +1816,18 @@ OperatorUsageMap::OperatorUsageMap() {
             "        sort-by[age] split[\" \"] |Rob Sam Emma Fred>\n"
             "            |Emma> + |Rob> + |Sam> + |Fred>\n\n"
             "    see also:\n"
-            "        ket-sort, coeff-sort, natural-sort\n";
+            "        ket-sort, coeff-sort, natural-sort, ket-length\n";
+
+    operator_usage_map.map["ket-length"] =
+            "\nket-length:\n"
+            "    description:\n"
+            "        ket-length input-seq\n"
+            "        Maps each ket in input-seq to its size\n\n"
+            "    examples:\n"
+            "        ket-length (|apple> + |orange> + |fish>)\n"
+            "            |number: 5> + |number: 6> + |number: 4>\n\n"
+            "    see also:\n"
+            "        how-many, show-many, sort-by\n";
 }
 
 std::string OperatorUsageMap::get_usage(const std::string &s) const {

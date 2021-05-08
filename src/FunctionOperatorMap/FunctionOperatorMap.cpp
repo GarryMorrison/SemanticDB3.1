@@ -395,6 +395,9 @@ FunctionOperatorMap::FunctionOperatorMap() {
     idx = ket_map.get_idx("sprint");
     fn_map.seq_fn.emplace(idx, &op_sprint);
     fn_map.compound_seq_fn.emplace(idx, &op_sprint1);
+
+    idx = ket_map.get_idx("ket-length");
+    fn_map.ket_fn.emplace(idx, &ket_length);
 }
 
 template <class T>
