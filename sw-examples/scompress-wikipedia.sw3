@@ -1,0 +1,123 @@
+-- Given the raw text of the simple English wikipedia page for dogs, use scompress[] to extract out repeated substrings:
+
+
+-- Here is the extracted text for that wikipedia page:
+learn-page |dog> #=>
+    seq |0> => ssplit |Dogs (Canis lupus familiaris) are domesticated mammals, not natural wild animals.>
+    seq |1> => ssplit |They were originally bred from wolves.>
+    seq |2> => ssplit |They have been bred by humans for a long time, and were the first animals ever to be domesticated.>
+    buggy-seq |3> => ssplit |There are different studies that suggest that this happened between 15.000 and 100.000 years before our time.>
+    seq |3> => ssplit |There are different studies that suggest that this happened between and years before our time.>
+    seq |4> => ssplit |The dingo is also a dog, but many dingos have become wild animals again and live independently of humans in the range where they occur (parts of Australia).>
+    seq |5> => ssplit |Today, some dogs are used as pets, others are used to help humans do their work.>
+    seq |6> => ssplit |They are a popular pet because they are usually playful, friendly, loyal and listen to humans.>
+    seq |7> => ssplit |Thirty million dogs in the United States are registered as pets.>
+    seq |8> => ssplit |Dogs eat both meat and vegetables, often mixed together and sold in stores as dog food.>
+    seq |9> => ssplit |Dogs often have jobs, including as police dogs, army dogs, assistance dogs, fire dogs, messenger dogs, hunting dogs, herding dogs, or rescue dogs.>
+    seq |10> => ssplit |They are sometimes called "canines" from the Latin word for dog - canis.>
+    seq |11> => ssplit |Sometimes people also use "dog" to describe other canids, such as wolves.>
+    seq |12> => ssplit |A baby dog is called a pup or puppy.>
+    seq |13> => ssplit |A dog is called a puppy until it is about one year old.>
+    seq |14> => ssplit |Dogs are sometimes referred to as "man's best friend" because they are kept as domestic pets and are usually loyal and like being around humans.>
+    seq |15> => ssplit |Dogs like to be petted, but only when they can first see the petter's hand before petting; one should never pet a dog from behind.>
+    seq |16> => ssplit |Dogs have four legs and make a "bark," "woof," or "arf" sound.>
+    seq |17> => ssplit |Dogs often chase cats, and most dogs will fetch a ball or stick.>
+    seq |18> => ssplit |Dogs can smell and hear better than humans, but cannot see well in color because they are color blind.>
+    seq |19> => ssplit |Due to the anatomy of the eye, dogs can see better in dim light than humans.>
+    seq |20> => ssplit |They also have a wider field of vision.>
+    seq |21> => ssplit |Like wolves, wild dogs travel in groups called packs.>
+    seq |22> => ssplit |Packs of dogs are ordered by rank, and dogs with low rank will submit to other dogs with higher rank.>
+    seq |23> => ssplit |The highest ranked dog is called the alpha male.>
+    seq |24> => ssplit |A dog in a group helps and cares for others.>
+    seq |25> => ssplit |Domesticated dogs often view their owner as the alpha male.>
+    seq |26> => ssplit |Different dog breeds have different lifespans.>
+    seq |27> => ssplit |In general, smaller dogs live longer than bigger ones.>
+    seq |28> => ssplit |The size and the breed of the dog change how long the dog lives, on average.>
+    seq |29> => ssplit |Breeds such as the Dachshund usually live for fifteen years, Chihuahuas can reach age twenty.>
+    seq |30> => ssplit |The Great Dane, on the other hand has an average lifespan of six to eight years; some Great Danes have lived for ten years.>
+    seq |31> => ssplit |All dogs are descended from wolves, by domestication and artificial selection.>
+    seq |32> => ssplit |This is known because DNA genome analysis has been done to discover this.>
+    seq |33> => ssplit |They have been bred by humans.>
+    seq |34> => ssplit |The earliest known fossil of a domestic dog is from years ago in Belgium.>
+    seq |35> => ssplit |Dogs have lived with people for at least years.>
+    seq |36> => ssplit |In, a study was published that showed that the skull and teeth of a canid, dated to years ago, had characteristics closer to a dog than to a wolf, and the authors conclude that "this specimen may represent a dog in the very early stages of domestication, i.e. an “incipient” dog.>
+    seq |37> => ssplit |The researchers go on to suggest that it was, however, a line that did not lead to modern dogs.>
+    seq |38> => ssplit |Genetically, this material is closer to that of a modern dog than to that of a wolf.>
+    seq |39> => ssplit |Other signs of domestication are that sometimes, dogs were buried together with humans.>
+    seq |40> => ssplit |Evidence of this is a tomb in Bonn, where a man of about years of age, a woman of about years of age, the remains of a dog, plus other artifacts were found.>
+    seq |41> => ssplit |Radiocarbon dating showed that the human bones were between and years old.>
+    seq |42> => ssplit |Dogs are often called "man's best friend" because they fit in with human life.>
+    seq |43> => ssplit |Man refers to humankind and not just guys (Old English).>
+    seq |44> => ssplit |Dogs can serve people in many ways.>
+    seq |45> => ssplit |For example, there are guard dogs, hunting dogs, herding dogs, guide dogs for blind people, and police dogs.>
+    seq |46> => ssplit |There are also dogs that are trained to smell for diseases in the human body or to find bombs or illegal drugs.>
+    seq |47> => ssplit |These dogs sometimes help police in airports or other areas.>
+    seq |48> => ssplit |Sniffer dogs (usually beagles) are sometimes trained for this job.>
+    seq |49> => ssplit |Dogs have even been sent by Russians into outer space, a few years before any human being.>
+    seq |50> => ssplit |The first dog sent up was named Laika, but she died within a few hours.>
+    seq |51> => ssplit |There are at least breeds (kinds) of dogs.>
+    seq |52> => ssplit |Dogs whose parents were the same breed will also be that breed these dogs are called purebred or pure pedigree dogs.>
+    seq |53> => ssplit |Dogs with parents from different breeds no longer belong to one breed they are called mutts, mixed-breed dogs, hybrids, or mongrels.>
+    seq |54> => ssplit |Some of the most popular breeds are sheepdogs, collies, poodles and retrievers.>
+    seq |55> => ssplit |It is becoming popular to breed together two different breeds of dogs and call the new dog's breed a name that is a mixture of the parents' breeds' two names.>
+    seq |56> => ssplit |A puppy with a poodle and a pomeranian as parents might be called a Pomapoo.>
+    seq |57> => ssplit |These kinds of dogs, instead of being called mutts, are known as designer dog breeds.>
+    seq |58> => ssplit |These dogs are normally used for prize shows and designer shows.>
+    seq |59> => ssplit |They can be guide dogs.>
+    |>
+
+
+-- Let's learn all of those sequences of letters:
+learn-page |dog>
+
+
+-- It works better if the raw text is lower case, so let's learn the lower case versions of the sequences:
+convert-to-lower-case |*> #=>
+    lower-seq |__self> => to-lower seq |__self>
+    |>
+
+convert-to-lower-case rel-kets[seq]
+
+
+-- Let's do the hard work, and apply the scompress[] operator:
+-- scompress[seq, cseq, "W: "]
+scompress[lower-seq, cseq, "W: "]
+
+
+
+-- The code to find the repeated substring patterns:
+filter-W |W: *> #=> |_self>
+expand-W |W: *> #=> smerge cseq^20 |_self>
+find |repeat patterns> #=> seq2sp expand-W cseq rel-kets[lower-seq] |>
+
+print-coeff |*> #=>
+    print (extract-value push-float |__self> _ |:> __ |__self>)
+    |>
+
+print-minimalist |*> #=>
+    print |__self>
+    |>
+
+-- print-coeff reverse sort-by[ket-length] find |repeat patterns>
+print-minimalist reverse sort-by[ket-length] find |repeat patterns>
+
+
+
+-- The operators needed to find the system depth:
+find-depth (*) #=>
+    depth |system> => plus[1] depth |system>
+    if( is-equal(|__self>, the |input>), |op: display-depth>, |op: find-depth>) cseq |__self>
+
+display-depth (*) #=>
+    |system depth:> __ depth |system>
+
+find-system-depth |*> #=>
+    depth |system> => |0>
+    the |input> => lower-seq |__self>
+    find-depth cseq |__self>
+
+
+-- Now, let's find the system depths for our sequences:
+coeff-sort find-system-depth rel-kets[lower-seq]
+
+
