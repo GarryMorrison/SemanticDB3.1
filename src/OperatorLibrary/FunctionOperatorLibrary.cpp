@@ -757,7 +757,7 @@ Sequence op_smap3(ContextList &context, const Sequence &input_seq, const Sequenc
 }
 
 Sequence op_is_equal2(const Sequence &input_seq, const Sequence &seq1, const Sequence &seq2) {
-    if (seq1.size() != seq2.size()) { return Sequence("no"); }
+    if ((seq1.size() != seq2.size()) || (seq1.size() == 0 && seq2.size() == 0)) { return Sequence("no"); }
     // Ket one = seq1.to_ket();
     // Ket two = seq2.to_ket();
     // if (one.label_idx() == two.label_idx() && double_eq(one.value(), two.value())) {
