@@ -1632,6 +1632,7 @@ OperatorUsageMap::OperatorUsageMap() {
             "    description:\n"
             "        scompress[source-op, dest-op]\n"
             "        scompress[source-op, dest-op, \"str\"]\n"
+            "        scompress[source-op, dest-op, \"str\", min-ngram-len, max-ngram-len]\n"
             "        reads in all the patterns that are defined with respect to 'source-op'\n"
             "        then breaks those patterns into smaller and smaller ngrams\n"
             "        counting the frequency of those ngrams\n"

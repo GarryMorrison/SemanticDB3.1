@@ -81,7 +81,8 @@ convert-to-lower-case rel-kets[seq]
 
 -- Let's do the hard work, and apply the scompress[] operator:
 -- scompress[seq, cseq, "W: "]
-scompress[lower-seq, cseq, "W: "]
+-- scompress[lower-seq, cseq, "W: "]
+scompress[lower-seq, cseq, "W: ", 6, 40]
 
 
 

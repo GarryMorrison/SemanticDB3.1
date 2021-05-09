@@ -1563,7 +1563,7 @@ Ket op_scompress(const Sequence &seq, ContextList &context, const std::vector<st
     if (source_kets.empty()) { return Ket(); }
 
     std::string prefix;
-    if (parameters.size() == 3) {
+    if (parameters.size() >= 3) {
         prefix = parameters[2]->get_string();
     } else {
         prefix = "scompress: ";          // Change this as desired.
@@ -1593,7 +1593,15 @@ Ket op_scompress(const Sequence &seq, ContextList &context, const std::vector<st
 
     unsigned int compress_count = 0;
     unsigned int working_ngram_len = max_seq_len;
-    while (working_ngram_len > 1) {
+    unsigned int min_ngram_len = 2;
+    if (parameters.size() == 5) {
+        min_ngram_len = std::min((unsigned int)max_seq_len, (unsigned int)(parameters[3]->get_int()));
+        working_ngram_len = std::min(working_ngram_len, (unsigned int)(parameters[4]->get_int()));
+        // std::cout << "min_ngram_len: " << min_ngram_len << "\n";
+        // std::cout << "working_ngram_len: " << working_ngram_len << "\n";
+    }
+
+    while (working_ngram_len >= min_ngram_len) {
 
         std::vector<std::vector<Superposition>> working_patterns;
         std::unordered_map<unsigned int, unsigned int> working_patterns_count;
