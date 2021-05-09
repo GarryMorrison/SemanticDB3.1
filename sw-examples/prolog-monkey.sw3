@@ -1,0 +1,168 @@
+|context> => |prolog monkey bananas problem>
+url |the context> => |url: http://www.inf.ed.ac.uk/teaching/courses/aipp/lecture_slides/15_Planning.pdf>
+
+-- A transcript making use of the below code:
+-- sa: set-up-initial-state
+-- |state initiated>
+--
+-- sa: print-current-state
+--
+-- monkey is on floor
+-- monkey is at a
+-- box is on floor
+-- box is at b
+-- bananas are at c
+-- banana status is hanging
+-- |>
+--
+-- sa: go(at |monkey>, |b>)
+-- |monkey moved to b>
+--
+-- sa: print-current-state
+--
+-- monkey is on floor
+-- monkey is at b
+-- box is on floor
+-- box is at b
+-- bananas are at c
+-- banana status is hanging
+-- |>
+--
+-- sa: push(|box>, at |monkey>, |c>)
+-- |monkey pushed box to c>
+--
+-- sa: print-current-state
+--
+-- monkey is on floor
+-- monkey is at c
+-- box is on floor
+-- box is at c
+-- bananas are at c
+-- banana status is hanging
+-- |>
+--
+-- sa: climb-on(|box>)
+-- |monkey climbed on box>
+--
+-- sa: print-current-state
+--
+-- monkey is on box
+-- monkey is at c
+-- box is on floor
+-- box is at c
+-- bananas are at c
+-- banana status is hanging
+-- |>
+--
+-- sa: grab(|bananas>)
+-- |monkey grabbed bananas>
+--
+-- sa: test-for-goal-state
+-- |reached goal state!>
+
+
+-- Now on with the code:
+set-up-initial-state |*> #=>
+    on |monkey> => |floor>
+    on |box> => |floor>
+    at |monkey> => |a>
+    at |box> => |b>
+    at |bananas> => |c>
+    status |bananas> => |hanging>
+    |state initiated>
+
+test-for-goal-state |*> #=>
+    unlearn[goal-state] |count>
+    goal-state |count> +=> is-equal(on |monkey>, |box>)
+    goal-state |count> +=> is-equal(on |box>, |floor>)
+    goal-state |count> +=> is-equal(at |monkey>, |c>)
+    goal-state |count> +=> is-equal(at |box>, |c>)
+    goal-state |count> +=> is-equal(at |bananas>, |c>)
+    goal-state |count> +=> is-equal(status |bananas>, |grabbed>)
+    value-if(is-equal(goal-state |count>, 6|yes>), |reached goal state!>, |not reached goal state>)
+
+print-current-state |*> #=>
+    print (|monkey is on> __ on |monkey>)
+    print (|monkey is at> __ at |monkey>)
+    print (|box is on> __ on |box>)
+    print (|box is at> __ at |box>)
+    print (|bananas are at> __ at |bananas>)
+    print (|banana status is> __ status |bananas>)
+    |>
+
+
+
+-- go( current-location, next-location)
+go (*,*) #=>
+    unlearn[precondition] |count>
+    precondition |count> +=> is-equal(at |monkey>, |__self1>)
+    precondition |count> +=> is-equal(on |monkey>, |floor>)
+    next |location> => |__self2>
+    if(is-equal(precondition |count>, 2|yes>), |op: go-action-A>, |op: go-action-B>)
+
+go-action-A (*) #=>
+    at |monkey> => next |location>
+    |monkey moved to> __ next |location>
+
+go-action-B (*) #=>
+    |monkey failed to move to> __ next |location>
+
+
+
+-- push( object, current-location, next-location)
+push (*,*,*) #=>
+    unlearn[precondition] |count>
+    precondition |count> +=> is-equal(at |monkey>, |__self2>)
+    precondition |count> +=> is-equal(at |__self1>, |__self2>)
+    precondition |count> +=> is-equal(on |monkey>, |floor>)
+    precondition |count> +=> is-equal(on |__self1>, |floor>)
+    next |location> => |__self3>
+    the |object> => |__self1>
+    if(is-equal(precondition |count>, 4|yes>), |op: push-action-A>, |op: push-action-B>)
+
+push-action-A (*) #=>
+    at |monkey> => next |location>
+    at the |object> => next |location>
+    |monkey pushed> __ the |object> __ |to> __ next |location>
+
+push-action-B (*) #=>
+    |monkey failed to push> __ the |object> __ |to> __ next |location>
+
+
+
+-- climb-on( object )
+climb-on (*) #=>
+    unlearn[precondition] |count>
+    precondition |count> +=> is-equal(at |monkey>, at |__self1>)
+    precondition |count> +=> is-equal(on |monkey>, |floor>)
+    precondition |count> +=> is-equal(on |__self1>, |floor>)
+    the |object> => |__self1>
+    if(is-equal(precondition |count>, 3|yes>), |op: climb-on-action-A>, |op: climb-on-action-B>)
+
+climb-on-action-A (*) #=>
+    on |monkey> => the |object>
+    |monkey climbed on> __ the |object>
+
+climb-on-action-B (*) #=>
+    |monkey failed to climb on> __ the |object>
+
+
+
+-- grab( object )
+grab (*) #=>
+    unlearn[precondition] |count>
+    precondition |count> +=> is-equal(on |monkey>, |box>)
+    precondition |count> +=> is-equal(at |__self1>, at |box>)
+    precondition |count> +=> is-equal(status |__self1>, |hanging>)
+    the |object> => |__self1>
+    if(is-equal(precondition |count>, 3|yes>), |op: grab-action-A>, |op: grab-action-B>)
+
+grab-action-A (*) #=>
+    status the |object> => |grabbed>
+    |monkey grabbed> __ the |object>
+
+grab-action-B (*) #=>
+    |monkey failed to grab> __ the |object>
+
+
+

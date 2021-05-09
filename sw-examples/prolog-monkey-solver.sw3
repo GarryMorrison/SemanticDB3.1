@@ -1,0 +1,146 @@
+-- Try to solve the monkey banana problem
+-- it has no intelligence, just random selection of operators
+-- load prolog-monkey.sw3 before you load this file.
+--
+-- To run the code, invoke:
+-- find-final-plan
+-- NB: it only tries for 100 times, so it may not always come to a satisfactory plan.
+-- This can be increased by changing the value of: max |attempts>
+
+
+
+set-up-initial-state
+the |locations> => at rel-kets[at]
+the |objects> => rel-kets[at]
+
+
+apply-go |*> #=>
+    move |to> => pick-elt drop (the |locations> -1 at |monkey>)
+    previously-at |monkey> => at |monkey>
+    the |result> => go(at |monkey>, move |to>)
+    if(has-prefix["monkey moved "] the |result>, |op: go-worked>, |op: go-failed>)
+
+go-worked (*) #=>
+    the |plan> .=> |go(> _ previously-at |monkey> _ |, > _ move |to> _ |)>
+    the |result>
+
+go-failed (*) #=>
+    the |result>
+
+
+apply-push |*> #=>
+    the-push |object> => pick-elt drop (the |objects> -1 |monkey>)
+    previously-at |monkey> => at |monkey>
+    move |to> => pick-elt drop (the |locations> -1 at |monkey>)
+    the |result> => push(the-push |object>, at |monkey>, move |to>)
+    if(has-prefix["monkey pushed "] the |result>, |op: push-worked>, |op: push-failed>)
+
+push-worked (*) #=>
+    the |plan> .=> |push(> _ the-push |object> _ |, > _ previously-at |monkey> _ |, > _ move |to> _|)>
+    the |result>
+
+push-failed (*) #=>
+    the |result>
+
+
+
+apply-climb-on |*> #=>
+    climb |object> => pick-elt drop (the |objects> -1 |monkey>)
+    the |result> => climb-on(climb |object>)
+    if(has-prefix["monkey climbed "] the |result>, |op: climb-on-worked>, |op: climb-on-failed>)
+
+climb-on-worked (*) #=>
+    the |plan> .=> |climb-on(> _ climb |object> _ |)>
+    the |result>
+
+climb-on-failed (*) #=>
+    the |result>
+
+
+
+apply-grab |*> #=>
+    the-grab |object> => pick-elt drop (the |objects> -1 |monkey>)
+    the |result> => grab(the-grab |object>)
+    if(has-prefix["monkey grabbed "] the |result>, |op: grab-worked>, |op: grab-failed>)
+
+grab-worked (*) #=>
+    the |plan> .=> |grab(> _ the-grab |object> _ |)>
+    the |result>
+
+grab-failed (*) #=>
+    the |result>
+
+
+
+the-list-of |operators> => |op: apply-go> + |op: apply-push> + |op: apply-climb-on> + |op: apply-grab>
+not |yes> => |no>
+not |no> => |yes>
+
+
+reset |*> #=>
+    the-list-of |operators> => |op: apply-go> + |op: apply-push> + |op: apply-climb-on> + |op: apply-grab>
+    unlearn[the-list-of] |used operators>
+    unlearn[the-list-of] |tried operators>
+    unlearn[the] |plan>
+    set-up-initial-state
+
+
+find-plan |*> #=>
+    the |plan length> => show-many the |plan>
+    the |operator> => pick-elt drop (the-list-of |operators> -1 the-list-of |used operators> -1 the-list-of |tried operators>)
+    apply(the |operator>, |>)
+    added-to-the |plan> => not is-equal(show-many the |plan>, the |plan length>)
+    if(added-to-the |plan>, |op: added-to-plan>, |op: did-not-add-to-plan>)
+
+added-to-plan (*) #=>
+    unlearn[the-list-of] |tried operators>
+    the-list-of |used operators> +=> the |operator>
+    if(has-prefix["reached goal "] test-for-goal-state |>, |op: finished>, |op: not-finished>)
+
+did-not-add-to-plan (*) #=>
+    the-list-of |tried operators> +=> the |operator>
+    remaining-operator |count> => how-many drop (the-list-of |operators> -1 the-list-of |used operators> -1 the-list-of |tried operators>)
+    if(is-equal[0] remaining-operator |count>, |op: do-not-have-remaining-operators>, |op: have-remaining-operators>)
+
+do-not-have-remaining-operators (*) #=>
+    print |here is the failed plan:>
+    print smerge[" "] the |plan>
+    print
+    print |here are the tried operators:>
+    print smerge[", "] sp2seq extract-value the-list-of |tried operators>
+
+have-remaining-operators (*) #=>
+    find-plan
+
+finished (*) #=>
+    print |here is the plan:>
+    print smerge[" "] the |plan>
+    the |final plan> => the |plan>
+    is |finished> => |yes>
+
+not-finished (*) #=>
+    find-plan
+
+
+find-plan-wrapper |*> #=>
+    if(is |finished>, |op: wrapper-finished>, |op: wrapper-not-finished>)
+
+wrapper-finished (*) #=>
+    |>
+
+wrapper-not-finished (*) #=>
+    reset
+    find-plan
+    print |------------------------>
+
+
+max |attempts> => |100>
+
+find-final-plan |*> #=>
+    is |finished> => |no>
+    find-plan-wrapper seq2sp srange(|1>, max |attempts>)
+    print
+    print |Here is our plan:>
+    smerge[" "] the |final plan>
+
+
