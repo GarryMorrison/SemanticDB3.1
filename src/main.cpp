@@ -9,7 +9,10 @@
 
 
 std::string standard_introduction_text = "Welcome to the Semantic DB version 3.1\n";
-std::string interactive_introduction_text = "\nWelcome to the Semantic DB version 3.1 shell.\nLast updated 4th May 2021.\nType h for help.\n";
+std::string interactive_introduction_text = "\nWelcome to the Semantic DB version 3.1 shell.\n"
+                                            "Last updated 9th May 2021.\n"
+                                            "Type h for help.\n"
+                                            "Online usage info at http://semantic-db.org/docs/usage3/\n";
 
 std::string help_string = "\n    q, quit, exit        quit the semantic agent\n"
                           "    h, help              print this message\n"
