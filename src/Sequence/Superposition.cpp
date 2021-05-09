@@ -623,6 +623,8 @@ Superposition Superposition::pick(const ulong n) const {
 }
 
 Ket Superposition::pick_elt() const {
+    if (this->size() == 0) { return Ket(); }
+    if (this->sort_order[0] == ket_map.get_idx("")) { return Ket(); }
     std::random_device rd;  // is this correct to re-seed on every invoke?
     std::mt19937 eng(rd()); // code from here: https://stackoverflow.com/questions/7560114/random-number-c-in-some-range
     std::uniform_int_distribution<> distr(0, sort_order.size() - 1);

@@ -82,6 +82,10 @@ Sequence SimpleOperator::Compile(ContextList& context, const Sequence& seq) cons
     }
 
     Sequence result;
+    if (seq.size() == 0) {
+        ulong empty_idx = ket_map.get_idx("");
+        return context.active_recall(op_idx, empty_idx);
+    }
     for (const auto &sp: seq) {
         Sequence seq2;
         if (sp.size() == 0) {

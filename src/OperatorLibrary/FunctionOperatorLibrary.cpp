@@ -441,7 +441,7 @@ Sequence op_not_filter(ContextList &context, const Sequence &input_seq, const Se
 }
 
 Sequence op_apply(ContextList &context, const Sequence &input_seq, const Sequence &one, const Sequence &two) {
-    Sequence result;
+    Sequence result, empty;
     for (const auto &sp: one) {
         Sequence r;
         for (const auto &k_op: sp) {
@@ -451,9 +451,14 @@ Sequence op_apply(ContextList &context, const Sequence &input_seq, const Sequenc
             }
             if (k_vec[0] == ket_map.get_idx("op")) {
                 SimpleOperator op(k_vec[1]);
-                for (const auto &k: two.to_sp()) {
-                    Sequence seq = op.Compile(context, k.to_seq());
+                if (two.size() == 0) {
+                    Sequence seq = op.Compile(context, empty);
                     r.add(seq);
+                } else {
+                    for (const auto &k: two.to_sp()) {
+                        Sequence seq = op.Compile(context, k.to_seq());
+                        r.add(seq);
+                    }
                 }
             } else if (k_vec[0] == ket_map.get_idx("ops")) {
                 std::vector<SimpleOperator> operators;
@@ -462,12 +467,20 @@ Sequence op_apply(ContextList &context, const Sequence &input_seq, const Sequenc
                     SimpleOperator op(s);
                     operators.push_back(op);
                 }
-                for (const auto &k: two.to_sp()) {
-                    Sequence seq = k.to_seq();
+                if (two.size() == 0) {
+                    Sequence seq;
                     for (auto it = operators.rbegin(); it != operators.rend(); ++it) {
                         seq = (*it).Compile(context, seq);
                     }
                     r.add(seq);
+                } else {
+                    for (const auto &k: two.to_sp()) {
+                        Sequence seq = k.to_seq();
+                        for (auto it = operators.rbegin(); it != operators.rend(); ++it) {
+                            seq = (*it).Compile(context, seq);
+                        }
+                        r.add(seq);
+                    }
                 }
             }
         }

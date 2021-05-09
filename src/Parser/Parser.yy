@@ -227,9 +227,9 @@ general_learn_rule : operator_with_sequence LEARN_SYM multi_learn_rule { $$ = ne
                    ;
 
 multi_learn_rule : EOL_SPACE4 learn_rule { $$ = new MultiLearnRule(*$2); }
-                 | EOL_SPACE4 general_sequence { $$ = new MultiLearnRule(*$2); }
+                 | EOL_SPACE4 operator_or_general_sequence { $$ = new MultiLearnRule(*$2); }
                  | multi_learn_rule EOL_SPACE4 learn_rule { $$->append(*$3); }
-                 | multi_learn_rule EOL_SPACE4 general_sequence { $$->append(*$3); }
+                 | multi_learn_rule EOL_SPACE4 operator_or_general_sequence { $$->append(*$3); }
                  | multi_learn_rule EOL_SPACE4 COMMENT { }
                  ;
 
