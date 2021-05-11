@@ -80,6 +80,6 @@ Sequence op_inherit(const Sequence &seq, ContextList &context, const std::vector
 Sequence op_inherit_path(const Sequence &seq, ContextList &context, const std::vector<std::shared_ptr<CompoundConstant> > &parameters);
 Sequence op_sprint(const Sequence &seq);
 Sequence op_sprint1(const Sequence &seq, const std::vector<std::shared_ptr<CompoundConstant> > &parameters);
-
+Sequence op_compile(const Sequence& seq, ContextList &context);
 
 #endif //SDB3_1_OPERATORLIBRARY_H

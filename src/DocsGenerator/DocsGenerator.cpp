@@ -223,6 +223,7 @@ void DocsGenerator::generate(const std::string& dir) {
     learn_locations(operator_locations, "sp-fn", fn_map.sp_fn);
     learn_locations(operator_locations, "compound-sp-fn", fn_map.compound_sp_fn);
     learn_locations(operator_locations, "seq-fn", fn_map.seq_fn);
+    learn_locations(operator_locations, "context-seq-fn", fn_map.context_seq_fn);
     learn_locations(operator_locations, "compound-seq-fn", fn_map.compound_seq_fn);
     learn_locations(operator_locations, "compound-context-sp-fn", fn_map.compound_context_sp_fn);
     learn_locations(operator_locations, "compound-context-seq-fn", fn_map.compound_context_seq_fn);
@@ -247,6 +248,7 @@ void DocsGenerator::generate(const std::string& dir) {
     page += generate_operator_usage_docs(operator_locations, "sp fn: ", dest_dir, "sp-fn", fn_map.sp_fn);
     page += generate_operator_usage_docs(operator_locations, "compound sp fn: ", dest_dir, "compound-sp-fn", fn_map.compound_sp_fn);
     page += generate_operator_usage_docs(operator_locations, "seq fn: ", dest_dir, "seq-fn", fn_map.seq_fn);
+    page += generate_operator_usage_docs(operator_locations, "context seq fn: ", dest_dir, "context-seq-fn", fn_map.context_seq_fn);
     page += generate_operator_usage_docs(operator_locations, "compound seq fn: ", dest_dir, "compound-seq-fn", fn_map.compound_seq_fn);
     page += generate_operator_usage_docs(operator_locations, "compound context sp fn: ", dest_dir, "compound-context-sp-fn", fn_map.compound_context_sp_fn);
     page += generate_operator_usage_docs(operator_locations, "compound context seq fn: ", dest_dir, "compound-context-seq-fn", fn_map.compound_context_seq_fn);

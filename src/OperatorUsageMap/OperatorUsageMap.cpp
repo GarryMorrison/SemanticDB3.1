@@ -1829,6 +1829,34 @@ OperatorUsageMap::OperatorUsageMap() {
             "            |number: 5> + |number: 6> + |number: 4>\n\n"
             "    see also:\n"
             "        how-many, show-many, sort-by\n";
+
+    operator_usage_map.map["compile"] =
+            "\ncompile:\n"
+            "    description:\n"
+            "        compile input-seq\n"
+            "        unpack the input-seq and compile the result\n"
+            "        the first superposition is the operator name\n"
+            "        the rest are parameters to be fed to that operator\n"
+            "        NB: the parameters are only superpositions, not sequences\n"
+            "        If you require sequence parameters, then you need to do it indirectly using a wrapper function\n\n"
+            "    examples:\n"
+            "        -- define a function, then compile it:\n"
+            "        fn (*,*,*) #=> 2|__self0> . 3|__self1> . 5|__self2> . 7|__self3>\n"
+            "        compile (|op: fn> . |input> . |a> . |b> . |c>)\n"
+            "            2|input> . 3|a> . 5|b> . 7|c>\n\n"
+            "        -- Now, if you require sequence parameters, you need a wrapper function:\n"
+            "        wrapper-fn (*,*,*) #=> fn(seq |__self1>, seq |__self2>, seq |__self3>) seq |__self0>\n\n"
+            "        -- Then we define our sequence parameters\n"
+            "        -- They can be anything:\n"
+            "        seq |input> => |input seq>\n"
+            "        seq |a> => |seq 1>\n"
+            "        seq |b> => |seq 2>\n"
+            "        seq |c> => |seq 3>\n\n"
+            "        -- Now, compile it:\n"
+            "        compile (|op: wrapper-fn> . |input> . |a> . |b> . |c>)\n"
+            "            2|input seq> . 3|seq 1> . 5|seq 2> . 7|seq 3>\n\n"
+            "    see also:\n"
+            "        apply\n";
 }
 
 std::string OperatorUsageMap::get_usage(const std::string &s) const {

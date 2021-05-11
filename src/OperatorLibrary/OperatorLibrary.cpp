@@ -13,6 +13,7 @@
 #include "../Function/misc.h"
 #include "FunctionOperatorLibrary.h"
 #include "../Sequence/SelfKet.h"
+#include "../Operator/FunctionOperator.h"
 
 
 Superposition split(const Ket k) {
@@ -1834,4 +1835,19 @@ Sequence op_sprint1(const Sequence &seq, const std::vector<std::shared_ptr<Compo
         std::cout << parameters[0]->get_string() << seq.to_string() << parameters[1]->get_string() << "\n";
     }
     return seq;
+}
+
+Sequence op_compile(const Sequence& seq, ContextList &context) {
+    if (seq.size() < 3 || seq.size() > 6) { return Sequence(""); }
+    auto op_split_idx = seq.get(0).to_ket().label_split_idx();
+    if (op_split_idx.size() < 2 || op_split_idx[0] != ket_map.get_idx("op")) { return Sequence(""); }
+    ulong op_idx = op_split_idx[1];
+    Sequence input_seq = seq.get(1).to_seq();
+    std::vector<std::shared_ptr<BaseSequence>> params;
+    for (auto iter = seq.cbegin() + 2; iter < seq.cend(); ++iter) {
+        std::shared_ptr<BaseSequence> tmp_BSeq = std::make_shared<Superposition>(*iter);  // Should it be Superposition, or Sequence?
+        params.push_back(tmp_BSeq);
+    }
+    FunctionOperator fn(op_idx, params);
+    return fn.Compile(context, input_seq);
 }

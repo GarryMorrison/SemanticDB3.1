@@ -398,6 +398,9 @@ FunctionOperatorMap::FunctionOperatorMap() {
 
     idx = ket_map.get_idx("ket-length");
     fn_map.ket_fn.emplace(idx, &ket_length);
+
+    idx = ket_map.get_idx("compile");
+    fn_map.context_seq_fn.emplace(idx, &op_compile);
 }
 
 template <class T>
@@ -425,6 +428,7 @@ void FunctionOperatorMap::print() const { // Doesn't need to be optimized at all
     print_map("compound_sigmoid:", compound_sigmoids);
     print_map("ket_fn:", ket_fn);
     print_map("context_ket_fn:", context_ket_fn);
+    print_map("context_seq_fn:", context_seq_fn);
     print_map("compound_ket_fn:", compound_ket_fn);
     print_map("sp_fn:", sp_fn);
     print_map("compound_sp_fn:", compound_sp_fn);

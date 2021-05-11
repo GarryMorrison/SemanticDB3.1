@@ -71,6 +71,9 @@ Sequence SimpleOperator::Compile(ContextList& context, const Sequence& seq) cons
     } else if (fn_map.seq_fn.find(op_idx) != fn_map.seq_fn.end()) {
         auto fn = fn_map.seq_fn[op_idx];
         return fn(seq);  // Is this correct? Do we instead need seq.apply_seq_fn(fn)?
+    } else if (fn_map.context_seq_fn.find(op_idx) != fn_map.context_seq_fn.end()) {
+        auto fn = fn_map.context_seq_fn[op_idx];
+        return fn(seq, context);
     } else if (context.fn_recall_type(op_idx, 1) == RULESTORED) {  // What about other rule types?
         auto rule = context.fn_recall(op_idx, 1);
         std::vector<Sequence> args; // specify size of args here?
