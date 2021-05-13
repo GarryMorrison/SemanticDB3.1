@@ -1863,10 +1863,10 @@ OperatorUsageMap::OperatorUsageMap() {
     operator_usage_map.map["for"] =
             "\nfor:\n"
             "    description:\n"
-            "        for(op, sp)\n"
-            "        for(op, sp1, sp2)\n"
-            "        for(op, sp1, sp2, sp3)\n"
-            "        apply op to each of the kets in the given superpositions, using a Cartesian product\n"
+            "        for(fn, sp)\n"
+            "        for(fn, sp1, sp2)\n"
+            "        for(fn, sp1, sp2, sp3)\n"
+            "        apply fn to each of the kets in the given superpositions, using a Cartesian product\n"
             "        NB: if given sequences, they are first cast to superpositions\n"
             "        If you want to use sequences, use sfor() instead\n\n"
             "    examples:\n"
@@ -1884,6 +1884,21 @@ OperatorUsageMap::OperatorUsageMap() {
             "            |fn2(a, u, x)> + |fn2(a, u, y)> + |fn2(a, v, x)> + |fn2(a, v, y)> + |fn2(b, u, x)> + |fn2(b, u, y)> + |fn2(b, v, x)> + |fn2(b, v, y)>\n\n"
             "    see also:\n"
             "        sfor\n";
+
+    operator_usage_map.map["sfor"] =
+            "\nsfor:\n"
+            "    description:\n"
+            "        sfor(fn, seq)\n"
+            "        sfor(fn, seq1, seq2)\n"
+            "        sfor(fn, seq1, seq2, seq3)\n"
+            "        apply fn to each of the superpositions in the given sequences, using a Cartesian product\n\n"
+            "    examples:\n"
+            "        -- for loop over single parameter function:\n"
+            "        fn (*) #=> |fn(> _ smerge[\", \"] |__self> _ |)>\n"
+            "        sfor( |op: fn>, split (|abc> . |de> . |xyz>))\n"
+            "            |fn(a, b, c)> . |fn(d, e)> . |fn(x, y, z)>\n\n"
+            "    see also:\n"
+            "        for\n";
 }
 
 std::string OperatorUsageMap::get_usage(const std::string &s) const {

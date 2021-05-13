@@ -1021,3 +1021,58 @@ Sequence op_for4(ContextList &context, const Sequence &input_seq, const Sequence
     return result;
 }
 
+
+Sequence op_sfor2(ContextList &context, const Sequence &input_seq, const Sequence &one, const Sequence &two) {
+    auto op_vec = one.to_ket().label_split_idx();
+    if (op_vec.size() < 2 || (op_vec[0] != ket_map.get_idx("op"))) { return Sequence(); }
+    ulong op_idx = op_vec[1];
+    Sequence result, empty;
+    for (const Superposition &sp: two) {
+        std::shared_ptr<BaseSequence> seq1 = std::make_shared<Sequence>(sp);  // Should this be Superposition, or Sequence?
+        FunctionOperator fn(op_idx, seq1);
+        Sequence tmp_result = fn.Compile(context, empty);
+        // result.add(tmp_result);
+        result.append(tmp_result);  // Do we want add() or append()?
+    }
+    return result;
+}
+
+Sequence op_sfor3(ContextList &context, const Sequence &input_seq, const Sequence &one, const Sequence &two, const Sequence &three) {
+    auto op_vec = one.to_ket().label_split_idx();
+    if (op_vec.size() < 2 || (op_vec[0] != ket_map.get_idx("op"))) { return Sequence(); }
+    ulong op_idx = op_vec[1];
+    Sequence result, empty;
+    for (const Superposition &sp1: two) {
+        for (const Superposition &sp2: three) {
+            std::shared_ptr<BaseSequence> seq1 = std::make_shared<Sequence>(sp1);  // Should this be Superposition, or Sequence?
+            std::shared_ptr<BaseSequence> seq2 = std::make_shared<Sequence>(sp2);  // Should this be Superposition, or Sequence?
+            FunctionOperator fn(op_idx, seq1, seq2);
+            Sequence tmp_result = fn.Compile(context, empty);
+            // result.add(tmp_result);
+            result.append(tmp_result);  // Do we want add() or append()?
+        }
+    }
+    return result;
+}
+
+Sequence op_sfor4(ContextList &context, const Sequence &input_seq, const Sequence &one, const Sequence &two, const Sequence &three, const Sequence &four) {
+    auto op_vec = one.to_ket().label_split_idx();
+    if (op_vec.size() < 2 || (op_vec[0] != ket_map.get_idx("op"))) { return Sequence(); }
+    ulong op_idx = op_vec[1];
+    Sequence result, empty;
+    for (const Superposition &sp1: two) {
+        for (const Superposition &sp2: three) {
+            for (const Superposition &sp3: four) {
+                std::shared_ptr<BaseSequence> seq1 = std::make_shared<Sequence>(sp1);  // Should this be Superposition, or Sequence?
+                std::shared_ptr<BaseSequence> seq2 = std::make_shared<Sequence>(sp2);  // Should this be Superposition, or Sequence?
+                std::shared_ptr<BaseSequence> seq3 = std::make_shared<Sequence>(sp3);  // Should this be Superposition, or Sequence?
+                FunctionOperator fn(op_idx, seq1, seq2, seq3);
+                Sequence tmp_result = fn.Compile(context, empty);
+                // result.add(tmp_result);
+                result.append(tmp_result);  // Do we want add() or append()?
+            }
+        }
+    }
+    return result;
+}
+

@@ -48,5 +48,9 @@ Sequence op_string_replace(const Sequence &input_seq, const Sequence &one, const
 Sequence op_for2(ContextList &context, const Sequence &input_seq, const Sequence &one, const Sequence &two);
 Sequence op_for3(ContextList &context, const Sequence &input_seq, const Sequence &one, const Sequence &two, const Sequence &three);
 Sequence op_for4(ContextList &context, const Sequence &input_seq, const Sequence &one, const Sequence &two, const Sequence &three, const Sequence &four);
+Sequence op_sfor2(ContextList &context, const Sequence &input_seq, const Sequence &one, const Sequence &two);
+Sequence op_sfor3(ContextList &context, const Sequence &input_seq, const Sequence &one, const Sequence &two, const Sequence &three);
+Sequence op_sfor4(ContextList &context, const Sequence &input_seq, const Sequence &one, const Sequence &two, const Sequence &three, const Sequence &four);
+
 
 #endif //SDB3_1_FUNCTIONOPERATORLIBRARY_H
