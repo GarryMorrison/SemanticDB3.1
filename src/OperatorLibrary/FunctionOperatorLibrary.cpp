@@ -8,6 +8,7 @@
 #include "../Function/misc.h"
 #include "../Operator/SimpleOperator.h"
 #include "../Function/split_join.h"
+#include "../Operator/FunctionOperator.h"
 
 
 Sequence op_srange2(const Sequence& input_seq, const Sequence& start, const Sequence& stop) {
@@ -968,3 +969,55 @@ Sequence op_string_replace(const Sequence &input_seq, const Sequence &one, const
     }
     return result;
 }
+
+Sequence op_for2(ContextList &context, const Sequence &input_seq, const Sequence &one, const Sequence &two) {
+    auto op_vec = one.to_ket().label_split_idx();
+    if (op_vec.size() < 2 || (op_vec[0] != ket_map.get_idx("op"))) { return Sequence(); }
+    ulong op_idx = op_vec[1];
+    Sequence result, empty;
+    for (const Ket &k: two.to_sp()) {
+        std::shared_ptr<BaseSequence> seq1 = std::make_shared<Ket>(k);  // Should this be Ket, Superposition, or Sequence?
+        FunctionOperator fn(op_idx, seq1);
+        Sequence tmp_result = fn.Compile(context, empty);
+        result.add(tmp_result);
+    }
+    return result;
+}
+
+Sequence op_for3(ContextList &context, const Sequence &input_seq, const Sequence &one, const Sequence &two, const Sequence &three) {
+    auto op_vec = one.to_ket().label_split_idx();
+    if (op_vec.size() < 2 || (op_vec[0] != ket_map.get_idx("op"))) { return Sequence(); }
+    ulong op_idx = op_vec[1];
+    Sequence result, empty;
+    for (const Ket &k1: two.to_sp()) {
+        for (const Ket &k2: three.to_sp()) {
+            std::shared_ptr<BaseSequence> seq1 = std::make_shared<Ket>(k1);  // Should this be Ket, Superposition, or Sequence?
+            std::shared_ptr<BaseSequence> seq2 = std::make_shared<Ket>(k2);  // Should this be Ket, Superposition, or Sequence?
+            FunctionOperator fn(op_idx, seq1, seq2);
+            Sequence tmp_result = fn.Compile(context, empty);
+            result.add(tmp_result);
+        }
+    }
+    return result;
+}
+
+Sequence op_for4(ContextList &context, const Sequence &input_seq, const Sequence &one, const Sequence &two, const Sequence &three, const Sequence &four) {
+    auto op_vec = one.to_ket().label_split_idx();
+    if (op_vec.size() < 2 || (op_vec[0] != ket_map.get_idx("op"))) { return Sequence(); }
+    ulong op_idx = op_vec[1];
+    Sequence result, empty;
+    for (const Ket &k1: two.to_sp()) {
+        for (const Ket &k2: three.to_sp()) {  // Should we apply .to_sp() outside of the for loops?
+            for (const Ket &k3: four.to_sp()) {
+                std::shared_ptr<BaseSequence> seq1 = std::make_shared<Ket>(k1);  // Should this be Ket, Superposition, or Sequence?
+                std::shared_ptr<BaseSequence> seq2 = std::make_shared<Ket>(k2);  // Should this be Ket, Superposition, or Sequence?
+                std::shared_ptr<BaseSequence> seq3 = std::make_shared<Ket>(k3);  // Should this be Ket, Superposition, or Sequence?
+                FunctionOperator fn(op_idx, seq1, seq2, seq3);
+                Sequence tmp_result = fn.Compile(context, empty);
+                result.add(tmp_result);
+            }
+        }
+    }
+    return result;
+}
+

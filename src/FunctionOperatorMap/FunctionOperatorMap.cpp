@@ -401,6 +401,11 @@ FunctionOperatorMap::FunctionOperatorMap() {
 
     idx = ket_map.get_idx("compile");
     fn_map.context_seq_fn.emplace(idx, &op_compile);
+
+    idx = ket_map.get_idx("for");
+    fn_map.context_whitelist_2.emplace(idx, &op_for2);
+    fn_map.context_whitelist_3.emplace(idx, &op_for3);
+    fn_map.context_whitelist_4.emplace(idx, &op_for4);
 }
 
 template <class T>
