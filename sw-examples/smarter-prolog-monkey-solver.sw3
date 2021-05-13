@@ -1,0 +1,124 @@
+-- Try to solve the monkey banana problem
+-- In this version, we try to solve the problem a little smarter than brute force
+-- load prolog-monkey.sw3 before you load this file.
+
+
+set-up-initial-state
+the |objects> => rel-kets[at]
+the |locations> => at rel-kets[at]
+the-list-of |operators> => |op: get-go-details> + |op: get-push-details> + |op: get-climb-on-details> + |op: get-grab-details>
+not |yes> => |no>
+not |no> => |yes>
+
+reset |*> #=>
+    unlearn[*] starts-with |depth: >
+    current |depth> => |depth: 0>
+    unlearn[the] |plan>
+    unlearn[the-used] |operators>
+    set-up-initial-state
+    |>
+
+save-state |*> #=>
+    previous-on |monkey> => |floor>
+    previous-on |box> => |floor>
+    previous-at |monkey> => |a>
+    previous-at |box> => |b>
+    previous-at |bananas> => |c>
+    previous-status |bananas> => |hanging>
+    |state saved>
+
+restore-state |*> #=>
+    on |monkey> => previous-on |monkey>
+    on |box> => previous-on |box>
+    at |monkey> => previous-at |monkey>
+    at |box> => previous-at |box>
+    at |bananas> => previous-at |bananas>
+    status |bananas> => previous-status |bananas>
+    |state restored>
+
+depth-back-track |*> #=>
+    unlearn[failed-attempts] current |depth>
+    current |depth> => minus[1] current |depth>
+    |depth back track>
+
+
+display-details (*) #=>
+    extract-value sselect[1,1] |__self> _ |(> _ smerge[", "] sselect[2, -1] |__self> _ |)>
+
+comma-merge (*,*) #=> |__self1> _ |, > _ |__self2>
+
+
+get-go-details |*> #=>
+    unlearn[move] |to>
+    move |to> => pick-elt drop (the |locations> -1 at |monkey> -1 attempted-go-move current |depth>)
+    attempted-go-move current |depth> +=> move |to>
+    the |details> => |op: go> . |> . at |monkey> . move |to>
+    value-if( do-you-know move |to>, the |details>, |> )
+
+get-push-details |*> #=>
+    unlearn[the] (|choices> + |choice>)
+    the |choices> => drop for( |op: comma-merge>, the |objects> -1 |monkey>, the |locations> -1 at |monkey>)
+    the |choice> => pick-elt drop (the |choices> -1 attempted-push-choice current |depth>)
+    the |object> => sselect[1,1] ssplit[", "] the |choice>
+    move |to> => sselect[2,2] ssplit[", "] the |choice>
+    attempted-push-choice current |depth> +=> the |choice>
+    the |details> => |op: push> . |> . the |object> . at |monkey> . move |to>
+    value-if( do-you-know the |choice>, the |details>, |> )
+
+get-climb-on-details |*> #=>
+    unlearn[climb] |object>
+    climb |object> => pick-elt drop (the |objects> -1 |monkey> -1 attempted-climb-on-object current |depth>)
+    attempted-climb-on-object current |depth> +=> climb |object>
+    the |details> => |op: climb-on> . |> . climb |object>
+    value-if( do-you-know climb |object>, the |details>, |> )
+
+get-grab-details |*> #=>
+    unlearn[the-grab] |object>
+    the-grab |object> => pick-elt drop (the |objects> -1 |monkey> -1 attempted-grab-object current |depth>)
+    attempted-grab-object current |depth> +=> the-grab |object>
+    the |details> => |op: grab> . |> . the-grab |object>
+    value-if( do-you-know the-grab |object>, the |details>, |> )
+
+
+solve |*> #=>
+    reset
+    try-operator
+
+try-operator (*) #=>
+    unlearn[the-solution] (|operator> + |details> + |result>)
+    the-solution |operator> => pick-elt drop (the-list-of |operators> -1 the-used |operators> -1 the-tried-operators current |depth>)
+    the-solution |details> => apply(the-solution |operator>, |>)
+    the-solution |result> => compile the-solution |details>
+    if( or( not do-you-know the-solution |details>, has-prefix["monkey failed to "] the-solution |result>), |op: monkey-failed>, |op: monkey-succeeded>)
+
+monkey-failed (*) #=>
+    print |monkey failed at something>
+    the-tried-operators current |depth> +=> value-if( do-you-know the-solution |details>, |>, the-solution |operator>)
+    if( do-you-know the-solution |operator>, |op: try-operator>, |op: no-operators-left>)
+    |>
+
+-- Currently if we run out of operators we reset back to the starting state
+-- It would be nice if we could instead back-track, instead of a full reset.
+no-operators-left (*) #=>
+    print |no operators left, resetting ... >
+    reset
+    try-operator
+    |>
+
+monkey-succeeded (*) #=>
+    print |monkey succeeded at something>
+    the |plan> .=> display-details the-solution |details>
+    the-used |operators> +=> the-solution |operator>
+    current |depth> => plus[1] current |depth>
+    the-current |state> => test-for-goal-state |>
+    print (|The current state:> __ the-current |state>)
+    print
+    if( is-equal(the-current |state>, |reached goal state!>), |op: finished>, |op: try-operator>)
+
+finished (*) #=>
+    print (|The plan:> __ smerge[" "] the |plan>)
+    |>
+
+
+solve
+
