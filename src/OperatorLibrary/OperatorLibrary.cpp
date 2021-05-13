@@ -1386,11 +1386,22 @@ Superposition digit2sp(const Superposition &sp, const std::vector<std::shared_pt
 
 Ket op_unlearn(const Superposition &sp, ContextList &context, const std::vector<std::shared_ptr<CompoundConstant> > &parameters) {
     if (parameters.empty() || sp.size() == 0) { return Ket(); }
-    for (const auto &param: parameters) {
-        ulong op_idx = param->get_operator().get_idx();
+    ulong star_idx = ket_map.get_idx("*");
+    if (parameters.size() == 1 && (parameters[0]->get_operator().get_idx() == star_idx)) {  // Unlearn everything.
         for (const auto &k: sp) {
             ulong label_idx = k.label_idx();
-            context.unlearn(op_idx, label_idx);
+            std::vector<ulong> supported_ops = context.supported_ops(label_idx);
+            for (ulong op_idx: supported_ops) {
+                context.unlearn(op_idx, label_idx);
+            }
+        }
+    } else {
+        for (const auto &param: parameters) {
+            ulong op_idx = param->get_operator().get_idx();
+            for (const auto &k: sp) {
+                ulong label_idx = k.label_idx();
+                context.unlearn(op_idx, label_idx);
+            }
         }
     }
     return Ket("unlearned");
