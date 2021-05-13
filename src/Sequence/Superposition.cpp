@@ -377,7 +377,7 @@ Superposition Superposition::select(const int a, const int b) const {
     start = std::max((int)0, start);  // For style reasons, use static_cast<int> instead?
     stop = std::max((int)0, stop);
     start = std::min((int)sort_order.size(), start);
-    stop = std::min((int)sort_order.size() + 1, stop);
+    stop = std::min((int)sort_order.size(), stop);
     // std::cout << "Superposition::select:" << std::endl;
     // std::cout << "    start: " << start << std::endl;
     // std::cout << "    stop: " << stop << std::endl;

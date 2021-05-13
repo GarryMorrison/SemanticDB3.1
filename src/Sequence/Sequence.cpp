@@ -568,9 +568,9 @@ Sequence Sequence::sselect(const int a, const int b) const {
     start = std::max((int)0, start);  // For style reasons, use static_cast<int> instead?
     stop = std::max((int)0, stop);
     start = std::min((int)seq.size(), start);
-    stop = std::min((int)seq.size() + 1, stop);
-    // std::cout << "start: " << start << std::endl;
-    // std::cout << "stop: " << stop << std::endl;
+    stop = std::min((int)seq.size(), stop);
+    // std::cout << "sselect start: " << start << std::endl;
+    // std::cout << "sselect stop: " << stop << std::endl;
 
     auto start_iter = seq.begin() + (size_t)start;
     auto stop_iter = seq.begin() + (size_t)stop;
