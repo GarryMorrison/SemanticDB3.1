@@ -34,14 +34,14 @@ FunctionOperator::FunctionOperator(const ulong idx2, const OperatorWithSequence 
 }
 
 const std::string FunctionOperator::to_string() const {
-    std::string s = ket_map.get_str(idx) + "(";
+    std::string s = ket_map.get_str(idx) + "( ";
     bool first_pass = true;
     for (const auto &seq: seq_vec) {
         if (first_pass) {
             s += seq->to_string();
             first_pass = false;
         } else {
-            s += "," + seq->to_string();
+            s += ", " + seq->to_string();
         }
     }
     return s + " ) ";

@@ -42,11 +42,11 @@ const std::string LearnRule::to_string() const {
     if (!_valid_learn_rule) { return ""; }
     std::string rule_sym;
     switch (_rule_type) {
-        case RULENORMAL : { rule_sym = " =>"; break; }
-        case RULEADD : { rule_sym = " +=>"; break; }
-        case RULESEQ : { rule_sym = " .=>"; break; }
-        case RULESTORED : { rule_sym = " #=>"; break; }
-        case RULEMEMOIZE : { rule_sym = " !=>"; break; }
+        case RULENORMAL : { rule_sym = " => "; break; }
+        case RULEADD : { rule_sym = " +=> "; break; }
+        case RULESEQ : { rule_sym = " .=> "; break; }
+        case RULESTORED : { rule_sym = " #=> "; break; }
+        case RULEMEMOIZE : { rule_sym = " !=> "; break; }
         default: rule_sym = " ?? ";
     }
     if (_ket_op->type() == OPEMPTY) {

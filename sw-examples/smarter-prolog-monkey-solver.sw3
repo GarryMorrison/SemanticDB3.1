@@ -111,8 +111,7 @@ monkey-succeeded (*) #=>
     the-used |operators> +=> the-solution |operator>
     current |depth> => plus[1] current |depth>
     the-current |state> => test-for-goal-state |>
-    print (|The current state:> __ the-current |state>)
-    print
+    print (|The current state:> __ the-current |state> . | >)
     if( is-equal(the-current |state>, |reached goal state!>), |op: finished>, |op: try-operator>)
 
 finished (*) #=>
