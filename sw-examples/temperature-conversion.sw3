@@ -16,3 +16,7 @@ to-K |*> #=> to-Kelvin |_self>
 to-C |*> #=> to-Celsius |_self>
 to-F |*> #=> to-Fahrenheit |_self>
 
+
+table[Celsius, to-Kelvin, to-Fahrenheit] seq2sp srange(|C: 0>, |C: 100>, |5>)
+
+

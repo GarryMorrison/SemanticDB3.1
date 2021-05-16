@@ -1,4 +1,4 @@
--- Implement the bottles of beer song:
+-- Implement, and run, the bottles of beer song:
 
 max |bottles> => |4>
 
@@ -14,4 +14,7 @@ second-line |0> #=> |Go to the store and buy some more,> __ bottles max |bottles
 row |*> #=> first-line |_self> . second-line |_self> . |>
 
 sing |*> #=> sdrop tidy print row sreverse srange(|0>, max |bottles>) |>
+
+
+sing
 
