@@ -72,7 +72,9 @@ ulong KetMap::get_idx(const std::vector<ulong>& uvec) {
                 first_pass = false;
             }
             else {
-                s += ": " + get_str(idx);
+                // s += ": " + get_str(idx);  // Is str.append() any faster than += ?
+                s.append(": ");
+                s.append(get_str(idx));
             }
         }
         return get_idx(s);  // later, swap in code so we aren't merging and then splitting our string.
