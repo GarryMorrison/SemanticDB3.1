@@ -356,13 +356,14 @@ void Superposition::sort_by(ContextList &context, const std::vector<std::shared_
     if (parameters.empty()) { return; }
     SimpleOperator op = parameters[0]->get_operator();
     std::unordered_map<ulong, std::string> sort_by_map;
+    // std::map<ulong, std::string> sort_by_map;  // Slower than unordered_map.
     for (const ulong idx: sort_order) {
         Ket k(idx, sp[idx]);
         std::string sort_by_str = op.Compile(context, k.to_seq()).to_ket().label();
         sort_by_map[idx] = sort_by_str;
     }
-    std::sort(sort_order.begin(), sort_order.end(), [sort_by_map] (ulong a, ulong b) {
-        if (strnatcasecmp(sort_by_map.at(a).c_str(), sort_by_map.at(b).c_str()) == -1) { return true; }
+    std::sort(sort_order.begin(), sort_order.end(), [&sort_by_map] (ulong a, ulong b) {
+        if (strnatcasecmp(sort_by_map[a].c_str(), sort_by_map[b].c_str()) == -1) { return true; } // Work out why we can't use [a] instead of .at(a)
         return false;
     });
 }
@@ -541,6 +542,7 @@ Superposition Superposition::normalize(const double t) const {
 
 Superposition Superposition::reverse() const {
     Superposition result;
+    result.sort_order.reserve(sort_order.size());
     for ( auto it = sort_order.rbegin(); it != sort_order.rend(); ++it) {
         double value = sp.at(*it);
         result.sp[*it] = value;
