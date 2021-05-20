@@ -192,6 +192,9 @@ FunctionOperatorMap::FunctionOperatorMap() {
     idx = ket_map.get_idx("union");
     fn_map.whitelist_2.emplace(idx, &op_union2);
 
+    idx = ket_map.get_idx("sum");
+    fn_map.whitelist_2.emplace(idx, &op_sum2);
+
     idx = ket_map.get_idx("select");
     fn_map.compound_built_in.emplace(idx, &Sequence::op_select2);
 
@@ -420,6 +423,9 @@ FunctionOperatorMap::FunctionOperatorMap() {
 
     idx = ket_map.get_idx("op-union");
     fn_map.compound_context_seq_fn.emplace(idx, &op_compound_union);
+
+    idx = ket_map.get_idx("op-sum");
+    fn_map.compound_context_seq_fn.emplace(idx, &op_compound_sum);
 }
 
 template <class T>

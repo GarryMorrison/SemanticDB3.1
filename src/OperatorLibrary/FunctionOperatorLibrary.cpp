@@ -239,7 +239,7 @@ Superposition sp_union(const Superposition &sp1, const Superposition &sp2) {
         double v1 = sp1.find_value(idx);
         double v2 = sp2.find_value(idx);
         double value = std::max(v1, v2);
-        if (value > 0) {
+        if (value > 0) {   // Do we need this check for unions?
             result.add(idx, value);
         }
     }
@@ -256,6 +256,41 @@ Sequence op_union2(const Sequence &input_seq, const Sequence &one, const Sequenc
     size_t max_size = std::max(one.size(), two.size());
     for (size_t k = 0; k < max_size; k++) {
         seq.append(sp_union(one.get(k), two.get(k)));
+    }
+    return seq;
+}
+
+Superposition sp_sum(const Superposition &sp1, const Superposition &sp2) {
+    if (sp1.size() == 0 && sp2.size() == 0) { return Superposition(); }
+    std::set<ulong> merged;
+    for (const auto k : sp1) {
+        merged.insert(k.label_idx());
+    }
+    for (const auto k : sp2) {
+        merged.insert(k.label_idx());
+    }
+    Superposition result;
+    for (const auto idx: merged) {
+        double v1 = sp1.find_value(idx);
+        double v2 = sp2.find_value(idx);
+        double value = v1 + v2;
+        if (value > 0) {   // Do we need this check for sum?
+            result.add(idx, value);
+        }
+    }
+    return result;
+}
+
+Sequence op_sum2(const Sequence &input_seq, const Sequence &one, const Sequence &two) {
+    auto one_iter = one.cbegin();
+    auto two_iter = two.cbegin();
+    Sequence seq;
+    // for (; one_iter != one.end() and two_iter != two.end(); ++one_iter, ++two_iter) {  // Only has seq-length of the shortest sequence.
+    //     seq.append(sp_union(*one_iter, *two_iter));
+    // }
+    size_t max_size = std::max(one.size(), two.size());
+    for (size_t k = 0; k < max_size; k++) {
+        seq.append(sp_sum(one.get(k), two.get(k)));
     }
     return seq;
 }

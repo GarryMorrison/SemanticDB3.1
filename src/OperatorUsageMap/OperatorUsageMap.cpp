@@ -1328,7 +1328,7 @@ OperatorUsageMap::OperatorUsageMap() {
             "        union( ssplit |abcde>, ssplit |xyz>)\n"
             "            |a> + |x> . |b> + |y> . |c> + |z> . |d> . |e>\n\n"
             "    see also:\n"
-            "        intersection, is-subset, is-mbr, simm\n";
+            "        intersection, sum, is-subset, is-mbr, simm\n";
 
     operator_usage_map.map["intersection"] =
             "\nintersection:\n"
@@ -1348,7 +1348,19 @@ OperatorUsageMap::OperatorUsageMap() {
             "        intersection( ssplit |abcde>, ssplit |abc>)\n"
             "            |a> . |b> . |c>\n\n"
             "    see also:\n"
-            "        union, is-subset, is-mbr, simm";
+            "        union, sum, is-subset, is-mbr, simm";
+
+    operator_usage_map.map["sum"] =
+            "\nsum:\n"
+            "    description:\n"
+            "        sum(seq, seq)\n"
+            "        the sum function, takes element-wise sum of the coefficients\n\n"
+            "    examples:\n"
+            "        -- sequence sum example:\n"
+            "        sum( ssplit |abcdefg>, ssplit |abxyz>)\n"
+            "            2|a> . 2|b> . |c> + |x> . |d> + |y> . |e> + |z> . |f> . |g>\n\n"
+            "    see also:\n"
+            "        intersection, union, is-subset, is-mbr, simm\n";
 
     operator_usage_map.map["select"] =
             "\nselect:\n"
@@ -1956,6 +1968,22 @@ OperatorUsageMap::OperatorUsageMap() {
             "            |Monday> + |Tuesday> + |Wednesday> + |Thursday> + |Friday> + |Saturday> + |Sunday>\n\n"
             "    see also:\n"
             "        common, op-sum\n";
+
+    operator_usage_map.map["op-sum"] =
+            "\nop-sum:\n"
+            "    description:\n"
+            "        op-sum[op] seq\n"
+            "        find the sum of op applied to each of the kets in seq\n"
+            "        while trying to preserve sequence structure\n\n"
+            "    examples:\n"
+            "        seq |one> => ssplit |abcde>\n"
+            "        seq |two> => ssplit |uvw>\n"
+            "        seq |three> => ssplit |xyz>\n\n"
+            "        op-sum[seq] split[\" \"] |one two three>\n"
+            "            |a> + |u> + |x> . |b> + |v> + |y> . |c> + |w> + |z> . |d> . |e>\n\n"
+            "    see also:\n"
+            "        common, op-union\n";
+
 
 }
 

@@ -20,6 +20,8 @@ Superposition sp_intersection(const Superposition &sp1, const Superposition &sp2
 Sequence op_intersection2(const Sequence &input_seq, const Sequence &one, const Sequence &two);
 Superposition sp_union(const Superposition &sp1, const Superposition &sp2);
 Sequence op_union2(const Sequence &input_seq, const Sequence &one, const Sequence &two);
+Superposition sp_sum(const Superposition &sp1, const Superposition &sp2);
+Sequence op_sum2(const Sequence &input_seq, const Sequence &one, const Sequence &two);
 Sequence op_filter(ContextList &context, const Sequence &input_seq, const Sequence &one, const Sequence &two);
 Sequence op_not_filter(ContextList &context, const Sequence &input_seq, const Sequence &one, const Sequence &two);
 Sequence op_apply(ContextList &context, const Sequence &input_seq, const Sequence &one, const Sequence &two);
