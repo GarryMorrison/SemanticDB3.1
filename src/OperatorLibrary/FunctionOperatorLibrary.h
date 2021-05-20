@@ -16,7 +16,7 @@ double simm(const Sequence &seq1, const Sequence &seq2);
 double strict_simm(const Sequence &seq1, const Sequence &seq2);
 Sequence op_simm2(const Sequence &input_seq, const Sequence &seq1, const Sequence &seq2);
 Sequence op_strict_simm2(const Sequence &input_seq, const Sequence &seq1, const Sequence &seq2);
-Superposition intersection(const Superposition &sp1, const Superposition &sp2);
+Superposition sp_intersection(const Superposition &sp1, const Superposition &sp2);
 Sequence op_intersection2(const Sequence &input_seq, const Sequence &one, const Sequence &two);
 Superposition sp_union(const Superposition &sp1, const Superposition &sp2);
 Sequence op_union2(const Sequence &input_seq, const Sequence &one, const Sequence &two);

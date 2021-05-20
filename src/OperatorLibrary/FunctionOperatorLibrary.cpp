@@ -190,7 +190,7 @@ Sequence op_strict_simm2(const Sequence &input_seq, const Sequence &seq1, const 
 }
 
 
-Superposition intersection(const Superposition &sp1, const Superposition &sp2) {
+Superposition sp_intersection(const Superposition &sp1, const Superposition &sp2) {
     if (sp1.size() == 0 || sp2.size() == 0) { return Superposition(); }
     std::set<ulong> merged;
     for (const auto k : sp1) {
@@ -216,7 +216,7 @@ Sequence op_intersection2(const Sequence &input_seq, const Sequence &one, const 
     auto two_iter = two.cbegin();
     Sequence seq;
     for (; one_iter != one.end() and two_iter != two.end(); ++one_iter, ++two_iter) {
-        seq.append(intersection(*one_iter, *two_iter));
+        seq.append(sp_intersection(*one_iter, *two_iter));
     }
     return seq;
 }
