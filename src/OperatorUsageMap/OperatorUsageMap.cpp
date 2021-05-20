@@ -1984,6 +1984,42 @@ OperatorUsageMap::OperatorUsageMap() {
             "    see also:\n"
             "        common, op-union\n";
 
+    operator_usage_map.map["spike-merge"] =
+            "\nspike-merge:\n"
+            "    description:\n"
+            "        spike-merge[t] input-seq\n"
+            "        merge t time steps of superpositions in the given input sequence\n"
+            "        the motivation for this operator is the idea of spike trains in neural circuits\n"
+            "        this operator takes a t time step sum of spikes,\n"
+            "        resulting in a more compressed spike train,\n"
+            "        that corresponds to a longer measurement window\n\n"
+            "    examples:\n"
+            "        -- just an abstract example:\n"
+            "        spike-merge[2] ssplit |abcdefghi>\n"
+            "            |a> + |b> . |c> + |d> . |e> + |f> . |g> + |h> . |i>\n\n"
+            "        -- and another:\n"
+            "        spike-merge[3] ssplit |abcdefghi>\n"
+            "            |a> + |b> + |c> . |d> + |e> + |f> . |g> + |h> + |i>\n\n"
+            "        -- an example closer to that of a neural spike train:\n"
+            "        -- note that for this to work we make use of |> as the identity element for superpositions\n"
+            "        -- ie: sp + |> == |> + sp == sp, for any superposition sp\n"
+            "        the |spike train> => 3|a> . |> . |> . |> . 5|b> . |> . |c> . |> . |> . |> . |> . |> . 2|d> . |> . |>\n\n"
+            "        spike-merge[2] the |spike train>\n"
+            "            3|a> . |> . 5|b> . |c> . |> . |> . 2|d> . |>\n\n"
+            "        spike-merge[3] the |spike train>\n"
+            "            3|a> . 5|b> . |c> . |> . 2|d>\n\n"
+            "        spike-merge[4] the |spike train>\n"
+            "            3|a> . 5|b> + |c> . |> . 2|d>\n\n"
+            "        spike-merge[5] the |spike train>\n"
+            "            3|a> + 5|b> . |c> . 2|d>\n\n"
+            "        spike-merge[6] the |spike train>\n"
+            "            3|a> + 5|b> . |c> . 2|d>\n\n"
+            "        spike-merge[7] the |spike train>\n"
+            "            3|a> + 5|b> + |c> . 2|d> . |>\n\n"
+            "        spike-merge[8] the |spike train>\n"
+            "            3|a> + 5|b> + |c> . 2|d>\n\n"
+            "    see also:\n"
+            "        op-sum\n";
 
 }
 

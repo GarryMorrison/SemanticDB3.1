@@ -426,6 +426,9 @@ FunctionOperatorMap::FunctionOperatorMap() {
 
     idx = ket_map.get_idx("op-sum");
     fn_map.compound_context_seq_fn.emplace(idx, &op_compound_sum);
+
+    idx = ket_map.get_idx("spike-merge");
+    fn_map.compound_seq_fn.emplace(idx, &op_spike_merge);
 }
 
 template <class T>

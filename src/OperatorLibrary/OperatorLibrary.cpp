@@ -1943,3 +1943,23 @@ Sequence op_compound_sum(const Sequence &seq, ContextList &context, const std::v
     }
     return result;
 }
+
+Sequence op_spike_merge(const Sequence &seq, const std::vector<std::shared_ptr<CompoundConstant> > &parameters) {  // Not 100% sure it is correct. There might be edge cases where it is wrong.
+    if (parameters.empty()) { return seq; }
+    unsigned int time_width = parameters[0]->get_int();
+    Sequence result;
+    unsigned int k = 0;
+    Superposition sp_bucket;
+    for (const auto &sp: seq) {
+        if (k < time_width) {
+            sp_bucket.add(sp);
+            k++;
+        } else {
+            result.append(sp_bucket);
+            sp_bucket = sp;
+            k = 1;
+        }
+    }
+    result.append(sp_bucket);
+    return result;
+}
