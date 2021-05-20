@@ -1875,19 +1875,23 @@ Ket op_hash(const Ket k, const std::vector<std::shared_ptr<CompoundConstant> > &
 Sequence op_common(const Sequence &seq, ContextList &context, const std::vector<std::shared_ptr<CompoundConstant> > &parameters) {
     if (parameters.empty() || (seq.size() == 0)) { return seq; }
     SimpleOperator op = parameters[0]->get_operator();
-    Superposition input_sp = seq.to_sp();  // Preserve sequence structure later?
-    if (input_sp.size() == 0) { return seq; }
-    // Sequence result;
-    // Superposition r = op.Compile(context, input_sp.get(0).to_seq()).to_sp();
-    Sequence empty;
-    Sequence r = op.Compile(context, input_sp.get(0).to_seq());
-    auto iter = input_sp.begin() + 1;
-    for (; iter != input_sp.end(); ++iter) {
-        // Superposition tmp_sp = op.Compile(context, (*iter).to_seq()).to_sp();
-        // r = sp_intersection(r, tmp_sp);   // Swap to sequence intersection later?
-        Sequence tmp_seq = op.Compile(context, (*iter).to_seq());
-        r = op_intersection2(empty, r, tmp_seq);
+
+    Sequence result, empty;
+    for (const auto &sp: seq) {
+        if (sp.size() == 0) {
+            continue;
+        }
+        Sequence r = op.Compile(context, sp.get(0).to_seq());
+        bool first_pass = true;
+        for (const auto &k: sp) {
+            if (first_pass) {
+                first_pass = false;
+                continue;
+            }
+            Sequence tmp_seq = op.Compile(context, k.to_seq());
+            r = op_intersection2(empty, r, tmp_seq);
+        }
+        result.append(r);
     }
-    return r;
-    // return result;
+    return result;
 }
