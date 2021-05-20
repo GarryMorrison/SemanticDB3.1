@@ -417,6 +417,9 @@ FunctionOperatorMap::FunctionOperatorMap() {
 
     idx = ket_map.get_idx("common");
     fn_map.compound_context_seq_fn.emplace(idx, &op_common);
+
+    idx = ket_map.get_idx("op-union");
+    fn_map.compound_context_seq_fn.emplace(idx, &op_compound_union);
 }
 
 template <class T>

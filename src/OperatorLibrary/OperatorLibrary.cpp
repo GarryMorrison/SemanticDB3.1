@@ -1895,3 +1895,27 @@ Sequence op_common(const Sequence &seq, ContextList &context, const std::vector<
     }
     return result;
 }
+
+Sequence op_compound_union(const Sequence &seq, ContextList &context, const std::vector<std::shared_ptr<CompoundConstant> > &parameters) {
+    if (parameters.empty() || (seq.size() == 0)) { return seq; }
+    SimpleOperator op = parameters[0]->get_operator();
+
+    Sequence result, empty;
+    for (const auto &sp: seq) {
+        if (sp.size() == 0) {
+            continue;
+        }
+        Sequence r = op.Compile(context, sp.get(0).to_seq());
+        bool first_pass = true;
+        for (const auto &k: sp) {
+            if (first_pass) {
+                first_pass = false;
+                continue;
+            }
+            Sequence tmp_seq = op.Compile(context, k.to_seq());
+            r = op_union2(empty, r, tmp_seq);
+        }
+        result.append(r);
+    }
+    return result;
+}

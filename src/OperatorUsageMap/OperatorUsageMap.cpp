@@ -1328,7 +1328,7 @@ OperatorUsageMap::OperatorUsageMap() {
             "        union( ssplit |abcde>, ssplit |xyz>)\n"
             "            |a> + |x> . |b> + |y> . |c> + |z> . |d> . |e>\n\n"
             "    see also:\n"
-            "        intersection, is-subset, is-mbr, simm";
+            "        intersection, is-subset, is-mbr, simm\n";
 
     operator_usage_map.map["intersection"] =
             "\nintersection:\n"
@@ -1929,7 +1929,8 @@ OperatorUsageMap::OperatorUsageMap() {
             "\ncommon:\n"
             "    description:\n"
             "        common[op] seq\n"
-            "        find the intersection of op applied to each of the kets in seq\n\n"
+            "        find the intersection of op applied to each of the kets in seq\n"
+            "        while trying to preserve sequence structure\n\n"
             "    examples:\n"
             "    -- learn Fred and Sam friends:\n"
             "    friends |Fred> => |Jack> + |Harry> + |Ed> + |Mary> + |Rob> + |Patrick> + |Emma> + |Charlie>\n"
@@ -1937,7 +1938,25 @@ OperatorUsageMap::OperatorUsageMap() {
             "    -- find their common friends:\n"
             "    common[friends] split[\" \"] |Fred Sam>\n"
             "        |Jack> + |Emma> + |Charlie>\n\n"
-            "    see also:\n";
+            "    see also:\n"
+            "        op-union, op-sum\n";
+
+    operator_usage_map.map["op-union"] =
+            "\nop-union:\n"
+            "    description:\n"
+            "        op-union[op] seq\n"
+            "        find the union of op applied to each of the kets in seq\n"
+            "        while trying to preserve sequence structure\n\n"
+            "    examples:\n"
+            "        -- learn some toy knowledge:\n"
+            "        days |weekday> => split[\" \"] |Monday Tuesday Wednesday Thursday Friday>\n"
+            "        days |weekend> => split[\" \"] |Saturday Sunday>\n\n"
+            "        -- now find their union:\n"
+            "        op-union[days] split[\" \"] |weekday weekend>\n"
+            "            |Monday> + |Tuesday> + |Wednesday> + |Thursday> + |Friday> + |Saturday> + |Sunday>\n\n"
+            "    see also:\n"
+            "        common, op-sum\n";
+
 }
 
 std::string OperatorUsageMap::get_usage(const std::string &s) const {
