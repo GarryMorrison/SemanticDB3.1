@@ -2017,7 +2017,14 @@ OperatorUsageMap::OperatorUsageMap() {
             "        spike-merge[7] the |spike train>\n"
             "            3|a> + 5|b> + |c> . 2|d> . |>\n\n"
             "        spike-merge[8] the |spike train>\n"
-            "            3|a> + 5|b> + |c> . 2|d>\n\n"
+            "            3|a> + 5|b> + |c> . 2|d>\n\n\n"
+            "        -- we can also merge spike trains using the op-sum[] operator\n"
+            "        the-spike-train |1> => 3|a> . |> . |> . |> . 5|b> . |> . |c> . |> . |> . |> . |> . |> . 2|d> . |> . |>\n"
+            "        the-spike-train |2> => |> . |> . 9|x> . |> . |> . |y> . |> . |> . |> . |> . 13|z> . |> . |>\n"
+            "        the-spike-train |3> => |> . |u> . |> . |v> . |> . |w> . |> . |> . |> . |>\n\n"
+            "        -- now merge them:\n"
+            "        op-sum[the-spike-train] split[\" \"] |1 2 3>\n"
+            "            3|a> . |u> . 9|x> . |v> . 5|b> . |y> + |w> . |c> . |> . |> . |> . 13|z> . |> . 2|d> . |> . |>\n\n"
             "    see also:\n"
             "        op-sum\n";
 
