@@ -1862,3 +1862,12 @@ Sequence op_compile(const Sequence& seq, ContextList &context) {
     FunctionOperator fn(op_idx, params);
     return fn.Compile(context, input_seq);
 }
+
+Ket op_hash(const Ket k, const std::vector<std::shared_ptr<CompoundConstant> > &parameters) {
+    if (parameters.empty()) { return k; }
+    unsigned int hash_size = parameters[0]->get_int();
+    std::hash<std::string> str_hash;
+    size_t ket_hash = str_hash(k.label());
+    size_t new_ket_hash = ket_hash % ( 1 << hash_size );
+    return Ket(std::to_string(new_ket_hash), k.value());
+}

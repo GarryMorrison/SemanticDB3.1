@@ -411,6 +411,9 @@ FunctionOperatorMap::FunctionOperatorMap() {
     fn_map.context_whitelist_2.emplace(idx, &op_sfor2);
     fn_map.context_whitelist_3.emplace(idx, &op_sfor3);
     fn_map.context_whitelist_4.emplace(idx, &op_sfor4);
+
+    idx = ket_map.get_idx("hash");
+    fn_map.compound_ket_fn.emplace(idx, &op_hash);
 }
 
 template <class T>

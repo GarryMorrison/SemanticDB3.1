@@ -1899,6 +1899,25 @@ OperatorUsageMap::OperatorUsageMap() {
             "            |fn(a, b, c)> . |fn(d, e)> . |fn(x, y, z)>\n\n"
             "    see also:\n"
             "        for\n";
+
+    operator_usage_map.map["hash"] =
+            "\nhash:\n"
+            "    description:\n"
+            "        hash[b] input-seq\n"
+            "        hash each ket in input-seq, but only keep b bits of the result\n"
+            "        NB: it is a standard c++ hash, and is not cryptographically secure\n"
+            "        Note, sequence structure is preserved\n\n"
+            "    examples:\n"
+            "        -- compress a range of values into a smaller range:\n"
+            "        hash[2] seq2sp srange(|1>, |10>)\n"
+            "            3|3> + 2|2> + 2|1> + 3|0>\n\n"
+            "        -- it also preserves sequence structure:\n"
+            "        hash[2] srange(|11>, |15>)\n"
+            "            |2> . |3> . |0> . |2> . |2>\n\n"
+            "        -- and of course, works for any type of ket label:\n"
+            "        hash[8] ssplit[\" \"] |Monday Tuesday Wednesday Thursday Friday Saturday Sunday>\n"
+            "            |40> . |154> . |60> . |225> . |18> . |33> . |8>\n\n"
+            "    see also:\n";
 }
 
 std::string OperatorUsageMap::get_usage(const std::string &s) const {
