@@ -1324,6 +1324,9 @@ OperatorUsageMap::OperatorUsageMap() {
             "        -- fuzzy set union example:\n"
             "        union(3|a> + 1.2|b>, 3.5|a> + 0.9|b> + 5.13|c>)\n"
             "            3.500000|a> + 1.200000|b> + 5.130000|c>\n\n"
+            "        -- sequence union example:\n"
+            "        union( ssplit |abcde>, ssplit |xyz>)\n"
+            "            |a> + |x> . |b> + |y> . |c> + |z> . |d> . |e>\n\n"
             "    see also:\n"
             "        intersection, is-subset, is-mbr, simm";
 
@@ -1341,6 +1344,9 @@ OperatorUsageMap::OperatorUsageMap() {
             "        -- fuzzy set intersection example:\n"
             "        intersection(3|a> + 1.2|b>, 3.5|a> + 0.9|b> + 5.13|c>)\n"
             "            3|a> + 0.900000|b>\n\n"
+            "        -- sequence intersection example:\n"
+            "        intersection( ssplit |abcde>, ssplit |abc>)\n"
+            "            |a> . |b> . |c>\n\n"
             "    see also:\n"
             "        union, is-subset, is-mbr, simm";
 

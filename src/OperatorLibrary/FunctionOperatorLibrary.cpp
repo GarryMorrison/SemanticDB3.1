@@ -215,8 +215,12 @@ Sequence op_intersection2(const Sequence &input_seq, const Sequence &one, const 
     auto one_iter = one.cbegin();
     auto two_iter = two.cbegin();
     Sequence seq;
-    for (; one_iter != one.end() and two_iter != two.end(); ++one_iter, ++two_iter) {
-        seq.append(sp_intersection(*one_iter, *two_iter));
+    // for (; one_iter != one.end() and two_iter != two.end(); ++one_iter, ++two_iter) {  // Only has seq-length of the shortest sequence.
+    //     seq.append(sp_intersection(*one_iter, *two_iter));
+    // }
+    size_t min_size = std::min(one.size(), two.size());
+    for (size_t k = 0; k < min_size; k++) {
+        seq.append(sp_intersection(one.get(k), two.get(k)));
     }
     return seq;
 }
@@ -246,8 +250,12 @@ Sequence op_union2(const Sequence &input_seq, const Sequence &one, const Sequenc
     auto one_iter = one.cbegin();
     auto two_iter = two.cbegin();
     Sequence seq;
-    for (; one_iter != one.end() and two_iter != two.end(); ++one_iter, ++two_iter) {
-        seq.append(sp_union(*one_iter, *two_iter));
+    // for (; one_iter != one.end() and two_iter != two.end(); ++one_iter, ++two_iter) {  // Only has seq-length of the shortest sequence.
+    //     seq.append(sp_union(*one_iter, *two_iter));
+    // }
+    size_t max_size = std::max(one.size(), two.size());
+    for (size_t k = 0; k < max_size; k++) {
+        seq.append(sp_union(one.get(k), two.get(k)));
     }
     return seq;
 }
