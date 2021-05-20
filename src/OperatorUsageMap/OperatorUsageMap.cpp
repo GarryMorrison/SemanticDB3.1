@@ -1924,6 +1924,20 @@ OperatorUsageMap::OperatorUsageMap() {
             "        hash[8] ssplit[\" \"] |Monday Tuesday Wednesday Thursday Friday Saturday Sunday>\n"
             "            |40> . |154> . |60> . |225> . |18> . |33> . |8>\n\n"
             "    see also:\n";
+
+    operator_usage_map.map["common"] =
+            "\ncommon:\n"
+            "    description:\n"
+            "        common[op] seq\n"
+            "        find the intersection of op applied to each of the kets in seq\n\n"
+            "    examples:\n"
+            "    -- learn Fred and Sam friends:\n"
+            "    friends |Fred> => |Jack> + |Harry> + |Ed> + |Mary> + |Rob> + |Patrick> + |Emma> + |Charlie>\n"
+            "    friends |Sam> => |Charlie> + |George> + |Emma> + |Jack> + |Robert> + |Frank> + |Julie>\n\n"
+            "    -- find their common friends:\n"
+            "    common[friends] split[\" \"] |Fred Sam>\n"
+            "        |Jack> + |Emma> + |Charlie>\n\n"
+            "    see also:\n";
 }
 
 std::string OperatorUsageMap::get_usage(const std::string &s) const {

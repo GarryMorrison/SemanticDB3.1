@@ -1871,3 +1871,19 @@ Ket op_hash(const Ket k, const std::vector<std::shared_ptr<CompoundConstant> > &
     size_t new_ket_hash = ket_hash % ( 1 << hash_size );
     return Ket(std::to_string(new_ket_hash), k.value());
 }
+
+Sequence op_common(const Sequence &seq, ContextList &context, const std::vector<std::shared_ptr<CompoundConstant> > &parameters) {
+    if (parameters.empty() || (seq.size() == 0)) { return seq; }
+    SimpleOperator op = parameters[0]->get_operator();
+    Superposition input_sp = seq.to_sp();  // Preserve sequence structure later?
+    if (input_sp.size() == 0) { return seq; }
+    // Sequence result;
+    Superposition r = op.Compile(context, input_sp.get(0).to_seq()).to_sp();
+    auto iter = input_sp.begin() + 1;
+    for (; iter != input_sp.end(); ++iter) {
+        Superposition tmp_sp = op.Compile(context, (*iter).to_seq()).to_sp();
+        r = sp_intersection(r, tmp_sp);   // Swap to sequence intersection later?
+    }
+    return r;
+    // return result;
+}

@@ -414,6 +414,9 @@ FunctionOperatorMap::FunctionOperatorMap() {
 
     idx = ket_map.get_idx("hash");
     fn_map.compound_ket_fn.emplace(idx, &op_hash);
+
+    idx = ket_map.get_idx("common");
+    fn_map.compound_context_seq_fn.emplace(idx, &op_common);
 }
 
 template <class T>
