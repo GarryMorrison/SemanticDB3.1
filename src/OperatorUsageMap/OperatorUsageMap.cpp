@@ -1236,8 +1236,6 @@ OperatorUsageMap::OperatorUsageMap() {
             "            inverse-friends |Frank> => |Sam>\n"
             "\n"
             "            inverse-friends |Julie> => |Sam>\n"
-            "\n"
-            "\n"
             "            ------------------------------------------\n\n"
             "    see also:\n";
 

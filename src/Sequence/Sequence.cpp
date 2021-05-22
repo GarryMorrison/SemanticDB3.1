@@ -319,6 +319,7 @@ Sequence Sequence::do_you_know() const {
 }
 
 Sequence Sequence::how_many() const {
+    if (seq.empty()) { return Sequence("number: 0"); }  // What about case where seq[0].size() == 0?
     Sequence result;
     for (const auto &sp: seq) {
         Superposition r = sp.how_many();
@@ -328,6 +329,7 @@ Sequence Sequence::how_many() const {
 }
 
 Sequence Sequence::measure_currency() const {
+    if (seq.empty()) { return Sequence("number: 0"); }  // What about case where seq[0].size() == 0?
     Sequence result;
     for (const auto &sp: seq) {
         Superposition r = sp.measure_currency();
