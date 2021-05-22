@@ -56,28 +56,48 @@ Sequence op_arithmetic3(const Sequence &input_seq, const Sequence &one, const Se
     auto two_idx_vec = two.to_ket().label_split_idx();
 
     if (one_idx_vec.empty() || two_idx_vec.empty() || symbol.empty()) { return Sequence(); }
-    long double x = std::stold(ket_map.get_str(one_idx_vec.back()));
-    long double y = std::stold(ket_map.get_str(two_idx_vec.back()));
-    one_idx_vec.pop_back();
-    two_idx_vec.pop_back();
+    try {
+        long double x = std::stold(ket_map.get_str(one_idx_vec.back()));
+        long double y = std::stold(ket_map.get_str(two_idx_vec.back()));
+        one_idx_vec.pop_back();
+        two_idx_vec.pop_back();
 
-    if (one_idx_vec != two_idx_vec) { return Sequence(); }
-    std::string cat = ket_map.get_str(one_idx_vec);  // what if one_idx_vec.size() == 0?
-    std::string label;
-    if (cat.length() > 0 ) { label = cat + ": "; }
+        if (one_idx_vec != two_idx_vec) { return Sequence(); }
+        std::string cat = ket_map.get_str(one_idx_vec);  // what if one_idx_vec.size() == 0?
+        std::string label;
+        if (cat.length() > 0) { label = cat + ": "; }
 
-    long double value;
+        long double value;
 
-    char symbol_char = symbol.front();
-    switch(symbol_char) {
-        case '+' : { value = x + y; break; }
-        case '-' : { value = x - y; break; }
-        case '*' : { value = x * y; break; }
-        case '/' : { value = x / y; break; } // check for div by zero here!
-        case '%' : { value = static_cast<long long>(x) % static_cast<long long>(y); break; }
-        default: return Sequence();
+        char symbol_char = symbol.front();
+        switch (symbol_char) {
+            case '+' : {
+                value = x + y;
+                break;
+            }
+            case '-' : {
+                value = x - y;
+                break;
+            }
+            case '*' : {
+                value = x * y;
+                break;
+            }
+            case '/' : {
+                value = x / y;
+                break;
+            } // check for div by zero here!
+            case '%' : {
+                value = static_cast<long long>(x) % static_cast<long long>(y);
+                break;
+            }
+            default:
+                return Sequence();
+        }
+        return Sequence(label + float_to_int(value, default_decimal_places));
+    } catch (const std::invalid_argument& e) {
+        return Sequence();
     }
-    return Sequence(label + float_to_int(value, default_decimal_places));
 }
 
 double simm(const Superposition &sp1, const Superposition &sp2) {
