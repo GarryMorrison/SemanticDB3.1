@@ -9,6 +9,9 @@
 
 Sequence op_srange2(const Sequence& input_seq, const Sequence& start, const Sequence& stop);
 Sequence op_srange3(const Sequence& input_seq, const Sequence& start, const Sequence& stop, const Sequence& step);
+Superposition op_range2(const Sequence& input_seq, const Sequence& start, const Sequence& stop);
+Superposition op_range3(const Sequence& input_seq, const Sequence& start, const Sequence& stop, const Sequence& step);
+
 Sequence op_arithmetic3(const Sequence &input_seq, const Sequence &one, const Sequence &symbol_ket, const Sequence &two);
 double simm(const Superposition &sp1, const Superposition &sp2);
 double scaled_simm(const Superposition &sp1, const Superposition &sp2);

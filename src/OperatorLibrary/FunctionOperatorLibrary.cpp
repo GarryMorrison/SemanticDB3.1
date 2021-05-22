@@ -48,6 +48,44 @@ Sequence op_srange3(const Sequence& input_seq, const Sequence& start, const Sequ
     return seq;
 }
 
+Superposition op_range2(const Sequence& input_seq, const Sequence& start, const Sequence& stop) {
+    Sequence step("1");
+    return op_range3(input_seq, start, stop, step);
+}
+
+Superposition op_range3(const Sequence& input_seq, const Sequence& start, const Sequence& stop, const Sequence& step) {
+    if (!start.is_ket() || !stop.is_ket() || !step.is_ket()) { return Superposition(); }
+    auto start_vec = start.to_ket().label_split_idx();
+    auto stop_vec = stop.to_ket().label_split_idx();
+    auto step_vec = step.to_ket().label_split_idx();
+    if (start_vec.empty() || stop_vec.empty() || step_vec.empty()) { return Superposition(); }
+    ulong start_idx = start_vec.back();
+    ulong stop_idx = stop_vec.back();
+    ulong step_idx = step_vec.back();
+    start_vec.pop_back();
+    stop_vec.pop_back();
+    if ( start_vec != stop_vec ) { return Superposition(); }
+    long double v1 = std::stold(ket_map.get_str(start_idx));
+    long double v2 = std::stold(ket_map.get_str(stop_idx));
+    long double v3 = std::stold(ket_map.get_str(step_idx));
+    if (long_double_eq(v3, 0)) { return start.to_sp(); }
+    std::string cat = ket_map.get_str(start_vec);  // what if start_vec.size() == 0?
+    std::string label;
+    Superposition sp;
+    if (cat.length() > 0 ) { label = cat + ": "; }
+    if (v3 > 0) {
+        for (long double i = v1; i <= v2; i += v3) {
+            sp.add(label + float_to_int(i, default_decimal_places));
+        }
+    } else if (v3 < 0) {
+        for (long double i = v1; i >= v2; i += v3) {
+            sp.add(label + float_to_int(i, default_decimal_places));
+        }
+    }
+    return sp;
+}
+
+
 // Should this return a Ket instead??
 Sequence op_arithmetic3(const Sequence &input_seq, const Sequence &one, const Sequence &symbol_ket, const Sequence &two) {
     if (!one.is_ket() || !two.is_ket() || !symbol_ket.is_ket()) { return Sequence(); }

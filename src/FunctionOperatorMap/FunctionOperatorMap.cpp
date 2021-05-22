@@ -177,6 +177,10 @@ FunctionOperatorMap::FunctionOperatorMap() {
     fn_map.whitelist_2.emplace(idx, &op_srange2);
     fn_map.whitelist_3.emplace(idx, &op_srange3);
 
+    idx = ket_map.get_idx("range");
+    fn_map.whitelist_2.emplace(idx, &op_range2);
+    fn_map.whitelist_3.emplace(idx, &op_range3);
+
     idx = ket_map.get_idx("arithmetic");
     fn_map.whitelist_3.emplace(idx, &op_arithmetic3);
 
