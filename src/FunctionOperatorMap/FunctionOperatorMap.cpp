@@ -384,6 +384,12 @@ FunctionOperatorMap::FunctionOperatorMap() {
     idx = ket_map.get_idx("not-sread");
     fn_map.whitelist_1.emplace(idx, &op_not_sread);
 
+    idx = ket_map.get_idx("read");
+    fn_map.whitelist_1.emplace(idx, &op_read);
+
+    idx = ket_map.get_idx("not-read");
+    fn_map.whitelist_1.emplace(idx, &op_not_read);
+
     idx = ket_map.get_idx("scompress");
     fn_map.compound_context_seq_fn.emplace(idx, &op_scompress);
 

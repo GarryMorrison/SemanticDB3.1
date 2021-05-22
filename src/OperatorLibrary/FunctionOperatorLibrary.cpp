@@ -1053,6 +1053,65 @@ Sequence op_not_sread(const Sequence &input_seq, const Sequence &one) {
     return result;
 }
 
+Sequence op_read(const Sequence &input_seq, const Sequence &one) {
+    std::set<ulong> index_set;  // Any use in using unordered_set here?
+    Superposition positions = one.to_sp();
+    for (const auto &k: positions) {
+        try {
+            long long idx = std::stoll(k.label()) - 1;
+            if (idx < 0) {
+                idx += input_seq.size() + 1;
+            }
+            index_set.insert((ulong)idx);
+        } catch (const std::invalid_argument &e) {
+            continue;
+        }
+    }
+    Sequence result;
+    for (const auto &sp: input_seq) {
+        Superposition tmp_sp;
+        ulong idx = 0;
+        for (const auto &k: sp) {
+            if (index_set.find(idx) != index_set.end()) {
+                tmp_sp.add(k);
+            }
+            idx++;
+        }
+        result.append(tmp_sp);
+    }
+    return result;
+}
+
+Sequence op_not_read(const Sequence &input_seq, const Sequence &one) {
+    std::set<ulong> index_set;  // Any use in using unordered_set here?
+    Superposition positions = one.to_sp();
+    for (const auto &k: positions) {
+        try {
+            long long idx = std::stoll(k.label()) - 1;
+            if (idx < 0) {
+                idx += input_seq.size() + 1;
+            }
+            index_set.insert((ulong)idx);
+        } catch (const std::invalid_argument &e) {
+            continue;
+        }
+    }
+    Sequence result;
+    for (const auto &sp: input_seq) {
+        Superposition tmp_sp;
+        ulong idx = 0;
+        for (const auto &k: sp) {
+            if (index_set.find(idx) == index_set.end()) {
+                tmp_sp.add(k);
+            }
+            idx++;
+        }
+        result.append(tmp_sp);
+    }
+    return result;
+}
+
+
 Sequence op_string_replace(const Sequence &input_seq, const Sequence &one, const Sequence &two) {  // Could do with some optimization.
     Sequence result;
     Superposition from_patterns = one.to_sp();

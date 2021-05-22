@@ -11,7 +11,6 @@ Sequence op_srange2(const Sequence& input_seq, const Sequence& start, const Sequ
 Sequence op_srange3(const Sequence& input_seq, const Sequence& start, const Sequence& stop, const Sequence& step);
 Superposition op_range2(const Sequence& input_seq, const Sequence& start, const Sequence& stop);
 Superposition op_range3(const Sequence& input_seq, const Sequence& start, const Sequence& stop, const Sequence& step);
-
 Sequence op_arithmetic3(const Sequence &input_seq, const Sequence &one, const Sequence &symbol_ket, const Sequence &two);
 double simm(const Superposition &sp1, const Superposition &sp2);
 double scaled_simm(const Superposition &sp1, const Superposition &sp2);
@@ -49,6 +48,8 @@ Sequence op_find_path_between(ContextList &context, const Sequence &input_seq, c
 Sequence op_find_operators_between(ContextList &context, const Sequence &input_seq, const Sequence &seq1, const Sequence &seq2);
 Sequence op_sread(const Sequence &input_seq, const Sequence &one);
 Sequence op_not_sread(const Sequence &input_seq, const Sequence &one);
+Sequence op_read(const Sequence &input_seq, const Sequence &one);
+Sequence op_not_read(const Sequence &input_seq, const Sequence &one);
 Sequence op_string_replace(const Sequence &input_seq, const Sequence &one, const Sequence &two);
 Sequence op_for2(ContextList &context, const Sequence &input_seq, const Sequence &one, const Sequence &two);
 Sequence op_for3(ContextList &context, const Sequence &input_seq, const Sequence &one, const Sequence &two, const Sequence &three);
