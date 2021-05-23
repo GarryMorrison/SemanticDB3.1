@@ -76,3 +76,16 @@ double op_sigmoid_random(const double x, const std::vector<std::shared_ptr<Compo
     std::normal_distribution<double> distribution(mu, sigma);                     // It would be faster to implement it as a compound sequence function.
     return x * distribution(generator);
 }
+
+double op_min(const double x, const std::vector<std::shared_ptr<CompoundConstant> > &parameters) {
+    if (parameters.empty()) { return x; }
+    double value = parameters[0]->get_float();
+    return std::min(x, value);
+}
+
+double op_max(const double x, const std::vector<std::shared_ptr<CompoundConstant> > &parameters) {
+    if (parameters.empty()) { return x; }
+    double value = parameters[0]->get_float();
+    return std::max(x, value);
+}
+

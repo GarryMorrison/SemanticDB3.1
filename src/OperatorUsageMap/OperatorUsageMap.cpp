@@ -2038,6 +2038,37 @@ OperatorUsageMap::OperatorUsageMap() {
             "    see also:\n"
             "        Gaussian\n";
 
+    operator_usage_map.map["sigmoid-min"] =
+            "\nsigmoid-min:\n"
+            "    description:\n"
+            "        sigmoid-min[t] ket\n"
+            "        set the coeff x of the ket to min(t, x)\n\n"
+            "    examples:\n"
+            "        sigmoid-min[4] rank split[\" \"] |one two three four five six>\n"
+            "            |one> + 2|two> + 3|three> + 4|four> + 4|five> + 4|six>\n\n"
+            "        -- set the coeffs to random values with mean 0.5, standard deviation 0.7:\n"
+            "        -- within range [0,1]:\n"
+            "        sigmoid-min[1] sigmoid-max[0] random[0.5, 0.7] split[\" \"] |one two three four five six>\n"
+            "            0.093304|one> + 0.077091|two> + |three> + 0.265837|four> + 0|five> + 0.071054|six>\n\n"
+            "    see also:\n"
+            "        sigmoid-max\n";
+
+    operator_usage_map.map["sigmoid-max"] =
+            "\nsigmoid-max:\n"
+            "    description:\n"
+            "        sigmoid-max[t] ket\n"
+            "        set the coeff x of the ket to max(t, x)\n\n"
+            "    examples:\n"
+            "        sigmoid-max[4] rank split[\" \"] |one two three four five six>\n"
+            "            4|one> + 4|two> + 4|three> + 4|four> + 5|five> + 6|six>\n\n"
+            "        -- set the coeffs to random values with mean 0.5, standard deviation 0.7:\n"
+            "        -- within range [0,1]:\n"
+            "        sigmoid-min[1] sigmoid-max[0] random[0.5, 0.7] split[\" \"] |one two three four five six>\n"
+            "            0|one> + 0.431141|two> + 0.815684|three> + |four> + |five> + 0.026755|six>\n\n"
+            "    see also:\n"
+            "        sigmoid-min\n";
+
+
 }
 
 std::string OperatorUsageMap::get_usage(const std::string &s) const {

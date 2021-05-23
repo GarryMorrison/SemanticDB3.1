@@ -20,5 +20,7 @@ double op_sigmoid_in_range(const double x, const std::vector<std::shared_ptr<Com
 double ReLU(const double x);
 double op_invert(const double x);
 double op_sigmoid_random(const double x, const std::vector<std::shared_ptr<CompoundConstant> > &parameters);  // Deprecated.
+double op_min(const double x, const std::vector<std::shared_ptr<CompoundConstant> > &parameters);
+double op_max(const double x, const std::vector<std::shared_ptr<CompoundConstant> > &parameters);
 
 #endif //SDB3_1_SIGMOIDLIBRARY_H

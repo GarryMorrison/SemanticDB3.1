@@ -68,6 +68,12 @@ FunctionOperatorMap::FunctionOperatorMap() {
     idx = ket_map.get_idx("sigmoid-in-range");
     fn_map.compound_sigmoids.emplace(idx, &op_sigmoid_in_range);
 
+    idx = ket_map.get_idx("sigmoid-min");
+    fn_map.compound_sigmoids.emplace(idx, &op_min);
+
+    idx = ket_map.get_idx("sigmoid-max");
+    fn_map.compound_sigmoids.emplace(idx, &op_max);
+
     idx = ket_map.get_idx("random");
     // fn_map.compound_sigmoids.emplace(idx, &op_sigmoid_random);
     fn_map.compound_seq_fn.emplace(idx, &op_random);
