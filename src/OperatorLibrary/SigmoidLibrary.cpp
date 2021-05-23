@@ -67,7 +67,7 @@ double op_invert(const double x) {
     return 1 / x;
 }
 
-double op_random(const double x, const std::vector<std::shared_ptr<CompoundConstant> > &parameters) {
+double op_sigmoid_random(const double x, const std::vector<std::shared_ptr<CompoundConstant> > &parameters) {  // Deprecated.
     if (parameters.size() < 2) { return x; }
     double mu = parameters[0]->get_float();
     double sigma = parameters[1]->get_float();

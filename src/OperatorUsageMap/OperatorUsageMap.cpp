@@ -2029,13 +2029,14 @@ OperatorUsageMap::OperatorUsageMap() {
     operator_usage_map.map["random"] =
             "\nrandom:\n"
             "    description:\n"
-            "        random[mu, sigma] ket\n"
-            "        multiply the coeff x by a random number from a normal distribution\n"
+            "        random[mu, sigma] input-seq\n"
+            "        multiply the coeffs in input-seq by a random number from a normal distribution\n"
             "        where mean = mu, and standard-deviation = sigma\n\n"
             "    examples:\n"
             "        random[1, 0.7] range(|1>, |5>)\n"
             "            1.352593|1> + 2.120979|2> + 2.134905|3> - 0.163504|4> + 1.371605|5>\n\n"
-            "    see also:\n";
+            "    see also:\n"
+            "        Gaussian\n";
 
 }
 

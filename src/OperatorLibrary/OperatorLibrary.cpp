@@ -8,6 +8,8 @@
 #include <cmath>
 #include <set>
 #include <algorithm>
+#include <random>
+#include <chrono>
 #include "OperatorLibrary.h"
 #include "../CompoundConstant/ConstantString.h"
 #include "../Function/misc.h"
@@ -1961,5 +1963,24 @@ Sequence op_spike_merge(const Sequence &seq, const std::vector<std::shared_ptr<C
         }
     }
     result.append(sp_bucket);
+    return result;
+}
+
+Sequence op_random(const Sequence &seq, const std::vector<std::shared_ptr<CompoundConstant> > &parameters) {
+    if (parameters.size() < 2) { return seq; }
+    double mu = parameters[0]->get_float();
+    double sigma = parameters[1]->get_float();
+    unsigned seed = std::chrono::system_clock::now().time_since_epoch().count();
+    std::default_random_engine generator(seed);
+    std::normal_distribution<double> distribution(mu, sigma);
+    Sequence result;
+    for (const auto &sp: seq) {
+        Superposition tmp_sp;
+        for (const auto &k: sp) {
+            double rand_value = distribution(generator);
+            tmp_sp.add(k.label_idx(), k.value() * rand_value);
+        }
+        result.append(tmp_sp);
+    }
     return result;
 }
