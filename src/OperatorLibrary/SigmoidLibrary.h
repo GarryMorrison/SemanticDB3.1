@@ -19,5 +19,6 @@ double sigmoid_in_range(const double x, const double a, const double b);
 double op_sigmoid_in_range(const double x, const std::vector<std::shared_ptr<CompoundConstant> > &parameters);
 double ReLU(const double x);
 double op_invert(const double x);
+double op_random(const double x, const std::vector<std::shared_ptr<CompoundConstant> > &parameters);
 
 #endif //SDB3_1_SIGMOIDLIBRARY_H

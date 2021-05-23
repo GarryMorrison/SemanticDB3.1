@@ -68,6 +68,9 @@ FunctionOperatorMap::FunctionOperatorMap() {
     idx = ket_map.get_idx("sigmoid-in-range");
     fn_map.compound_sigmoids.emplace(idx, &op_sigmoid_in_range);
 
+    idx = ket_map.get_idx("random");
+    fn_map.compound_sigmoids.emplace(idx, &op_random);
+
     idx = ket_map.get_idx("split");
     fn_map.ket_fn.emplace(idx, &op_split_ket);
     fn_map.compound_ket_fn.emplace(idx, &op_split);
