@@ -28,24 +28,28 @@ Sequence op_srange3(const Sequence& input_seq, const Sequence& start, const Sequ
     start_vec.pop_back();
     stop_vec.pop_back();
     if ( start_vec != stop_vec ) { return Sequence(); }
-    long double v1 = std::stold(ket_map.get_str(start_idx));
-    long double v2 = std::stold(ket_map.get_str(stop_idx));
-    long double v3 = std::stold(ket_map.get_str(step_idx));
-    if (long_double_eq(v3, 0)) { return start; }
-    std::string cat = ket_map.get_str(start_vec);  // what if start_vec.size() == 0?
-    std::string label;
-    Sequence seq;
-    if (cat.length() > 0 ) { label = cat + ": "; }
-    if (v3 > 0) {
-        for (long double i = v1; i <= v2; i += v3) {
-            seq.append(label + float_to_int(i, default_decimal_places));
+    try {
+        long double v1 = std::stold(ket_map.get_str(start_idx));
+        long double v2 = std::stold(ket_map.get_str(stop_idx));
+        long double v3 = std::stold(ket_map.get_str(step_idx));
+        if (long_double_eq(v3, 0)) { return start; }
+        std::string cat = ket_map.get_str(start_vec);  // what if start_vec.size() == 0?
+        std::string label;
+        Sequence seq;
+        if (cat.length() > 0) { label = cat + ": "; }
+        if (v3 > 0) {
+            for (long double i = v1; i <= v2; i += v3) {
+                seq.append(label + float_to_int(i, default_decimal_places));
+            }
+        } else if (v3 < 0) {
+            for (long double i = v1; i >= v2; i += v3) {
+                seq.append(label + float_to_int(i, default_decimal_places));
+            }
         }
-    } else if (v3 < 0) {
-        for (long double i = v1; i >= v2; i += v3) {
-            seq.append(label + float_to_int(i, default_decimal_places));
-        }
+        return seq;
+    } catch (const std::invalid_argument &e) {
+        return Sequence();
     }
-    return seq;
 }
 
 Superposition op_range2(const Sequence& input_seq, const Sequence& start, const Sequence& stop) {
@@ -65,24 +69,28 @@ Superposition op_range3(const Sequence& input_seq, const Sequence& start, const 
     start_vec.pop_back();
     stop_vec.pop_back();
     if ( start_vec != stop_vec ) { return Superposition(); }
-    long double v1 = std::stold(ket_map.get_str(start_idx));
-    long double v2 = std::stold(ket_map.get_str(stop_idx));
-    long double v3 = std::stold(ket_map.get_str(step_idx));
-    if (long_double_eq(v3, 0)) { return start.to_sp(); }
-    std::string cat = ket_map.get_str(start_vec);  // what if start_vec.size() == 0?
-    std::string label;
-    Superposition sp;
-    if (cat.length() > 0 ) { label = cat + ": "; }
-    if (v3 > 0) {
-        for (long double i = v1; i <= v2; i += v3) {
-            sp.add(label + float_to_int(i, default_decimal_places));
+    try {
+        long double v1 = std::stold(ket_map.get_str(start_idx));
+        long double v2 = std::stold(ket_map.get_str(stop_idx));
+        long double v3 = std::stold(ket_map.get_str(step_idx));
+        if (long_double_eq(v3, 0)) { return start.to_sp(); }
+        std::string cat = ket_map.get_str(start_vec);  // what if start_vec.size() == 0?
+        std::string label;
+        Superposition sp;
+        if (cat.length() > 0) { label = cat + ": "; }
+        if (v3 > 0) {
+            for (long double i = v1; i <= v2; i += v3) {
+                sp.add(label + float_to_int(i, default_decimal_places));
+            }
+        } else if (v3 < 0) {
+            for (long double i = v1; i >= v2; i += v3) {
+                sp.add(label + float_to_int(i, default_decimal_places));
+            }
         }
-    } else if (v3 < 0) {
-        for (long double i = v1; i >= v2; i += v3) {
-            sp.add(label + float_to_int(i, default_decimal_places));
-        }
+        return sp;
+    } catch (const std::invalid_argument &e) {
+        return Superposition();
     }
-    return sp;
 }
 
 
