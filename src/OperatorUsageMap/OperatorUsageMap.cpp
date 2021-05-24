@@ -2068,6 +2068,47 @@ OperatorUsageMap::OperatorUsageMap() {
             "    see also:\n"
             "        sigmoid-min\n";
 
+    operator_usage_map.map["floor"] =
+            "\nfloor:\n"
+            "    description:\n"
+            "        floor ket\n"
+            "        take the floor function of the value in the ket label\n"
+            "        while preserving the ket label category\n"
+            "        if the value is not a number, then return the ket unchanged\n"
+            "        also, we preserve the ket coefficient\n\n"
+            "    examples:\n"
+            "        -- floor of a simple number:\n"
+            "        floor |2.7>\n"
+            "            |2>\n\n"
+            "        -- floor of a number with a category, in this case \"number\"\n"
+            "        floor |number: 5.3>\n"
+            "            |number: 5>\n\n"
+            "        -- attempted floor of a non number:\n"
+            "        floor |alpha>\n"
+            "            |alpha>\n\n"
+            "    see also:\n"
+            "        ceiling\n";
+
+    operator_usage_map.map["ceiling"] =
+            "\nceiling:\n"
+            "    description:\n"
+            "        ceiling ket\n"
+            "        take the ceiling function of the value in the ket label\n"
+            "        while preserving the ket label category\n"
+            "        if the value is not a number, then return the ket unchanged\n"
+            "        also, we preserve the ket coefficient\n\n"
+            "    examples:\n"
+            "        -- ceiling of a simple number:\n"
+            "        ceiling |2.7>\n"
+            "            |3>\n\n"
+            "        -- ceiling of a number with a category, in this case \"number\"\n"
+            "        ceiling |number: 5.3>\n"
+            "            |number: 6>\n\n"
+            "        -- attempted ceiling of a non number:\n"
+            "        ceiling |alpha>\n"
+            "            |alpha>\n\n"
+            "    see also:\n"
+            "        floor\n";
 
 }
 

@@ -33,10 +33,9 @@ Sequence op_srange3(const Sequence& input_seq, const Sequence& start, const Sequ
         long double v2 = std::stold(ket_map.get_str(stop_idx));
         long double v3 = std::stold(ket_map.get_str(step_idx));
         if (long_double_eq(v3, 0)) { return start; }
-        std::string cat = ket_map.get_str(start_vec);  // what if start_vec.size() == 0?
-        std::string label;
+        std::string label = ket_map.get_str(start_vec);  // what if start_vec.size() == 0?
         Sequence seq;
-        if (cat.length() > 0) { label = cat + ": "; }
+        if (label.length() > 0) { label += ": "; }
         if (v3 > 0) {
             for (long double i = v1; i <= v2; i += v3) {
                 seq.append(label + float_to_int(i, default_decimal_places));
@@ -74,10 +73,9 @@ Superposition op_range3(const Sequence& input_seq, const Sequence& start, const 
         long double v2 = std::stold(ket_map.get_str(stop_idx));
         long double v3 = std::stold(ket_map.get_str(step_idx));
         if (long_double_eq(v3, 0)) { return start.to_sp(); }
-        std::string cat = ket_map.get_str(start_vec);  // what if start_vec.size() == 0?
-        std::string label;
+        std::string label = ket_map.get_str(start_vec);  // what if start_vec.size() == 0?
         Superposition sp;
-        if (cat.length() > 0) { label = cat + ": "; }
+        if (label.length() > 0) { label += ": "; }
         if (v3 > 0) {
             for (long double i = v1; i <= v2; i += v3) {
                 sp.add(label + float_to_int(i, default_decimal_places));
@@ -109,9 +107,8 @@ Sequence op_arithmetic3(const Sequence &input_seq, const Sequence &one, const Se
         two_idx_vec.pop_back();
 
         if (one_idx_vec != two_idx_vec) { return Sequence(); }
-        std::string cat = ket_map.get_str(one_idx_vec);  // what if one_idx_vec.size() == 0?
-        std::string label;
-        if (cat.length() > 0) { label = cat + ": "; }
+        std::string label = ket_map.get_str(one_idx_vec);  // what if one_idx_vec.size() == 0?
+        if (label.length() > 0) { label += ": "; }
 
         long double value;
 
