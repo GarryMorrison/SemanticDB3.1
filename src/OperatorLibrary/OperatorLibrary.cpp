@@ -162,20 +162,20 @@ Ket ket_length(const Ket k) {
     return Ket("number: " + std::to_string(len), k.value());
 }
 
-Ket push_float(const Ket k) {
+Ket push_float(const Ket &k) {
     if (k.label_idx() == ket_map.get_idx("")) { return k;}
+    // std::cout << "push-float, decimal places: " << default_decimal_places << "\n";
     std::string label = k.label();
 
-    std::string s;
     if (label == " ") {
-        s = "";
+        label = "";
     } else {
-        s = label + ": ";
+        label += ": ";
     }
-    return Ket(s + float_to_int(k.value(), default_decimal_places));
+    return Ket(label + float_to_int(k.value(), default_decimal_places));
 }
 
-Ket pop_float(const Ket k) {
+Ket pop_float(const Ket &k) {
     auto k_vec = k.label_split_idx();
     if (k_vec.empty()) { return Ket(); } // should never happen
     std::string value_str = ket_map.get_str(k_vec.back());

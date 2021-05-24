@@ -2110,6 +2110,55 @@ OperatorUsageMap::OperatorUsageMap() {
             "    see also:\n"
             "        floor\n";
 
+    operator_usage_map.map["push-float"] =
+            "\npush-float:\n"
+            "    description:\n"
+            "        push-float ket\n"
+            "        push the float coefficient c onto the ket label\n"
+            "        so that c is now the \"value\" of the ket\n"
+            "        often useful if you want to swap between manipulating the coeff versus the value of a ket\n"
+            "        NB: it uses default-decimal-places as the max number of digits to use\n"
+            "        NB: the max of which seems to be 5, probably due to the limit in precision of floats\n"
+            "        push-float is the approximate inverse of pop-float\n\n"
+            "    examples:\n"
+            "        push-float 2.5|x>\n"
+            "            |x: 2.5>\n\n"
+            "        -- | > is a special ket that effectively has no \"category\"\n"
+            "        push-float 3.1415| >\n"
+            "            |3.1415>\n\n"
+            "        push-float 3.14159265| >\n"
+            "            |3.14159>\n\n"
+            "        -- if the ket has no coeff, then the actual coeff is 1\n"
+            "        push-float |alpha>\n"
+            "            |alpha: 1>\n\n"
+            "    see also:\n"
+            "        pop-float, extract-value, extract-category\n";
+
+    operator_usage_map.map["pop-float"] =
+            "\npop-float:\n"
+            "    description:\n"
+            "        pop-float ket\n"
+            "        pop the \"value\" of the ket onto the coefficient\n"
+            "        the coefficient of the ket is multiplied by the ket value\n"
+            "        and the value is removed from the ket label\n"
+            "        often useful if you want to swap between manipulating the coeff versus the value of a ket\n"
+            "        if the ket value is not a number, then simply return the original ket\n"
+            "        pop-float is the approximate inverse of push-float\n\n"
+            "    examples:\n"
+            "        pop-float |x: 2.5>\n"
+            "            2.500000|x>\n\n"
+            "        -- if the ket only has a value, then use the special ket | >\n"
+            "        pop-float |3.1415>\n"
+            "            3.141500| >\n\n"
+            "        -- if the value is not a number, then return the original ket:\n"
+            "        pop-float |alpha>\n"
+            "            |alpha>\n\n"
+            "        -- if the ket has a coeff other than 1, then multiply it:\n"
+            "        pop-float 10 |x: 7.259>\n"
+            "            72.590000|x>\n\n"
+            "    see also:\n"
+            "        push-float, extract-value, extract-category\n";
+
 }
 
 std::string OperatorUsageMap::get_usage(const std::string &s) const {

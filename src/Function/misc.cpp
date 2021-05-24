@@ -27,6 +27,7 @@ std::string float_to_int(const long double v, unsigned int places) {
         return std::to_string(static_cast<long long int>(round(v)));
     }
     // return std::to_string(v); // use decimal places here later!
+    // std::cout << "float_to_int, decimal places: " << places << "\n";
     std::ostringstream buffer;
     unsigned int tens = pow(10, places);
     buffer << round(v*tens)/tens;
