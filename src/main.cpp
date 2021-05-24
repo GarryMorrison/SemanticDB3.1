@@ -10,33 +10,35 @@
 
 std::string standard_introduction_text = "Welcome to the Semantic DB version 3.1\n";
 std::string interactive_introduction_text = "\nWelcome to the Semantic DB version 3.1 shell.\n"
-                                            "Last updated 9th May 2021.\n"
+                                            "Last updated 24th May 2021.\n"
                                             "Type h for help.\n"
                                             "Online usage info at http://semantic-db.org/docs/usage3/\n";
 
-std::string help_string = "\n    q, quit, exit        quit the semantic agent\n"
-                          "    h, help              print this message\n"
-                          "    dump                 print current context\n"
-                          "    dump multi           print context list\n"
-                          "    dump verbose         print current context including supported-ops\n"
-                          "    dump multi verbose   print context list including supported-ops\n"
-                          "    create inverse       create inverse for current context\n"
-                          "    create multi inverse create inverse for all context's\n"
-                          "    load file.sw3        load the given file\n"
-                          "    save file.sw3        save the current context to file\n"
-                          "    save multi file.sw3  save context list to file\n"
-                          "    context              show known context's\n"
-                          "    context string       set context to string\n"
-                          "    icontext             interactively choose context\n"
-                          "    .                    repeat last command\n"
-                          "    i                    interactive history\n"
-                          "    history              show console history\n"
-                          "    quiet on             switch time-taken messages off\n"
-                          "    quiet off            switch time-taken messages on\n"
-                          "    usage                show available operators\n"
-                          "    usage op             show op usage information\n"
-                          "    reset                Completely erase all knowledge\n"
-                          "    -- comment           ignore, this is just a comment line\n";
+std::string help_string = "\n    q, quit, exit          quit the semantic agent\n"
+                          "    h, help                print this message\n"
+                          "    dump                   print current context\n"
+                          "    dump multi             print context list\n"
+                          "    dump verbose           print current context including supported-ops\n"
+                          "    dump multi verbose     print context list including supported-ops\n"
+                          "    create inverse         create inverse for current context\n"
+                          "    create multi inverse   create inverse for all context's\n"
+                          "    load file.sw3          load the given file\n"
+                          "    save file.sw3          save the current context to file\n"
+                          "    save multi file.sw3    save context list to file\n"
+                          "    context                show known context's\n"
+                          "    context string         set context to string\n"
+                          "    icontext               interactively choose context\n"
+                          "    .                      repeat last command\n"
+                          "    i                      interactive history\n"
+                          "    history                show console history\n"
+                          "    quiet on               switch time-taken messages off\n"
+                          "    quiet off              switch time-taken messages on\n"
+                          "    set decimal places p   set default decimal places\n"
+                          "    get decimal places     get default decimal places\n"
+                          "    usage                  show available operators\n"
+                          "    usage op               show op usage information\n"
+                          "    reset                  Completely erase all knowledge\n"
+                          "    -- comment             ignore, this is just a comment line\n";
 
 unsigned int default_decimal_places;
 extern OperatorUsageMap operator_usage_map;
@@ -229,6 +231,11 @@ int main(int argc, char** argv) {
             } else if (shell_input == "quiet off") {
                 quiet_mode = false;
                 std::cout << "Switched off quiet mode." << std::endl;
+            } else if (shell_input == "get decimal places") {
+                std::cout << "\nDefault decimal places: " << default_decimal_places << std::endl;
+            } else if (shell_input.substr(0, 18) == "set decimal places") {
+                default_decimal_places = std::stoi(shell_input.substr(18));  // crashes if not given an integer.
+                std::cout << "\nDefault decimal places set to: " << default_decimal_places << std::endl;
             } else if (shell_input == "context") {
                 context.show_context_list();
             } else if (shell_input.substr(0, 8) == "context ") {
