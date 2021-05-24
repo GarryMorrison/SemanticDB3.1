@@ -108,7 +108,10 @@ FunctionOperatorMap::FunctionOperatorMap() {
     fn_map.ket_fn.emplace(idx, &op_floor);
 
     idx = ket_map.get_idx("ceiling");
-    fn_map.ket_fn.emplace(idx,&op_ceiling);
+    fn_map.ket_fn.emplace(idx, &op_ceiling);
+
+    idx = ket_map.get_idx("log");
+    fn_map.ket_fn.emplace(idx, &op_log);
 
     idx = ket_map.get_idx("push-float");
     fn_map.ket_fn.emplace(idx, &push_float);

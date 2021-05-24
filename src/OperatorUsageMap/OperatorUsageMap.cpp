@@ -2087,7 +2087,7 @@ OperatorUsageMap::OperatorUsageMap() {
             "        floor |alpha>\n"
             "            |alpha>\n\n"
             "    see also:\n"
-            "        ceiling\n";
+            "        ceiling, log\n";
 
     operator_usage_map.map["ceiling"] =
             "\nceiling:\n"
@@ -2108,7 +2108,28 @@ OperatorUsageMap::OperatorUsageMap() {
             "        ceiling |alpha>\n"
             "            |alpha>\n\n"
             "    see also:\n"
-            "        floor\n";
+            "        floor, log\n";
+
+    operator_usage_map.map["log"] =
+            "\nlog:\n"
+            "    description:\n"
+            "        log ket\n"
+            "        take the natural log of the value in the ket label\n"
+            "        while preserving the ket label category\n"
+            "        if the value is not a number, then return the ket unchanged\n"
+            "        also, we preserve the ket coefficient\n\n"
+            "    examples:\n"
+            "        -- log of a simple number:\n"
+            "        log |2.71828>\n"
+            "            |1>\n\n"
+            "        -- log of a number with a category, in this case \"number\"\n"
+            "        log |number: 5.3>\n"
+            "            |number: 1.66771>\n\n"
+            "        -- attempted log of a non number:\n"
+            "        log |alpha>\n"
+            "            |alpha>\n\n"
+            "    see also:\n"
+            "        floor, ceiling\n";
 
     operator_usage_map.map["push-float"] =
             "\npush-float:\n"

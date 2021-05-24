@@ -24,6 +24,7 @@ Ket extract_category(const Ket k);
 Ket extract_value(const Ket k);
 Ket op_floor(const Ket &k);
 Ket op_ceiling(const Ket &k);
+Ket op_log(const Ket &k);
 Ket ket_length(const Ket k);
 Ket push_float(const Ket &k);
 Ket pop_float(const Ket &k);

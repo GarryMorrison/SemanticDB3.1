@@ -156,6 +156,21 @@ Ket op_ceiling(const Ket &k) {
     }
 }
 
+Ket op_log(const Ket &k) {
+    auto idx_vec = k.label_split_idx();
+    if (idx_vec.empty()) { return Ket(); }
+    try {
+        long double value = std::log(std::stold(ket_map.get_str(idx_vec.back())));
+        idx_vec.pop_back();
+        std::string label = ket_map.get_str(idx_vec);  // What happens if idx_vec is empty?
+        if (label.length() > 0) { label += ": "; }
+        return Ket(label + float_to_int(value, default_decimal_places), k.value());
+    } catch (const std::invalid_argument &e) {
+        return k;
+    }
+}
+
+
 
 Ket ket_length(const Ket k) {
     unsigned int len = k.label().size();
