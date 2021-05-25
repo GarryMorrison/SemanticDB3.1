@@ -2180,6 +2180,41 @@ OperatorUsageMap::OperatorUsageMap() {
             "    see also:\n"
             "        push-float, extract-value, extract-category\n";
 
+    operator_usage_map.map["normalize"] =
+            "\nnormalize:\n"
+            "    description:\n"
+            "        normalize sp\n"
+            "        normalize[t] sp\n"
+            "        normalize the coefficients in sp such that they sum to 1, or t if specified\n"
+            "        ie, the \"currency\" of the result will be either 1 or t\n"
+            "        if applied to a sequence, apply normalize to each of the component superpositions\n\n"
+            "    examples:\n"
+            "        normalize (2|alpha> + 3|beta> + 5|gamma> + 7|delta>)\n"
+            "            0.117647|alpha> + 0.176471|beta> + 0.294118|gamma> + 0.411765|delta>\n\n"
+            "        measure-currency normalize (2|alpha> + 3|beta> + 5|gamma> + 7|delta>)\n"
+            "            |number: 1>\n\n"
+            "        normalize[100] (3|x> + |y> + 2|z>)\n"
+            "            50|x> + 16.666667|y> + 33.333333|z>\n\n"
+            "        measure-currency normalize[100] (3|x> + |y> + 2|z>)\n"
+            "            |number: 100>\n\n"
+            "    see also:\n"
+            "        measure-currency, rescale\n";
+
+    operator_usage_map.map["rescale"] =
+            "\nrescale:\n"
+            "    description:\n"
+            "        rescale sp\n"
+            "        rescale[t] sp\n"
+            "        rescale the coefficients in sp such that the max coefficient is 1, or t if specified\n"
+            "        if applied to a sequence, apply rescale to each of the component superpositions\n\n"
+            "    examples:\n"
+            "        rescale (2|alpha> + 3|beta> + 5|gamma> + 7|delta>)\n"
+            "            0.285714|alpha> + 0.428571|beta> + 0.714286|gamma> + |delta>\n\n"
+            "        rescale[100] (3|x> + |y> + 2|z>)\n"
+            "            100|x> + 33.333333|y> + 66.666667|z>\n\n"
+            "    see also:\n"
+            "        normalize\n";
+
 }
 
 std::string OperatorUsageMap::get_usage(const std::string &s) const {

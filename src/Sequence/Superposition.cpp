@@ -505,6 +505,7 @@ double Superposition::find_max_coeff() const { // what happens if sp is empty?
 }
 
 Superposition Superposition::rescale(const double t) const {
+    if (sort_order.empty()) { return Superposition(); }
     double the_max = this->find_max_coeff();
     if (the_max == 0) { return *this; }
     Superposition result;
@@ -525,6 +526,7 @@ Superposition Superposition::normalize() const {
 }
 
 Superposition Superposition::normalize(const double t) const {
+    if (sort_order.empty()) { return Superposition(); }
     double sum = 0;
     for (const auto idx : sort_order) {
         double value = sp.at(idx);
