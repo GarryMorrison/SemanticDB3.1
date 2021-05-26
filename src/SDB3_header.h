@@ -38,5 +38,6 @@
 #include "src/Parser/Driver.h"
 #include "OperatorUsageMap/OperatorUsageMap.h"
 #include "DocsGenerator/DocsGenerator.h"
+#include "Operator/InfixOperator.h"
 
 #endif //SDB3_1_SDB3_HEADER_H

@@ -19,6 +19,7 @@
 #define OPPOWER 45
 #define OPSEQUENCE 46
 #define OPFUNCTION 47
+#define OPINFIX 48
 
 class BaseOperator {
 private:

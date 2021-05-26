@@ -103,6 +103,16 @@ yylloc->step();
 "__" { yylval->integerVal = SMERGE2; return token::INFIX_OP; }
 "_" { yylval->integerVal = SMERGE; return token::INFIX_OP; }
 
+" == " { yylval->integerVal = OPEQUAL; return token::INFIX_DOUBLE_OP; }
+" != " { yylval->integerVal = OPNOTEQUAL; return token::INFIX_DOUBLE_OP; }
+" && " { yylval->integerVal = OPAND; return token::INFIX_DOUBLE_OP; }
+" || " { yylval->integerVal = OPOR; return token::INFIX_DOUBLE_OP; }
+" ++ " { yylval->integerVal = OPPLUS; return token::INFIX_DOUBLE_OP; }
+" -- " { yylval->integerVal = OPMINUS; return token::INFIX_DOUBLE_OP; }
+" ** " { yylval->integerVal = OPMULT; return token::INFIX_DOUBLE_OP; }
+" // " { yylval->integerVal = OPDIV; return token::INFIX_DOUBLE_OP; }
+" %% " { yylval->integerVal = OPMOD; return token::INFIX_DOUBLE_OP; }
+
 "(" { return token::LPAREN; }
 ")" { return token::RPAREN; }
 "[" { return token::LSQUARE; }

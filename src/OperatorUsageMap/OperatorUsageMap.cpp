@@ -839,7 +839,8 @@ OperatorUsageMap::OperatorUsageMap() {
             "        where one and two are sequences\n"
             "        the order of the kets in any of the superpositions does not matter\n"
             "        however, the order of the superpositions in the sequences do matter\n"
-            "        NB: if one and two are both the empty ket, return |no>\n\n"
+            "        NB: if one and two are both the empty ket, return |no>\n"
+            "        Now implemented as: ( one == two ) \n\n"
             "    examples:\n"
             "        -- Let's give some abstract examples:\n\n"
             "        -- first demonstrate it works with superpositions\n"
@@ -1115,7 +1116,8 @@ OperatorUsageMap::OperatorUsageMap() {
             "\nand:\n"
             "    description:\n"
             "        and(ket1, ket2)\n"
-            "        returns |yes> if ket1 and ket2 are |yes>, |no> otherwise.\n\n"
+            "        returns |yes> if ket1 and ket2 are |yes>, |no> otherwise.\n"
+            "        now implemented as: ( ket1 && ket2 ) \n\n"
             "    examples:\n"
             "        and(|yes>, |yes>)\n"
             "            |yes>\n\n"
@@ -1141,7 +1143,8 @@ OperatorUsageMap::OperatorUsageMap() {
             "\nor:\n"
             "    description:\n"
             "        or(ket1, ket2)\n"
-            "        returns |yes> if ket1 or ket2 are |yes>, |no> otherwise.\n\n"
+            "        returns |yes> if ket1 or ket2 are |yes>, |no> otherwise.\n"
+            "        now implemented as: ( ket1 || ket2 ) \n\n"
             "    examples:\n"
             "        or(|yes>, |yes>)\n"
             "            |yes>\n\n"
@@ -2214,6 +2217,26 @@ OperatorUsageMap::OperatorUsageMap() {
             "            100|x> + 33.333333|y> + 66.666667|z>\n\n"
             "    see also:\n"
             "        normalize\n";
+
+    operator_usage_map.map["arithmetic"] =
+            "\narithmetic:\n"
+            "    description:\n"
+            "        arithmetic(one, symbol, two)\n"
+            "        one and two are converted to kets (for now), and then processed using the symbol type\n"
+            "        possible types are: + - * / %\n"
+            "        ie, addition, subtraction, multiplication, division, modulus\n"
+            "        Note that categories are preserved, and if the categories differ, return the empty ket |>\n"
+            "        now implemented as: (one ++ two), (one -- two), (one ** two), (one // two), (one %% two)\n\n"
+            "    examples:\n"
+            "        arithmetic(|2>, |+>, |3>)\n"
+            "            |5>\n\n"
+            "        arithmetic(|2>, |*>, |3>)\n"
+            "            |6>\n\n"
+            "        (|number: 2> ++ |number: 7>)\n"
+            "            |number: 9>\n\n"
+            "        (|23> %% |7>)\n"
+            "            |2>\n\n"
+            "    see also:\n";
 
 }
 
