@@ -99,9 +99,18 @@ Sequence InfixOperator::process_compile(const Sequence &seq_one, const Sequence 
                 one_idx_vec.pop_back();
                 two_idx_vec.pop_back();
 
-                if (one_idx_vec != two_idx_vec) { return Sequence(); }
-                std::string label = ket_map.get_str(one_idx_vec);  // what if one_idx_vec.size() == 0?
-                if (label.length() > 0) { label += ": "; }
+                std::string label;
+                if (!one_idx_vec.empty() && two_idx_vec.empty()) {
+                    label = ket_map.get_str(one_idx_vec) + ": ";
+                } else if (one_idx_vec.empty() && !two_idx_vec.empty()) {
+                    label = ket_map.get_str(two_idx_vec) + ": ";
+                } else if (one_idx_vec == two_idx_vec) {
+                    if (!one_idx_vec.empty()) {
+                        label = ket_map.get_str(one_idx_vec) + ": ";
+                    }
+                } else {
+                    return Sequence();
+                }
 
                 long double value;
 

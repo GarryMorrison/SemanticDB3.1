@@ -2226,6 +2226,7 @@ OperatorUsageMap::OperatorUsageMap() {
             "        possible types are: + - * / %\n"
             "        ie, addition, subtraction, multiplication, division, modulus\n"
             "        Note that categories are preserved, and if the categories differ, return the empty ket |>\n"
+            "        If one of the kets has a category, and the other doesn't, then the result will have that category too\n"
             "        now implemented as: (one ++ two), (one -- two), (one ** two), (one // two), (one %% two)\n\n"
             "    examples:\n"
             "        arithmetic(|2>, |+>, |3>)\n"
