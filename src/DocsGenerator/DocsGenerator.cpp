@@ -35,19 +35,15 @@ const std::string docs_footer =
         "\n</body>\n</html>\n";
 
 
-std::string convert_usage_to_html(std::map<std::string, std::string> &operator_locations, const std::string &header, const std::string &operator_str) {  // We factored this out, to keep things tidy!
+std::string convert_usage_to_html(std::map<std::string, std::string> &operator_locations, const std::string &header, const std::string &operator_str, const std::string &source_usage) {  // We factored this out, to keep things tidy!
+    std::string usage = source_usage;  // Just copy it, since we want to modify it in place.
     std::string html_usage;
     html_usage = "<html>\n<head><title>" + header + operator_str + "</title></head>\n<body>\n";
-    html_usage += "<h3>" + header + operator_str + "</h3>\n<pre>";
-    std::string usage = operator_usage_map.get_usage(operator_str) + "\n";
-    std::string sw3_ext = ".sw3";  // Not ideal that we hardwire in the extension here.
+    html_usage += "<h3>" + header + operator_str + "</h3>\n";
+    html_usage += "\n$header$\n<pre>\n";
     std::string html_link;
     for (const auto &iter: operator_locations) {
-        if (std::equal(sw3_ext.rbegin(), sw3_ext.rend(), iter.first.rbegin())) {  // If the iter.first ends with .sw3 then it is an sw3 file, not an operator.
-            html_link = "<a href=\"../" + iter.second + "/" + iter.first + "\">" + iter.first + "</a>";
-        } else {
-            html_link = "<a href=\"../" + iter.second + "/" + iter.first + ".html\">" + iter.first + "</a>";
-        }
+        html_link = "<a href=\"../" + iter.second + "/" + iter.first + ".html\">" + iter.first + "</a>";
 
         std::string from = " " + iter.first + " ";  // Potentially add more of these later. Or do it in a more intelligent way?
         std::string to = " " + html_link + " ";
@@ -110,11 +106,19 @@ std::string generate_operator_usage_docs(std::map<std::string, std::string> &ope
             std::string operator_file = dir + "/" + str + ".html";
             section += "        <dd><a href=\"" + operator_file + "\">" + str + "</a></dd>\n";
 
+            std::string usage = operator_usage_map.get_usage(str) + "\n";
+
             // Write operator usage info to file:
             std::ofstream myfile;
             myfile.open(dest_dir + operator_file);
             if (myfile.is_open()) {
-                myfile << convert_usage_to_html(operator_locations, header, str);
+                std::string html_usage = convert_usage_to_html(operator_locations, header, str, usage);
+
+                // Now sub in the file header:
+                std::string file_header = "\n<hr>\n";
+                string_replace_all(html_usage, "$header$", file_header);
+
+                myfile << html_usage;
                 myfile.close();
             } else {
                 std::cout << "Unable to open file: " << dest_dir + operator_file << std::endl;
@@ -126,7 +130,7 @@ std::string generate_operator_usage_docs(std::map<std::string, std::string> &ope
     return section + "</dl>\n";
 }
 
-std::string generate_sw_section(const std::string &header, const std::string &dest_dir, const std::string &dir, std::vector<fs::path> &sw3_files) {
+std::string generate_sw_section(std::map<std::string, std::string> &operator_locations, const std::string &header, const std::string &dest_dir, const std::string &dir, std::vector<fs::path> &sw3_files) {
     std::string section;
 
     // Create destination directory:
@@ -151,10 +155,39 @@ std::string generate_sw_section(const std::string &header, const std::string &de
     }
     std::sort(tmp_sorted.begin(), tmp_sorted.end());
     for (const auto &str: tmp_sorted) {
-        section += "        <dd><a href=\"" + dir + "/" + str + "\">" + str + "</a></dd>\n";
+        section += "        <dd><a href=\"" + dir + "/" + str + ".html\">" + str + "</a></dd>\n";
         fs::path source_file = sw3_path_map[str];
         fs::path target_file = working_dir + "/" + str;
         fs::copy(source_file, target_file, fs::copy_options::overwrite_existing);
+
+        std::string html_usage;
+        std::ifstream source_stream;
+        source_stream.open(source_file);
+        if (source_stream.is_open()) {
+            std::string usage;
+            std::stringstream buffer;
+            buffer << source_stream.rdbuf();
+            usage = buffer.str();
+            html_usage += convert_usage_to_html(operator_locations, header, str, usage);
+            source_stream.close();
+        } else {
+            std::cout << "Unable to open file: " << source_file << std::endl;
+        }
+
+        // Now sub in the file header:
+        std::string file_header = "Raw file <a href=\"" + str + "\">here.</a>\n<hr>\n";
+        string_replace_all(html_usage, "$header$", file_header);
+
+        // Write operator usage info to file:
+        std::string dot_html = ".html";
+        std::ofstream myfile;
+        myfile.open(target_file.c_str() + dot_html);
+        if (myfile.is_open()) {
+            myfile << html_usage;
+            myfile.close();
+        } else {
+            std::cout << "Unable to open file: " << target_file.c_str() + dot_html << std::endl;
+        }
     }
     return section + "</dl>\n";
 }
@@ -264,7 +297,7 @@ void DocsGenerator::generate(const std::string& dir) {
 
     // Generate sw-examples section:
     if (!sw3_files.empty()) {
-        page += generate_sw_section("sw-examples: ", dest_dir, "sw-examples", sw3_files);
+        page += generate_sw_section(operator_locations, "sw-examples: ", dest_dir, "sw-examples", sw3_files);
     }
 
     page += docs_footer;

@@ -112,7 +112,7 @@ monkey-succeeded (*) #=>
     current |depth> => plus[1] current |depth>
     the-current |state> => test-for-goal-state |>
     print (|The current state:> __ the-current |state> . | >)
-    if( is-equal(the-current |state>, |reached goal state!>), |op: finished>, |op: try-operator>)
+    if( ( the-current |state> == |reached goal state!> ), |op: finished>, |op: try-operator>)
 
 finished (*) #=>
     print (|The plan:> __ smerge[" "] the |plan>)
