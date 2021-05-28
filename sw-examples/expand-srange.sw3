@@ -5,6 +5,7 @@
 -- If their categories don't match, return the ket unchanged.
 -- If the given ket is not a valid range, or a badly defined range, then return it unchanged.
 -- The same structure can be used for other functions, not just srange().
+-- Eg, range().
 
 
 -- examples:
@@ -28,5 +29,10 @@
 expand-srange |*> #=>
     unlearn[the] |result>
     the |result> => compile (|op: srange> . |> . ssplit[" .. "] |__self>)
+    value-if( do-you-know the |result>, the |result>, |__self>)
+
+expand-range |*> #=>
+    unlearn[the] |result>
+    the |result> => compile (|op: range> . |> . ssplit[" .. "] |__self>)
     value-if( do-you-know the |result>, the |result>, |__self>)
 
