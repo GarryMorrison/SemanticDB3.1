@@ -340,11 +340,6 @@ constant : STRING { $$ = new ConstantString(*$1); }
          | INTEGER DIVIDE DOUBLE { $$ = new ConstantFloat((double)$1 / $3); }
          | DOUBLE DIVIDE INTEGER { $$ = new ConstantFloat($1 / (double)$3); }
          | MINUS_OP { $$ = new ConstantFloat(-1); }
-         // | MINUS_OP INTEGER { $$ = new ConstantInteger(- $2); }
-         // | MINUS_OP DOUBLE { $$ = new ConstantFloat(- $2); }
-         // | MINUS_OP INTEGER DIVIDE INTEGER { $$ = new ConstantFloat(- (double)$2 / (double)$4); }
-         // | MINUS_OP INTEGER DIVIDE DOUBLE { $$ = new ConstantFloat(- (double)$2 / $4); }
-         // | MINUS_OP DOUBLE DIVIDE INTEGER { $$ = new ConstantFloat(- $2 / (double)$4); }
          ;
 
 parameters : constant { $$ = new std::vector<std::shared_ptr<CompoundConstant>>;
