@@ -26,7 +26,7 @@ const std::string InfixOperator::to_string() const {
         case OPMULT: str_type = " ** "; break;
         case OPDIV: str_type = " // "; break;
         case OPMOD: str_type = " %% "; break;
-        case OPPOWER: str_type = " ^^ "; break;
+        case OPARITHPOWER: str_type = " ^^ "; break;
         case OPRANGE: str_type = " .. "; break;
         default: str_type = " ?? ";
     }
