@@ -19,31 +19,55 @@ DocsGenerator docs_generator;
 extern FunctionOperatorMap fn_map;
 extern OperatorUsageMap operator_usage_map;
 
-const std::string docs_header =
+const std::string docs_index_page =
         "<html>\n"
         "<head><title>Semantic DB 3.1 usage information</title></head>\n"
         "<body>\n"
         "<h3>Semantic DB 3.1 usage information</h3>\n"
         "Welcome to the Semantic DB 3.1 usage page. Below are brief descriptions and examples for our operators and sequence functions.\n"
-        "The corresponding github repo is <a href=\"https://github.com/GarryMorrison/SemanticDB3.1\">available here</a>.\n";
-
-const std::string docs_footer =
+        "The corresponding github repo is <a href=\"https://github.com/GarryMorrison/SemanticDB3.1\">available here</a>.\n"
+        "<hr>\n"
+        "$body$\n"
         "<hr>\n"
         "by Garry Morrison<br>\n"
         "email: garry -at- semantic-db.org<br>\n"
-        "updated: $datetime$\n"
+        "updated: $date-time$\n"
         "\n</body>\n</html>\n";
 
+const std::string docs_operator_page =
+        "<html>\n"
+        "<head><title>$operator-type$: $operator-name$</title></head>\n"
+        "<body>\n"
+        "<h3>$operator-type$: $operator-name$</h3>\n"
+        "<hr>\n"
+        "<pre>\n"
+        "$operator-usage$"
+        "</pre>\n"
+        "<hr>\n"
+        "<a href=\"../index.html\">Home</a><br>\n"
+        "</body>\n"
+        "</html>";
 
-std::string convert_usage_to_html(std::map<std::string, std::string> &operator_locations, const std::string &header, const std::string &operator_str, const std::string &source_usage) {  // We factored this out, to keep things tidy!
+const std::string docs_sw3_page =
+        "<html>\n"
+        "<head><title>$sw3-type$: $sw3-name$</title></head>\n"
+        "<body>\n"
+        "<h3>$sw3-type$: $sw3-name$</h3>\n"
+        "\nRaw file <a href=\"$sw3-name$\">here.</a>\n"
+        "<hr>\n"
+        "<pre>"
+        "$sw3-code$"
+        "</pre>\n"
+        "<hr>\n"
+        "<a href=\"../index.html\">Home</a><br>\n"
+        "</body>\n"
+        "</html>";
+
+
+std::string linkify_operators(std::map<std::string, std::string> &operator_locations, const std::string &source_usage) {
     std::string usage = source_usage;  // Just copy it, since we want to modify it in place.
-    std::string html_usage;
-    html_usage = "<html>\n<head><title>" + header + operator_str + "</title></head>\n<body>\n";
-    html_usage += "<h3>" + header + operator_str + "</h3>\n";
-    html_usage += "\n$header$\n<pre>\n";
-    std::string html_link;
     for (const auto &iter: operator_locations) {
-        html_link = "<a href=\"../" + iter.second + "/" + iter.first + ".html\">" + iter.first + "</a>";
+        std::string html_link = "<a href=\"../" + iter.second + "/" + iter.first + ".html\">" + iter.first + "</a>";
 
         std::string from = " " + iter.first + " ";  // Potentially add more of these later. Or do it in a more intelligent way?
         std::string to = " " + html_link + " ";
@@ -73,9 +97,7 @@ std::string convert_usage_to_html(std::map<std::string, std::string> &operator_l
         to = " " + html_link + "^";
         string_replace_all(usage, from, to);
     }
-    html_usage += usage;
-    html_usage += "\n</pre>\n<hr>\n<a href=\"../index.html\">Home</a><br>\n</body>\n</html>\n";
-    return html_usage;
+    return usage;
 }
 
 template <class T>
@@ -112,11 +134,11 @@ std::string generate_operator_usage_docs(std::map<std::string, std::string> &ope
             std::ofstream myfile;
             myfile.open(dest_dir + operator_file);
             if (myfile.is_open()) {
-                std::string html_usage = convert_usage_to_html(operator_locations, header, str, usage);
-
-                // Now sub in the file header:
-                std::string file_header = "\n<hr>\n";
-                string_replace_all(html_usage, "$header$", file_header);
+                std::string html_usage = docs_operator_page;
+                std::string linked_operator_usage = linkify_operators(operator_locations, usage);
+                string_replace_all(html_usage, "$operator-type$", header);
+                string_replace_all(html_usage, "$operator-name$", str);
+                string_replace_all(html_usage, "$operator-usage$", linked_operator_usage);
 
                 myfile << html_usage;
                 myfile.close();
@@ -160,23 +182,26 @@ std::string generate_sw_section(std::map<std::string, std::string> &operator_loc
         fs::path target_file = working_dir + "/" + str;
         fs::copy(source_file, target_file, fs::copy_options::overwrite_existing);
 
-        std::string html_usage;
+        std::string code;
         std::ifstream source_stream;
         source_stream.open(source_file);
         if (source_stream.is_open()) {
-            std::string usage;
             std::stringstream buffer;
             buffer << source_stream.rdbuf();
-            usage = buffer.str();
-            html_usage += convert_usage_to_html(operator_locations, header, str, usage);
+            code = buffer.str();
             source_stream.close();
         } else {
             std::cout << "Unable to open file: " << source_file << std::endl;
         }
 
-        // Now sub in the file header:
-        std::string file_header = "Raw file <a href=\"" + str + "\">here.</a>\n<hr>\n";
-        string_replace_all(html_usage, "$header$", file_header);
+        // Now linkify the code:
+        std::string linked_code = linkify_operators(operator_locations, code);
+
+        // Now sub in the variables:
+        std::string html_usage = docs_sw3_page;
+        string_replace_all(html_usage, "$sw3-type$", header);
+        string_replace_all(html_usage, "$sw3-name$", str);
+        string_replace_all(html_usage, "$sw3-code$", linked_code);
 
         // Write operator usage info to file:
         std::string dot_html = ".html";
@@ -240,7 +265,7 @@ void DocsGenerator::generate(const std::string& dir) {
     }
 
     // Generate html page:
-    std::string page = docs_header;
+    std::string body;
 
     // Learn operator locations:
     // NB: the locations must match those used in the next section.
@@ -270,37 +295,39 @@ void DocsGenerator::generate(const std::string& dir) {
     learn_locations(operator_locations, "context-function-4", fn_map.context_whitelist_4);
 
     // Generate sections:
-    page += generate_operator_usage_docs(operator_locations, "built in operators: ", dest_dir, "built-in", fn_map.built_in);
-    page += generate_operator_usage_docs(operator_locations, "built in compound operators: ", dest_dir, "compound-built-in", fn_map.compound_built_in);
-    page += generate_operator_usage_docs(operator_locations, "built in compound context operators: ", dest_dir, "compound-context-built-in", fn_map.compound_context_built_in);
-    page += generate_operator_usage_docs(operator_locations, "sigmoids: ", dest_dir, "sigmoid", fn_map.sigmoids);
-    page += generate_operator_usage_docs(operator_locations, "compound sigmoids: ", dest_dir, "compound-sigmoid", fn_map.compound_sigmoids);
-    page += generate_operator_usage_docs(operator_locations, "ket fn: ", dest_dir, "ket-fn", fn_map.ket_fn);
-    page += generate_operator_usage_docs(operator_locations, "context ket fn: ", dest_dir, "context-ket-fn", fn_map.context_ket_fn);
-    page += generate_operator_usage_docs(operator_locations, "compound ket fn: ", dest_dir, "compound-ket-fn", fn_map.compound_ket_fn);
-    page += generate_operator_usage_docs(operator_locations, "sp fn: ", dest_dir, "sp-fn", fn_map.sp_fn);
-    page += generate_operator_usage_docs(operator_locations, "compound sp fn: ", dest_dir, "compound-sp-fn", fn_map.compound_sp_fn);
-    page += generate_operator_usage_docs(operator_locations, "seq fn: ", dest_dir, "seq-fn", fn_map.seq_fn);
-    page += generate_operator_usage_docs(operator_locations, "context seq fn: ", dest_dir, "context-seq-fn", fn_map.context_seq_fn);
-    page += generate_operator_usage_docs(operator_locations, "compound seq fn: ", dest_dir, "compound-seq-fn", fn_map.compound_seq_fn);
-    page += generate_operator_usage_docs(operator_locations, "compound context sp fn: ", dest_dir, "compound-context-sp-fn", fn_map.compound_context_sp_fn);
-    page += generate_operator_usage_docs(operator_locations, "compound context seq fn: ", dest_dir, "compound-context-seq-fn", fn_map.compound_context_seq_fn);
-    page += generate_operator_usage_docs(operator_locations, "function 1: ", dest_dir, "function-1", fn_map.whitelist_1);
-    page += generate_operator_usage_docs(operator_locations, "function 2: ", dest_dir, "function-2", fn_map.whitelist_2);
-    page += generate_operator_usage_docs(operator_locations, "function 3: ", dest_dir, "function-3", fn_map.whitelist_3);
-    page += generate_operator_usage_docs(operator_locations, "function 4: ", dest_dir, "function-4", fn_map.whitelist_4);
-    page += generate_operator_usage_docs(operator_locations, "context function 1: ", dest_dir, "context-function-1", fn_map.context_whitelist_1);
-    page += generate_operator_usage_docs(operator_locations, "context function 2: ", dest_dir, "context-function-2", fn_map.context_whitelist_2);
-    page += generate_operator_usage_docs(operator_locations, "context function 3: ", dest_dir, "context-function-3", fn_map.context_whitelist_3);
-    page += generate_operator_usage_docs(operator_locations, "context function 4: ", dest_dir, "context-function-4", fn_map.context_whitelist_4);
+    body += generate_operator_usage_docs(operator_locations, "built in operators", dest_dir, "built-in", fn_map.built_in);
+    body += generate_operator_usage_docs(operator_locations, "built in compound operators", dest_dir, "compound-built-in", fn_map.compound_built_in);
+    body += generate_operator_usage_docs(operator_locations, "built in compound context operators", dest_dir, "compound-context-built-in", fn_map.compound_context_built_in);
+    body += generate_operator_usage_docs(operator_locations, "sigmoids", dest_dir, "sigmoid", fn_map.sigmoids);
+    body += generate_operator_usage_docs(operator_locations, "compound sigmoids", dest_dir, "compound-sigmoid", fn_map.compound_sigmoids);
+    body += generate_operator_usage_docs(operator_locations, "ket fn", dest_dir, "ket-fn", fn_map.ket_fn);
+    body += generate_operator_usage_docs(operator_locations, "context ket fn", dest_dir, "context-ket-fn", fn_map.context_ket_fn);
+    body += generate_operator_usage_docs(operator_locations, "compound ket fn", dest_dir, "compound-ket-fn", fn_map.compound_ket_fn);
+    body += generate_operator_usage_docs(operator_locations, "sp fn", dest_dir, "sp-fn", fn_map.sp_fn);
+    body += generate_operator_usage_docs(operator_locations, "compound sp fn", dest_dir, "compound-sp-fn", fn_map.compound_sp_fn);
+    body += generate_operator_usage_docs(operator_locations, "seq fn", dest_dir, "seq-fn", fn_map.seq_fn);
+    body += generate_operator_usage_docs(operator_locations, "context seq fn", dest_dir, "context-seq-fn", fn_map.context_seq_fn);
+    body += generate_operator_usage_docs(operator_locations, "compound seq fn", dest_dir, "compound-seq-fn", fn_map.compound_seq_fn);
+    body += generate_operator_usage_docs(operator_locations, "compound context sp fn", dest_dir, "compound-context-sp-fn", fn_map.compound_context_sp_fn);
+    body += generate_operator_usage_docs(operator_locations, "compound context seq fn", dest_dir, "compound-context-seq-fn", fn_map.compound_context_seq_fn);
+    body += generate_operator_usage_docs(operator_locations, "function 1", dest_dir, "function-1", fn_map.whitelist_1);
+    body += generate_operator_usage_docs(operator_locations, "function 2", dest_dir, "function-2", fn_map.whitelist_2);
+    body += generate_operator_usage_docs(operator_locations, "function 3", dest_dir, "function-3", fn_map.whitelist_3);
+    body += generate_operator_usage_docs(operator_locations, "function 4", dest_dir, "function-4", fn_map.whitelist_4);
+    body += generate_operator_usage_docs(operator_locations, "context function 1", dest_dir, "context-function-1", fn_map.context_whitelist_1);
+    body += generate_operator_usage_docs(operator_locations, "context function 2", dest_dir, "context-function-2", fn_map.context_whitelist_2);
+    body += generate_operator_usage_docs(operator_locations, "context function 3", dest_dir, "context-function-3", fn_map.context_whitelist_3);
+    body += generate_operator_usage_docs(operator_locations, "context function 4", dest_dir, "context-function-4", fn_map.context_whitelist_4);
 
 
     // Generate sw-examples section:
     if (!sw3_files.empty()) {
-        page += generate_sw_section(operator_locations, "sw-examples: ", dest_dir, "sw-examples", sw3_files);
+        body += generate_sw_section(operator_locations, "sw-examples", dest_dir, "sw-examples", sw3_files);
     }
 
-    page += docs_footer;
+    // Load up the index page, and insert the body:
+    std::string page = docs_index_page;
+    string_replace_all(page, "$body$", body);
 
     // Generate current date:
     time_t rawtime;
@@ -310,8 +337,8 @@ void DocsGenerator::generate(const std::string& dir) {
     timeinfo = localtime(&rawtime);
     strftime(buffer, 80, "%B %d, %G", timeinfo);
 
-    // Now sub it in:
-    string_replace_all(page, "$datetime$", buffer);
+    // Now sub the date-time in:
+    string_replace_all(page, "$date-time$", buffer);
 
     // Write index page to stdout:
     std::cout << "\nNew html index page:\n" << page << std::endl;
