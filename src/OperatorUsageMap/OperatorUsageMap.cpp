@@ -66,6 +66,21 @@ OperatorUsageMap::OperatorUsageMap() {
             "    see also:\n"
             "        drop-below, drop-above, sdrop\n";
 
+    operator_usage_map.map["sdrop"] =
+            "\nsdrop:\n"
+            "    description:\n"
+            "        sdrop seq\n"
+            "        drop all kets with coeff <= 0 from the given sequence\n"
+            "        including empty kets\n\n"
+            "    examples:\n"
+            "        sdrop (|a> . |> . 0|b> . -3 |c> . |d> . |x> + |y>)\n"
+            "            |a> . |d> . |x> + |y>\n\n"
+            "        sdrop (|a> + 0|b> -3|c> + |d> . |> . |x> + |y> + |z>)\n"
+            "            |a> + |d> . |x> + |y> + |z>\n\n"
+            "    see also:\n"
+            "        drop, drop-below, drop-above\n";
+
+
     operator_usage_map.map["filter"] =
             "\nfilter:\n"
             "    description:\n"
@@ -2175,7 +2190,7 @@ OperatorUsageMap::OperatorUsageMap() {
             "            |3.1415>\n\n"
             "        push-float 3.14159265| >\n"
             "            |3.14159>\n\n"
-            "        -- if the ket has no coeff, then the actual coeff is 1\n"
+            "        -- if the ket has no explicit coeff, then the actual coeff is 1\n"
             "        push-float |alpha>\n"
             "            |alpha: 1>\n\n"
             "    see also:\n"
