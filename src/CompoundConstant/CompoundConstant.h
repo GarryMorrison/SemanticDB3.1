@@ -6,6 +6,7 @@
 #define SDB3_1_COMPOUNDCONSTANT_H
 
 #include <string>
+#include <memory>
 // #include "../Operator/SimpleOperator.h"
 class SimpleOperator;
 
@@ -25,6 +26,7 @@ public:
     virtual const int get_int() const = 0;
     virtual const SimpleOperator get_operator() const = 0; // should this be SimpleOperator or BaseOperator*?
     virtual const std::string get_string() const = 0;
+    virtual void append(const std::shared_ptr<CompoundConstant> compound_constant) = 0;
 };
 
 

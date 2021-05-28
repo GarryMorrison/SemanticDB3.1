@@ -39,6 +39,7 @@ Sequence NumericOperator::Compile(ContextList &context, const Sequence &seq, con
 }
 
 const std::string NumericOperator::to_string() const {
+    if (double_eq(value, -1)) { return "-"; }
     if (double_eq(value, round(value))) {
         return std::to_string((int)round(value));
     }

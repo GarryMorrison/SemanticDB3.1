@@ -22,6 +22,7 @@ public:
     const SimpleOperator get_operator() const { return SimpleOperator(""); } // Maybe change later.
     const std::string to_string() const { return "\"" + str + "\""; }
 
+    void append(const std::shared_ptr<CompoundConstant> compound_constant) { return; }
 };
 
 

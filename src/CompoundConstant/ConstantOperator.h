@@ -23,6 +23,7 @@ public:
     const std::string get_string() const { return ""; }  // Maybe change later.
     const std::string to_string() const { return ket_map.get_str(idx); }
 
+    void append(const std::shared_ptr<CompoundConstant> compound_constant) { return; }
 };
 
 

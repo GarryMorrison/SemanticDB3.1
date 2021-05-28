@@ -11,7 +11,7 @@
 
 class ConstantFloat : public CompoundConstant {
 private:
-    const double value;
+    double value;
 public:
     ConstantFloat(const double val) : value(val) { }
     const int type() const { return CFLOAT; }
@@ -21,6 +21,9 @@ public:
     const std::string get_string() const { return ""; }
     const std::string to_string() const { return std::to_string(value); }  // Float_to_int() instead?
 
+    void append(const std::shared_ptr<CompoundConstant> compound_constant) {
+        value *= compound_constant->get_float();
+    }
 };
 
 

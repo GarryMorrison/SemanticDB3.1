@@ -339,17 +339,22 @@ constant : STRING { $$ = new ConstantString(*$1); }
          | INTEGER DIVIDE INTEGER { $$ = new ConstantFloat((double)$1 / (double)$3); }
          | INTEGER DIVIDE DOUBLE { $$ = new ConstantFloat((double)$1 / $3); }
          | DOUBLE DIVIDE INTEGER { $$ = new ConstantFloat($1 / (double)$3); }
-         | MINUS_OP INTEGER { $$ = new ConstantInteger(- $2); }
-         | MINUS_OP DOUBLE { $$ = new ConstantFloat(- $2); }
-         | MINUS_OP INTEGER DIVIDE INTEGER { $$ = new ConstantFloat(- (double)$2 / (double)$4); }
-         | MINUS_OP INTEGER DIVIDE DOUBLE { $$ = new ConstantFloat(- (double)$2 / $4); }
-         | MINUS_OP DOUBLE DIVIDE INTEGER { $$ = new ConstantFloat(- $2 / (double)$4); }
+         | MINUS_OP { $$ = new ConstantFloat(-1); }
+         // | MINUS_OP INTEGER { $$ = new ConstantInteger(- $2); }
+         // | MINUS_OP DOUBLE { $$ = new ConstantFloat(- $2); }
+         // | MINUS_OP INTEGER DIVIDE INTEGER { $$ = new ConstantFloat(- (double)$2 / (double)$4); }
+         // | MINUS_OP INTEGER DIVIDE DOUBLE { $$ = new ConstantFloat(- (double)$2 / $4); }
+         // | MINUS_OP DOUBLE DIVIDE INTEGER { $$ = new ConstantFloat(- $2 / (double)$4); }
          ;
 
 parameters : constant { $$ = new std::vector<std::shared_ptr<CompoundConstant>>;
                         std::shared_ptr<CompoundConstant> tmp_ptr($1);
                         $$->push_back(tmp_ptr);
                         }
+           | parameters constant { $$ = $1;
+                                   std::shared_ptr<CompoundConstant> tmp_ptr($2);
+                                   $$->back()->append(tmp_ptr);
+           }
            | parameters COMMA constant { $$ = $1; std::shared_ptr<CompoundConstant> tmp_ptr($3); $$->push_back(tmp_ptr); }
            ;
 
