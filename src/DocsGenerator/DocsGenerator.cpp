@@ -96,6 +96,18 @@ std::string linkify_operators(std::map<std::string, std::string> &operator_locat
         from = " " + iter.first + "^";
         to = " " + html_link + "^";
         string_replace_all(usage, from, to);
+
+        from = "|op: " + iter.first + ">";
+        to = "|op: " + html_link + ">";
+        string_replace_all(usage, from, to);
+
+        from = "|ops: " + iter.first + " ";
+        to = "|ops: " + html_link + " ";
+        string_replace_all(usage, from, to);
+
+        from = " " + iter.first + ">";  // Does this one work, or bug out?
+        to = " " + html_link + ">";
+        string_replace_all(usage, from, to);
     }
     return usage;
 }
