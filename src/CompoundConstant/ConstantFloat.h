@@ -8,6 +8,7 @@
 #include <string>
 #include "CompoundConstant.h"
 #include "../Operator/SimpleOperator.h"
+#include "../Function/misc.h"
 
 class ConstantFloat : public CompoundConstant {
 private:
@@ -19,7 +20,7 @@ public:
     const int get_int() const { return static_cast<int>(value); }
     const SimpleOperator get_operator() const { return SimpleOperator(""); } // Maybe change later.
     const std::string get_string() const { return ""; }
-    const std::string to_string() const { return std::to_string(value); }  // Float_to_int() instead?
+    const std::string to_string() const { return float_to_int(value, default_decimal_places); }  // float_to_int() instead?
 
     void append(const std::shared_ptr<CompoundConstant> compound_constant) {
         value *= compound_constant->get_float();

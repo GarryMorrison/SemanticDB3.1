@@ -64,7 +64,7 @@ const std::string CompoundOperator::to_string() const {
     s = ket_map.get_str(op_idx) + "[";
     bool first_pass = true;
     // for (const auto c: const_seq ) {
-    for (const auto c: const_vec ) {
+    for (const auto &c: const_vec ) {
         if (first_pass) {
             s += c->to_string();
             first_pass = false;
