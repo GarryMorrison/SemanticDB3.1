@@ -2239,6 +2239,55 @@ OperatorUsageMap::OperatorUsageMap() {
             "            |2>\n\n"
             "    see also:\n";
 
+    operator_usage_map.map["range"] =
+            "\nrange:\n"
+            "    description:\n"
+            "        range(start, stop)\n"
+            "        range(start, stop, step)\n"
+            "        returns a superposition of kets starting at start, and finishing at stop\n"
+            "        with step size step, if it is provided, otherwise step with size 1\n"
+            "        if start and stop have categories, then so does the result\n"
+            "        if the categories differ, then return the empty ket |>\n"
+            "        now partially implemented as: (start .. stop)\n"
+            "        in this form, you can't specify the step size\n\n"
+            "    examples:\n"
+            "        range(|1>, |6>)\n"
+            "            |1> + |2> + |3> + |4> + |5> + |6>\n\n"
+            "        range(|number: 7>, |number: 13>)\n"
+            "            |number: 7> + |number: 8> + |number: 9> + |number: 10> + |number: 11> + |number: 12> + |number: 13>\n\n"
+            "        range(|2>, |4>, |0.5>)\n"
+            "            |2> + |2.5> + |3> + |3.5> + |4>\n\n"
+            "        range(|8>, |3>, |-1>)\n"
+            "            |8> + |7> + |6> + |5> + |4> + |3>\n\n"
+            "        -- an example using the new infix notation:\n"
+            "        (|13> .. |17>)\n"
+            "            |13> + |14> + |15> + |16> + |17>\n\n"
+            "    see also:\n"
+            "        srange, sp2seq\n";
+
+    operator_usage_map.map["srange"] =
+            "\nsrange:\n"
+            "    description:\n"
+            "        srange(start, stop)\n"
+            "        srange(start, stop, step)\n"
+            "        returns a sequence of kets starting at start, and finishing at stop\n"
+            "        with step size step, if it is provided, otherwise step with size 1\n"
+            "        if start and stop have categories, then so does the result\n"
+            "        if the categories differ, then return the empty ket |>\n"
+            "        NB: unlike range, there is no (currently?) infix operator version\n\n"
+            "    examples:\n"
+            "        srange(|1>, |6>)\n"
+            "            |1> . |2> . |3> . |4> . |5> . |6>\n\n"
+            "        srange(|number: 7>, |number: 13>)\n"
+            "            |number: 7> . |number: 8> . |number: 9> . |number: 10> . |number: 11> . |number: 12> . |number: 13>\n\n"
+            "        srange(|2>, |4>, |0.5>)\n"
+            "            |2> . |2.5> . |3> . |3.5> . |4>\n\n"
+            "        srange(|8>, |3>, |-1>)\n"
+            "            |8> . |7> . |6> . |5> . |4> . |3>\n\n"
+            "    see also:\n"
+            "        range, seq2sp\n";
+
+
 }
 
 std::string OperatorUsageMap::get_usage(const std::string &s) const {

@@ -18,6 +18,7 @@
 #define OPMULT 106
 #define OPDIV 107
 #define OPMOD 108
+#define OPRANGE 109
 
 
 class InfixOperator : public BaseOperator {

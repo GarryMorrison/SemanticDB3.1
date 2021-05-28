@@ -4,6 +4,8 @@
 
 #include "InfixOperator.h"
 #include "../Function/misc.h"
+#include "../OperatorLibrary/FunctionOperatorLibrary.h"
+
 
 InfixOperator::InfixOperator(const OperatorWithSequence &param0, int infix_type2, const OperatorWithSequence &param1) {
     one = std::make_shared<OperatorWithSequence>(param0);
@@ -23,6 +25,7 @@ const std::string InfixOperator::to_string() const {
         case OPMULT: str_type = " ** "; break;
         case OPDIV: str_type = " // "; break;
         case OPMOD: str_type = " %% "; break;
+        case OPRANGE: str_type = " .. "; break;
         default: str_type = " ?? ";
     }
     return "( " + one->to_string() + str_type + two->to_string() + " )";
@@ -142,6 +145,10 @@ Sequence InfixOperator::process_compile(const Sequence &seq_one, const Sequence 
             } catch (const std::invalid_argument& e) {
                 return Sequence();
             }
+        }
+        case OPRANGE: {
+            Sequence empty;
+            return op_range2(empty, seq_one, seq_two);  // Should we inline it, or leave as a function call?
         }
         default: return Sequence("unimplemented");
     }

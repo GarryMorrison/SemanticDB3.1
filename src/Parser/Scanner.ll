@@ -112,6 +112,7 @@ yylloc->step();
 " ** " { yylval->integerVal = OPMULT; return token::INFIX_DOUBLE_OP; }
 " // " { yylval->integerVal = OPDIV; return token::INFIX_DOUBLE_OP; }
 " %% " { yylval->integerVal = OPMOD; return token::INFIX_DOUBLE_OP; }
+" .. " { yylval->integerVal = OPRANGE; return token::INFIX_DOUBLE_OP; }
 
 "(" { return token::LPAREN; }
 ")" { return token::RPAREN; }
