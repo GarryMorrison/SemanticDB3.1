@@ -80,6 +80,28 @@ OperatorUsageMap::OperatorUsageMap() {
             "    see also:\n"
             "        drop, drop-below, drop-above\n";
 
+    operator_usage_map.map["drop-below"] =
+            "\ndrop-below:\n"
+            "    description:\n"
+            "        drop-below[t] sp\n"
+            "        drop all kets with coeff < t from the given superposition\n\n"
+            "    examples:\n"
+            "        drop-below[2] (-1 |a> + 0|b> + |c> + 2|d> + 3|e> + 4|f>)\n"
+            "            2|d> + 3|e> + 4|f>\n\n"
+            "    see also:\n"
+            "        drop, drop-above, sdrop\n";
+
+    operator_usage_map.map["drop-above"] =
+            "\ndrop-above:\n"
+            "    description:\n"
+            "        drop-above[t] sp\n"
+            "        drop all kets with coeff > t from the given superposition\n\n"
+            "    examples:\n"
+            "        drop-above[1.99] (-1 |a> + 0|b> + |c> + 2|d> + 3|e> + 4|f>)\n"
+            "            - |a> + 0|b> + |c>\n\n"
+            "    see also:\n"
+            "        drop, drop-below, sdrop\n";
+
 
     operator_usage_map.map["filter"] =
             "\nfilter:\n"
