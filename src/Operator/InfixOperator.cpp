@@ -2,6 +2,7 @@
 // Created by Garry Morrison on 26/05/2021.
 //
 
+#include <math.h>
 #include "InfixOperator.h"
 #include "../Function/misc.h"
 #include "../OperatorLibrary/FunctionOperatorLibrary.h"
@@ -25,6 +26,7 @@ const std::string InfixOperator::to_string() const {
         case OPMULT: str_type = " ** "; break;
         case OPDIV: str_type = " // "; break;
         case OPMOD: str_type = " %% "; break;
+        case OPPOWER: str_type = " ^^ "; break;
         case OPRANGE: str_type = " .. "; break;
         default: str_type = " ?? ";
     }
@@ -91,7 +93,8 @@ Sequence InfixOperator::process_compile(const Sequence &seq_one, const Sequence 
         case OPMINUS:
         case OPMULT:
         case OPDIV:
-        case OPMOD: {
+        case OPMOD:
+        case OPARITHPOWER: {
             // std::cout << "    arithmetic section:\n";
             auto one_idx_vec = seq_one.to_ket().label_split_idx();  // Handle more than just kets later! Ie, arithmetic over superpositions and sequences.
             auto two_idx_vec = seq_two.to_ket().label_split_idx();
@@ -136,6 +139,10 @@ Sequence InfixOperator::process_compile(const Sequence &seq_one, const Sequence 
                     } // check for div by zero here!
                     case OPMOD : {
                         value = static_cast<long long>(x) % static_cast<long long>(y);
+                        break;
+                    }
+                    case OPARITHPOWER : {
+                        value = pow(x, y);
                         break;
                     }
                     default:

@@ -4,6 +4,7 @@
 
 #include <iostream>
 #include <set>
+#include <math.h>
 #include "FunctionOperatorLibrary.h"
 #include "../Function/misc.h"
 #include "../Operator/SimpleOperator.h"
@@ -141,6 +142,10 @@ Sequence op_arithmetic3(const Sequence &input_seq, const Sequence &one, const Se
             } // check for div by zero here!
             case '%' : {
                 value = static_cast<long long>(x) % static_cast<long long>(y);
+                break;
+            }
+            case '^' : {
+                value = pow(x, y);
                 break;
             }
             default:
