@@ -1,0 +1,32 @@
+-- a useful operator, the expand-srange operator:
+-- Given |one .. two>, return srange(one, two).
+-- Given |one .. two .. step>, return srange(one, two, step).
+-- If one and two have categories defined, then so does the result.
+-- If their categories don't match, return the ket unchanged.
+-- If the given ket is not a valid range, or a badly defined range, then return it unchanged.
+-- The same structure can be used for other functions, not just srange().
+
+
+-- examples:
+-- expand-srange |3 .. 7>
+--     |3> . |4> . |5> . |6> . |7>
+--
+-- expand-srange |number: 8 .. |number: 11>
+--     |number: 8> . |number: 9> . |number: 10> . |number: 11>
+--
+-- expand-srange |3 .. 9 .. 2>
+--     |3> . |5> . |7> . |9>
+--
+-- expand-srange |alpha>
+--     |alpha>
+--
+-- expand-srange |alpha .. 11>
+--     |alpha .. 11>
+--
+
+
+expand-srange |*> #=>
+    unlearn[the] |result>
+    the |result> => compile (|op: srange> . |> . ssplit[" .. "] |__self>)
+    value-if( do-you-know the |result>, the |result>, |__self>)
+
