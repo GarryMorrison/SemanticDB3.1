@@ -6,6 +6,8 @@
 #include "src/SDB3_header.h"
 #include "src/Parser/Scanner.h"
 
+int current_indentation = 0;
+
 /* import the parser's token type into a local typedef */
 typedef SDB::Parser::token token;
 typedef SDB::Parser::token_type token_type;
@@ -29,6 +31,7 @@ ulong get_ket_idx(char *str, yy_size_t len) { // tidy later!!
 ulong get_op_idx(char *str, yy_size_t len) {
     std::string s(str, len);
     return ket_map.get_idx(s);
+
 }
 
 %}
@@ -81,6 +84,9 @@ yylloc->step();
 
 "|"[^<|>]*">" { yylval->ulongVal = get_ket_idx(yytext, yyleng); return token::KET_LABEL; }
 
+"if(" { return token::OPEN_IF; }
+"else:" { return token::OPEN_ELSE; }
+
 [a-zA-Z!][a-zA-Z0-9\-\+!\?\.:]* { yylval->ulongVal = get_op_idx(yytext, yyleng); return token::OP_LABEL; }
 [a-zA-Z!][a-zA-Z0-9\-\+!\?\.:]*"(" { yylval->ulongVal = get_op_idx(yytext, yyleng - 1); return token::FN_LPAREN; }
 
@@ -125,8 +131,15 @@ yylloc->step();
 "\"" { return token::QUOTE; }
 "\*" { return token::STAR; }
 "/"  { return token::DIVIDE; }
+":"  { return token::COLON; }
 
-"\n    " { return token::EOL_SPACE4; }
+"\n""    "+ { int indentation_delta = (yyleng - current_indentation - 1)/4;
+              current_indentation = yyleng - 1;
+              yylval->integerVal = indentation_delta;
+              if (indentation_delta > 0) { return token::EOL_INDENT; }
+              if (indentation_delta == 0) { return token::EOL_SAME; }
+              if (indentation_delta < 0) { return token::EOL_UNDENT; }
+            }
 
 [0-9]+ {
         yylval->integerVal = atoi(yytext);
@@ -146,7 +159,10 @@ yylloc->step();
 
 \n {
         yylloc->lines(yyleng); yylloc->step();
-        return token::EOL;
+        int indentation_delta = - current_indentation / 4;
+        current_indentation = 0;
+        if (indentation_delta == 0) { return token::EOL; }
+        if (indentation_delta < 0) { yylval->integerVal = indentation_delta; return token::EOL_UNDENT; }
     }
 
 

@@ -12,12 +12,20 @@ MultiLearnRule::MultiLearnRule(const OperatorWithSequence &operator_with_sequenc
     vec_rules.push_back(std::make_shared<OperatorWithSequence>(operator_with_sequence));
 }
 
+MultiLearnRule::MultiLearnRule(const IfElseStatement &if_else_statement) {
+    vec_rules.push_back(std::make_shared<IfElseStatement>(if_else_statement));
+}
+
 void MultiLearnRule::append(const LearnRule &learn_rule) {
     vec_rules.push_back(std::make_shared<LearnRule>(learn_rule));
 }
 
 void MultiLearnRule::append(const OperatorWithSequence &operator_with_sequence) {
     vec_rules.push_back(std::make_shared<OperatorWithSequence>(operator_with_sequence));
+}
+
+void MultiLearnRule::append(const IfElseStatement &if_else_statement) {
+    vec_rules.push_back(std::make_shared<IfElseStatement>(if_else_statement));
 }
 
 const std::string MultiLearnRule::to_string() const {
@@ -27,6 +35,15 @@ const std::string MultiLearnRule::to_string() const {
     }
     return s;
 }
+
+const std::string MultiLearnRule::to_string(const std::string &prefix) const {
+    std::string s = "\n";
+    for (const auto& rule: vec_rules) {
+        s += "    " + prefix + rule->to_string() + "\n";
+    }
+    return s;
+}
+
 
 Sequence MultiLearnRule::Compile(NewContext &context) const {
     return Sequence();

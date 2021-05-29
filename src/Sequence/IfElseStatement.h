@@ -1,39 +1,37 @@
 //
-// Created by Garry Morrison on 20/10/2020.
+// Created by Garry Morrison on 29/05/2021.
 //
 
-#ifndef SDB3_1_MULTILEARNRULE_H
-#define SDB3_1_MULTILEARNRULE_H
+#ifndef SDB3_1_IFELSESTATEMENT_H
+#define SDB3_1_IFELSESTATEMENT_H
 
-// #define MULTILEARNRULE 12
+// #define IFELSESTATEMENT 13
 
-#include <vector>
-#include "OperatorWithSequence.h"
-#include "LearnRule.h"
 #include "BaseSequence.h"
-#include "IfElseStatement.h"
+#include "OperatorWithSequence.h"
+#include "MultiLearnRule.h"
 
-class IfElseStatement;
 
-class MultiLearnRule : public BaseSequence {
+class IfElseStatement : public BaseSequence {
 private:
-    std::vector<std::shared_ptr<BaseSequence> > vec_rules;
+    OperatorWithSequence& condition;
+    MultiLearnRule& if_rules;
+    MultiLearnRule& else_rules;
 
 public:
-    MultiLearnRule() {}
-    MultiLearnRule(const LearnRule& learn_rule);
-    MultiLearnRule(const OperatorWithSequence& operator_with_sequence);
-    MultiLearnRule(const IfElseStatement& if_else_statement);
-    void append(const LearnRule& learn_rule);
-    void append(const OperatorWithSequence& operator_with_sequence);
-    void append(const IfElseStatement& if_else_statement);
+    // IfElseStatement(OperatorWithSequence &our_condition, MultiLearnRule &if_rules) : condition(our_condition), if_vec_rules(if_rules) {
+    //     else_vec_rules = MultiLearnRule();
+    // };
+    IfElseStatement(OperatorWithSequence &condition2, MultiLearnRule &if_rules2, MultiLearnRule &else_rules2) : condition(condition2), if_rules(if_rules2), else_rules(else_rules2) {};
+
+    // void append(const LearnRule& learn_rule);
+    // void append(const OperatorWithSequence& operator_with_sequence);
 
     // methods needed to support BaseSequence:
-    const int type() const { return MULTILEARNRULE; }
+    const int type() const { return IFELSESTATEMENT; }
     const bool is_ket() const { return false; }
-    const size_t size() const { return vec_rules.size(); }
+    const size_t size() const;
     const std::string to_string() const;
-    const std::string to_string(const std::string &prefix) const;
 
     Ket to_ket() const { return Ket(); }  // Do something more interesting with these later!
     Superposition to_sp() const { return Superposition(); }
@@ -56,4 +54,4 @@ public:
 };
 
 
-#endif //SDB3_1_MULTILEARNRULE_H
+#endif //SDB3_1_IFELSESTATEMENT_H

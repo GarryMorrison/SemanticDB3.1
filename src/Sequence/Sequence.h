@@ -5,7 +5,7 @@
 #ifndef SDB3_1_SEQUENCE_H
 #define SDB3_1_SEQUENCE_H
 
-#define SEQUENCE 2
+// #define SEQUENCE 2
 
 #include <vector>
 #include <string>

@@ -5,7 +5,7 @@
 #ifndef SDB3_1_SUPERPOSITION_H
 #define SDB3_1_SUPERPOSITION_H
 
-#define SUPERPOSITION 1
+// #define SUPERPOSITION 1
 
 #include <unordered_map>
 #include <string>

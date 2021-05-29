@@ -5,7 +5,7 @@
 #ifndef SDB3_1_MULTISELFKET_H
 #define SDB3_1_MULTISELFKET_H
 
-#define MULTISELFKET 4
+// #define MULTISELFKET 4
 
 #include <string>
 #include "BaseSequence.h"

@@ -39,5 +39,6 @@
 #include "OperatorUsageMap/OperatorUsageMap.h"
 #include "DocsGenerator/DocsGenerator.h"
 #include "Operator/InfixOperator.h"
+#include "Sequence/IfElseStatement.h"
 
 #endif //SDB3_1_SDB3_HEADER_H

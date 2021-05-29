@@ -5,7 +5,7 @@
 #ifndef SDB3_1_KET_H
 #define SDB3_1_KET_H
 
-#define KET 0
+// #define KET 0
 
 #include "../KetMap/KetMap.h"
 #include "Superposition.h"

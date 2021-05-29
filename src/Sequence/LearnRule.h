@@ -5,7 +5,7 @@
 #ifndef SDB3_1_LEARNRULE_H
 #define SDB3_1_LEARNRULE_H
 
-#define LEARNRULE 11
+// #define LEARNRULE 11
 
 #include "src/KetMap/KetMap.h"
 #include "src/Context/Frame.h"

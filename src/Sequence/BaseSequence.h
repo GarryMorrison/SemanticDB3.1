@@ -8,6 +8,17 @@
 #include <memory>
 #include "../KetMap/KetMap.h"
 
+// Define our BaseSequence types:
+#define KET 0
+#define SUPERPOSITION 1
+#define SEQUENCE 2
+#define SELFKET 3
+#define MULTISELFKET 4
+#define OPERATORWITHSEQUENCE 10
+#define LEARNRULE 11
+#define MULTILEARNRULE 12
+#define IFELSESTATEMENT 13
+
 
 class Ket;
 class Superposition;

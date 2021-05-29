@@ -5,7 +5,7 @@
 #ifndef SDB3_1_SELFKET_H
 #define SDB3_1_SELFKET_H
 
-#define SELFKET 3
+// #define SELFKET 3
 
 #include "BaseSequence.h"
 #include "Ket.h"

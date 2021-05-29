@@ -17,7 +17,7 @@
 
 /* add debug output code to generated parser. disable this for release
  * versions. */
-// %debug
+%debug
 
 /* start symbol is named "start" */
 %start start
@@ -53,7 +53,7 @@
 
 /* verbose error messages */
 // Switch off for release version:
-// %define parse.error verbose
+%define parse.error verbose
 
 
 %union {
@@ -74,6 +74,7 @@
     class CompoundOperator* compOpVal;
     class BracketOperator* bracketOpVal;
     class MultiLearnRule* multiLearnRuleVal;
+    class IfElseStatement* ifElseStatementVal;
 }
 
 %token			END	     0	"end of file"
@@ -115,8 +116,14 @@
 %token          QUOTE           "quotation symbol"
 %token          STAR            "*"
 %token          DIVIDE          "divide symbol"
+%token          COLON          "colon symbol"
 %token          EOL_SPACE4      "end of line with space 4"
 %token <integerVal>  INFIX_DOUBLE_OP "infix double operator"
+%token          OPEN_IF         "open if statement"
+%token          OPEN_ELSE         "open else statement"
+%token <integerVal>  EOL_INDENT "end of line followed by indent"
+%token <integerVal>  EOL_SAME "end of line followed by same depth"
+%token <integerVal>  EOL_UNDENT "end of line followed by undent"
 
 
 // %type <ketVal> ket
@@ -132,6 +139,7 @@
 // %type <compOpVal> compound_operator
 %type <bracketOpVal> bracket_operator bracket_parameters
 %type <multiLearnRuleVal> multi_learn_rule
+%type <ifElseStatementVal> if_else_statement
 
 
 
@@ -228,11 +236,24 @@ learn_rule : operator_with_sequence LEARN_SYM operator_or_general_sequence { $$ 
 general_learn_rule : operator_with_sequence LEARN_SYM multi_learn_rule { $$ = new LearnRule(*$1, $2, *$3); }
                    ;
 
-multi_learn_rule : EOL_SPACE4 learn_rule { $$ = new MultiLearnRule(*$2); }
-                 | EOL_SPACE4 operator_or_general_sequence { $$ = new MultiLearnRule(*$2); }
-                 | multi_learn_rule EOL_SPACE4 learn_rule { $$->append(*$3); }
-                 | multi_learn_rule EOL_SPACE4 operator_or_general_sequence { $$->append(*$3); }
-                 | multi_learn_rule EOL_SPACE4 COMMENT { }
+if_else_statement : OPEN_IF operator_or_general_sequence RPAREN COLON multi_learn_rule EOL_UNDENT {
+                       MultiLearnRule *empty_rule = new MultiLearnRule();  // Not sure about this at all! Memory leak? Crashes?
+                       $$ = new IfElseStatement(*$2, *$5, *empty_rule);
+                       std::cout << "if statement found:\n";
+                       std::cout << "    " << $2->to_string() << "\n";
+                       std::cout << "    " << $5->to_string() << "\n";
+                       }
+                   | OPEN_IF operator_or_general_sequence RPAREN COLON multi_learn_rule EOL_UNDENT OPEN_ELSE multi_learn_rule EOL_UNDENT {
+                       $$ = new IfElseStatement(*$2, *$5, *$8);
+                   }
+
+multi_learn_rule : EOL_INDENT learn_rule { $$ = new MultiLearnRule(*$2); std::cout << "indent: " << $1 << "\n"; }
+                 | EOL_INDENT operator_or_general_sequence { $$ = new MultiLearnRule(*$2); }
+                 | EOL_INDENT if_else_statement { $$ = new MultiLearnRule(*$2); }
+                 | multi_learn_rule EOL_SAME learn_rule { $$->append(*$3); }
+                 | multi_learn_rule EOL_SAME operator_or_general_sequence { $$->append(*$3); }
+                 | multi_learn_rule EOL_SAME COMMENT { }
+                 | multi_learn_rule EOL_SAME if_else_statement { $$->append(*$3); }
                  ;
 
 function_learn_rule : OP_LABEL FN_SYM LEARN_SYM operator_or_general_sequence { std::shared_ptr<BaseSequence> tmp_ptr($4); driver.context.fn_learn($1, $2, tmp_ptr); }
