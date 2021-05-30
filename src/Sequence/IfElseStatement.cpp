@@ -12,7 +12,7 @@ const size_t IfElseStatement::size() const {
 const std::string IfElseStatement::to_string() const {
     std::string s = "if( " + condition.to_string() + " ):" + if_rules.to_string("    ");
     if (else_rules.size() > 0) { s += "    else:" + else_rules.to_string("    "); }
-    return s;
+    return s + "    end:";
 }
 
 Sequence IfElseStatement::Compile(NewContext &context) const {

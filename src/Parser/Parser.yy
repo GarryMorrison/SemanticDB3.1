@@ -116,11 +116,12 @@
 %token          QUOTE           "quotation symbol"
 %token          STAR            "*"
 %token          DIVIDE          "divide symbol"
-%token          COLON          "colon symbol"
+%token          COLON           "colon symbol"
 %token          EOL_SPACE4      "end of line with space 4"
 %token <integerVal>  INFIX_DOUBLE_OP "infix double operator"
 %token          OPEN_IF         "open if statement"
-%token          OPEN_ELSE         "open else statement"
+%token          OPEN_ELSE       "open else statement"
+%token          CLOSE           "close statement"
 %token <integerVal>  EOL_INDENT "end of line followed by indent"
 %token <integerVal>  EOL_SAME "end of line followed by same depth"
 %token <integerVal>  EOL_UNDENT "end of line followed by undent"
@@ -236,14 +237,14 @@ learn_rule : operator_with_sequence LEARN_SYM operator_or_general_sequence { $$ 
 general_learn_rule : operator_with_sequence LEARN_SYM EOL_INDENT multi_learn_rule { $$ = new LearnRule(*$1, $2, *$4); }
                    ;
 
-if_else_statement : OPEN_IF operator_or_general_sequence RPAREN COLON EOL_INDENT multi_learn_rule EOL_UNDENT {
+if_else_statement : OPEN_IF operator_or_general_sequence RPAREN COLON EOL_INDENT multi_learn_rule EOL_UNDENT CLOSE {
                        MultiLearnRule *empty_rule = new MultiLearnRule();  // Not sure about this at all! Memory leak? Crashes?
                        $$ = new IfElseStatement(*$2, *$6, *empty_rule);
                        std::cout << "if statement found:\n";
                        std::cout << "    " << $2->to_string() << "\n";
                        std::cout << "    " << $6->to_string() << "\n";
                        }
-                   | OPEN_IF operator_or_general_sequence RPAREN COLON EOL_INDENT multi_learn_rule EOL_UNDENT OPEN_ELSE EOL_INDENT multi_learn_rule EOL_UNDENT {
+                   | OPEN_IF operator_or_general_sequence RPAREN COLON EOL_INDENT multi_learn_rule EOL_UNDENT OPEN_ELSE EOL_INDENT multi_learn_rule EOL_UNDENT CLOSE {
                        $$ = new IfElseStatement(*$2, *$6, *$10);
                    }
 
@@ -254,6 +255,7 @@ multi_learn_rule : learn_rule { $$ = new MultiLearnRule(*$1);  /* std::cout << "
                  | multi_learn_rule EOL_SAME operator_or_general_sequence { $$->append(*$3); }
                  | multi_learn_rule EOL_SAME COMMENT { }
                  | multi_learn_rule EOL_SAME if_else_statement { $$->append(*$3); }
+
                  ;
 
 function_learn_rule : OP_LABEL FN_SYM LEARN_SYM operator_or_general_sequence { std::shared_ptr<BaseSequence> tmp_ptr($4); driver.context.fn_learn($1, $2, tmp_ptr); }

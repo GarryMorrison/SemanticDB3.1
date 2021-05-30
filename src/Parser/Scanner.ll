@@ -86,6 +86,7 @@ yylloc->step();
 
 "if(" { return token::OPEN_IF; }
 "else:" { return token::OPEN_ELSE; }
+"end:" { return token::CLOSE; }
 
 [a-zA-Z!][a-zA-Z0-9\-\+!\?\.:]* { yylval->ulongVal = get_op_idx(yytext, yyleng); return token::OP_LABEL; }
 [a-zA-Z!][a-zA-Z0-9\-\+!\?\.:]*"(" { yylval->ulongVal = get_op_idx(yytext, yyleng - 1); return token::FN_LPAREN; }
@@ -159,6 +160,7 @@ yylloc->step();
 
 \n {
         yylloc->lines(yyleng); yylloc->step();
+        return token::EOL;  // switch off EOL_UNDENT code for now.
         int indentation_delta = - current_indentation / 4;
         current_indentation = 0;
         if (indentation_delta == 0) { return token::EOL; }
