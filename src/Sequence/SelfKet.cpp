@@ -21,6 +21,10 @@ const std::string SelfKet::to_string() const {
     return coeff + s;
 }
 
+const std::string SelfKet::to_string(const std::string &prefix) const {
+    return prefix + this->to_string();
+}
+
 Ket SelfKet::to_ket() const {
     Ket tmp("_self", value); // Should this be "_self" + std::to_string(idx)?
     return tmp;

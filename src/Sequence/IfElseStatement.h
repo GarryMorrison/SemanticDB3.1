@@ -32,6 +32,7 @@ public:
     const bool is_ket() const { return false; }
     const size_t size() const;
     const std::string to_string() const;
+    const std::string to_string(const std::string &prefix) const;
 
     Ket to_ket() const { return Ket(); }  // Do something more interesting with these later!
     Superposition to_sp() const { return Superposition(); }

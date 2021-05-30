@@ -45,6 +45,10 @@ const std::string Ket::to_string() const {
     return s;
 }
 
+const std::string Ket::to_string(const std::string &prefix) const {
+    return prefix + this->to_string();
+}
+
 const std::vector<ulong> Ket::label_split_idx() const {
     return ket_map.get_split_idx(ket_label_idx);
 }

@@ -135,6 +135,10 @@ const std::string Superposition::to_string() const {
     return s;
 }
 
+const std::string Superposition::to_string(const std::string &prefix) const {
+    return prefix + this->to_string();
+}
+
 const std::string Superposition::readable_display() const {
     if (sp.empty()) { return ""; }
 

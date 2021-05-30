@@ -39,6 +39,7 @@ public:
     // const ulong size() const;
     const size_t size() const;
     const std::string to_string() const;
+    const std::string to_string(const std::string &prefix) const;
     const std::string readable_display() const;
 
     Ket to_ket() const;

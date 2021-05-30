@@ -26,6 +26,7 @@ public:
     const int type() const { return MULTISELFKET; }
     const bool is_ket() const { return true; }
     const std::string to_string() const;
+    const std::string to_string(const std::string &prefix) const;
     const size_t size() const { return 1; }
     void multiply(const double d) { value *= d; }
     Ket to_ket() const;

@@ -85,6 +85,10 @@ const std::string Sequence::to_string() const {
     return s;
 }
 
+const std::string Sequence::to_string(const std::string &prefix) const {
+    return prefix + this->to_string();
+}
+
 const std::string Sequence::readable_display() const {
     if (seq.empty()) { return ""; }
     std::string s;

@@ -15,6 +15,13 @@ const std::string IfElseStatement::to_string() const {
     return s + "    end:";
 }
 
+const std::string IfElseStatement::to_string(const std::string &prefix) const {
+    std::string s = prefix + "if( " + condition.to_string() + " ):" + if_rules.to_string(prefix + "    ");  // prefix + "    " or "    " + prefix?
+    if (else_rules.size() > 0) { s += prefix + "    else:" + else_rules.to_string(prefix + "    "); }
+    return s + prefix + "    end:";
+}
+
+
 Sequence IfElseStatement::Compile(NewContext &context) const {
     return Sequence();
 }

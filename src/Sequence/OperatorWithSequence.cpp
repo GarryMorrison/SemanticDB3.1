@@ -45,6 +45,10 @@ const std::string OperatorWithSequence::to_string() const {
     return s;
 }
 
+const std::string OperatorWithSequence::to_string(const std::string &prefix) const {
+    return prefix + this->to_string();  // Not sure this is correct. this->to_string() might be multi-line.
+}
+
 // Maybe implement something more interesting later.
 Ket OperatorWithSequence::to_ket() const {
     Ket tmp;

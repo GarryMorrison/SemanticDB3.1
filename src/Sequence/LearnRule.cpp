@@ -55,6 +55,11 @@ const std::string LearnRule::to_string() const {
     return ket_map.get_str(_first_op_idx) + " ( " + _ket_op->to_string() + _ket_like_seq->to_string() + " )" + rule_sym + _RHS_seq->to_string();
 }
 
+const std::string LearnRule::to_string(const std::string &prefix) const {
+    return prefix + this->to_string();  // what if this->to_string() is multi-line? Then we would have to do more work here!
+}
+
+
 Sequence LearnRule::Compile(NewContext &context) const {  // TODO: these two are almost certainly deprecated.
     return Sequence();
 }

@@ -1,0 +1,32 @@
+-- a test case for the new if/else statment:
+
+op |if test> #=>
+    the |start> => |true>
+    the |next> => |true>
+    if( |yes> ):
+        the |rule 1> => |it worked!>
+        the |rule 2> => |I hope ... >
+    else:
+        the |rule 3> => |else works too!>
+    end:
+    the |end> => |not quite yet ... >
+    if( |yes> ):
+        the |rule 4> => |and this too?>
+        the |rule 5> => |blah ... >
+        if( |yes> ):
+            the |rule 6> => |more blah ... >
+            the |rule 7> => |... >
+            if( |yes> ):
+                the |rule 8> => |even more nested!>
+                the |rule 9> => |... >
+            end:
+        end:
+    end:
+    the |real end> => |true>
+
+
+
+
+
+
+

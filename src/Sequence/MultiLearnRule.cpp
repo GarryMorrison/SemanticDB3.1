@@ -39,7 +39,7 @@ const std::string MultiLearnRule::to_string() const {
 const std::string MultiLearnRule::to_string(const std::string &prefix) const {
     std::string s = "\n";
     for (const auto& rule: vec_rules) {
-        s += "    " + prefix + rule->to_string() + "\n";
+        s += "    " + rule->to_string(prefix) + "\n";
     }
     return s;
 }

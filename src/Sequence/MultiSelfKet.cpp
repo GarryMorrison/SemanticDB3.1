@@ -20,6 +20,10 @@ const std::string MultiSelfKet::to_string() const {
     return coeff + s;
 }
 
+const std::string MultiSelfKet::to_string(const std::string &prefix) const {
+    return prefix + this->to_string();
+}
+
 Ket MultiSelfKet::to_ket() const {
     if (idx == 1) { return Ket("__self", value); }
     return Ket("__self" + std::to_string(idx), value);

@@ -51,6 +51,7 @@ public:
     const std::string label() const;
     const double value() const;
     const std::string to_string() const;
+    const std::string to_string(const std::string &prefix) const;
     const std::vector<ulong> label_split_idx() const;
 
     void multiply(const double d);

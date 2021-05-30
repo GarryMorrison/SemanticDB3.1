@@ -35,6 +35,7 @@ public:
     // virtual const ulong size() const = 0;
     virtual const size_t size() const = 0;
     virtual const std::string to_string() const = 0;
+    virtual const std::string to_string(const std::string &prefix) const = 0;
 
     virtual Ket to_ket() const = 0;
     virtual Superposition to_sp() const = 0;

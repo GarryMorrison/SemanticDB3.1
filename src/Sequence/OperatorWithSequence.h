@@ -67,6 +67,7 @@ public:
     // const size_t size() const { return sign_vec.size(); };  // Should this be in OperatorWithSequence.cpp?
     const size_t size() const;
     const std::string to_string() const;
+    const std::string to_string(const std::string &prefix) const;
 
     Ket to_ket() const;  // For now, these three just return empty Ket/Superposition/Sequence.
     Superposition to_sp() const;
