@@ -139,9 +139,9 @@ int main(int argc, char** argv) {
         unsigned int current_indentation = 0;
         unsigned int indentation_delta = 4;  // Note that 4 is (currently) hard-wired into our parser.
         std::string multi_line_suffix = "=>";  // String used to indicate the start of a multi line rule.
-        std::vector<std::string> indent_line_tokens{ "if("};
+        std::vector<std::string> indent_line_tokens{ "if(" };
         std::vector<std::string> middle_tokens{ "else:" };
-        std::vector<std::string> undent_line_tokens{ "end:"};
+        std::vector<std::string> undent_line_tokens{ "end:" };
         std::string indentation_prefix;
 
         while (true) {
@@ -152,15 +152,15 @@ int main(int argc, char** argv) {
                 current_indentation += indentation_delta;
                 bool inside_multi_line = true;
                 while (inside_multi_line) {
-                    indentation_prefix = repeat(" ", current_indentation);
+                    indentation_prefix = string_repeat(" ", current_indentation);
                     std::cout << indentation_prefix + ": ";
                     getline(std::cin, shell_input);
                     if (!shell_input.empty() && shell_input != "\n") {
                         if (string_starts_with_token(shell_input, undent_line_tokens)) {
                             current_indentation -= indentation_delta;
-                            indentation_prefix = repeat(" ", current_indentation);
+                            indentation_prefix = string_repeat(" ", current_indentation);
                         } else if (string_starts_with_token(shell_input, middle_tokens)) {
-                            indentation_prefix = repeat(" ", current_indentation - indentation_delta);
+                            indentation_prefix = string_repeat(" ", current_indentation - indentation_delta);
                         }
                         multi_line_shell_input += indentation_prefix + shell_input + "\n";
                         if (string_starts_with_token(shell_input, indent_line_tokens)) {

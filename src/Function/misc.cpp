@@ -55,7 +55,7 @@ bool string_starts_with_token(const std::string &str, const std::vector<std::str
     return false;
 }
 
-std::string repeat(const std::string& input, unsigned num) {
+std::string string_repeat(const std::string& input, unsigned num) {
     std::string ret;
     ret.reserve(input.size() * num);
     while (num--)
