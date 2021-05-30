@@ -17,7 +17,7 @@
 
 /* add debug output code to generated parser. disable this for release
  * versions. */
-%debug
+// %debug
 
 /* start symbol is named "start" */
 %start start
@@ -53,7 +53,7 @@
 
 /* verbose error messages */
 // Switch off for release version:
-%define parse.error verbose
+// %define parse.error verbose
 
 
 %union {
@@ -240,10 +240,7 @@ general_learn_rule : operator_with_sequence LEARN_SYM EOL_INDENT multi_learn_rul
 if_else_statement : OPEN_IF operator_or_general_sequence RPAREN COLON EOL_INDENT multi_learn_rule EOL_UNDENT CLOSE {
                        MultiLearnRule *empty_rule = new MultiLearnRule();  // Not sure about this at all! Memory leak? Crashes?
                        $$ = new IfElseStatement(*$2, *$6, *empty_rule);
-                       std::cout << "if statement found:\n";
-                       std::cout << "    " << $2->to_string() << "\n";
-                       std::cout << "    " << $6->to_string() << "\n";
-                       }
+                   }
                    | OPEN_IF operator_or_general_sequence RPAREN COLON EOL_INDENT multi_learn_rule EOL_UNDENT OPEN_ELSE EOL_INDENT multi_learn_rule EOL_UNDENT CLOSE {
                        $$ = new IfElseStatement(*$2, *$6, *$10);
                    }

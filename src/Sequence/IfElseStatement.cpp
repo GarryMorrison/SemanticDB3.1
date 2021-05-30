@@ -31,7 +31,7 @@ Sequence IfElseStatement::Compile(NewContext &context, const ulong label_idx) co
 }
 
 Sequence IfElseStatement::Compile(ContextList &context) const {
-    std::cout << "IfElseStatement::Compile(context):\n";
+    // std::cout << "IfElseStatement::Compile(context):\n";
     std::string condition_str = condition.Compile(context).to_ket().label();
     if (condition_str == "yes") {
         return if_rules.Compile(context);
@@ -42,7 +42,7 @@ Sequence IfElseStatement::Compile(ContextList &context) const {
 }
 
 Sequence IfElseStatement::Compile(ContextList &context, const Ket &label_ket) const {
-    std::cout << "IfElseStatement::Compile(context, label_ket):\n";
+    // std::cout << "IfElseStatement::Compile(context, label_ket):\n";
     std::string condition_str = condition.Compile(context, label_ket).to_ket().label();
     if (condition_str == "yes") {
         return if_rules.Compile(context, label_ket);
@@ -53,7 +53,7 @@ Sequence IfElseStatement::Compile(ContextList &context, const Ket &label_ket) co
 }
 
 Sequence IfElseStatement::Compile(ContextList &context, const Ket &label_ket, const Ket &multi_label_ket) const {
-    std::cout << "IfElseStatement::Compile(context, label_ket, multi_label_ket):\n";
+    // std::cout << "IfElseStatement::Compile(context, label_ket, multi_label_ket):\n";
     std::string condition_str = condition.Compile(context, label_ket, multi_label_ket).to_ket().label();
     if (condition_str == "yes") {
         return if_rules.Compile(context, label_ket, multi_label_ket);
@@ -64,7 +64,7 @@ Sequence IfElseStatement::Compile(ContextList &context, const Ket &label_ket, co
 }
 
 Sequence IfElseStatement::Compile(ContextList &context, const Ket &label_ket, const std::vector<Sequence> &args) const {
-    std::cout << "IfElseStatement::Compile(context, label_ket, args):\n";
+    // std::cout << "IfElseStatement::Compile(context, label_ket, args):\n";
     std::string condition_str = condition.Compile(context, label_ket, args).to_ket().label();
     if (condition_str == "yes") {
         return if_rules.Compile(context, label_ket, args);
