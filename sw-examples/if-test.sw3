@@ -1,4 +1,4 @@
--- a test case for the new if/else statment:
+-- a test case for the new if/else statement:
 
 op |if test> #=>
     the |start> => |true>

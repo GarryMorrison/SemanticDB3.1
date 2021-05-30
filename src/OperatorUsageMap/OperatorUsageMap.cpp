@@ -787,21 +787,22 @@ OperatorUsageMap::OperatorUsageMap() {
             "    see also:\n"
             "        numbers-to-words.sw3";
 
-    operator_usage_map.map["if"] =
-            "\nif:\n"
+    operator_usage_map.map["op-if"] =
+            "\nop-if:\n"
             "    description:\n"
-            "        if(condition, operator1, operator2) input-seq\n"
-            "        if condition evaluates to |yes> or |true> then apply operator1 to input-seq\n"
+            "        op-if(condition, operator1, operator2) input-seq\n"
+            "        op-if condition evaluates to |yes> or |true> then apply operator1 to input-seq\n"
             "        else apply operator2 to input-seq\n"
-            "        NB: the python version of if() is much uglier and clunkier.\n\n"
+            "        NB: the python version of if() is much uglier and clunkier.\n"
+            "        It is now implemented as value-if()\n\n"
             "    examples:\n"
             "        -- just define a couple of abstract operators:\n"
             "        op1 (*) #=> |op1:> __ smerge[\", \"] |__self>\n"
             "        op2 (*) #=> |op2:> __ smerge[\", \"] |__self>\n\n"
             "        -- then apply it:\n"
-            "        if(|yes>, |op: op1>, |op: op2>) ssplit |abc>\n"
+            "        op-if(|yes>, |op: op1>, |op: op2>) ssplit |abc>\n"
             "            |op1: a, b, c>\n\n"
-            "        if(|no>, |op: op1>, |op: op2>) ssplit |abc>\n"
+            "        op-if(|no>, |op: op1>, |op: op2>) ssplit |abc>\n"
             "            |op2: a, b, c>\n\n"
             "    see also:\n"
             "        value-if\n";
@@ -818,7 +819,7 @@ OperatorUsageMap::OperatorUsageMap() {
             "        value-if( |no>, |branch a>, |branch b>)\n"
             "            |branch b>\n\n"
             "    see also:\n"
-            "        if\n";
+            "        op-if\n";
 
     operator_usage_map.map["is-less-than"] =
             "\nis-less-than:\n"

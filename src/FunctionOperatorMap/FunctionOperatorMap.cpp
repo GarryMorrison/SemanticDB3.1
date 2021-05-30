@@ -302,7 +302,7 @@ FunctionOperatorMap::FunctionOperatorMap() {
     idx = ket_map.get_idx("op-zip");
     fn_map.context_whitelist_1.emplace(idx, &op_zip);
 
-    idx = ket_map.get_idx("if");
+    idx = ket_map.get_idx("op-if");
     fn_map.context_whitelist_3.emplace(idx, &op_if);
 
     idx = ket_map.get_idx("value-if");
