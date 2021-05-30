@@ -2354,14 +2354,14 @@ OperatorUsageMap::OperatorUsageMap() {
             "        do-you-know seq\n"
             "        returns |no> if seq is the empty ket |>\n"
             "        returns |yes> otherwise\n"
-            "        frequently useful with if() and value-if()\n\n"
+            "        frequently useful with op-if() and value-if()\n\n"
             "    examples:\n"
             "        do-you-know |>\n"
             "            |no>\n\n"
             "        do-you-know |...>\n"
             "            |yes>\n\n"
             "    see also:\n"
-            "        if, value-if\n";
+            "        op-if, value-if\n";
 
 
 }

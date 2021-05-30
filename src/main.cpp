@@ -140,19 +140,19 @@ int main(int argc, char** argv) {
         while (true) {
             std::cout << "\nsa: ";
             getline(std::cin, shell_input);
-            if (std::equal(multi_line_suffix.rbegin(), multi_line_suffix.rend(), shell_input.rbegin())) {
+            if (std::equal(multi_line_suffix.rbegin(), multi_line_suffix.rend(), shell_input.rbegin())) {  // Multi line input is currently incomplete. It needs to handle if-else statements.
                 std::string multi_line_shell_input = shell_input + "\n";
                 bool inside_multi_line = true;
                 while (inside_multi_line) {
                     std::cout << "    : ";
                     getline(std::cin, shell_input);
                     if (!shell_input.empty()) {
-                        multi_line_shell_input += "    " + shell_input + "\n";
+                        multi_line_shell_input += "    " + shell_input;
                     } else {
                         inside_multi_line = false;
                     }
                 }
-                shell_input = multi_line_shell_input;
+                shell_input = multi_line_shell_input + "\n";
             }
             if (shell_input == ".") {
                 if (sa_history.empty()) {
