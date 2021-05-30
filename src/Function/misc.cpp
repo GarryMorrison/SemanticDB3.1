@@ -42,3 +42,23 @@ void string_replace_all(std::string &str, const std::string &from, const std::st
         start_pos += to.length();
     }
 }
+
+bool string_starts_with_token(const std::string &str, const std::vector<std::string> &tokens) {
+    for (const std::string &token: tokens) {
+        if (str.size() < token.size()) {
+            continue;
+        }
+        if (str.substr(0, token.size()) == token) {
+            return true;
+        }
+    }
+    return false;
+}
+
+std::string repeat(const std::string& input, unsigned num) {
+    std::string ret;
+    ret.reserve(input.size() * num);
+    while (num--)
+        ret += input;
+    return ret;
+}

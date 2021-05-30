@@ -136,19 +136,38 @@ int main(int argc, char** argv) {
             }
         }
         std::string shell_input;
+        unsigned int current_indentation = 0;
+        unsigned int indentation_delta = 4;  // Note that 4 is (currently) hard-wired into our parser.
         std::string multi_line_suffix = "=>";  // String used to indicate the start of a multi line rule.
+        std::vector<std::string> indent_line_tokens{ "if("};
+        std::vector<std::string> middle_tokens{ "else:" };
+        std::vector<std::string> undent_line_tokens{ "end:"};
+        std::string indentation_prefix;
+
         while (true) {
             std::cout << "\nsa: ";
             getline(std::cin, shell_input);
             if (std::equal(multi_line_suffix.rbegin(), multi_line_suffix.rend(), shell_input.rbegin())) {  // Multi line input is currently incomplete. It needs to handle if-else statements.
                 std::string multi_line_shell_input = shell_input + "\n";
+                current_indentation += indentation_delta;
                 bool inside_multi_line = true;
                 while (inside_multi_line) {
-                    std::cout << "    : ";
+                    indentation_prefix = repeat(" ", current_indentation);
+                    std::cout << indentation_prefix + ": ";
                     getline(std::cin, shell_input);
-                    if (!shell_input.empty()) {
-                        multi_line_shell_input += "    " + shell_input;
+                    if (!shell_input.empty() && shell_input != "\n") {
+                        if (string_starts_with_token(shell_input, undent_line_tokens)) {
+                            current_indentation -= indentation_delta;
+                            indentation_prefix = repeat(" ", current_indentation);
+                        } else if (string_starts_with_token(shell_input, middle_tokens)) {
+                            indentation_prefix = repeat(" ", current_indentation - indentation_delta);
+                        }
+                        multi_line_shell_input += indentation_prefix + shell_input + "\n";
+                        if (string_starts_with_token(shell_input, indent_line_tokens)) {
+                            current_indentation += indentation_delta;
+                        }
                     } else {
+                        current_indentation -= indentation_delta;
                         inside_multi_line = false;
                     }
                 }
@@ -266,7 +285,7 @@ int main(int argc, char** argv) {
                 Timer_ms timer("\n    Time taken", quiet_mode);  // Time the execution of the command. The destructor prints the results.
                 parse_success = driver.parse_string(shell_input + "\n");  // Is there a cleaner way than adding \n here?
                 if (!parse_success) {
-                    std::cout << "Parse failed for command: " << shell_input << std::endl;
+                    std::cout << "Parse failed for command:\n" << shell_input << std::endl;
                 }
             }
         }
