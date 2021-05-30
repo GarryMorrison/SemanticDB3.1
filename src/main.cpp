@@ -8,9 +8,9 @@
 #include "tclap/CmdLine.h"
 
 
-std::string standard_introduction_text = "Welcome to the Semantic DB version 3.1\n";
-std::string interactive_introduction_text = "\nWelcome to the Semantic DB version 3.1 shell.\n"
-                                            "Last updated 24th May 2021.\n"
+std::string standard_introduction_text = "Welcome to the Semantic DB version 3.1.1\n";
+std::string interactive_introduction_text = "\nWelcome to the Semantic DB version 3.1.1 shell.\n"
+                                            "Last updated 30th May 2021.\n"
                                             "Type h for help.\n"
                                             "Online usage info at http://semantic-db.org/docs/usage3/\n";
 
@@ -55,7 +55,7 @@ int main(int argc, char** argv) {
     SDB::Driver driver(context);
 
     try {
-        TCLAP::CmdLine cmd("The Semantic DB 3.1 shell", ' ', "3.1");
+        TCLAP::CmdLine cmd("The Semantic DB 3.1.1 shell", ' ', "3.1.1");
 
         // TCLAP::SwitchArg generate_docs_switch("g", "generate", "Generate html documentation (currently unimplemented).", cmd, false);
         TCLAP::ValueArg<std::string> generate_docs_arg("g", "generate", "Generate html documentation in the given directory (currently unimplemented).", false, "", "directory");
