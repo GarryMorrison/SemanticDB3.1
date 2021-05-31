@@ -21,10 +21,10 @@ extern OperatorUsageMap operator_usage_map;
 
 const std::string docs_index_page =
         "<html>\n"
-        "<head><title>Semantic DB 3.1 usage information</title></head>\n"
+        "<head><title>Semantic DB 3.1.1 usage information</title></head>\n"
         "<body>\n"
-        "<h3>Semantic DB 3.1 usage information</h3>\n"
-        "Welcome to the Semantic DB 3.1 usage page. Below are brief descriptions and examples for our operators and sequence functions.\n"
+        "<h3>Semantic DB 3.1.1 usage information</h3>\n"
+        "Welcome to the Semantic DB 3.1.1 usage page. Below are brief descriptions and examples for our operators and sequence functions.\n"
         "The corresponding github repo is <a href=\"https://github.com/GarryMorrison/SemanticDB3.1\">available here</a>.\n"
         "<hr>\n"
         "$body$\n"

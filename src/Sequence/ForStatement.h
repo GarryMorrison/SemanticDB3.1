@@ -1,41 +1,33 @@
 //
-// Created by Garry Morrison on 20/10/2020.
+// Created by Garry Morrison on 31/05/2021.
 //
 
-#ifndef SDB3_1_MULTILEARNRULE_H
-#define SDB3_1_MULTILEARNRULE_H
+#ifndef SDB3_1_FORSTATEMENT_H
+#define SDB3_1_FORSTATEMENT_H
 
-// #define MULTILEARNRULE 12
+#define FOR_TYPE 0
+#define SFOR_TYPE 1
 
-#include <vector>
-#include "OperatorWithSequence.h"
-#include "LearnRule.h"
 #include "BaseSequence.h"
-#include "IfElseStatement.h"
-#include "ForStatement.h"
+#include "OperatorWithSequence.h"
+#include "MultiLearnRule.h"
 
-class IfElseStatement;
-class ForStatement;
-
-class MultiLearnRule : public BaseSequence {
+class ForStatement : public BaseSequence {
 private:
-    std::vector<std::shared_ptr<BaseSequence> > vec_rules;
+    int for_type;
+    ulong op_idx;
+    ulong ket_idx;
+    OperatorWithSequence& iterables;
+    MultiLearnRule& for_rules;
 
 public:
-    MultiLearnRule() {}
-    MultiLearnRule(const LearnRule& learn_rule);
-    MultiLearnRule(const OperatorWithSequence& operator_with_sequence);
-    MultiLearnRule(const IfElseStatement& if_else_statement);
-    MultiLearnRule(const ForStatement& for_statement);
-    void append(const LearnRule& learn_rule);
-    void append(const OperatorWithSequence& operator_with_sequence);
-    void append(const IfElseStatement& if_else_statement);
-    void append(const ForStatement& for_statement);
+    ForStatement(int for_type2, ulong op_idx2, ulong ket_idx2, OperatorWithSequence &iterables2, MultiLearnRule &for_rules2)
+        : for_type(for_type2), op_idx(op_idx2), ket_idx(ket_idx2), iterables(iterables2), for_rules(for_rules2) {}
 
     // methods needed to support BaseSequence:
-    const int type() const { return MULTILEARNRULE; }
+    const int type() const { return FORSTATEMENT; }
     const bool is_ket() const { return false; }
-    const size_t size() const { return vec_rules.size(); }
+    const size_t size() const;
     const std::string to_string() const;
     const std::string to_string(const std::string &prefix) const;
 
@@ -60,4 +52,4 @@ public:
 };
 
 
-#endif //SDB3_1_MULTILEARNRULE_H
+#endif //SDB3_1_FORSTATEMENT_H

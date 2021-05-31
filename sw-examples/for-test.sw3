@@ -1,0 +1,18 @@
+-- a small test of the new sfor and for statements:
+
+op |for test> #=>
+    the |start> => |true>
+    print |----->
+    sfor( var|x> in ssplit |abc>):
+        sfor( var|y> in ssplit |xyz>):
+            print (var|x> __ var|y>)
+        end:
+        print |----->
+    end:
+    the |middle> => |true>
+    for( var|a> in split |abc>):
+        print var|a>
+    end:
+    print |----->
+    the |end> => |true>
+

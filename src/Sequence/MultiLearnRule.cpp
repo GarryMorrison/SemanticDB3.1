@@ -16,6 +16,11 @@ MultiLearnRule::MultiLearnRule(const IfElseStatement &if_else_statement) {
     vec_rules.push_back(std::make_shared<IfElseStatement>(if_else_statement));
 }
 
+MultiLearnRule::MultiLearnRule(const ForStatement &for_statement) {
+    vec_rules.push_back(std::make_shared<ForStatement>(for_statement));
+}
+
+
 void MultiLearnRule::append(const LearnRule &learn_rule) {
     vec_rules.push_back(std::make_shared<LearnRule>(learn_rule));
 }
@@ -27,6 +32,11 @@ void MultiLearnRule::append(const OperatorWithSequence &operator_with_sequence) 
 void MultiLearnRule::append(const IfElseStatement &if_else_statement) {
     vec_rules.push_back(std::make_shared<IfElseStatement>(if_else_statement));
 }
+
+void MultiLearnRule::append(const ForStatement &for_statement) {
+    vec_rules.push_back(std::make_shared<ForStatement>(for_statement));
+}
+
 
 const std::string MultiLearnRule::to_string() const {
     std::string s = "\n";

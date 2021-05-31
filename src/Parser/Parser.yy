@@ -75,6 +75,7 @@
     class BracketOperator* bracketOpVal;
     class MultiLearnRule* multiLearnRuleVal;
     class IfElseStatement* ifElseStatementVal;
+    class ForStatement* forStatementVal;
 }
 
 %token			END	     0	"end of file"
@@ -125,6 +126,8 @@
 %token <integerVal>  EOL_INDENT "end of line followed by indent"
 %token <integerVal>  EOL_SAME "end of line followed by same depth"
 %token <integerVal>  EOL_UNDENT "end of line followed by undent"
+%token <integerVal>  OPEN_FOR   "open for statement"
+%token               INFIX_IN   "infix in"
 
 
 // %type <ketVal> ket
@@ -141,7 +144,7 @@
 %type <bracketOpVal> bracket_operator bracket_parameters
 %type <multiLearnRuleVal> multi_learn_rule
 %type <ifElseStatementVal> if_else_statement
-
+%type <forStatementVal> for_statement
 
 
 %destructor { delete $$; } STRING
@@ -244,15 +247,22 @@ if_else_statement : OPEN_IF operator_or_general_sequence RPAREN COLON EOL_INDENT
                    | OPEN_IF operator_or_general_sequence RPAREN COLON EOL_INDENT multi_learn_rule EOL_UNDENT OPEN_ELSE EOL_INDENT multi_learn_rule EOL_UNDENT CLOSE {
                        $$ = new IfElseStatement(*$2, *$6, *$10);
                    }
+                   ;
+
+for_statement : OPEN_FOR OP_LABEL KET_LABEL INFIX_IN operator_or_general_sequence RPAREN COLON EOL_INDENT multi_learn_rule EOL_UNDENT CLOSE {
+                  $$ = new ForStatement($1, $2, $3, *$5, *$9);
+              }
+              ;
 
 multi_learn_rule : learn_rule { $$ = new MultiLearnRule(*$1);  /* std::cout << "indent: " << $1 << "\n"; */ }
                  | operator_or_general_sequence { $$ = new MultiLearnRule(*$1); }
                  | if_else_statement { $$ = new MultiLearnRule(*$1); }
+                 | for_statement { $$ = new MultiLearnRule(*$1); }
                  | multi_learn_rule EOL_SAME learn_rule { $$->append(*$3); }
                  | multi_learn_rule EOL_SAME operator_or_general_sequence { $$->append(*$3); }
                  | multi_learn_rule EOL_SAME COMMENT { }
                  | multi_learn_rule EOL_SAME if_else_statement { $$->append(*$3); }
-
+                 | multi_learn_rule EOL_SAME for_statement { $$->append(*$3); }
                  ;
 
 function_learn_rule : OP_LABEL FN_SYM LEARN_SYM operator_or_general_sequence { std::shared_ptr<BaseSequence> tmp_ptr($4); driver.context.fn_learn($1, $2, tmp_ptr); }

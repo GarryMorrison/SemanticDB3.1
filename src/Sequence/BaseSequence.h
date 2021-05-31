@@ -18,6 +18,7 @@
 #define LEARNRULE 11
 #define MULTILEARNRULE 12
 #define IFELSESTATEMENT 13
+#define FORSTATEMENT 14
 
 
 class Ket;
