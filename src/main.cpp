@@ -30,6 +30,7 @@ std::string help_string = "\n    q, quit, exit          quit the semantic agent\
                           "    icontext               interactively choose context\n"
                           "    .                      repeat last command\n"
                           "    i                      interactive history\n"
+                          "    $                      enter multi-line-learn-rule mode\n"
                           "    history                show console history\n"
                           "    quiet on               switch time-taken messages off\n"
                           "    quiet off              switch time-taken messages on\n"
