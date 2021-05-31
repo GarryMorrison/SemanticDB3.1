@@ -1940,45 +1940,45 @@ OperatorUsageMap::OperatorUsageMap() {
             "    see also:\n"
             "        apply\n";
 
-    operator_usage_map.map["for"] =
-            "\nfor:\n"
+    operator_usage_map.map["op-for"] =
+            "\nop-for:\n"
             "    description:\n"
-            "        for(fn, sp)\n"
-            "        for(fn, sp1, sp2)\n"
-            "        for(fn, sp1, sp2, sp3)\n"
+            "        op-for(fn, sp)\n"
+            "        op-for(fn, sp1, sp2)\n"
+            "        op-for(fn, sp1, sp2, sp3)\n"
             "        apply fn to each of the kets in the given superpositions, using a Cartesian product\n"
             "        NB: if given sequences, they are first cast to superpositions\n"
-            "        If you want to use sequences, use sfor() instead\n\n"
+            "        If you want to use sequences, use op-sfor() instead\n\n"
             "    examples:\n"
             "        -- for loop over single parameter function:\n"
             "        fn (*) #=> |fn:> __ |__self>\n"
-            "        for( |op: fn>, split |abcde>)\n"
+            "        op-for( |op: fn>, split |abcde>)\n"
             "            |fn: a> + |fn: b> + |fn: c> + |fn: d> + |fn: e>\n\n"
             "        -- for loop over two parameter function:\n"
             "        fn2 (*,*) #=> |fn2(> _ |__self1> _ |, > _ |__self2> _ |)>\n"
-            "        for( |op: fn2>, split |abc>, split |xyz>)\n"
+            "        op-for( |op: fn2>, split |abc>, split |xyz>)\n"
             "            |fn2(a, x)> + |fn2(a, y)> + |fn2(a, z)> + |fn2(b, x)> + |fn2(b, y)> + |fn2(b, z)> + |fn2(c, x)> + |fn2(c, y)> + |fn2(c, z)>\n\n"
             "        -- for loop over three parameter function:\n"
             "        fn3 (*,*,*) #=> |fn2(> _ |__self1> _ |, > _ |__self2> _ |, > _ |__self3> _ |)>\n"
-            "        for( |op: fn3>, split |ab>, split |uv>, split |xy>)\n"
+            "        op-for( |op: fn3>, split |ab>, split |uv>, split |xy>)\n"
             "            |fn2(a, u, x)> + |fn2(a, u, y)> + |fn2(a, v, x)> + |fn2(a, v, y)> + |fn2(b, u, x)> + |fn2(b, u, y)> + |fn2(b, v, x)> + |fn2(b, v, y)>\n\n"
             "    see also:\n"
-            "        sfor\n";
+            "        op-sfor\n";
 
-    operator_usage_map.map["sfor"] =
-            "\nsfor:\n"
+    operator_usage_map.map["op-sfor"] =
+            "\nop-sfor:\n"
             "    description:\n"
-            "        sfor(fn, seq)\n"
-            "        sfor(fn, seq1, seq2)\n"
-            "        sfor(fn, seq1, seq2, seq3)\n"
+            "        op-sfor(fn, seq)\n"
+            "        op-sfor(fn, seq1, seq2)\n"
+            "        op-sfor(fn, seq1, seq2, seq3)\n"
             "        apply fn to each of the superpositions in the given sequences, using a Cartesian product\n\n"
             "    examples:\n"
             "        -- for loop over single parameter function:\n"
             "        fn (*) #=> |fn(> _ smerge[\", \"] |__self> _ |)>\n"
-            "        sfor( |op: fn>, split (|abc> . |de> . |xyz>))\n"
+            "        op-sfor( |op: fn>, split (|abc> . |de> . |xyz>))\n"
             "            |fn(a, b, c)> . |fn(d, e)> . |fn(x, y, z)>\n\n"
             "    see also:\n"
-            "        for\n";
+            "        op-for\n";
 
     operator_usage_map.map["hash"] =
             "\nhash:\n"
