@@ -138,7 +138,7 @@ int main(int argc, char** argv) {
         std::string shell_input;
         unsigned int current_indentation = 0;
         unsigned int indentation_delta = 4;  // Note that 4 is (currently) hard-wired into our parser.
-        std::string multi_line_suffix = "=>";  // String used to indicate the start of a multi line rule.
+        std::vector<std::string> multi_line_suffix{ "=>" , "$" };  // Strings used to indicate the start of a multi line rule.
         std::vector<std::string> indent_line_tokens{ "if(" , "for(", "sfor(" };
         std::vector<std::string> middle_tokens{ "else:" };
         std::vector<std::string> undent_line_tokens{ "end:" };
@@ -147,7 +147,7 @@ int main(int argc, char** argv) {
         while (true) {
             std::cout << "\nsa: ";
             getline(std::cin, shell_input);
-            if (std::equal(multi_line_suffix.rbegin(), multi_line_suffix.rend(), shell_input.rbegin())) {  // Multi line input is currently incomplete. It needs to handle if-else statements.
+            if (string_ends_with_token(shell_input, multi_line_suffix)) {  // Multi line input is currently incomplete. It needs to handle if-else statements.
                 std::string multi_line_shell_input = shell_input + "\n";
                 current_indentation += indentation_delta;
                 bool inside_multi_line = true;

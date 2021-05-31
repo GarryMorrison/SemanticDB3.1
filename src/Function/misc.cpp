@@ -55,6 +55,19 @@ bool string_starts_with_token(const std::string &str, const std::vector<std::str
     return false;
 }
 
+bool string_ends_with_token(const std::string &str, const std::vector<std::string> &tokens) {
+    for (const std::string &token: tokens) {
+        if (str.size() < token.size()) {
+            continue;
+        }
+        if (std::equal(token.rbegin(), token.rend(), str.rbegin())) {
+            return true;
+        }
+    }
+    return false;
+}
+
+
 std::string string_repeat(const std::string& input, unsigned num) {
     std::string ret;
     ret.reserve(input.size() * num);

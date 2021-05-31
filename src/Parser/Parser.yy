@@ -53,7 +53,7 @@
 
 /* verbose error messages */
 // Switch off for release version:
-// %define parse.error verbose
+%define parse.error verbose
 
 
 %union {
@@ -128,6 +128,7 @@
 %token <integerVal>  EOL_UNDENT "end of line followed by undent"
 %token <integerVal>  OPEN_FOR   "open for statement"
 %token               INFIX_IN   "infix in"
+%token               DOLLAR "dollar symbol"
 
 
 // %type <ketVal> ket
@@ -198,6 +199,7 @@ item : operator_or_general_sequence EOL { std::cout << "\n" << $1->Compile(drive
      | function_learn_rule EOL
      | COMMENT EOL
      | CONTEXT KET_LABEL EOL { driver.context.set(ket_map.get_str($2)); }
+     | DOLLAR EOL_INDENT multi_learn_rule EOL { std::cout << "\n" << $3->Compile(driver.context).to_string() << "\n"; }
      | EOL
 //     | compound_operator { std::cout << "compound operator: " << $1->to_string() << std::endl; }
 //     | bracket_operator

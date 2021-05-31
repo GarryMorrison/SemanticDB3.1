@@ -136,6 +136,7 @@ yylloc->step();
 "\*" { return token::STAR; }
 "/"  { return token::DIVIDE; }
 ":"  { return token::COLON; }
+"$"  { return token::DOLLAR; }
 
 "\n""    "+ { int indentation_delta = (yyleng - current_indentation - 1)/4;
               current_indentation = yyleng - 1;
