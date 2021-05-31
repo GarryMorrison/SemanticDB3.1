@@ -53,7 +53,7 @@
 
 /* verbose error messages */
 // Switch off for release version:
-%define parse.error verbose
+// %define parse.error verbose
 
 
 %union {
