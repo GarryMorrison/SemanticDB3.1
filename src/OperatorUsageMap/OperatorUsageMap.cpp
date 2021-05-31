@@ -2363,6 +2363,55 @@ OperatorUsageMap::OperatorUsageMap() {
             "    see also:\n"
             "        op-if, value-if\n";
 
+    operator_usage_map.map["if"] =
+            "\nif:\n"
+            "    description:\n"
+            "        if( condition ):\n"
+            "            statements ...\n"
+            "        end:\n\n"
+            "        if condition evaluates to |yes> then compile and run the given statements\n\n"
+            "    examples:\n"
+            "    see also:\n"
+            "        if-else, if-test.sw3\n";
+
+    operator_usage_map.map["if-else"] =
+            "\nif-else:\n"
+            "    description:\n"
+            "        if( condition ):\n"
+            "            if-statements ...\n"
+            "        else:\n"
+            "            else-statements ...\n"
+            "        end:\n\n"
+            "        if condition evaluates to |yes> then compile and run the given if-statements\n"
+            "        otherwise, run the given else-statements\n\n"
+            "    examples:\n"
+            "    see also:\n"
+            "        if, if-test.sw3\n";
+
+    operator_usage_map.map["for"] =
+            "\nfor:\n"
+            "    description:\n"
+            "        for( var|x> in superposition):\n"
+            "            statements ...\n"
+            "        end:\n\n"
+            "        for each ket in superposition, set var|x> to that ket\n"
+            "        and then compile and run the given statements\n"
+            "        If instead you specify a sequence, then repeat the above for each superposition in that sequence\n\n"
+            "    examples:\n"
+            "    see also:\n"
+            "        sfor, op-for, op-sfor, for-test.sw3\n";
+
+    operator_usage_map.map["sfor"] =
+            "\nsfor:\n"
+            "    description:\n"
+            "        sfor( var|x> in sequence):\n"
+            "            statements ...\n"
+            "        end:\n\n"
+            "        for each superposition in sequence, set var|x> to that superposition\n"
+            "        and then compile and run the given statements\n\n"
+            "    examples:\n"
+            "    see also:\n"
+            "        for, op-for, op-sfor, for-test.sw3\n";
 
 }
 

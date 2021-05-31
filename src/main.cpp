@@ -10,7 +10,7 @@
 
 std::string standard_introduction_text = "Welcome to the Semantic DB version 3.1.1\n";
 std::string interactive_introduction_text = "\nWelcome to the Semantic DB version 3.1.1 shell.\n"
-                                            "Last updated 30th May 2021.\n"
+                                            "Last updated 31st May 2021.\n"
                                             "Type h for help.\n"
                                             "Online usage info at http://semantic-db.org/docs/usage3/\n";
 
@@ -139,7 +139,7 @@ int main(int argc, char** argv) {
         unsigned int current_indentation = 0;
         unsigned int indentation_delta = 4;  // Note that 4 is (currently) hard-wired into our parser.
         std::string multi_line_suffix = "=>";  // String used to indicate the start of a multi line rule.
-        std::vector<std::string> indent_line_tokens{ "if(" };
+        std::vector<std::string> indent_line_tokens{ "if(" , "for(", "sfor(" };
         std::vector<std::string> middle_tokens{ "else:" };
         std::vector<std::string> undent_line_tokens{ "end:" };
         std::string indentation_prefix;

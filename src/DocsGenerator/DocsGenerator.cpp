@@ -34,6 +34,21 @@ const std::string docs_index_page =
         "updated: $date-time$\n"
         "\n</body>\n</html>\n";
 
+const std::string docs_statement_page =
+        "<html>\n"
+        "<head><title>$statement-type$: $statement-name$</title></head>\n"
+        "<body>\n"
+        "<h3>$statement-type$: $statement-name$</h3>\n"
+        "<hr>\n"
+        "<pre>\n"
+        "$statement-usage$"
+        "</pre>\n"
+        "<hr>\n"
+        "<a href=\"../index.html\">Home</a><br>\n"
+        "</body>\n"
+        "</html>";
+
+
 const std::string docs_operator_page =
         "<html>\n"
         "<head><title>$operator-type$: $operator-name$</title></head>\n"
@@ -111,6 +126,53 @@ std::string linkify_operators(std::map<std::string, std::string> &operator_locat
     }
     return usage;
 }
+
+std::string generate_statement_usage_docs(std::map<std::string, std::string> &operator_locations, const std::string &header, const std::string &dest_dir, const std::string &dir, std::vector<std::string> &built_in_statements) {
+    std::string section;
+
+    // Create destination directory:
+    std::string working_dir = dest_dir + dir;
+    try {
+        std::cout << "Creating: " << working_dir << std::endl;
+        fs::create_directories(working_dir);
+    } catch (std::exception& e) {
+        std::cout << "Failed to create: " << working_dir << std::endl;
+        std::cout << "Reason: " << e.what() << std::endl;
+        return section;
+    }
+
+    section = "<dl>\n    <dt><b>" + header + "</b></dt>\n";
+
+    // Now learn the statements:
+    for (const auto &str: built_in_statements) {
+        if (operator_usage_map.usage_is_defined(str)) {
+            std::string statement_file = dir + "/" + str + ".html";
+            section += "        <dd><a href=\"" + statement_file + "\">" + str + "</a></dd>\n";
+
+            std::string usage = operator_usage_map.get_usage(str) + "\n";
+
+            // Write operator usage info to file:
+            std::ofstream myfile;
+            myfile.open(dest_dir + statement_file);
+            if (myfile.is_open()) {
+                std::string html_usage = docs_statement_page;
+                std::string linked_operator_usage = linkify_operators(operator_locations, usage);
+                string_replace_all(html_usage, "$statement-type$", header);
+                string_replace_all(html_usage, "$statement-name$", str);
+                string_replace_all(html_usage, "$statement-usage$", linked_operator_usage);
+
+                myfile << html_usage;
+                myfile.close();
+            } else {
+                std::cout << "Unable to open file: " << dest_dir + statement_file << std::endl;
+            }
+        } else {
+            section += "        <dd>" + str + "</dd>\n";
+        }
+    }
+    return section + "</dl>\n";
+}
+
 
 template <class T>
 std::string generate_operator_usage_docs(std::map<std::string, std::string> &operator_locations, const std::string &header, const std::string &dest_dir, const std::string &dir, T& our_map) {
@@ -280,8 +342,16 @@ void DocsGenerator::generate(const std::string& dir) {
     std::string body;
 
     // Learn operator locations:
+
+    // First, learn built in statements:
+    std::vector<std::string> built_in_statements{ "if", "if-else", "for", "sfor" };
+    operator_locations["if"] = "built-in-statement";
+    operator_locations["if-else"] = "built-in-statement";
+    operator_locations["for"] = "built-in-statement";
+    operator_locations["sfor"] = "built-in-statement";
+
+    // Now, learn our operators:
     // NB: the locations must match those used in the next section.
-    // std::map<std::string, std::string> operator_locations;
     learn_locations(operator_locations, "built-in", fn_map.built_in);
     learn_locations(operator_locations, "compound-built-in", fn_map.compound_built_in);
     learn_locations(operator_locations, "compound-context-built-in", fn_map.compound_context_built_in);
@@ -306,7 +376,10 @@ void DocsGenerator::generate(const std::string& dir) {
     learn_locations(operator_locations, "context-function-3", fn_map.context_whitelist_3);
     learn_locations(operator_locations, "context-function-4", fn_map.context_whitelist_4);
 
-    // Generate sections:
+    // Generate built-in statements section:
+    body += generate_statement_usage_docs(operator_locations, "built in statements", dest_dir, "built-in-statement", built_in_statements);
+
+    // Generate operator sections:
     body += generate_operator_usage_docs(operator_locations, "built in operators", dest_dir, "built-in", fn_map.built_in);
     body += generate_operator_usage_docs(operator_locations, "built in compound operators", dest_dir, "compound-built-in", fn_map.compound_built_in);
     body += generate_operator_usage_docs(operator_locations, "built in compound context operators", dest_dir, "compound-context-built-in", fn_map.compound_context_built_in);
