@@ -164,9 +164,10 @@ yylloc->step();
 
 \n {
         yylloc->lines(yyleng); yylloc->step();
-        return token::EOL;  // switch off EOL_UNDENT code for now.
+        // return token::EOL;  // switch off EOL_UNDENT code for now.
         int indentation_delta = - current_indentation / 4;
         current_indentation = 0;
+        return token::EOL;
         if (indentation_delta == 0) { return token::EOL; }
         if (indentation_delta < 0) { yylval->integerVal = indentation_delta; return token::EOL_UNDENT; }
     }

@@ -139,7 +139,7 @@ int main(int argc, char** argv) {
         std::string shell_input;
         unsigned int current_indentation = 0;
         unsigned int indentation_delta = 4;  // Note that 4 is (currently) hard-wired into our parser.
-        std::vector<std::string> multi_line_suffix{ "=>" , "$" };  // Strings used to indicate the start of a multi line rule.
+        std::vector<std::string> multi_line_suffix{ "=>", "$" };  // Strings used to indicate the start of a multi line rule.
         std::vector<std::string> indent_line_tokens{ "if(" , "for(", "sfor(" };
         std::vector<std::string> middle_tokens{ "else:" };
         std::vector<std::string> undent_line_tokens{ "end:" };
@@ -173,6 +173,8 @@ int main(int argc, char** argv) {
                     }
                 }
                 shell_input = multi_line_shell_input + "\n";
+                current_indentation = 0;
+                indentation_prefix.clear();
             }
             if (shell_input == ".") {
                 if (sa_history.empty()) {
@@ -285,7 +287,10 @@ int main(int argc, char** argv) {
             } else {
                 Timer_ms timer("\n    Time taken", quiet_mode);  // Time the execution of the command. The destructor prints the results.
                 parse_success = driver.parse_string(shell_input + "\n");  // Is there a cleaner way than adding \n here?
+                // string_replace_all(shell_input, " ", ".");
+                // std::cout << "shell_input:\n" << shell_input << std::endl;
                 if (!parse_success) {
+                    // string_replace_all(shell_input, " ", ".");
                     std::cout << "Parse failed for command:\n" << shell_input << std::endl;
                 }
             }
