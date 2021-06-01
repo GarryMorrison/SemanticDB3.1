@@ -136,7 +136,7 @@
 // %type <seqVal> sequence
 %type <bSeq> ket
 %type <opSeqVal> operator_sequence
-%type <baseOpVal> operator compound_operator function_operator general_operator infix_operator
+%type <baseOpVal> operator compound_operator function_operator general_operator // infix_operator
 %type <opWithSeqVal> operator_with_sequence general_sequence operator_or_general_sequence
 %type <learnRuleVal> learn_rule general_learn_rule
 %type <constVal> constant
@@ -328,13 +328,14 @@ function_operator : FN_LPAREN operator_or_general_sequence RPAREN { $$ = new Fun
                   | FN_LPAREN operator_or_general_sequence COMMA operator_or_general_sequence COMMA operator_or_general_sequence COMMA operator_or_general_sequence RPAREN { $$ = new FunctionOperator($1, *$2, *$4, *$6, *$8); }
                   ;
 
-infix_operator : LPAREN operator_or_general_sequence INFIX_DOUBLE_OP operator_or_general_sequence RPAREN { $$ = new InfixOperator(*$2, $3, *$4); }
-               ;
+// infix_operator : LPAREN operator_or_general_sequence INFIX_DOUBLE_OP operator_or_general_sequence RPAREN { $$ = new InfixOperator(*$2, $3, *$4); }
+//                ;
+
 
 operator : function_operator { $$ = $1; }
          | compound_operator { $$ = $1; }
          | bracket_operator { $$ = $1; }
-         | infix_operator { $$ = $1; }
+         // | infix_operator { $$ = $1; }
          | constant {
                 switch ($1->type()) {
                     case COPERATOR : { $$ = new SimpleOperator($1->get_operator()); break; }
@@ -353,6 +354,11 @@ general_sequence : operator_with_sequence { $$ = $1; }
                  | general_sequence INFIX_OP operator_with_sequence { $$ = $1; $$->append($2, *$3); }
                  | general_sequence operator_with_sequence { $$ = $1; $$->append(SPLUS, *$2); }
                  | LPAREN general_sequence RPAREN { $$ = $2; }
+                 | operator_with_sequence INFIX_DOUBLE_OP operator_with_sequence { /* $$ = $1; $$->append($2, *$3); */
+                     std::shared_ptr<BaseOperator> tmp_op = std::make_shared<InfixOperator>(*$1, $2, *$3);
+                     std::shared_ptr<BaseSequence> tmp_seq = std::make_shared<Ket>();
+                     $$ = new OperatorWithSequence(tmp_op, tmp_seq);
+                 }
                  ;
 
 operator_or_general_sequence : general_sequence { $$ = $1; }

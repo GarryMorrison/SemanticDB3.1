@@ -39,7 +39,7 @@ public:
     const std::shared_ptr<BaseOperator> get_tail_op() const { return std::make_shared<NumericOperator>(1); }
     const std::string to_string() const;
 
-    Sequence process_compile(const Sequence &seq_one, const Sequence &seq_two) const;
+    Sequence process_compile(const Sequence &seq_one, const Sequence &seq_two) const;  // Make this private?
 
     Sequence Compile(NewContext& context, const Sequence& seq) const { return seq; };  // Deprecated.
     Sequence Compile(ContextList& context, const Sequence& seq) const;

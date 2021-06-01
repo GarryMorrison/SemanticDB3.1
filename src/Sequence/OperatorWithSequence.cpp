@@ -8,6 +8,7 @@
 #include "Superposition.h"
 #include "Sequence.h"
 #include "SelfKet.h"
+#include "../Operator/InfixOperator.h"
 
 void OperatorWithSequence::append(const unsigned int the_sign, const OperatorWithSequence &opWithSeq) {
     if (opWithSeq.size() == 0) { return; }
@@ -35,6 +36,21 @@ const std::string OperatorWithSequence::to_string() const {
             case SSEQ: s += " . "; break;
             case SMERGE: s += " _ "; break;
             case SMERGE2: s += " __ "; break;
+
+            /*  // Currently we don't need these! They are handled by InfixOperator.
+            case OPEQUAL: s += " == "; break;
+            case OPNOTEQUAL: s += " != "; break;
+            case OPAND: s += " && "; break;
+            case OPOR: s += " || "; break;
+            case OPPLUS: s += " ++ "; break;
+            case OPMINUS: s += " -- "; break;
+            case OPMULT: s += " ** "; break;
+            case OPDIV: s += " // "; break;
+            case OPMOD: s += " %% "; break;
+            case OPARITHPOWER: s += " ^^ "; break;
+            case OPRANGE: s += " .. "; break;
+            */
+            default: s += " ?? ";
         }
         std::string pre = " ( ";
         std::string post = " ) ";
