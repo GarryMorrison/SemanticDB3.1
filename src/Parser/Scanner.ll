@@ -140,7 +140,7 @@ yylloc->step();
 
 "\n""    "+ { int indentation_delta = (yyleng - current_indentation - 1)/4;
               current_indentation = yyleng - 1;
-              yylval->integerVal = indentation_delta;
+              // yylval->integerVal = indentation_delta;
               if (indentation_delta > 0) { return token::EOL_INDENT; }
               if (indentation_delta == 0) { return token::EOL_SAME; }
               if (indentation_delta < 0) { return token::EOL_UNDENT; }
