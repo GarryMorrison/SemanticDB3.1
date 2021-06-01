@@ -174,7 +174,6 @@ int main(int argc, char** argv) {
                 }
                 shell_input = multi_line_shell_input + "\n";
                 current_indentation = 0;
-                indentation_prefix.clear();
             }
             if (shell_input == ".") {
                 if (sa_history.empty()) {

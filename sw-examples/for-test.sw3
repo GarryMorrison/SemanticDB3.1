@@ -16,3 +16,18 @@ op |for test> #=>
     print |----->
     the |end> => |true>
 
+
+range |*> #=> compile (|op: range> . |> . ssplit[" .. "] |_self>)
+srange |*> #=> compile (|op: srange> . |> . ssplit[" .. "] |_self>)
+
+-- memoizing versions:
+-- range |*> !=> compile (|op: range> . |> . ssplit[" .. "] |_self>)
+-- srange |*> !=> compile (|op: srange> . |> . ssplit[" .. "] |_self>)
+
+
+op |for test 2> #=>
+    for( var|i> in range |0 .. 10 .. 2>):
+        print var|i>
+    end:
+
+
