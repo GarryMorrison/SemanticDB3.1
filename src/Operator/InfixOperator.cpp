@@ -19,6 +19,10 @@ const std::string InfixOperator::to_string() const {
     switch (infix_type) {
         case OPEQUAL: str_type = " == "; break;
         case OPNOTEQUAL: str_type = " != "; break;
+        case OPGREATEREQUAL: str_type = " >= "; break;
+        case OPGREATER: str_type = " >> "; break;
+        case OPLESSEQUAL: str_type = " <= "; break;
+        case OPLESS: str_type = " << "; break;
         case OPAND: str_type = " && "; break;
         case OPOR: str_type = " || "; break;
         case OPPLUS: str_type = " ++ "; break;
@@ -80,6 +84,39 @@ Sequence InfixOperator::process_compile(const Sequence &seq_one, const Sequence 
         case OPNOTEQUAL: {
             if (!(seq_one == seq_two)) { return Sequence("yes"); }
             return Sequence("no");
+        }
+        case OPGREATEREQUAL:
+        case OPGREATER:
+        case OPLESSEQUAL:
+        case OPLESS: {
+            try {
+                auto one_idx_vec = seq_one.to_ket().label_split_idx();  // Handle more than just kets later! Ie, arithmetic over superpositions and sequences.
+                auto two_idx_vec = seq_two.to_ket().label_split_idx();
+                if (one_idx_vec.empty() || two_idx_vec.empty()) { return Sequence(); }
+                long double x = std::stold(ket_map.get_str(one_idx_vec.back()));
+                long double y = std::stold(ket_map.get_str(two_idx_vec.back()));
+                one_idx_vec.pop_back();
+                two_idx_vec.pop_back();
+                if (one_idx_vec != two_idx_vec) { return Sequence(); } // Do we want this check here? Ie, checking that the categories are equal?
+                switch (infix_type) {
+                    case OPGREATEREQUAL:
+                        if (x >= y) { return Sequence("yes"); }
+                        return Sequence("no");
+                    case OPGREATER:
+                        if (x > y) { return Sequence("yes"); }
+                        return Sequence("no");
+                    case OPLESSEQUAL:
+                        if (x <= y) { return Sequence("yes"); }
+                        return Sequence("no");
+                    case OPLESS:
+                        if (x < y) { return Sequence("yes"); }
+                        return Sequence("no");
+                    default:
+                        return Sequence();
+                }
+            } catch (const std::invalid_argument& e) {
+                return Sequence();
+            }
         }
         case OPAND: {
             if (seq_one.to_ket().label_idx() == yes_idx && seq_two.to_ket().label_idx() == yes_idx) { return Sequence("yes"); }

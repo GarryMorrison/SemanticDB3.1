@@ -11,15 +11,19 @@
 
 #define OPEQUAL 100
 #define OPNOTEQUAL 101
-#define OPAND 102
-#define OPOR 103
-#define OPPLUS 104
-#define OPMINUS 105
-#define OPMULT 106
-#define OPDIV 107
-#define OPMOD 108
-#define OPARITHPOWER 109
-#define OPRANGE 110
+#define OPGREATEREQUAL 102
+#define OPGREATER 103
+#define OPLESSEQUAL 104
+#define OPLESS 105
+#define OPAND 106
+#define OPOR 107
+#define OPPLUS 108
+#define OPMINUS 109
+#define OPMULT 110
+#define OPDIV 111
+#define OPMOD 112
+#define OPARITHPOWER 113
+#define OPRANGE 114
 
 
 class InfixOperator : public BaseOperator {

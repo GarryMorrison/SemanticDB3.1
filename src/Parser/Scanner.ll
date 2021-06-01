@@ -115,6 +115,10 @@ yylloc->step();
 
 " == " { yylval->integerVal = OPEQUAL; return token::INFIX_DOUBLE_OP; }
 " != " { yylval->integerVal = OPNOTEQUAL; return token::INFIX_DOUBLE_OP; }
+" >= " { yylval->integerVal = OPGREATEREQUAL; return token::INFIX_DOUBLE_OP; }
+" >> " { yylval->integerVal = OPGREATER; return token::INFIX_DOUBLE_OP; }
+" <= " { yylval->integerVal = OPLESSEQUAL; return token::INFIX_DOUBLE_OP; }
+" << " { yylval->integerVal = OPLESS; return token::INFIX_DOUBLE_OP; }
 " && " { yylval->integerVal = OPAND; return token::INFIX_DOUBLE_OP; }
 " || " { yylval->integerVal = OPOR; return token::INFIX_DOUBLE_OP; }
 " ++ " { yylval->integerVal = OPPLUS; return token::INFIX_DOUBLE_OP; }
