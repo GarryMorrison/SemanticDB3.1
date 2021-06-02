@@ -2399,7 +2399,7 @@ OperatorUsageMap::OperatorUsageMap() {
             "        If instead you specify a sequence, then repeat the above for each superposition in that sequence\n\n"
             "    examples:\n"
             "    see also:\n"
-            "        sfor, op-for, op-sfor, for-test.sw3\n";
+            "        sfor, while, op-for, op-sfor, for-test.sw3\n";
 
     operator_usage_map.map["sfor"] =
             "\nsfor:\n"
@@ -2411,7 +2411,7 @@ OperatorUsageMap::OperatorUsageMap() {
             "        and then compile and run the given statements\n\n"
             "    examples:\n"
             "    see also:\n"
-            "        for, op-for, op-sfor, for-test.sw3\n";
+            "        for, while, op-for, op-sfor, for-test.sw3\n";
 
     operator_usage_map.map["while"] =
             "\nwhile:\n"
@@ -2422,7 +2422,7 @@ OperatorUsageMap::OperatorUsageMap() {
             "        while condition is |yes>, compile and run the given statements\n\n"
             "    examples:\n"
             "    see also:\n"
-            "        for, op-for, op-sfor, while-test.sw3\n";
+            "        if, for, op-for, op-sfor, while-test.sw3\n";
 
 
     operator_usage_map.map["operators"] =
