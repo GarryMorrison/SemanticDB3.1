@@ -26,6 +26,7 @@ class Superposition : public BaseSequence {
 private:
     std::unordered_map<ulong, double> sp;
     std::vector<ulong> sort_order;
+    ulong process_infix_compile(ulong idx1, unsigned int infix_type, ulong idx2) const;
 
 public:
     Superposition() {};
@@ -73,6 +74,8 @@ public:
 
     void merge(const Superposition& sp2, const std::string& s);
     void merge(const Superposition& sp2);
+
+    void process_infix(unsigned int infix_type, const Superposition &sp2);  // Not sure this is the cleanest way to handle infix operators!
 
     Superposition operator+(Ket& b);
     Superposition operator+(Superposition& sp);

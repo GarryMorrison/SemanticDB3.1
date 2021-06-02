@@ -56,6 +56,8 @@ public:
     void merge(const Sequence& seq2, const std::string& s);
     void merge(const Sequence& seq2);
 
+    void process_infix(unsigned int infix_type, const Sequence &seq2);  // Not sure this is the cleanest way to handle infix operators!
+
     void append(const Ket& k);  // How about append(std::string, double) ?
     void append(const Superposition& sp);
     void append(const Sequence& seq);

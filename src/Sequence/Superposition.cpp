@@ -10,7 +10,7 @@
 #include "../Function/misc.h"
 #include "../Function/NaturalSort.h"
 #include "../Operator/SimpleOperator.h"
-
+#include "../Operator/InfixOperator.h"
 
 Superposition::Superposition(const ulong idx) {
     if (ket_map.get_idx("") == idx) {return; }
@@ -398,7 +398,7 @@ Superposition Superposition::select(const int a, const int b) const {
     return result;
 }
 
-void Superposition::merge(const Superposition& sp2, const std::string& s) {
+void Superposition::merge(const Superposition& sp2, const std::string& s) {  // Can we tidy this function up?
     if (sp2.sort_order.empty() ) { return; }
     if (sort_order.empty() ) { this->add(sp2); return; }
 
@@ -424,6 +424,31 @@ void Superposition::merge(const Superposition& sp2, const std::string& s) {
 
 void Superposition::merge(const Superposition& sp2) {
     this->merge(sp2, "");
+}
+
+void Superposition::process_infix(unsigned int infix_type, const Superposition &sp2) {
+    if (sort_order.empty() || sp2.sort_order.empty()) { return; }
+
+    ulong head_idx = sort_order.back();
+    double head_value = sp[head_idx];
+    sp.erase(head_idx);
+    sort_order.pop_back();
+    ulong tail_idx = sp2.sort_order.front();
+    double tail_value = sp2.sp.at(tail_idx); // does this work: sp2.sp[tail_idx] ?
+    // std::string s2 = ket_map.get_str(head_idx) + s + ket_map.get_str(tail_idx);
+    // ulong new_idx = ket_map.get_idx(s2);
+
+    ulong new_idx = process_infix_compile(head_idx, infix_type, tail_idx);
+    double new_value = head_value * tail_value;
+    this->add(new_idx, new_value);
+
+    bool first_pass = true;
+    for (const auto idx: sp2.sort_order) {
+        if (!first_pass) {
+            this->add(idx, sp2.sp.at(idx));
+        }
+        first_pass = false;
+    }
 }
 
 Superposition Superposition::operator+(Ket& b) {
@@ -745,4 +770,126 @@ Sequence Superposition::Compile(ContextList &context, const Ket& label_ket, cons
 
 Sequence Superposition::Compile(ContextList& context, const Ket& label_ket, const std::vector<Sequence>& args) const {
     return this->to_seq();
+}
+
+
+ulong Superposition::process_infix_compile(ulong idx1, unsigned int infix_type, ulong idx2) const {
+    std::cout << " idx1: " << ket_map.get_str(idx1) << "\n";
+    std::cout << " idx2: " << ket_map.get_str(idx2) << "\n";
+    ulong empty_idx = ket_map.get_idx("");
+    ulong yes_idx = ket_map.get_idx("yes");
+    ulong no_idx = ket_map.get_idx("no");
+
+    switch (infix_type) {
+        case OPGREATEREQUAL:
+        case OPGREATER:
+        case OPLESSEQUAL:
+        case OPLESS: {
+            try {
+                auto one_idx_vec = ket_map.get_split_idx(idx1);  // Handle more than just kets later! Ie, arithmetic over superpositions and sequences.
+                auto two_idx_vec = ket_map.get_split_idx(idx2);
+                if (one_idx_vec.empty() || two_idx_vec.empty()) { return empty_idx; }
+                long double x = std::stold(ket_map.get_str(one_idx_vec.back()));
+                long double y = std::stold(ket_map.get_str(two_idx_vec.back()));
+                one_idx_vec.pop_back();
+                two_idx_vec.pop_back();
+                if (one_idx_vec != two_idx_vec) { return empty_idx; } // Do we want this check here? Ie, checking that the categories are equal?
+                switch (infix_type) {
+                    case OPGREATEREQUAL:
+                        if (x >= y) { return yes_idx; }
+                        return no_idx;
+                    case OPGREATER:
+                        if (x > y) { return yes_idx; }
+                        return no_idx;
+                    case OPLESSEQUAL:
+                        if (x <= y) { return yes_idx; }
+                        return no_idx;
+                    case OPLESS:
+                        if (x < y) { return yes_idx; }
+                        return no_idx;
+                    default:
+                        return empty_idx;
+                }
+            } catch (const std::invalid_argument& e) {
+                return empty_idx;
+            }
+        }
+        case OPAND: {
+            if (idx1 == yes_idx && idx2 == yes_idx) { return yes_idx; }
+            return no_idx;
+        }
+        case OPOR: {
+            if (idx1 == yes_idx || idx2 == yes_idx) { return yes_idx; }
+            return no_idx;
+        }
+        case OPPLUS:
+        case OPMINUS:
+        case OPMULT:
+        case OPDIV:
+        case OPMOD:
+        case OPARITHPOWER: {
+            // std::cout << "    arithmetic section:\n";
+            auto one_idx_vec = ket_map.get_split_idx(idx1);  // Handle more than just kets later! Ie, arithmetic over superpositions and sequences.
+            auto two_idx_vec = ket_map.get_split_idx(idx2);
+            if (one_idx_vec.empty() || two_idx_vec.empty()) { return empty_idx; }
+            try {
+                long double x = std::stold(ket_map.get_str(one_idx_vec.back()));
+                long double y = std::stold(ket_map.get_str(two_idx_vec.back()));
+                one_idx_vec.pop_back();
+                two_idx_vec.pop_back();
+
+                std::string label;
+                if (!one_idx_vec.empty() && two_idx_vec.empty()) {
+                    label = ket_map.get_str(one_idx_vec) + ": ";
+                } else if (one_idx_vec.empty() && !two_idx_vec.empty()) {
+                    label = ket_map.get_str(two_idx_vec) + ": ";
+                } else if (one_idx_vec == two_idx_vec) {
+                    if (!one_idx_vec.empty()) {
+                        label = ket_map.get_str(one_idx_vec) + ": ";
+                    }
+                } else {
+                    return empty_idx;
+                }
+
+                long double value;
+
+                switch (infix_type) {
+                    case OPPLUS : {
+                        value = x + y;
+                        break;
+                    }
+                    case OPMINUS : {
+                        value = x - y;
+                        break;
+                    }
+                    case OPMULT : {
+                        value = x * y;
+                        break;
+                    }
+                    case OPDIV : {
+                        value = x / y;
+                        break;
+                    } // check for div by zero here!
+                    case OPMOD : {
+                        value = static_cast<long long>(x) % static_cast<long long>(y);
+                        break;
+                    }
+                    case OPARITHPOWER : {
+                        value = pow(x, y);
+                        break;
+                    }
+                    default:
+                        return empty_idx;
+                }
+                return ket_map.get_idx(label + float_to_int(value, default_decimal_places));
+            } catch (const std::invalid_argument& e) {
+                return empty_idx;
+            }
+        }
+            // case OPRANGE: {
+            //     Sequence empty;
+            //     return op_range2(empty, seq_one, seq_two);  // Should we inline it, or leave as a function call?
+            // }
+        default: return ket_map.get_idx("unimplemented");
+    }
 }

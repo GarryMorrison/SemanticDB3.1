@@ -182,9 +182,8 @@ void Sequence::multiply(const double d) {
 void Sequence::merge(const Sequence& seq2, const std::string& s) {
     if (seq2.seq.empty() ) { return; }             // buggy. Eg: |> __ |> Maybe we want this behaviour.
     if (seq.empty()) { this->add(seq2); return; }  // buggy. Eg: |> __ |>
-    Superposition head, tail;
-    head = seq.back();
-    tail = seq2.seq.front();
+    Superposition head = seq.back();
+    Superposition tail = seq2.seq.front();
     head.merge(tail, s);
     seq.pop_back();
     seq.push_back(head);
@@ -201,6 +200,25 @@ void Sequence::merge(const Sequence& seq2, const std::string& s) {
 void Sequence::merge(const Sequence& seq2) {
     this->merge(seq2, "");
 }
+
+void Sequence::process_infix(unsigned int infix_type, const Sequence &seq2) {
+    if (seq2.seq.empty() ) { return; }             // buggy. Eg: |> __ |> Maybe we want this behaviour.
+    if (seq.empty()) { this->add(seq2); return; }  // buggy. Eg: |> __ |>
+    Superposition head = seq.back();
+    Superposition tail = seq2.seq.front();
+    head.process_infix(infix_type, tail);
+    seq.pop_back();
+    seq.push_back(head);
+
+    bool first_pass = true;
+    for (auto const &sp : seq2.seq) {
+        if (!first_pass) {
+            seq.push_back(sp);
+        }
+        first_pass = false;
+    }
+}
+
 
 void Sequence::append(const Ket& k) {
     Superposition tmp(k);

@@ -32,6 +32,8 @@ private:
     std::vector<std::shared_ptr<BaseSequence> > seq_vec;
     friend class LearnRule;
 
+    ulong process_infix_compile(ulong idx1, unsigned int infix_type, ulong idx2) const;
+
 public:
     OperatorWithSequence() {}
     OperatorWithSequence(const std::shared_ptr<BaseOperator> the_op, const std::shared_ptr<BaseSequence> the_seq) {
