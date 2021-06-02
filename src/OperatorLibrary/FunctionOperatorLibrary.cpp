@@ -11,6 +11,32 @@
 #include "../Function/split_join.h"
 #include "../Operator/FunctionOperator.h"
 
+Superposition range2(ulong start_idx2, ulong stop_idx2) {
+    auto start_vec = ket_map.get_split_idx(start_idx2);
+    auto stop_vec = ket_map.get_split_idx(stop_idx2);
+
+    if (start_vec.empty() || stop_vec.empty()) { return Superposition(); }
+    ulong start_idx = start_vec.back();
+    ulong stop_idx = stop_vec.back();
+
+    start_vec.pop_back();
+    stop_vec.pop_back();
+    if ( start_vec != stop_vec ) { return Superposition(); }
+    try {
+        long double v1 = std::stold(ket_map.get_str(start_idx));
+        long double v2 = std::stold(ket_map.get_str(stop_idx));
+
+        std::string label = ket_map.get_str(start_vec);  // what if start_vec.size() == 0?
+        Superposition sp;
+        if (label.length() > 0) { label += ": "; }
+        for (long double i = v1; i <= v2; i++) {  // Fix float iteration variables issue!
+            sp.add(label + float_to_int(i, default_decimal_places));
+        }
+        return sp;
+    } catch (const std::invalid_argument &e) {
+        return Superposition();
+    }
+}
 
 Sequence op_srange2(const Sequence& input_seq, const Sequence& start, const Sequence& stop) {
     Sequence step("1");

@@ -11,6 +11,7 @@
 #include "../Function/NaturalSort.h"
 #include "../Operator/SimpleOperator.h"
 #include "../Operator/InfixOperator.h"
+#include "../OperatorLibrary/FunctionOperatorLibrary.h"
 
 Superposition::Superposition(const ulong idx) {
     if (ket_map.get_idx("") == idx) {return; }
@@ -451,6 +452,32 @@ void Superposition::process_infix(unsigned int infix_type, const Superposition &
     }
 }
 
+void Superposition::insert_range(const Superposition &sp2) {
+    if (sp2.sort_order.empty() ) { return; }
+    if (sort_order.empty() ) { this->add(sp2); return; }  // Not 100% sure on what we want to do here.
+
+    ulong head_idx = sort_order.back();
+    double head_value = sp[head_idx];
+    sp.erase(head_idx);
+    sort_order.pop_back();
+    ulong tail_idx = sp2.sort_order.front();
+    double tail_value = sp2.sp.at(tail_idx); // does this work: sp2.sp[tail_idx] ?
+
+    Superposition our_range = range2(head_idx, tail_idx);
+
+    double new_value = head_value * tail_value;
+    our_range.multiply(new_value);
+    this->add(our_range);
+
+    bool first_pass = true;
+    for (const auto idx: sp2.sort_order) {
+        if (!first_pass) {
+            this->add(idx, sp2.sp.at(idx));
+        }
+        first_pass = false;
+    }
+}
+
 Superposition Superposition::operator+(Ket& b) {
     Superposition tmp;
     tmp.add(*this);
@@ -774,8 +801,8 @@ Sequence Superposition::Compile(ContextList& context, const Ket& label_ket, cons
 
 
 ulong Superposition::process_infix_compile(ulong idx1, unsigned int infix_type, ulong idx2) const {
-    std::cout << "  idx1: " << ket_map.get_str(idx1) << "\n";
-    std::cout << "  idx2: " << ket_map.get_str(idx2) << "\n";
+    // std::cout << "  idx1: " << ket_map.get_str(idx1) << "\n";
+    // std::cout << "  idx2: " << ket_map.get_str(idx2) << "\n";
     ulong empty_idx = ket_map.get_idx("");
     ulong yes_idx = ket_map.get_idx("yes");
     ulong no_idx = ket_map.get_idx("no");

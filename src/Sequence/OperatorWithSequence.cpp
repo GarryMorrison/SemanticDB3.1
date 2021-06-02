@@ -222,6 +222,7 @@ Sequence OperatorWithSequence::Compile(ContextList& context) const {
             case OPDIV:
             case OPMOD:
             case OPARITHPOWER: { result.process_infix(*sign_vec_iter, current_result); break; }
+            case OPRANGE: { result.insert_range(current_result); break; }
             default: continue;
         }
         previous_result = std::move(current_result);
@@ -294,6 +295,7 @@ Sequence OperatorWithSequence::Compile(ContextList& context, const Ket& label_ke
             case OPDIV:
             case OPMOD:
             case OPARITHPOWER: { result.process_infix(*sign_vec_iter, current_result); break; }
+            case OPRANGE: { result.insert_range(current_result); break; }
             default: continue;
         }
         previous_result = std::move(current_result);  // Fix move bug.
@@ -365,6 +367,7 @@ Sequence OperatorWithSequence::Compile(ContextList &context, const Ket& label_ke
             case OPDIV:
             case OPMOD:
             case OPARITHPOWER: { result.process_infix(*sign_vec_iter, current_result); break; }
+            case OPRANGE: { result.insert_range(current_result); break; }
             default: continue;
         }
     }
@@ -436,6 +439,7 @@ Sequence OperatorWithSequence::Compile(ContextList& context, const Ket& label_ke
             case OPDIV:
             case OPMOD:
             case OPARITHPOWER: { result.process_infix(*sign_vec_iter, current_result); break; }
+            case OPRANGE: { result.insert_range(current_result); break; }
             default: continue;
         }
     }

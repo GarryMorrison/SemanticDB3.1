@@ -76,6 +76,7 @@ public:
     void merge(const Superposition& sp2);
 
     void process_infix(unsigned int infix_type, const Superposition &sp2);  // Not sure this is the cleanest way to handle infix operators!
+    void insert_range(const Superposition &sp2);
 
     Superposition operator+(Ket& b);
     Superposition operator+(Superposition& sp);

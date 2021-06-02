@@ -7,6 +7,7 @@
 
 #include "../Sequence/Sequence.h"
 
+Superposition range2(ulong start_idx, ulong stop_idx);
 Sequence op_srange2(const Sequence& input_seq, const Sequence& start, const Sequence& stop);
 Sequence op_srange3(const Sequence& input_seq, const Sequence& start, const Sequence& stop, const Sequence& step);
 Superposition op_range2(const Sequence& input_seq, const Sequence& start, const Sequence& stop);
