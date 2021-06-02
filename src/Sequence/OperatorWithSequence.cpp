@@ -28,13 +28,6 @@ const size_t OperatorWithSequence::size() const {
 const std::string OperatorWithSequence::to_string() const {
     if (sign_vec.empty()) { return ""; }
 
-    std::string bracket_pre;
-    std::string bracket_post;
-    if (seq_has_bracket && false) {
-        bracket_pre = " ( ";
-        bracket_post = " ) ";
-    }
-
     std::string s;
     auto sign_vec_iter = sign_vec.cbegin();
     auto op_vec_iter = op_vec.cbegin();
@@ -76,7 +69,7 @@ const std::string OperatorWithSequence::to_string() const {
         // s += (*op_vec_iter)->to_string() + " ( " + (*seq_vec_iter)->to_string() + " ) ";
         s += (*op_vec_iter)->to_string() + pre + (*seq_vec_iter)->to_string() + post;
     }
-    return bracket_pre + s + bracket_post;
+    return s;
 }
 
 const std::string OperatorWithSequence::to_string(const std::string &prefix) const {
@@ -175,15 +168,15 @@ Sequence OperatorWithSequence::Compile(ContextList& context) const {
         Sequence tmp_seq = (*seq_vec_iter)->Compile(context);
         Sequence current_result = (*op_vec_iter)->Compile(context, tmp_seq);
 
-        std::cout << "\nOperatorWithSequence::Compile:" << std::endl;  // Later, if in debug mode, print this out.
-        std::cout << "    sign_vec_iter: " << (*sign_vec_iter) << std::endl;
+        // std::cout << "\nOperatorWithSequence::Compile:" << std::endl;  // Later, if in debug mode, print this out.
+        // std::cout << "    sign_vec_iter: " << (*sign_vec_iter) << std::endl;
         // std::cout << "    op_vec_iter: " << (*op_vec_iter)->to_string() << std::endl;
         // std::cout << "    op_vec_iter type: " << (*op_vec_iter)->type() << std::endl;
         // std::cout << "    seq_vec_iter: " << (*seq_vec_iter)->to_string() << std::endl;
         // std::cout << "    sign_vec_iter: " << (*sign_vec_iter) << std::endl;
         // std::cout << "    tmp_seq: " << tmp_seq.to_string() << std::endl;
-        std::cout << "    previous_result: " << previous_result.to_string() << std::endl;
-        std::cout << "    current_result: " << current_result.to_string() << std::endl;
+        // std::cout << "    previous_result: " << previous_result.to_string() << std::endl;
+        // std::cout << "    current_result: " << current_result.to_string() << std::endl;
         if ((*sign_vec_iter) == SMINUS) {
             current_result.multiply(-1);
         }
@@ -248,14 +241,14 @@ Sequence OperatorWithSequence::Compile(ContextList& context, const Ket& label_ke
         Sequence current_result = (*op_vec_iter)->Compile(context, tmp_seq, label_ket);
         // Sequence tmp_result;
 
-        std::cout << "OperatorWithSequence::Compile(context, label_ket):" << std::endl;
+        // std::cout << "OperatorWithSequence::Compile(context, label_ket):" << std::endl;
         // std::cout << "    label_ket: " << label_ket.to_string() << std::endl;
-        std::cout << "    sign_vec_iter: " << (*sign_vec_iter) << std::endl;
+        // std::cout << "    sign_vec_iter: " << (*sign_vec_iter) << std::endl;
         // std::cout << "    op_vec_iter: " << (*op_vec_iter)->to_string() << std::endl;
         // std::cout << "    seq_vec_iter: " << (*seq_vec_iter)->to_string() << std::endl;
         // std::cout << "    tmp_seq: " << tmp_seq.to_string() << std::endl;
-        std::cout << "    previous_result: " << previous_result.to_string() << std::endl;
-        std::cout << "    current_result: " << current_result.to_string() << std::endl;
+        // std::cout << "    previous_result: " << previous_result.to_string() << std::endl;
+        // std::cout << "    current_result: " << current_result.to_string() << std::endl;
 
         if ((*sign_vec_iter) == SMINUS) {
             current_result.multiply(-1);
@@ -321,7 +314,7 @@ Sequence OperatorWithSequence::Compile(ContextList &context, const Ket& label_ke
         Sequence current_result = (*op_vec_iter)->Compile(context, tmp_seq, label_ket, multi_label_ket);
         // Sequence tmp_result;
 
-        std::cout << "OperatorWithSequence::Compile(context, label_ket, multi_label_ket):" << std::endl;
+        // std::cout << "OperatorWithSequence::Compile(context, label_ket, multi_label_ket):" << std::endl;
         // std::cout << "    label_ket: " << label_ket.to_string() << std::endl;
         // std::cout << "    multi_label_ket: " << multi_label_ket.to_string() << std::endl;
         // std::cout << "    op_vec_iter: " << (*op_vec_iter)->to_string() << std::endl;
@@ -394,7 +387,7 @@ Sequence OperatorWithSequence::Compile(ContextList& context, const Ket& label_ke
         Sequence current_result = (*op_vec_iter)->Compile(context, tmp_seq, label_ket, args);
         // Sequence tmp_result;
 
-        std::cout << "OperatorWithSequence::Compile(context, label_ket, args):" << std::endl;
+        // std::cout << "OperatorWithSequence::Compile(context, label_ket, args):" << std::endl;
         // std::cout << "    label_ket: " << label_ket.to_string() << std::endl;
         // std::cout << "    op_vec_iter: " << (*op_vec_iter)->to_string() << std::endl;
         // std::cout << "    seq_vec_iter: " << (*seq_vec_iter)->to_string() << std::endl;
@@ -446,121 +439,3 @@ Sequence OperatorWithSequence::Compile(ContextList& context, const Ket& label_ke
     return result;
 }
 
-ulong OperatorWithSequence::process_infix_compile(ulong idx1, unsigned int infix_type, ulong idx2) const {
-    ulong empty_idx = ket_map.get_idx("");
-    ulong yes_idx = ket_map.get_idx("yes");
-    ulong no_idx = ket_map.get_idx("no");
-
-    switch (infix_type) {
-        case OPGREATEREQUAL:
-        case OPGREATER:
-        case OPLESSEQUAL:
-        case OPLESS: {
-            try {
-                auto one_idx_vec = ket_map.get_split_idx(idx1);  // Handle more than just kets later! Ie, arithmetic over superpositions and sequences.
-                auto two_idx_vec = ket_map.get_split_idx(idx2);
-                if (one_idx_vec.empty() || two_idx_vec.empty()) { return empty_idx; }
-                long double x = std::stold(ket_map.get_str(one_idx_vec.back()));
-                long double y = std::stold(ket_map.get_str(two_idx_vec.back()));
-                one_idx_vec.pop_back();
-                two_idx_vec.pop_back();
-                if (one_idx_vec != two_idx_vec) { return empty_idx; } // Do we want this check here? Ie, checking that the categories are equal?
-                switch (infix_type) {
-                    case OPGREATEREQUAL:
-                        if (x >= y) { return yes_idx; }
-                        return no_idx;
-                    case OPGREATER:
-                        if (x > y) { return yes_idx; }
-                        return no_idx;
-                    case OPLESSEQUAL:
-                        if (x <= y) { return yes_idx; }
-                        return no_idx;
-                    case OPLESS:
-                        if (x < y) { return yes_idx; }
-                        return no_idx;
-                    default:
-                        return empty_idx;
-                }
-            } catch (const std::invalid_argument& e) {
-                return empty_idx;
-            }
-        }
-        case OPAND: {
-            if (idx1 == yes_idx && idx2 == yes_idx) { return yes_idx; }
-            return no_idx;
-        }
-        case OPOR: {
-            if (idx1 == yes_idx || idx2 == yes_idx) { return yes_idx; }
-            return no_idx;
-        }
-        case OPPLUS:
-        case OPMINUS:
-        case OPMULT:
-        case OPDIV:
-        case OPMOD:
-        case OPARITHPOWER: {
-            // std::cout << "    arithmetic section:\n";
-            auto one_idx_vec = ket_map.get_split_idx(idx1);  // Handle more than just kets later! Ie, arithmetic over superpositions and sequences.
-            auto two_idx_vec = ket_map.get_split_idx(idx1);
-            if (one_idx_vec.empty() || two_idx_vec.empty()) { return empty_idx; }
-            try {
-                long double x = std::stold(ket_map.get_str(one_idx_vec.back()));
-                long double y = std::stold(ket_map.get_str(two_idx_vec.back()));
-                one_idx_vec.pop_back();
-                two_idx_vec.pop_back();
-
-                std::string label;
-                if (!one_idx_vec.empty() && two_idx_vec.empty()) {
-                    label = ket_map.get_str(one_idx_vec) + ": ";
-                } else if (one_idx_vec.empty() && !two_idx_vec.empty()) {
-                    label = ket_map.get_str(two_idx_vec) + ": ";
-                } else if (one_idx_vec == two_idx_vec) {
-                    if (!one_idx_vec.empty()) {
-                        label = ket_map.get_str(one_idx_vec) + ": ";
-                    }
-                } else {
-                    return empty_idx;
-                }
-
-                long double value;
-
-                switch (infix_type) {
-                    case OPPLUS : {
-                        value = x + y;
-                        break;
-                    }
-                    case OPMINUS : {
-                        value = x - y;
-                        break;
-                    }
-                    case OPMULT : {
-                        value = x * y;
-                        break;
-                    }
-                    case OPDIV : {
-                        value = x / y;
-                        break;
-                    } // check for div by zero here!
-                    case OPMOD : {
-                        value = static_cast<long long>(x) % static_cast<long long>(y);
-                        break;
-                    }
-                    case OPARITHPOWER : {
-                        value = pow(x, y);
-                        break;
-                    }
-                    default:
-                        return empty_idx;
-                }
-                return ket_map.get_idx(label + float_to_int(value, default_decimal_places));
-            } catch (const std::invalid_argument& e) {
-                return empty_idx;
-            }
-        }
-        // case OPRANGE: {
-        //     Sequence empty;
-        //     return op_range2(empty, seq_one, seq_two);  // Should we inline it, or leave as a function call?
-        // }
-        default: return ket_map.get_idx("unimplemented");
-    }
-}
