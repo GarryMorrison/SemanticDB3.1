@@ -9,6 +9,7 @@
 #include "NumericOperator.h"
 #include "OperatorSequence.h"
 
+/*
 #define OPEQUAL 100
 #define OPNOTEQUAL 101
 #define OPGREATEREQUAL 102
@@ -24,7 +25,7 @@
 #define OPMOD 112
 #define OPARITHPOWER 113
 #define OPRANGE 114
-
+*/
 
 class InfixOperator : public BaseOperator {  // Should this be BaseSequence?
 private:

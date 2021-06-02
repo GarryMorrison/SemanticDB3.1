@@ -13,6 +13,23 @@
 #define SMERGE 3
 #define SMERGE2 4
 
+#define OPEQUAL 100
+#define OPNOTEQUAL 101
+#define OPGREATEREQUAL 102
+#define OPGREATER 103
+#define OPLESSEQUAL 104
+#define OPLESS 105
+#define OPAND 106
+#define OPOR 107
+#define OPPLUS 108
+#define OPMINUS 109
+#define OPMULT 110
+#define OPDIV 111
+#define OPMOD 112
+#define OPARITHPOWER 113
+#define OPRANGE 114
+
+
 #include <memory>
 #include <string>
 #include <vector>
