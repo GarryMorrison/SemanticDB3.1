@@ -35,9 +35,6 @@ public:
     std::shared_ptr<BaseSequence> b_add(std::shared_ptr<BaseSequence> bSeq);
     std::shared_ptr<BaseSequence> b_append(std::shared_ptr<BaseSequence> bSeq);
 
-    Sequence Compile(NewContext& context) const;
-    Sequence Compile(NewContext& context, const ulong label_idx) const;
-
     Sequence Compile(ContextList& context) const;
     // Sequence Compile(ContextList& context, const ulong label_idx) const;
     // Sequence Compile(ContextList& context, const ulong label_idx, const ulong multi_label_idx) const;

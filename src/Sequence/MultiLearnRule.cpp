@@ -62,15 +62,6 @@ const std::string MultiLearnRule::to_string(const std::string &prefix) const {
 }
 
 
-Sequence MultiLearnRule::Compile(NewContext &context) const {
-    return Sequence();
-}
-
-Sequence MultiLearnRule::Compile(NewContext &context, const ulong label_idx) const {
-    return Sequence();
-}
-
-
 Sequence MultiLearnRule::Compile(ContextList &context) const {
     Sequence result;
     for (const auto& rule: vec_rules) {

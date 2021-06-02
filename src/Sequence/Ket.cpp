@@ -120,14 +120,6 @@ std::shared_ptr<BaseSequence> Ket::b_append(std::shared_ptr<BaseSequence> bSeq) 
     return result;
 }
 
-Sequence Ket::Compile(NewContext& context) const {
-    return this->to_seq();
-}
-
-Sequence Ket::Compile(NewContext& context, const ulong label_idx) const {
-    return this->to_seq();
-}
-
 
 Sequence Ket::Compile(ContextList& context) const {
     return this->to_seq();

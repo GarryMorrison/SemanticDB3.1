@@ -772,13 +772,6 @@ Superposition Superposition::apply_compound_sigmoid(const std::function<double(d
     return result;
 }
 
-Sequence Superposition::Compile(NewContext& context) const {
-    return this->to_seq();
-}
-
-Sequence Superposition::Compile(NewContext& context, const ulong label_idx) const {
-    return this->to_seq();
-}
 
 Sequence Superposition::Compile(ContextList& context) const {
     return this->to_seq();

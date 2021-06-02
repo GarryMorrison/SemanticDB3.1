@@ -52,17 +52,6 @@ std::shared_ptr<BaseSequence> MultiSelfKet::b_append(std::shared_ptr<BaseSequenc
     return result;
 }
 
-Sequence MultiSelfKet::Compile(NewContext& context) const {
-    return this->to_seq();
-}
-
-Sequence MultiSelfKet::Compile(NewContext& context, const ulong label_idx) const {
-//     if (idx == 1) {
-//         Ket tmp(label_idx, value);
-//         return tmp.to_seq();
-//     }
-    return this->to_seq();
-}
 
 Sequence MultiSelfKet::Compile(ContextList& context) const {
     return this->to_seq();

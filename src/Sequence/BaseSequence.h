@@ -48,9 +48,6 @@ public:
     virtual std::shared_ptr<BaseSequence> b_add(std::shared_ptr<BaseSequence> bSeq) = 0;
     virtual std::shared_ptr<BaseSequence> b_append(std::shared_ptr<BaseSequence> bSeq) = 0;
 
-    virtual Sequence Compile(NewContext& context) const = 0;  // Really should get rid of these two.
-    virtual Sequence Compile(NewContext& context, const ulong label_idx) const = 0;
-
     virtual Sequence Compile(ContextList& context) const = 0;
     // virtual Sequence Compile(ContextList& context, const ulong label_idx) const = 0;
     // virtual Sequence Compile(ContextList& context, const ulong label_idx, const ulong multi_label_idx) const = 0;

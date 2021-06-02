@@ -22,14 +22,6 @@ const std::string IfElseStatement::to_string(const std::string &prefix) const {
 }
 
 
-Sequence IfElseStatement::Compile(NewContext &context) const {
-    return Sequence();
-}
-
-Sequence IfElseStatement::Compile(NewContext &context, const ulong label_idx) const {
-    return Sequence();
-}
-
 Sequence IfElseStatement::Compile(ContextList &context) const {
     // std::cout << "IfElseStatement::Compile(context):\n";
     std::string condition_str = condition.Compile(context).to_ket().label();

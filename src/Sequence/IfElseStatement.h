@@ -41,9 +41,6 @@ public:
     std::shared_ptr<BaseSequence> b_add(std::shared_ptr<BaseSequence> bSeq) { return bSeq; }  // Maybe change later!
     std::shared_ptr<BaseSequence> b_append(std::shared_ptr<BaseSequence> bSeq) { return bSeq; }
 
-    Sequence Compile(NewContext& context) const;  // Really should get rid of these two.
-    Sequence Compile(NewContext& context, const ulong label_idx) const;
-
     Sequence Compile(ContextList& context) const;  // needs filling out
     // Sequence Compile(ContextList& context, const ulong label_idx) const;  // needs filling out
     // Sequence Compile(ContextList& context, const ulong label_idx, const ulong multi_label_idx) const;  // needs filling out

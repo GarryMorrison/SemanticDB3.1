@@ -40,7 +40,6 @@ const std::string OperatorWithSequence::to_string() const {
             case SMERGE: s += " _ "; break;
             case SMERGE2: s += " __ "; break;
 
-              // Currently we don't need these! They are handled by InfixOperator.
             case OPEQUAL: s += " == "; break;
             case OPNOTEQUAL: s += " != "; break;
             case OPGREATEREQUAL: s += " >= "; break;
@@ -91,65 +90,6 @@ Sequence OperatorWithSequence::to_seq() const {
     return tmp;
 }
 
-Sequence OperatorWithSequence::Compile(NewContext& context) const {
-    Sequence result;
-    if (sign_vec.empty()) { return result; }
-
-    auto sign_vec_iter = sign_vec.cbegin();
-    auto op_vec_iter = op_vec.cbegin();
-    auto seq_vec_iter = seq_vec.cbegin();
-    for (; sign_vec_iter != sign_vec.end() and op_vec_iter != op_vec.end() and seq_vec_iter != seq_vec.end();
-           ++sign_vec_iter, ++op_vec_iter, ++seq_vec_iter) {
-        // Sequence tmp_result;
-        // tmp_result = op_vec.at(k)->Compile(context, seq_vec.at(k)->to_seq());
-        // Sequence tmp_result = (*op_vec_iter)->Compile(context, (*seq_vec_iter)->Compile(context));
-        Sequence tmp_seq = (*seq_vec_iter)->Compile(context);
-        Sequence tmp_result = (*op_vec_iter)->Compile(context, tmp_seq);
-        // std::cout << "op_vec_iter: " << (*op_vec_iter)->to_string() << std::endl;
-        // std::cout << "seq_vec_iter: " << (*seq_vec_iter)->to_string() << std::endl;
-        // std::cout << "tmp_result: " << tmp_result.to_string() << std::endl;
-        if ((*sign_vec_iter) == SMINUS) {
-            tmp_result.multiply(-1);
-        }
-        switch((*sign_vec_iter)) {
-            case SPLUS: { result.add(tmp_result); break; }
-            case SMINUS: { result.add(tmp_result); break; }
-            case SSEQ: { result.append(tmp_result); break; }
-            case SMERGE: { result.merge(tmp_result); break; }
-            case SMERGE2: { result.merge(tmp_result, " "); break; }
-        }
-    }
-    return result;
-}
-
-Sequence OperatorWithSequence::Compile(NewContext& context, const ulong label_idx) const {
-    Sequence result;
-    if (sign_vec.empty()) { return result; }
-
-    auto sign_vec_iter = sign_vec.cbegin();
-    auto op_vec_iter = op_vec.cbegin();
-    auto seq_vec_iter = seq_vec.cbegin();
-    for (; sign_vec_iter != sign_vec.end() and op_vec_iter != op_vec.end() and seq_vec_iter != seq_vec.end();
-           ++sign_vec_iter, ++op_vec_iter, ++seq_vec_iter) {
-        // Sequence tmp_result = (*op_vec_iter)->Compile(context, (*seq_vec_iter)->Compile(context));
-        Sequence tmp_seq = (*seq_vec_iter)->Compile(context, label_idx);
-        Sequence tmp_result = (*op_vec_iter)->Compile(context, tmp_seq);  // later make use of label_idx too!
-        // Sequence tmp_result = (*op_vec_iter)->Compile(context, tmp_seq, label_idx);
-        // std::cout << "\ntmp_seq: " << tmp_seq.to_string() << std::endl;
-        // std::cout << "tmp_result: " << tmp_result.to_string() << std::endl;
-        if ((*sign_vec_iter) == SMINUS) {
-            tmp_result.multiply(-1);
-        }
-        switch((*sign_vec_iter)) {
-            case SPLUS: { result.add(tmp_result); break; }
-            case SMINUS: { result.add(tmp_result); break; }
-            case SSEQ: { result.append(tmp_result); break; }
-            case SMERGE: { result.merge(tmp_result); break; }
-            case SMERGE2: { result.merge(tmp_result, " "); break; }
-        }
-    }
-    return result;
-}
 
 Sequence OperatorWithSequence::Compile(ContextList& context) const {
     Sequence result;

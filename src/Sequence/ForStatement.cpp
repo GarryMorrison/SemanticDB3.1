@@ -22,13 +22,6 @@ const std::string ForStatement::to_string(const std::string &prefix) const {
     return s + prefix + "    end:";
 }
 
-Sequence ForStatement::Compile(NewContext &context) const {
-    return Sequence();
-}
-
-Sequence ForStatement::Compile(NewContext &context, const ulong label_idx) const {
-    return Sequence();
-}
 
 Sequence ForStatement::Compile(ContextList &context) const {
     // std::cout << "ForStatement::Compile(context):\n";

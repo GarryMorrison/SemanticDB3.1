@@ -60,14 +60,6 @@ const std::string LearnRule::to_string(const std::string &prefix) const {
 }
 
 
-Sequence LearnRule::Compile(NewContext &context) const {  // TODO: these two are almost certainly deprecated.
-    return Sequence();
-}
-
-Sequence LearnRule::Compile(NewContext &context, const ulong label_idx) const {
-    return Sequence();
-}
-
 Sequence LearnRule::Compile(ContextList &context) const {  // Maybe we should compile _RHS_seq before passing to context.learn() ??
     if (!_valid_learn_rule) { return Sequence(); }
     // std::cout << "LearnRule::Compile(context):" << std::endl;

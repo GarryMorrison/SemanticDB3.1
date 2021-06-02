@@ -149,8 +149,6 @@ public:
     void dummy1(std::shared_ptr<CompoundConstant> &constant);  // Delete these two later!
     void dummy2(std::vector<std::shared_ptr<CompoundConstant> > &const_vec);
 
-    Sequence Compile(NewContext& context) const { return (*this); };
-    Sequence Compile(NewContext& context, const ulong label_idx) const { return (*this); };
 
     Sequence Compile(ContextList& context) const { return (*this); };
     // Sequence Compile(ContextList& context, const ulong label_idx) const { return (*this); };

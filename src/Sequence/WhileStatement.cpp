@@ -18,13 +18,6 @@ const std::string WhileStatement::to_string(const std::string &prefix) const {
     return s + prefix + "    end:";
 }
 
-Sequence WhileStatement::Compile(NewContext &context) const {
-    return Sequence();
-}
-
-Sequence WhileStatement::Compile(NewContext &context, const ulong label_idx) const {
-    return Sequence();
-}
 
 Sequence WhileStatement::Compile(ContextList &context) const {
     // std::cout << "WhileStatement::Compile(context):\n";
