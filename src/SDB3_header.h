@@ -38,7 +38,6 @@
 #include "src/Parser/Driver.h"
 #include "OperatorUsageMap/OperatorUsageMap.h"
 #include "DocsGenerator/DocsGenerator.h"
-#include "Operator/InfixOperator.h"
 #include "Sequence/IfElseStatement.h"
 #include "Sequence/ForStatement.h"
 #include "Sequence/WhileStatement.h"

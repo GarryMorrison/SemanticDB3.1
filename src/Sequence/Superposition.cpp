@@ -10,8 +10,8 @@
 #include "../Function/misc.h"
 #include "../Function/NaturalSort.h"
 #include "../Operator/SimpleOperator.h"
-#include "../Operator/InfixOperator.h"
 #include "../OperatorLibrary/FunctionOperatorLibrary.h"
+#include "../Sequence/OperatorWithSequence.h"
 
 Superposition::Superposition(const ulong idx) {
     if (ket_map.get_idx("") == idx) {return; }

@@ -10,7 +10,6 @@
 #include "Superposition.h"
 #include "Sequence.h"
 #include "SelfKet.h"
-#include "../Operator/InfixOperator.h"
 #include "../OperatorLibrary/FunctionOperatorLibrary.h"
 
 
