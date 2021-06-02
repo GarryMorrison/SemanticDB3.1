@@ -2372,7 +2372,7 @@ OperatorUsageMap::OperatorUsageMap() {
             "        if condition evaluates to |yes> then compile and run the given statements\n\n"
             "    examples:\n"
             "    see also:\n"
-            "        if-else, if-test.sw3\n";
+            "        if-else, test-if.sw3\n";
 
     operator_usage_map.map["if-else"] =
             "\nif-else:\n"
@@ -2386,7 +2386,7 @@ OperatorUsageMap::OperatorUsageMap() {
             "        otherwise, run the given else-statements\n\n"
             "    examples:\n"
             "    see also:\n"
-            "        if, if-test.sw3\n";
+            "        if, test-if.sw3\n";
 
     operator_usage_map.map["for"] =
             "\nfor:\n"
@@ -2399,7 +2399,7 @@ OperatorUsageMap::OperatorUsageMap() {
             "        If instead you specify a sequence, then repeat the above for each superposition in that sequence\n\n"
             "    examples:\n"
             "    see also:\n"
-            "        sfor, while, op-for, op-sfor, for-test.sw3\n";
+            "        sfor, while, op-for, op-sfor, test-for.sw3\n";
 
     operator_usage_map.map["sfor"] =
             "\nsfor:\n"
@@ -2411,7 +2411,7 @@ OperatorUsageMap::OperatorUsageMap() {
             "        and then compile and run the given statements\n\n"
             "    examples:\n"
             "    see also:\n"
-            "        for, while, op-for, op-sfor, for-test.sw3\n";
+            "        for, while, op-for, op-sfor, test-for.sw3\n";
 
     operator_usage_map.map["while"] =
             "\nwhile:\n"
@@ -2422,7 +2422,7 @@ OperatorUsageMap::OperatorUsageMap() {
             "        while condition is |yes>, compile and run the given statements\n\n"
             "    examples:\n"
             "    see also:\n"
-            "        if, for, op-for, op-sfor, while-test.sw3\n";
+            "        if, for, op-for, op-sfor, test-while.sw3\n";
 
 
     operator_usage_map.map["operators"] =
