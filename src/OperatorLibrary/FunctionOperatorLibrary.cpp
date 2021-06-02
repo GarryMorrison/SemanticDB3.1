@@ -29,8 +29,10 @@ Superposition range2(ulong start_idx2, ulong stop_idx2) {
         std::string label = ket_map.get_str(start_vec);  // what if start_vec.size() == 0?
         Superposition sp;
         if (label.length() > 0) { label += ": "; }
-        for (long double i = v1; i <= v2; i++) {  // Fix float iteration variables issue!
-            sp.add(label + float_to_int(i, default_decimal_places));
+        // unsigned int steps = std::ceil(v2 - v1);  // Do we need ceiling() or floor()?
+        unsigned int steps = std::floor(v2 - v1);  // Do we need ceiling() or floor()?
+        for (unsigned int i = 0; i <= steps; i++) {  // Fix float iteration variables issue!
+            sp.add(label + float_to_int(i + v1, default_decimal_places));
         }
         return sp;
     } catch (const std::invalid_argument &e) {
