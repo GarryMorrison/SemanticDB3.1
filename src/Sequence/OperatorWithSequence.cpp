@@ -193,6 +193,36 @@ Sequence OperatorWithSequence::Compile(ContextList& context) const {
             case SSEQ: { result.append(current_result); break; }
             case SMERGE: { result.merge(current_result); break; }
             case SMERGE2: { result.merge(current_result, " "); break; }
+
+            case OPEQUAL: {
+                if (previous_result == current_result) {
+                    result = Sequence("yes");
+                } else {
+                    result = Sequence("no");
+                }
+                break;
+            }
+            case OPNOTEQUAL: {
+                if (!(previous_result == current_result)) {
+                    result = Sequence("yes");
+                } else {
+                    result = Sequence("no");
+                }
+                break;
+            }
+            case OPGREATEREQUAL:
+            case OPGREATER:
+            case OPLESSEQUAL:
+            case OPLESS:
+            case OPAND:
+            case OPOR:
+            case OPPLUS:
+            case OPMINUS:
+            case OPMULT:
+            case OPDIV:
+            case OPMOD:
+            case OPARITHPOWER: { result.process_infix(*sign_vec_iter, current_result); break; }
+            default: continue;
         }
         previous_result = std::move(current_result);
     }
@@ -278,6 +308,7 @@ Sequence OperatorWithSequence::Compile(ContextList &context, const Ket& label_ke
     auto sign_vec_iter = sign_vec.cbegin();
     auto op_vec_iter = op_vec.cbegin();
     auto seq_vec_iter = seq_vec.cbegin();
+    Sequence previous_result;
     for (; sign_vec_iter != sign_vec.end() and op_vec_iter != op_vec.end() and seq_vec_iter != seq_vec.end();
            ++sign_vec_iter, ++op_vec_iter, ++seq_vec_iter) {
         // Sequence tmp_result;
@@ -285,7 +316,7 @@ Sequence OperatorWithSequence::Compile(ContextList &context, const Ket& label_ke
         // Sequence tmp_result = (*op_vec_iter)->Compile(context, (*seq_vec_iter)->Compile(context));
         Sequence tmp_seq = (*seq_vec_iter)->Compile(context, label_ket, multi_label_ket);
         // Sequence tmp_result = (*op_vec_iter)->Compile(context, tmp_seq);
-        Sequence tmp_result = (*op_vec_iter)->Compile(context, tmp_seq, label_ket, multi_label_ket);
+        Sequence current_result = (*op_vec_iter)->Compile(context, tmp_seq, label_ket, multi_label_ket);
         // Sequence tmp_result;
 
         std::cout << "OperatorWithSequence::Compile(context, label_ket, multi_label_ket):" << std::endl;
@@ -297,14 +328,44 @@ Sequence OperatorWithSequence::Compile(ContextList &context, const Ket& label_ke
         // std::cout << "    tmp_result: " << tmp_result.to_string() << std::endl;
 
         if ((*sign_vec_iter) == SMINUS) {
-            tmp_result.multiply(-1);
+            current_result.multiply(-1);
         }
         switch((*sign_vec_iter)) {
-            case SPLUS: { result.add(tmp_result); break; }
-            case SMINUS: { result.add(tmp_result); break; }
-            case SSEQ: { result.append(tmp_result); break; }
-            case SMERGE: { result.merge(tmp_result); break; }
-            case SMERGE2: { result.merge(tmp_result, " "); break; }
+            case SPLUS: { result.add(current_result); break; }
+            case SMINUS: { result.add(current_result); break; }
+            case SSEQ: { result.append(current_result); break; }
+            case SMERGE: { result.merge(current_result); break; }
+            case SMERGE2: { result.merge(current_result, " "); break; }
+
+            case OPEQUAL: {
+                if (previous_result == current_result) {
+                    result = Sequence("yes");
+                } else {
+                    result = Sequence("no");
+                }
+                break;
+            }
+            case OPNOTEQUAL: {
+                if (!(previous_result == current_result)) {
+                    result = Sequence("yes");
+                } else {
+                    result = Sequence("no");
+                }
+                break;
+            }
+            case OPGREATEREQUAL:
+            case OPGREATER:
+            case OPLESSEQUAL:
+            case OPLESS:
+            case OPAND:
+            case OPOR:
+            case OPPLUS:
+            case OPMINUS:
+            case OPMULT:
+            case OPDIV:
+            case OPMOD:
+            case OPARITHPOWER: { result.process_infix(*sign_vec_iter, current_result); break; }
+            default: continue;
         }
     }
     return result;
@@ -318,6 +379,7 @@ Sequence OperatorWithSequence::Compile(ContextList& context, const Ket& label_ke
     auto sign_vec_iter = sign_vec.cbegin();
     auto op_vec_iter = op_vec.cbegin();
     auto seq_vec_iter = seq_vec.cbegin();
+    Sequence previous_result;
     for (; sign_vec_iter != sign_vec.end() and op_vec_iter != op_vec.end() and seq_vec_iter != seq_vec.end();
            ++sign_vec_iter, ++op_vec_iter, ++seq_vec_iter) {
         // Sequence tmp_result;
@@ -326,7 +388,7 @@ Sequence OperatorWithSequence::Compile(ContextList& context, const Ket& label_ke
         Sequence tmp_seq = (*seq_vec_iter)->Compile(context, label_ket, args);
         // Sequence tmp_result = (*op_vec_iter)->Compile(context, tmp_seq);
         // Sequence tmp_result = (*op_vec_iter)->Compile(context, tmp_seq, label_idx);
-        Sequence tmp_result = (*op_vec_iter)->Compile(context, tmp_seq, label_ket, args);
+        Sequence current_result = (*op_vec_iter)->Compile(context, tmp_seq, label_ket, args);
         // Sequence tmp_result;
 
         std::cout << "OperatorWithSequence::Compile(context, label_ket, args):" << std::endl;
@@ -337,14 +399,44 @@ Sequence OperatorWithSequence::Compile(ContextList& context, const Ket& label_ke
         // std::cout << "    tmp_result: " << tmp_result.to_string() << std::endl;
 
         if ((*sign_vec_iter) == SMINUS) {
-            tmp_result.multiply(-1);
+            current_result.multiply(-1);
         }
         switch((*sign_vec_iter)) {
-            case SPLUS: { result.add(tmp_result); break; }
-            case SMINUS: { result.add(tmp_result); break; }
-            case SSEQ: { result.append(tmp_result); break; }
-            case SMERGE: { result.merge(tmp_result); break; }
-            case SMERGE2: { result.merge(tmp_result, " "); break; }
+            case SPLUS: { result.add(current_result); break; }
+            case SMINUS: { result.add(current_result); break; }
+            case SSEQ: { result.append(current_result); break; }
+            case SMERGE: { result.merge(current_result); break; }
+            case SMERGE2: { result.merge(current_result, " "); break; }
+
+            case OPEQUAL: {
+                if (previous_result == current_result) {
+                    result = Sequence("yes");
+                } else {
+                    result = Sequence("no");
+                }
+                break;
+            }
+            case OPNOTEQUAL: {
+                if (!(previous_result == current_result)) {
+                    result = Sequence("yes");
+                } else {
+                    result = Sequence("no");
+                }
+                break;
+            }
+            case OPGREATEREQUAL:
+            case OPGREATER:
+            case OPLESSEQUAL:
+            case OPLESS:
+            case OPAND:
+            case OPOR:
+            case OPPLUS:
+            case OPMINUS:
+            case OPMULT:
+            case OPDIV:
+            case OPMOD:
+            case OPARITHPOWER: { result.process_infix(*sign_vec_iter, current_result); break; }
+            default: continue;
         }
     }
     return result;

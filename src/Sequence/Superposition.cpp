@@ -774,8 +774,8 @@ Sequence Superposition::Compile(ContextList& context, const Ket& label_ket, cons
 
 
 ulong Superposition::process_infix_compile(ulong idx1, unsigned int infix_type, ulong idx2) const {
-    std::cout << " idx1: " << ket_map.get_str(idx1) << "\n";
-    std::cout << " idx2: " << ket_map.get_str(idx2) << "\n";
+    std::cout << "  idx1: " << ket_map.get_str(idx1) << "\n";
+    std::cout << "  idx2: " << ket_map.get_str(idx2) << "\n";
     ulong empty_idx = ket_map.get_idx("");
     ulong yes_idx = ket_map.get_idx("yes");
     ulong no_idx = ket_map.get_idx("no");
