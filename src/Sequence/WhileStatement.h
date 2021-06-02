@@ -1,46 +1,27 @@
 //
-// Created by Garry Morrison on 20/10/2020.
+// Created by Garry Morrison on 2/06/2021.
 //
 
-#ifndef SDB3_1_MULTILEARNRULE_H
-#define SDB3_1_MULTILEARNRULE_H
+#ifndef SDB3_1_WHILESTATEMENT_H
+#define SDB3_1_WHILESTATEMENT_H
 
-// #define MULTILEARNRULE 12
-
-#include <vector>
-#include "OperatorWithSequence.h"
-#include "LearnRule.h"
 #include "BaseSequence.h"
-#include "IfElseStatement.h"
-#include "ForStatement.h"
-#include "WhileStatement.h"
-
-class IfElseStatement;
-class ForStatement;
-class WhileStatement;
+#include "OperatorWithSequence.h"
+#include "MultiLearnRule.h"
 
 
-class MultiLearnRule : public BaseSequence {
+class WhileStatement : public BaseSequence {
 private:
-    std::vector<std::shared_ptr<BaseSequence> > vec_rules;
+    OperatorWithSequence& condition;
+    MultiLearnRule& while_rules;
 
 public:
-    MultiLearnRule() {}
-    MultiLearnRule(const LearnRule& learn_rule);
-    MultiLearnRule(const OperatorWithSequence& operator_with_sequence);
-    MultiLearnRule(const IfElseStatement& if_else_statement);
-    MultiLearnRule(const ForStatement& for_statement);
-    MultiLearnRule(const WhileStatement& while_statement);
-    void append(const LearnRule& learn_rule);
-    void append(const OperatorWithSequence& operator_with_sequence);
-    void append(const IfElseStatement& if_else_statement);
-    void append(const ForStatement& for_statement);
-    void append(const WhileStatement& while_statement);
+    WhileStatement(OperatorWithSequence &condition2, MultiLearnRule &while_rules2) : condition(condition2), while_rules(while_rules2) {};
 
     // methods needed to support BaseSequence:
-    const int type() const { return MULTILEARNRULE; }
+    const int type() const { return WHILESTATEMENT; }
     const bool is_ket() const { return false; }
-    const size_t size() const { return vec_rules.size(); }
+    const size_t size() const;
     const std::string to_string() const;
     const std::string to_string(const std::string &prefix) const;
 
@@ -65,4 +46,4 @@ public:
 };
 
 
-#endif //SDB3_1_MULTILEARNRULE_H
+#endif //SDB3_1_WHILESTATEMENT_H

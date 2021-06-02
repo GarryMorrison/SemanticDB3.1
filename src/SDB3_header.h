@@ -41,5 +41,6 @@
 #include "Operator/InfixOperator.h"
 #include "Sequence/IfElseStatement.h"
 #include "Sequence/ForStatement.h"
+#include "Sequence/WhileStatement.h"
 
 #endif //SDB3_1_SDB3_HEADER_H

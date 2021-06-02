@@ -19,6 +19,7 @@
 #define MULTILEARNRULE 12
 #define IFELSESTATEMENT 13
 #define FORSTATEMENT 14
+#define WHILESTATEMENT 15
 
 
 class Ket;

@@ -90,6 +90,8 @@ yylloc->step();
 "sfor(" { yylval->integerVal = SFOR_TYPE; return token::OPEN_FOR; }
 "for(" { yylval->integerVal = FOR_TYPE; return token::OPEN_FOR; }
 " in " { return token::INFIX_IN; /* means we can't use "in" as a literal operator. Change? */ }
+"while(" { return token::OPEN_WHILE; }
+
 
 [a-zA-Z!][a-zA-Z0-9\-\+!\?\.:]* { yylval->ulongVal = get_op_idx(yytext, yyleng); return token::OP_LABEL; }
 [a-zA-Z!][a-zA-Z0-9\-\+!\?\.:]*"(" { yylval->ulongVal = get_op_idx(yytext, yyleng - 1); return token::FN_LPAREN; }

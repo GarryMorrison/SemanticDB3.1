@@ -76,6 +76,7 @@
     class MultiLearnRule* multiLearnRuleVal;
     class IfElseStatement* ifElseStatementVal;
     class ForStatement* forStatementVal;
+    class WhileStatement* whileStatementVal;
 }
 
 %token			END	     0	"end of file"
@@ -129,6 +130,7 @@
 %token <integerVal>  OPEN_FOR   "open for statement"
 %token               INFIX_IN   "infix in"
 %token               DOLLAR "dollar symbol"
+%token          OPEN_WHILE         "open while statement"
 
 
 // %type <ketVal> ket
@@ -146,6 +148,7 @@
 %type <multiLearnRuleVal> multi_learn_rule
 %type <ifElseStatementVal> if_else_statement
 %type <forStatementVal> for_statement
+%type <whileStatementVal> while_statement
 
 
 %destructor { delete $$; } STRING
@@ -256,15 +259,22 @@ for_statement : OPEN_FOR OP_LABEL KET_LABEL INFIX_IN operator_or_general_sequenc
               }
               ;
 
+while_statement : OPEN_WHILE operator_or_general_sequence RPAREN COLON EOL_INDENT multi_learn_rule EOL_UNDENT CLOSE {
+                    $$ = new WhileStatement(*$2, *$6);
+                }
+                ;
+
 multi_learn_rule : learn_rule { $$ = new MultiLearnRule(*$1);  /* std::cout << "indent: " << $1 << "\n"; */ }
                  | operator_or_general_sequence { $$ = new MultiLearnRule(*$1); }
                  | if_else_statement { $$ = new MultiLearnRule(*$1); }
                  | for_statement { $$ = new MultiLearnRule(*$1); }
+                 | while_statement { $$ = new MultiLearnRule(*$1); }
                  | multi_learn_rule EOL_SAME learn_rule { $$->append(*$3); }
                  | multi_learn_rule EOL_SAME operator_or_general_sequence { $$->append(*$3); }
                  | multi_learn_rule EOL_SAME COMMENT { }
                  | multi_learn_rule EOL_SAME if_else_statement { $$->append(*$3); }
                  | multi_learn_rule EOL_SAME for_statement { $$->append(*$3); }
+                 | multi_learn_rule EOL_SAME while_statement { $$->append(*$3); }
                  ;
 
 function_learn_rule : OP_LABEL FN_SYM LEARN_SYM operator_or_general_sequence { std::shared_ptr<BaseSequence> tmp_ptr($4); driver.context.fn_learn($1, $2, tmp_ptr); }

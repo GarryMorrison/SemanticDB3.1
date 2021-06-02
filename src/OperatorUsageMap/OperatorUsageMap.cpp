@@ -2413,6 +2413,48 @@ OperatorUsageMap::OperatorUsageMap() {
             "    see also:\n"
             "        for, op-for, op-sfor, for-test.sw3\n";
 
+    operator_usage_map.map["while"] =
+            "\nwhile:\n"
+            "    description:\n"
+            "        while( condition ):\n"
+            "            statements ...\n"
+            "        end:\n\n"
+            "        while condition is |yes>, compile and run the given statements\n\n"
+            "    examples:\n"
+            "    see also:\n"
+            "        for, op-for, op-sfor, while-test.sw3\n";
+
+
+    operator_usage_map.map["operators"] =
+            "\noperators:\n"
+            "    description:\n"
+            "        Here are our hard-wired in infix operators:\n"
+            "        Type 1:\n"
+            "            ket1 + ket2\n"
+            "            ket1 - ket2\n"
+            "            ket1 _ ket2\n"
+            "            ket1 __ ket2\n"
+            "            ket1 . ket2\n"
+            "        Type 2:\n"
+            "            seq|one> == seq|two>\n"
+            "            seq|one> != seq|two>\n"
+            "            ket1 >= ket2\n"
+            "            ket1 > ket2\n"
+            "            ket1 <= ket2\n"
+            "            ket1 < ket2\n"
+            "            ket1 && ket2\n"
+            "            ket1 || ket2\n"
+            "            ket1 ++ ket2\n"
+            "            ket1 -- ket2\n"
+            "            ket1 ** ket2\n"
+            "            ket1 // ket2\n"
+            "            ket1 %% ket2\n"
+            "            ket1 ^^ ket2\n"
+            "            ket1 .. ket2\n\n"
+            "    examples:\n"
+            "    see also:\n"
+            "        arithmetic, range, if, if-else, for, sfor\n";
+
 }
 
 std::string OperatorUsageMap::get_usage(const std::string &s) const {

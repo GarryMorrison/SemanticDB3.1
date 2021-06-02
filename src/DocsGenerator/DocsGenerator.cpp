@@ -344,11 +344,13 @@ void DocsGenerator::generate(const std::string& dir) {
     // Learn operator locations:
 
     // First, learn built in statements:
-    std::vector<std::string> built_in_statements{ "if", "if-else", "for", "sfor" };
+    std::vector<std::string> built_in_statements{ "operators", "if", "if-else", "for", "sfor" , "while" };
+    operator_locations["operators"] = "built-in-statement";
     operator_locations["if"] = "built-in-statement";
     operator_locations["if-else"] = "built-in-statement";
     operator_locations["for"] = "built-in-statement";
     operator_locations["sfor"] = "built-in-statement";
+    operator_locations["while"] = "built-in-statement";
 
     // Now, learn our operators:
     // NB: the locations must match those used in the next section.

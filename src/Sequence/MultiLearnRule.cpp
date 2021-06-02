@@ -20,6 +20,9 @@ MultiLearnRule::MultiLearnRule(const ForStatement &for_statement) {
     vec_rules.push_back(std::make_shared<ForStatement>(for_statement));
 }
 
+MultiLearnRule::MultiLearnRule(const WhileStatement &while_statement) {
+    vec_rules.push_back(std::make_shared<WhileStatement>(while_statement));
+}
 
 void MultiLearnRule::append(const LearnRule &learn_rule) {
     vec_rules.push_back(std::make_shared<LearnRule>(learn_rule));
@@ -35,6 +38,10 @@ void MultiLearnRule::append(const IfElseStatement &if_else_statement) {
 
 void MultiLearnRule::append(const ForStatement &for_statement) {
     vec_rules.push_back(std::make_shared<ForStatement>(for_statement));
+}
+
+void MultiLearnRule::append(const WhileStatement &while_statement) {
+    vec_rules.push_back(std::make_shared<WhileStatement>(while_statement));
 }
 
 

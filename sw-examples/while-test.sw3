@@ -1,0 +1,11 @@
+-- a quick test of the new while() statement:
+
+op |while test> #=>
+    the |start> => |true>
+    var|x> => |10>
+    while( var|x> > |0>):
+        print var|x>
+        var|x> => minus[1] var|x>
+    end:
+    the |end> => |true>
+
