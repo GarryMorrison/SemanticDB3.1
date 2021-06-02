@@ -44,9 +44,14 @@ const std::string OperatorWithSequence::to_string() const {
             case SMERGE: s += " _ "; break;
             case SMERGE2: s += " __ "; break;
 
-            /*  // Currently we don't need these! They are handled by InfixOperator.
+              // Currently we don't need these! They are handled by InfixOperator.
             case OPEQUAL: s += " == "; break;
             case OPNOTEQUAL: s += " != "; break;
+            case OPGREATEREQUAL: s += " >= "; break;
+            case OPGREATER: s += " > "; break;
+            case OPLESSEQUAL: s += " <= "; break;
+            case OPLESS: s += " < "; break;
+
             case OPAND: s += " && "; break;
             case OPOR: s += " || "; break;
             case OPPLUS: s += " ++ "; break;
@@ -56,7 +61,7 @@ const std::string OperatorWithSequence::to_string() const {
             case OPMOD: s += " %% "; break;
             case OPARITHPOWER: s += " ^^ "; break;
             case OPRANGE: s += " .. "; break;
-            */
+
             default: s += " ?? ";
         }
         // std::string pre = " ( ";
