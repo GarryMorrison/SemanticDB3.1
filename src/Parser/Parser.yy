@@ -353,19 +353,32 @@ general_operator : operator { $$ = $1; }
 general_sequence : operator_with_sequence { $$ = $1; }
                  | general_sequence INFIX_OP operator_with_sequence { $$ = $1; $$->append($2, *$3); }
                  | general_sequence operator_with_sequence { $$ = $1; $$->append(SPLUS, *$2); }
-                 | LPAREN general_sequence RPAREN { $$ = $2; }
-                 | operator_with_sequence INFIX_DOUBLE_OP operator_with_sequence { /* $$ = $1; $$->append($2, *$3); */
-                     std::shared_ptr<BaseOperator> tmp_op = std::make_shared<InfixOperator>(*$1, $2, *$3);
-                     std::shared_ptr<BaseSequence> tmp_seq = std::make_shared<Ket>();
-                     $$ = new OperatorWithSequence(tmp_op, tmp_seq);
+                 | LPAREN general_sequence RPAREN {
+                     // $$ = $2; $$->has_bracket(true);
+                     // $2->has_bracket(true);
+                     std::shared_ptr<BaseOperator> tmp_op_ptr = std::make_shared<SimpleOperator>("");
+                     std::shared_ptr<BaseSequence> tmp_seq_ptr($2);
+                     $$ = new OperatorWithSequence(tmp_op_ptr, tmp_seq_ptr);
                  }
-                 | general_sequence INFIX_OP operator_with_sequence INFIX_DOUBLE_OP operator_with_sequence {
+                 | general_sequence INFIX_OP LPAREN general_sequence RPAREN {
                      $$ = $1;
-                     std::shared_ptr<BaseOperator> tmp_op = std::make_shared<InfixOperator>(*$3, $4, *$5);
-                     std::shared_ptr<BaseSequence> tmp_seq = std::make_shared<Ket>();
-                     OperatorWithSequence OpWithSeq = OperatorWithSequence(tmp_op, tmp_seq);
+                     std::shared_ptr<BaseOperator> tmp_op_ptr = std::make_shared<SimpleOperator>("");
+                     std::shared_ptr<BaseSequence> tmp_seq_ptr($4);
+                     OperatorWithSequence OpWithSeq = OperatorWithSequence(tmp_op_ptr, tmp_seq_ptr);
                      $$->append($2, OpWithSeq);
                  }
+                 // | operator_with_sequence INFIX_DOUBLE_OP operator_with_sequence { /* $$ = $1; $$->append($2, *$3); */
+                 //     std::shared_ptr<BaseOperator> tmp_op = std::make_shared<InfixOperator>(*$1, $2, *$3);
+                 //     std::shared_ptr<BaseSequence> tmp_seq = std::make_shared<Ket>();
+                 //     $$ = new OperatorWithSequence(tmp_op, tmp_seq);
+                 // }
+                 // | general_sequence INFIX_OP operator_with_sequence INFIX_DOUBLE_OP operator_with_sequence {
+                 //     $$ = $1;
+                 //     std::shared_ptr<BaseOperator> tmp_op = std::make_shared<InfixOperator>(*$3, $4, *$5);
+                 //     std::shared_ptr<BaseSequence> tmp_seq = std::make_shared<Ket>();
+                 //     OperatorWithSequence OpWithSeq = OperatorWithSequence(tmp_op, tmp_seq);
+                 //     $$->append($2, OpWithSeq);
+                 // }
                  ;
 
 operator_or_general_sequence : general_sequence { $$ = $1; }

@@ -24,6 +24,13 @@ const size_t OperatorWithSequence::size() const {
 const std::string OperatorWithSequence::to_string() const {
     if (sign_vec.empty()) { return ""; }
 
+    std::string bracket_pre;
+    std::string bracket_post;
+    if (seq_has_bracket && false) {
+        bracket_pre = " ( ";
+        bracket_post = " ) ";
+    }
+
     std::string s;
     auto sign_vec_iter = sign_vec.cbegin();
     auto op_vec_iter = op_vec.cbegin();
@@ -52,13 +59,15 @@ const std::string OperatorWithSequence::to_string() const {
             */
             default: s += " ?? ";
         }
-        std::string pre = " ( ";
-        std::string post = " ) ";
+        // std::string pre = " ( ";
+        // std::string post = " ) ";
+        std::string pre = "(";
+        std::string post = ")";
         if ((*seq_vec_iter)->is_ket()) { pre = ""; post = ""; }
         // s += (*op_vec_iter)->to_string() + " ( " + (*seq_vec_iter)->to_string() + " ) ";
         s += (*op_vec_iter)->to_string() + pre + (*seq_vec_iter)->to_string() + post;
     }
-    return s;
+    return bracket_pre + s + bracket_post;
 }
 
 const std::string OperatorWithSequence::to_string(const std::string &prefix) const {

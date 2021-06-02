@@ -26,6 +26,7 @@ private:
     // std::shared_ptr<BaseOperator> op;
     // std::shared_ptr<BaseSequence> seq;
 
+    bool seq_has_bracket = false;
     std::vector<unsigned int> sign_vec;
     std::vector<std::shared_ptr<BaseOperator> > op_vec;
     std::vector<std::shared_ptr<BaseSequence> > seq_vec;
@@ -60,6 +61,7 @@ public:
     }
 
     void append(const unsigned int the_sign, const OperatorWithSequence& opWithSeq);
+    void has_bracket(bool has_bracket2) { seq_has_bracket = has_bracket2; }
 
     const int type() const { return OPERATORWITHSEQUENCE; };
     const bool is_ket() const { return false; }

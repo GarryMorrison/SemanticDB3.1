@@ -26,7 +26,7 @@
 #define OPRANGE 114
 
 
-class InfixOperator : public BaseOperator {
+class InfixOperator : public BaseOperator {  // Should this be BaseSequence?
 private:
     int infix_type;
     std::shared_ptr<BaseSequence> one;
