@@ -428,27 +428,35 @@ void Superposition::merge(const Superposition& sp2) {
 }
 
 void Superposition::process_infix(unsigned int infix_type, const Superposition &sp2) {
-    if (sort_order.empty() || sp2.sort_order.empty()) { return; }
+    // if (sort_order.empty() || sp2.sort_order.empty()) { return; }
+    if (sort_order.empty()) { return; }
+    // if (sp2.sort_order.empty()) { sort_order.clear(); sp.clear(); }
 
-    ulong head_idx = sort_order.back();
-    double head_value = sp[head_idx];
-    sp.erase(head_idx);
-    sort_order.pop_back();
-    ulong tail_idx = sp2.sort_order.front();
-    double tail_value = sp2.sp.at(tail_idx); // does this work: sp2.sp[tail_idx] ?
-    // std::string s2 = ket_map.get_str(head_idx) + s + ket_map.get_str(tail_idx);
-    // ulong new_idx = ket_map.get_idx(s2);
+    if (sp2.sort_order.empty()) {  // Not quite correct. Eg, Sequence() vs Sequence("").
+        ulong head_idx = sort_order.back();
+        sp.erase(head_idx);
+        sort_order.pop_back();
+    } else {
+        ulong head_idx = sort_order.back();
+        double head_value = sp[head_idx];
+        sp.erase(head_idx);
+        sort_order.pop_back();
+        ulong tail_idx = sp2.sort_order.front();
+        double tail_value = sp2.sp.at(tail_idx); // does this work: sp2.sp[tail_idx] ?
+        // std::string s2 = ket_map.get_str(head_idx) + s + ket_map.get_str(tail_idx);
+        // ulong new_idx = ket_map.get_idx(s2);
 
-    ulong new_idx = process_infix_compile(head_idx, infix_type, tail_idx);
-    double new_value = head_value * tail_value;
-    this->add(new_idx, new_value);
+        ulong new_idx = process_infix_compile(head_idx, infix_type, tail_idx);
+        double new_value = head_value * tail_value;
+        this->add(new_idx, new_value);
 
-    bool first_pass = true;
-    for (const auto idx: sp2.sort_order) {
-        if (!first_pass) {
-            this->add(idx, sp2.sp.at(idx));
+        bool first_pass = true;
+        for (const auto idx: sp2.sort_order) {
+            if (!first_pass) {
+                this->add(idx, sp2.sp.at(idx));
+            }
+            first_pass = false;
         }
-        first_pass = false;
     }
 }
 

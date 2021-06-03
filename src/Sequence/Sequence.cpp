@@ -202,8 +202,9 @@ void Sequence::merge(const Sequence& seq2) {
 }
 
 void Sequence::process_infix(unsigned int infix_type, const Sequence &seq2) {
-    if (seq2.seq.empty() ) { return; }             // buggy. Eg: |> __ |> Maybe we want this behaviour.
-    if (seq.empty()) { this->add(seq2); return; }  // buggy. Eg: |> __ |>
+    // if (seq2.seq.empty() ) { return; }             // buggy. Eg: |> __ |> Maybe we want this behaviour.
+    // if (seq.empty()) { this->add(seq2); return; }  // buggy. Eg: |> __ |>
+    if (seq.empty() || seq2.seq.empty()) { return; }  // I don't think this is correct!
     Superposition head = seq.back();
     Superposition tail = seq2.seq.front();
     head.process_infix(infix_type, tail);
