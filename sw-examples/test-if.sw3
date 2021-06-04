@@ -26,6 +26,7 @@ op |if test> #=>
 
 
 -- this now works!
+-- we had a bug in the equality operator ==
 if-test (*,*) #=>
     if( |__self1> == |__self2> ):
         print |it worked!>
@@ -44,6 +45,7 @@ if-test2 (*,*) #=>
 
 
 -- test if operators other than == and != are effected by the bug:
+-- nope, they are fine.
 if-test3 (*,*) #=>
     if( |__self1> < |__self2> ):
         print |is less than>
