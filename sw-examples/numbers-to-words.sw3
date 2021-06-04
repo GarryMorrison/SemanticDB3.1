@@ -1,5 +1,6 @@
 -- convert numbers to words:
 -- usage: n2w |12345>
+-- updated to the version 3.1.1 language
 
 
 ones |1> => |one>
@@ -61,9 +62,14 @@ n2w |*> #=> smerge[", "] sreverse op-zip(op |seq>) split-num |_self>
 
 
 -- the split-number operator:
-split-num |*> #=> if(is-less-than[1000] |_self>, |op: is-less-than-1000>, |op: is-greater-than-1000>) |_self>
+-- split-num |*> #=> op-if(is-less-than[1000] |_self>, |op: is-less-than-1000>, |op: is-greater-than-1000>) |_self>
+-- is-less-than-1000 |*> #=> |_self>
+-- is-greater-than-1000 |*> #=> mod[1000] |_self> . split-num int-divide-by[1000] |_self>
 
-is-less-than-1000 |*> #=> |_self>
-is-greater-than-1000 |*> #=> mod[1000] |_self> . split-num int-divide-by[1000] |_self>
-
+split-num |*> #=>
+    if( is-less-than[1000] |__self> ):
+        |__self>
+    else:
+        mod[1000] |__self> . split-num int-divide-by[1000] |__self>
+    end:
 

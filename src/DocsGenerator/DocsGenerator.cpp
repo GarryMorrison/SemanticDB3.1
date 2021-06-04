@@ -96,6 +96,10 @@ std::string linkify_operators(std::map<std::string, std::string> &operator_locat
         to = " " + html_link + "(";
         string_replace_all(usage, from, to);
 
+        from = "\n" + iter.first + "(";
+        to = "\n" + html_link + "(";
+        string_replace_all(usage, from, to);
+
         from = "(" + iter.first + " ";
         to = "(" + html_link + " ";
         string_replace_all(usage, from, to);
