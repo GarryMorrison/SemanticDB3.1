@@ -17,10 +17,16 @@ op |for test> #=>
     the |end> => |true>
 
 
+-- Note, we can overload the range operator here,
+-- because these are literal operator definitions,
+-- which are distinct from function definitions.
 range |*> #=> compile (|op: range> . |> . ssplit[" .. "] |_self>)
 srange |*> #=> compile (|op: srange> . |> . ssplit[" .. "] |_self>)
 
 -- memoizing versions:
+-- ie, store the range after it is calculated,
+-- so we don't have to recalculate it if we see it again.
+-- Basically a memory vs cpu trade-off.
 -- range |*> !=> compile (|op: range> . |> . ssplit[" .. "] |_self>)
 -- srange |*> !=> compile (|op: srange> . |> . ssplit[" .. "] |_self>)
 
