@@ -1,4 +1,5 @@
 -- Given the raw text of the simple English wikipedia page for dogs, use scompress[] to extract out repeated substrings:
+-- Updated to the version 3.1.1 language.
 
 
 -- Here is the extracted text for that wikipedia page:
@@ -105,17 +106,24 @@ print-minimalist reverse sort-by[ket-length] find |repeat patterns>
 
 
 -- The operators needed to find the system depth:
-find-depth (*) #=>
-    depth |system> => plus[1] depth |system>
-    if( is-equal(|__self>, the |input>), |op: display-depth>, |op: find-depth>) cseq |__self>
-
-display-depth (*) #=>
-    |system depth:> __ depth |system>
+-- find-depth (*) #=>
+--     depth |system> => plus[1] depth |system>
+--     op-if( is-equal(|__self>, the |input>), |op: display-depth>, |op: find-depth>) cseq |__self>
+--
+-- display-depth (*) #=>
+--     |system depth:> __ depth |system>
 
 find-system-depth |*> #=>
     depth |system> => |0>
     the |input> => lower-seq |__self>
     find-depth cseq |__self>
+
+find-depth (*) #=>
+    depth |system> => plus[1] depth |system>
+    if( |__self> != the |input> ):
+        find-depth cseq |__self>
+    end:
+    |system depth:> __ depth |system>
 
 
 -- Now, let's find the system depths for our sequences:
