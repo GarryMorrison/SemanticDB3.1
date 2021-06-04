@@ -461,28 +461,35 @@ void Superposition::process_infix(unsigned int infix_type, const Superposition &
 }
 
 void Superposition::insert_range(const Superposition &sp2) {
-    if (sp2.sort_order.empty() ) { return; }
-    if (sort_order.empty() ) { this->add(sp2); return; }  // Not 100% sure on what we want to do here.
+    // if (sp2.sort_order.empty() ) { return; }
+    // if (sort_order.empty() ) { this->add(sp2); return; }  // Not 100% sure on what we want to do here.
+    if (sort_order.empty()) { return; }
 
-    ulong head_idx = sort_order.back();
-    double head_value = sp[head_idx];
-    sp.erase(head_idx);
-    sort_order.pop_back();
-    ulong tail_idx = sp2.sort_order.front();
-    double tail_value = sp2.sp.at(tail_idx); // does this work: sp2.sp[tail_idx] ?
+    if (sp2.sort_order.empty()) {
+        ulong head_idx = sort_order.back();
+        sp.erase(head_idx);
+        sort_order.pop_back();
+    } else {
+        ulong head_idx = sort_order.back();
+        double head_value = sp[head_idx];
+        sp.erase(head_idx);
+        sort_order.pop_back();
+        ulong tail_idx = sp2.sort_order.front();
+        double tail_value = sp2.sp.at(tail_idx); // does this work: sp2.sp[tail_idx] ?
 
-    Superposition our_range = range2(head_idx, tail_idx);
+        Superposition our_range = range2(head_idx, tail_idx);
 
-    double new_value = head_value * tail_value;
-    our_range.multiply(new_value);
-    this->add(our_range);
+        double new_value = head_value * tail_value;
+        our_range.multiply(new_value);
+        this->add(our_range);
 
-    bool first_pass = true;
-    for (const auto idx: sp2.sort_order) {
-        if (!first_pass) {
-            this->add(idx, sp2.sp.at(idx));
+        bool first_pass = true;
+        for (const auto idx: sp2.sort_order) {
+            if (!first_pass) {
+                this->add(idx, sp2.sp.at(idx));
+            }
+            first_pass = false;
         }
-        first_pass = false;
     }
 }
 

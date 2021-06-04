@@ -221,8 +221,10 @@ void Sequence::process_infix(unsigned int infix_type, const Sequence &seq2) {
 }
 
 void Sequence::insert_range(const Sequence &seq2) {
-    if (seq2.seq.empty() ) { return; }             // buggy. Eg: |> __ |> Maybe we want this behaviour.
-    if (seq.empty()) { this->add(seq2); return; }  // buggy. Eg: |> __ |>
+    // if (seq2.seq.empty() ) { return; }             // buggy. Eg: |> __ |> Maybe we want this behaviour.
+    // if (seq.empty()) { this->add(seq2); return; }  // buggy. Eg: |> __ |>
+    if (seq.empty() || seq2.seq.empty()) { return; }
+
     Superposition head = seq.back();
     Superposition tail = seq2.seq.front();
     head.insert_range(tail);
