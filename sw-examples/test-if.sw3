@@ -25,7 +25,31 @@ op |if test> #=>
     the |real end> => |true>
 
 
+-- this now works!
+if-test (*,*) #=>
+    if( |__self1> == |__self2> ):
+        print |it worked!>
+    else:
+        print |it failed!>
+    end:
 
+
+-- this correctly returns it worked.
+if-test2 (*,*) #=>
+    if( is-equal( |__self1>, |__self2>) ):
+        print |it worked!>
+    else:
+        print |it failed!>
+    end:
+
+
+-- test if operators other than == and != are effected by the bug:
+if-test3 (*,*) #=>
+    if( |__self1> < |__self2> ):
+        print |is less than>
+    else:
+        print |is not less than>
+    end:
 
 
 

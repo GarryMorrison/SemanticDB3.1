@@ -57,6 +57,8 @@ Sequence IfElseStatement::Compile(ContextList &context, const Ket &label_ket, co
 
 Sequence IfElseStatement::Compile(ContextList &context, const Ket &label_ket, const std::vector<Sequence> &args) const {
     // std::cout << "IfElseStatement::Compile(context, label_ket, args):\n";
+    // Sequence result = condition.Compile(context, label_ket, args);
+    // std::cout << "    condition: " << result.to_string() << "\n";
     std::string condition_str = condition.Compile(context, label_ket, args).to_ket().label();
     if (condition_str == "yes") {
         return if_rules.Compile(context, label_ket, args);

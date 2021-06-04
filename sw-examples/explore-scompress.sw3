@@ -40,8 +40,6 @@ find |repeat patterns> #=> seq2sp expand-W cseq rel-kets[seq] |>
 -- display-depth (*) #=>
 --     |system depth:> __ depth |system>
 
-not |yes> => |no>
-not |no> => |yes>
 
 find-system-depth |*> #=>
     depth |system> => |0>
@@ -50,7 +48,7 @@ find-system-depth |*> #=>
 
 find-depth (*) #=>
     depth |system> => plus[1] depth |system>
-    if( not is-equal( |__self>, the |input>) ):
+    if( |__self> != the |input> ):
         find-depth cseq |__self>
     end:
     |system depth:> __ depth |system>

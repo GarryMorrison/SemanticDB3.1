@@ -302,6 +302,7 @@ Sequence OperatorWithSequence::Compile(ContextList &context, const Ket& label_ke
             case OPRANGE: { result.insert_range(current_result); break; }
             default: continue;
         }
+        previous_result = std::move(current_result);  // Fix move bug.
     }
     return result;
 }
@@ -344,6 +345,9 @@ Sequence OperatorWithSequence::Compile(ContextList& context, const Ket& label_ke
             case SMERGE2: { result.merge(current_result, " "); break; }
 
             case OPEQUAL: {
+                // std::cout << "OpWithSeq::Compile(context, label_ket, args):\n";
+                // std::cout << "    previous_result: " << previous_result.to_string() << "\n";
+                // std::cout << "    current_result: " << current_result.to_string() << "\n";
                 if (previous_result == current_result) {
                     result = Sequence("yes");
                 } else {
@@ -374,6 +378,7 @@ Sequence OperatorWithSequence::Compile(ContextList& context, const Ket& label_ke
             case OPRANGE: { result.insert_range(current_result); break; }
             default: continue;
         }
+        previous_result = std::move(current_result);  // Fix move bug.
     }
     return result;
 }
