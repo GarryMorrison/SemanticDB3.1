@@ -1,4 +1,6 @@
 -- Some code to explore the scompress operator:
+-- Updated to the version 3.1.1 language.
+
 
 -- Define a set of patterns:
 learn-patterns |one> #=>
@@ -31,18 +33,27 @@ find |repeat patterns> #=> seq2sp expand-W cseq rel-kets[seq] |>
 
 
 -- The operators needed to find the system depth:
-find-depth (*) #=>
-    depth |system> => plus[1] depth |system>
-    if( is-equal(|__self>, the |input>), |op: display-depth>, |op: find-depth>) cseq |__self>
+-- find-depth (*) #=>
+--     depth |system> => plus[1] depth |system>
+--     op-if( is-equal(|__self>, the |input>), |op: display-depth>, |op: find-depth>) cseq |__self>
+--
+-- display-depth (*) #=>
+--     |system depth:> __ depth |system>
 
-display-depth (*) #=>
-    |system depth:> __ depth |system>
+not |yes> => |no>
+not |no> => |yes>
 
 find-system-depth |*> #=>
     depth |system> => |0>
     the |input> => seq |__self>
     find-depth cseq |__self>
 
+find-depth (*) #=>
+    depth |system> => plus[1] depth |system>
+    if( not is-equal( |__self>, the |input>) ):
+        find-depth cseq |__self>
+    end:
+    |system depth:> __ depth |system>
 
 
 -- The operators needed to display the results:
