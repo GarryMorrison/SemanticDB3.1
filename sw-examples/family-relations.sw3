@@ -1,6 +1,7 @@
 -- Family relations operators:
 -- Given only operators for: mother, father, son, daughter, wife, husband, age
 -- We can construct the following collection of family related operators:
+-- updated to the version 3.1.1 language
 
 
 -- define our not operator:
@@ -69,29 +70,48 @@ is-a-great-grand-mother |*> #=> is-mbr(|_self>) clean mother parent^2 child^3 |_
 is-a-great-grand-father |*> #=> is-mbr(|_self>) clean father parent^2 child^3 |_self>
 is-a-great-grand-parent |*> #=> do-you-know child^3 |_self>
 
-is-a-male |*> #=> or(is-a-son |_self>, is-a-father |_self>) |>
-is-a-female |*> #=> or(is-a-daughter |_self>, is-a-mother |_self>) |>
+-- is-a-male |*> #=> or(is-a-son |_self>, is-a-father |_self>)
+-- is-a-female |*> #=> or(is-a-daughter |_self>, is-a-mother |_self>)
 
-is-an-uncle |*> #=> and(is-a-male |_self>, do-you-know child sibling |_self>) |>
-is-an-aunt |*> #=> and(is-a-female |_self>, do-you-know child sibling |_self>) |>
+-- is-an-uncle |*> #=> and(is-a-male |_self>, do-you-know child sibling |_self>)
+-- is-an-aunt |*> #=> and(is-a-female |_self>, do-you-know child sibling |_self>)
 
-is-a-husband |*> #=> and(is-a-male |_self>, do-you-know wife |_self>) |>
-is-a-wife |*> #=> and(is-a-female |_self>, do-you-know husband |_self>) |>
+-- is-a-husband |*> #=> and(is-a-male |_self>, do-you-know wife |_self>)
+-- is-a-wife |*> #=> and(is-a-female |_self>, do-you-know husband |_self>)
 
-is-a-brother |*> #=> and(is-a-male |_self>, do-you-know sibling |_self>) |>
-is-a-sister |*> #=> and(is-a-female |_self>, do-you-know sibling |_self>) |>
+-- is-a-brother |*> #=> and(is-a-male |_self>, do-you-know sibling |_self>)
+-- is-a-sister |*> #=> and(is-a-female |_self>, do-you-know sibling |_self>)
 
+
+is-a-male |*> #=> is-a-son |_self> || is-a-father |_self>
+is-a-female |*> #=> is-a-daughter |_self> || is-a-mother |_self>
+
+is-an-uncle |*> #=> is-a-male |_self> && do-you-know child sibling |_self>
+is-an-aunt |*> #=> is-a-female |_self> && do-you-know child sibling |_self>
+
+is-a-husband |*> #=> is-a-male |_self> && do-you-know wife |_self>
+is-a-wife |*> #=> is-a-female |_self> && do-you-know husband |_self>
+
+is-a-brother |*> #=> is-a-male |_self> && do-you-know sibling |_self>
+is-a-sister |*> #=> is-a-female |_self> && do-you-know sibling |_self>
 
 
 -- define some is-a-x rules that require knowledge of age:
 is-a-child |*> #=> is-in-range[0,17] age |_self>
 is-a-teenager |*> #=> is-in-range[13,19] age |_self>
 is-an-adult |*> #=> not is-in-range[0,17] age |_self>
-is-a-man |*> #=> and(is-a-male |_self>, is-an-adult |_self>) |>
-is-a-woman |*> #=> and(is-a-female |_self>, is-an-adult |_self>) |>
-is-a-boy |*> #=> and(is-a-male |_self>, not is-an-adult |_self>) |>
-is-a-girl |*> #=> and(is-a-female |_self>, not is-an-adult |_self>) |>
-is-male-or-female |*> #=> or(is-a-male |_self>, is-a-female |_self>) |>
+-- is-a-man |*> #=> and(is-a-male |_self>, is-an-adult |_self>)
+-- is-a-woman |*> #=> and(is-a-female |_self>, is-an-adult |_self>)
+-- is-a-boy |*> #=> and(is-a-male |_self>, not is-an-adult |_self>)
+-- is-a-girl |*> #=> and(is-a-female |_self>, not is-an-adult |_self>)
+-- is-male-or-female |*> #=> or(is-a-male |_self>, is-a-female |_self>)
+
+is-a-man |*> #=> is-a-male |_self> && is-an-adult |_self>
+is-a-woman |*> #=> is-a-female |_self> && is-an-adult |_self>
+is-a-boy |*> #=> is-a-male |_self> && not is-an-adult |_self>
+is-a-girl |*> #=> is-a-female |_self> && not is-an-adult |_self>
+is-male-or-female |*> #=> is-a-male |_self> || is-a-female |_self>
+
 is-a-senior-citizen |*> #=> not is-in-range[0,59] age |_self>
 
 
@@ -125,4 +145,4 @@ how-many-nephews |*> #=> how-many nephew |_self>
 have-1-child |*> #=> is-equal[1] how-many-children |_self>
 have-2-children |*> #=> is-equal[2] how-many-children |_self>
 have-3-children |*> #=> is-equal[3] how-many-children |_self>
-
+have-4-children |*> #=> is-equal[4] how-many-children |_self>

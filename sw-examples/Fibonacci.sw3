@@ -1,4 +1,5 @@
 -- Implment the Fibonacci sequence:
+-- updated to the version 3.1.1 language
 
 Fib |0> => |0>
 Fib |1> => |1>

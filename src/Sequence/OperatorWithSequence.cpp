@@ -316,7 +316,8 @@ Sequence OperatorWithSequence::Compile(ContextList& context, const Ket& label_ke
     auto op_vec_iter = op_vec.cbegin();
     auto seq_vec_iter = seq_vec.cbegin();
     Sequence previous_result;
-    for (; sign_vec_iter != sign_vec.end() and op_vec_iter != op_vec.end() and seq_vec_iter != seq_vec.end();
+    Sequence current_result;
+    for (; sign_vec_iter != sign_vec.cend() and op_vec_iter != op_vec.cend() and seq_vec_iter != seq_vec.cend();
            ++sign_vec_iter, ++op_vec_iter, ++seq_vec_iter) {
         // Sequence tmp_result;
         // tmp_result = op_vec.at(k)->Compile(context, seq_vec.at(k)->to_seq());
@@ -324,7 +325,7 @@ Sequence OperatorWithSequence::Compile(ContextList& context, const Ket& label_ke
         Sequence tmp_seq = (*seq_vec_iter)->Compile(context, label_ket, args);
         // Sequence tmp_result = (*op_vec_iter)->Compile(context, tmp_seq);
         // Sequence tmp_result = (*op_vec_iter)->Compile(context, tmp_seq, label_idx);
-        Sequence current_result = (*op_vec_iter)->Compile(context, tmp_seq, label_ket, args);
+        current_result = (*op_vec_iter)->Compile(context, tmp_seq, label_ket, args);
         // Sequence tmp_result;
 
         // std::cout << "OperatorWithSequence::Compile(context, label_ket, args):" << std::endl;
@@ -378,7 +379,7 @@ Sequence OperatorWithSequence::Compile(ContextList& context, const Ket& label_ke
             case OPRANGE: { result.insert_range(current_result); break; }
             default: continue;
         }
-        previous_result = std::move(current_result);  // Fix move bug.
+        previous_result = std::move(current_result);  // Fix move bug. I don't understand why current_result is considered a "const reference argument".
     }
     return result;
 }
