@@ -6,6 +6,7 @@
 -- find-final-plan
 -- NB: it only tries for 100 times, so it may not always come to a satisfactory plan.
 -- This can be increased by changing the value of: max |attempts>
+-- updated to the version 3.1.1 language
 
 
 
@@ -14,11 +15,11 @@ the |locations> => at rel-kets[at]
 the |objects> => rel-kets[at]
 
 
-apply-go |*> #=>
+apply-go-v1 |*> #=>
     move |to> => pick-elt drop (the |locations> -1 at |monkey>)
     previously-at |monkey> => at |monkey>
     the |result> => go(at |monkey>, move |to>)
-    if(has-prefix["monkey moved "] the |result>, |op: go-worked>, |op: go-failed>)
+    op-if(has-prefix["monkey moved "] the |result>, |op: go-worked>, |op: go-failed>)
 
 go-worked (*) #=>
     the |plan> .=> |go(> _ previously-at |monkey> _ |, > _ move |to> _ |)>
@@ -28,12 +29,22 @@ go-failed (*) #=>
     the |result>
 
 
-apply-push |*> #=>
+apply-go |*> #=>
+    move |to> => pick-elt drop (the |locations> -1 at |monkey>)
+    previously-at |monkey> => at |monkey>
+    the |result> => go(at |monkey>, move |to>)
+    if( has-prefix["monkey moved "] the |result> ):
+        the |plan> .=> |go(> _ previously-at |monkey> _ |, > _ move |to> _ |)>
+    end:
+    the |result>
+
+
+apply-push-v1 |*> #=>
     the-push |object> => pick-elt drop (the |objects> -1 |monkey>)
     previously-at |monkey> => at |monkey>
     move |to> => pick-elt drop (the |locations> -1 at |monkey>)
     the |result> => push(the-push |object>, at |monkey>, move |to>)
-    if(has-prefix["monkey pushed "] the |result>, |op: push-worked>, |op: push-failed>)
+    op-if(has-prefix["monkey pushed "] the |result>, |op: push-worked>, |op: push-failed>)
 
 push-worked (*) #=>
     the |plan> .=> |push(> _ the-push |object> _ |, > _ previously-at |monkey> _ |, > _ move |to> _|)>
@@ -43,11 +54,21 @@ push-failed (*) #=>
     the |result>
 
 
+apply-push |*> #=>
+    the-push |object> => pick-elt drop (the |objects> -1 |monkey>)
+    previously-at |monkey> => at |monkey>
+    move |to> => pick-elt drop (the |locations> -1 at |monkey>)
+    the |result> => push(the-push |object>, at |monkey>, move |to>)
+    if( has-prefix["monkey pushed "] the |result> ):
+        the |plan> .=> |push(> _ the-push |object> _ |, > _ previously-at |monkey> _ |, > _ move |to> _|)>
+    end:
+    the |result>
 
-apply-climb-on |*> #=>
+
+apply-climb-on-v1 |*> #=>
     climb |object> => pick-elt drop (the |objects> -1 |monkey>)
     the |result> => climb-on(climb |object>)
-    if(has-prefix["monkey climbed "] the |result>, |op: climb-on-worked>, |op: climb-on-failed>)
+    op-if(has-prefix["monkey climbed "] the |result>, |op: climb-on-worked>, |op: climb-on-failed>)
 
 climb-on-worked (*) #=>
     the |plan> .=> |climb-on(> _ climb |object> _ |)>
@@ -56,12 +77,19 @@ climb-on-worked (*) #=>
 climb-on-failed (*) #=>
     the |result>
 
+apply-climb-on |*> #=>
+    climb |object> => pick-elt drop (the |objects> -1 |monkey>)
+    the |result> => climb-on(climb |object>)
+    if( has-prefix["monkey climbed "] the |result> ):
+        the |plan> .=> |climb-on(> _ climb |object> _ |)>
+    end:
+    the |result>
 
 
-apply-grab |*> #=>
+apply-grab-v1 |*> #=>
     the-grab |object> => pick-elt drop (the |objects> -1 |monkey>)
     the |result> => grab(the-grab |object>)
-    if(has-prefix["monkey grabbed "] the |result>, |op: grab-worked>, |op: grab-failed>)
+    op-if(has-prefix["monkey grabbed "] the |result>, |op: grab-worked>, |op: grab-failed>)
 
 grab-worked (*) #=>
     the |plan> .=> |grab(> _ the-grab |object> _ |)>
@@ -70,6 +98,13 @@ grab-worked (*) #=>
 grab-failed (*) #=>
     the |result>
 
+apply-grab |*> #=>
+    the-grab |object> => pick-elt drop (the |objects> -1 |monkey>)
+    the |result> => grab(the-grab |object>)
+    if( has-prefix["monkey grabbed "] the |result> ):
+        the |plan> .=> |grab(> _ the-grab |object> _ |)>
+    end:
+    the |result>
 
 
 the-list-of |operators> => |op: apply-go> + |op: apply-push> + |op: apply-climb-on> + |op: apply-grab>
@@ -90,17 +125,17 @@ find-plan |*> #=>
     the |operator> => pick-elt drop (the-list-of |operators> -1 the-list-of |used operators> -1 the-list-of |tried operators>)
     apply(the |operator>, |>)
     added-to-the |plan> => not is-equal(show-many the |plan>, the |plan length>)
-    if(added-to-the |plan>, |op: added-to-plan>, |op: did-not-add-to-plan>)
+    op-if(added-to-the |plan>, |op: added-to-plan>, |op: did-not-add-to-plan>)
 
 added-to-plan (*) #=>
     unlearn[the-list-of] |tried operators>
     the-list-of |used operators> +=> the |operator>
-    if(has-prefix["reached goal "] test-for-goal-state |>, |op: finished>, |op: not-finished>)
+    op-if(has-prefix["reached goal "] test-for-goal-state |>, |op: finished>, |op: not-finished>)
 
 did-not-add-to-plan (*) #=>
     the-list-of |tried operators> +=> the |operator>
     remaining-operator |count> => how-many drop (the-list-of |operators> -1 the-list-of |used operators> -1 the-list-of |tried operators>)
-    if(is-equal[0] remaining-operator |count>, |op: do-not-have-remaining-operators>, |op: have-remaining-operators>)
+    op-if(is-equal[0] remaining-operator |count>, |op: do-not-have-remaining-operators>, |op: have-remaining-operators>)
 
 do-not-have-remaining-operators (*) #=>
     print |here is the failed plan:>
@@ -123,7 +158,7 @@ not-finished (*) #=>
 
 
 find-plan-wrapper |*> #=>
-    if(is |finished>, |op: wrapper-finished>, |op: wrapper-not-finished>)
+    op-if(is |finished>, |op: wrapper-finished>, |op: wrapper-not-finished>)
 
 wrapper-finished (*) #=>
     |>
