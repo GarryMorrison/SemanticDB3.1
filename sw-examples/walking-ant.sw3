@@ -1,9 +1,10 @@
 -- learn and randomly walk a grid
--- keep a record of the pathway home, so we can walk directly towards home
+-- keep a record of the pathway home, so we can walk directly towards home (a kind of path integration)
 -- if find food return home, leaving a scent trail
 -- once home, follow scent trail back to food (approximately)
 -- if find food again, return home, adding to the scent trail
 -- when reach home, store the food, switch off scent trail, and start randomly walking again
+-- updated to the version 3.1.1 language
 
 
 -- define our ant symbol:
@@ -139,7 +140,7 @@ expand |op: SE> => -1 |op: N> + |op: E>
 
 -- invert the given direction:
 invert-direction |*> #=>
-    if(is-less-than[0] push-float |__self>, |op: negate>, |op: reverse-dir>) |__self>
+    op-if(is-less-than[0] push-float |__self>, |op: negate>, |op: reverse-dir>) |__self>
 
 
 
@@ -159,7 +160,7 @@ invert-direction |*> #=>
 
 -- if there is food at the current cell, and not already carry food, then apply |op: found-food>, else do nothing:
 if-find-food |*> #=>
-    if( and(is-greater-than[0] food current |cell>, is-equal[0] carry |food>) |>, |op: found-food>, |op: not-found-food>) |>
+    op-if( and(is-greater-than[0] food current |cell>, is-equal[0] carry |food>) |>, |op: found-food>, |op: not-found-food>) |>
 
 found-food |*> #=>
     food current |cell> => minus[1] food current |cell>
@@ -173,7 +174,7 @@ not-found-food |*> #=> |>
 -- the if-reach-home operator:
 -- if current cell is home cell then apply |op: reached-home>, else do nothing:
 if-reach-home |*> #=>
-    if( is-equal(current |cell>, home |cell>) |>, |op: reached-home>, |op: not-reached-home>) |>
+    op-if( is-equal(current |cell>, home |cell>) |>, |op: reached-home>, |op: not-reached-home>) |>
 
 
 -- drop and store any food you are carrying:
@@ -188,7 +189,7 @@ not-reached-home |*> #=> |>
 
 
 record-scent |*> #=>
-    if(lay |scent>, |op: apply-scent>, |op: nop>) |>
+    op-if(lay |scent>, |op: apply-scent>, |op: nop>) |>
 
 apply-scent |*> #=>
     value current |cell> => plus[1] value current |cell>
@@ -196,13 +197,13 @@ apply-scent |*> #=>
 
 
 if-find-scent-change-heading |*> #=>
-    if(is-greater-than[0] value |__self>, |op: found-scent>, |op: nop>) |>
+    op-if(is-greater-than[0] value |__self>, |op: found-scent>, |op: nop>) |>
 
 found-scent |*> #=>
     heading |ops> => random-if-zero reverse-dir return-path |home>
 
 random-if-zero (*) #=>
-    if(do-you-know sdrop |__self>, |op: id>, |op: pick-random-direction>) |__self>
+    op-if(do-you-know sdrop |__self>, |op: id>, |op: pick-random-direction>) |__self>
 
 pick-random-direction |*> #=> pick-elt list-of |directions>
 
@@ -236,7 +237,7 @@ random-walk |*> #=>
     try |direction> => clean weighted-pick-elt heading |ops>
     --
     -- if valid direction, step, else turn right:
-    if( do-you-know apply(try |direction>, |__self>) |>, |op: valid-step>, |op: not-valid-step>) |>
+    op-if( do-you-know apply(try |direction>, |__self>) |>, |op: valid-step>, |op: not-valid-step>) |>
 
 valid-step |*> #=>
     try |direction>
@@ -253,37 +254,37 @@ return-home |*> #=> clean weighted-pick-elt return-path |home>
 
 -- single map update:
 update |*> #=>
-    record-scent |>
-    take-a-step |>
-    dg |>
+    record-scent
+    take-a-step
+    dg
     |>
 
 -- walk max steps:
-walk |*> #=> sdrop update srange(|1>, max |steps>) |>
+walk |*> #=> update (|1> .. max |steps>)
 
 -- walk given steps:
-walk-steps |*> #=> sdrop update srange(|1>, |_self>) |>
+walk-steps |*> #=> update (|1> .. |_self>)
 
 
 print-usage |*> #=>
     print | >
     print |    Usage:>
     print |        make the ant walk max steps:>
-    print |        walk>
-    print | >
+    print |            walk>
+    print
     print |        make the ant walk the given number of steps:>
-    print |        walk-steps ket(500)>
-    print | >
+    print |            walk-steps ket(500)>
+    print
     print |        show all the available food:>
-    print |        show-food>
-    print | >
+    print |            show-food>
+    print
     print |        show all the stored food:>
-    print |        show-stored-food>
-    print | >
+    print |            show-stored-food>
+    print
     print |        display grid:>
-    print |        dg>
-    print | >
+    print |            dg>
+    print
 
-print-usage |>
+print-usage
 
 
