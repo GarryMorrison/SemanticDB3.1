@@ -1,5 +1,6 @@
 -- use smap and if-then machines to identify and predict next digits from an integer sequence fragment:
 -- see: 
+-- updated to the version 3.1.1 language
 
 
 -- min and max ngram lenghts for the prediction if-then machines:
@@ -15,11 +16,13 @@ max |fragment len> => |3>
 -- Fibonacci:
 fib |0> => |0>
 fib |1> => |1>
-fib |*> !=> arithmetic(fib minus[1] |_self>, |+>, fib minus[2] |_self>) |>
+-- fib |*> !=> arithmetic(fib minus[1] |_self>, |+>, fib minus[2] |_self>) |>
+fib |*> !=> fib minus[1] |_self> ++ fib minus[2] |_self>
 
 -- factorial:
 fact |0> => |1>
-fact |*> !=> arithmetic(|_self>, |*>, fact minus[1] |_self>) |>
+-- fact |*> !=> arithmetic(|_self>, |*>, fact minus[1] |_self>) |>
+fact |*> !=> |_self> ** fact minus[1] |_self>
 
 
 -- now learn our four sequences, counting, Fibonacci, factorial, primes:
@@ -38,17 +41,31 @@ is-integer |*> #=> is-subset(clean split |_self>) list-of |digits>
 
 
 -- define a digit encoder:
-digit-encoder |*> #=> if(is-digit |_self>, |op: Gaussian-0.6>, |op: identity>) |_self>
+-- digit-encoder |*> #=> op-if(is-digit |_self>, |op: Gaussian-0.6>, |op: identity>) |_self>
+--
+-- define an integer encoder:
+-- integer-encoder |*> #=> op-if(is-integer |_self>, |op: Gaussian-1>, |op: identity>) |_self>
+--
+-- define our helper operators:
+-- Gaussian-0.6 |*> #=> Gaussian[0.6] |_self>
+-- Gaussian-1 |*> #=> Gaussian[1] |_self>
+-- identity |*> #=> |_self>
+
+-- define a digit encoder:
+digit-encoder |*> #=>
+    if( is-digit |__self> ):
+        Gaussian[0.6] |__self>
+    else:
+        |__self>
+    end:
 
 -- define an integer encoder:
-integer-encoder |*> #=> if(is-integer |_self>, |op: Gaussian-1>, |op: identity>) |_self>
-
-
--- define our helper operators:
-Gaussian-0.6 |*> #=> Gaussian[0.6] |_self>
-Gaussian-1 |*> #=> Gaussian[1] |_self>
-identity |*> #=> |_self>
-
+integer-encoder |*> #=>
+    if( is-integer |__self> ):
+        Gaussian[1] |__self>
+    else:
+        |__self>
+    end:
 
 -- define the if-then machine create-rule for the id-sequence code:
 create-single-rule (*) #=>
@@ -136,9 +153,14 @@ do-you-know-prediction |*> #=> do-you-know predict-nodes |_self>
 
 
 predict-next |*> #=>
-    the |result> => |#EMPTY#>
+    unlearn[the] |result>
     the |result> => predict-nodes |__self>
-    print-result the |result>
+    -- print-result the |result>
+    if( do-you-know the |result> ):
+        print-next the |result>
+    else:
+        |Anomaly, no sequence detected ... >
+    end:
 
 print-result |#EMPTY#> => |Anomaly, no sequence detected ... >
 print-result |*> #=> print-next |_self>
@@ -170,9 +192,15 @@ fuzzy-predict-nodes |*> #=> drop-below[0.5] strict-similar-input[fuzzy-pattern] 
 do-you-know-fuzzy-prediction |*> #=> do-you-know fuzzy-predict-nodes |_self>
 
 fuzzy-predict-next |*> #=>
-    the |result> => |#EMPTY#>
+    unlearn[the] |result>
     the |result> => fuzzy-predict-nodes |__self>
-    print-result the |result>
+    -- print-result the |result>
+    if( do-you-know the |result> ):
+        print-next the |result>
+    else:
+        |Anomaly, no sequence detected ... >
+    end:
+
 
 
 print-usage |*> #=>
