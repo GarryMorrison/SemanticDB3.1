@@ -2,6 +2,8 @@
 -- In this version, we try to solve the problem a little smarter than brute force
 -- load prolog-monkey.sw3 before you load this file.
 
+-- updated to the version 3.1.1 language
+
 
 set-up-initial-state
 the |objects> => rel-kets[at]
@@ -50,14 +52,14 @@ comma-merge (*,*) #=> |__self1> _ |, > _ |__self2>
 
 get-go-details |*> #=>
     unlearn[move] |to>
-    move |to> => pick-elt drop (the |locations> -1 at |monkey> -1 attempted-go-move current |depth>)
+    move |to> => pick-elt drop (the |locations> - at |monkey> - attempted-go-move current |depth>)
     attempted-go-move current |depth> +=> move |to>
     the |details> => |op: go> . |> . at |monkey> . move |to>
     value-if( do-you-know move |to>, the |details>, |> )
 
 get-push-details |*> #=>
     unlearn[the] (|choices> + |choice>)
-    the |choices> => drop for( |op: comma-merge>, the |objects> -1 |monkey>, the |locations> -1 at |monkey>)
+    the |choices> => drop op-for( |op: comma-merge>, the |objects> -1 |monkey>, the |locations> -1 at |monkey>)
     the |choice> => pick-elt drop (the |choices> -1 attempted-push-choice current |depth>)
     the |object> => sselect[1,1] ssplit[", "] the |choice>
     move |to> => sselect[2,2] ssplit[", "] the |choice>
@@ -80,6 +82,51 @@ get-grab-details |*> #=>
     value-if( do-you-know the-grab |object>, the |details>, |> )
 
 
+solve-v1 |*> #=>
+    reset
+    try-operator-v1
+
+try-operator-v1 (*) #=>
+    unlearn[the-solution] (|operator> + |details> + |result>)
+    the-solution |operator> => pick-elt drop (the-list-of |operators> -1 the-used |operators> -1 the-tried-operators current |depth>)
+    the-solution |details> => apply(the-solution |operator>, |>)
+    the-solution |result> => compile the-solution |details>
+    op-if( or( not do-you-know the-solution |details>, has-prefix["monkey failed to "] the-solution |result>), |op: monkey-failed-v1>, |op: monkey-succeeded-v1>)
+
+monkey-failed-v1 (*) #=>
+    print |monkey failed at something>
+    the-tried-operators current |depth> +=> value-if( do-you-know the-solution |details>, |>, the-solution |operator>)
+    op-if( do-you-know the-solution |operator>, |op: try-operator-v1>, |op: no-operators-left-v1>)
+    |>
+
+-- Currently if we run out of operators we reset back to the starting state
+-- It would be nice if we could instead back-track, instead of a full reset.
+no-operators-left-v1 (*) #=>
+    print |no operators left, resetting ... >
+    reset
+    try-operator-v1
+    |>
+
+monkey-succeeded-v1 (*) #=>
+    print |monkey succeeded at something>
+    the |plan> .=> display-details the-solution |details>
+    the-used |operators> +=> the-solution |operator>
+    current |depth> => plus[1] current |depth>
+    the-current |state> => test-for-goal-state |>
+    print (|The current state:> __ the-current |state> . | >)
+    op-if( the-current |state> == |reached goal state!>, |op: finished-v1>, |op: try-operator-v1>)
+
+finished-v1 (*) #=>
+    print (|The plan:> __ smerge[" "] the |plan>)
+    |>
+
+
+-- now solve it:
+-- solve-v1
+
+------------------------------------------------------------------------------
+-- the version 3.1.1 solve code:
+
 solve |*> #=>
     reset
     try-operator
@@ -89,35 +136,31 @@ try-operator (*) #=>
     the-solution |operator> => pick-elt drop (the-list-of |operators> -1 the-used |operators> -1 the-tried-operators current |depth>)
     the-solution |details> => apply(the-solution |operator>, |>)
     the-solution |result> => compile the-solution |details>
-    if( or( not do-you-know the-solution |details>, has-prefix["monkey failed to "] the-solution |result>), |op: monkey-failed>, |op: monkey-succeeded>)
-
-monkey-failed (*) #=>
-    print |monkey failed at something>
-    the-tried-operators current |depth> +=> value-if( do-you-know the-solution |details>, |>, the-solution |operator>)
-    if( do-you-know the-solution |operator>, |op: try-operator>, |op: no-operators-left>)
+    if( or( not do-you-know the-solution |details>, has-prefix["monkey failed to "] the-solution |result> )):
+        print |monkey failed at something>
+        the-tried-operators current |depth> +=> value-if( do-you-know the-solution |details>, |>, the-solution |operator>)
+        if( do-you-know the-solution |operator> ):
+            try-operator
+        else:
+            print |no operators left, resetting ... >
+            reset
+            try-operator
+        end:
+    else:
+        print |monkey succeeded at something>
+        the |plan> .=> display-details the-solution |details>
+        the-used |operators> +=> the-solution |operator>
+        current |depth> => plus[1] current |depth>
+        the-current |state> => test-for-goal-state |>
+        print (|The current state:> __ the-current |state> . | >)
+        if( the-current |state> == |reached goal state!> ):
+            print (|The plan:> __ smerge[" "] the |plan>)
+        else:
+            try-operator
+        end:
+    end:
     |>
 
--- Currently if we run out of operators we reset back to the starting state
--- It would be nice if we could instead back-track, instead of a full reset.
-no-operators-left (*) #=>
-    print |no operators left, resetting ... >
-    reset
-    try-operator
-    |>
-
-monkey-succeeded (*) #=>
-    print |monkey succeeded at something>
-    the |plan> .=> display-details the-solution |details>
-    the-used |operators> +=> the-solution |operator>
-    current |depth> => plus[1] current |depth>
-    the-current |state> => test-for-goal-state |>
-    print (|The current state:> __ the-current |state> . | >)
-    if( ( the-current |state> == |reached goal state!> ), |op: finished>, |op: try-operator>)
-
-finished (*) #=>
-    print (|The plan:> __ smerge[" "] the |plan>)
-    |>
-
-
+-- now solve it:
 solve
 
