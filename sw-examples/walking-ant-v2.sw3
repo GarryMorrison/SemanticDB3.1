@@ -4,7 +4,8 @@
 -- once home, follow scent trail back to food (approximately)
 -- if find food again, return home, adding to the scent trail
 -- when reach home, store the food, switch off scent trail, and start randomly walking again
--- minimally updated to the version 3.1.1 language
+-- fully updated to the version 3.1.1 language
+-- NB: there is a subtle bug somewhere. In one test run, the ant stopped walking. But I haven't seen the bug since.
 
 
 -- define our ant symbol:
@@ -140,72 +141,55 @@ expand |op: SE> => -1 |op: N> + |op: E>
 
 -- invert the given direction:
 invert-direction |*> #=>
-    op-if(is-less-than[0] push-float |__self>, |op: negate>, |op: reverse-dir>) |__self>
+    if( is-less-than[0] push-float |__self> ):
+        -1 |__self>
+    else:
+        reverse-dir |__self>
+    end:
 
 
 
--- not sure we use carry-the |food> and drop-the |food> anywhere
--- So potentially delete them
--- carry the food operator:
--- carry-the |food> #=>
---     food current |cell> => minus[1] food current |cell>
---     carry |food> => plus[1] carry |food>
-
-
--- drop the food operator:
--- drop-the |food> #=>
---     stored-food current |cell> => arithmetic(stored-food |_self>, |+>, carry |food>) |>
---     carry |food> => |0>
-
-
--- if there is food at the current cell, and not already carry food, then apply |op: found-food>, else do nothing:
+-- if there is food at the current cell, and not already carry food, then apply found-food branch, else do nothing:
 if-find-food |*> #=>
-    op-if( and(is-greater-than[0] food current |cell>, is-equal[0] carry |food>) |>, |op: found-food>, |op: not-found-food>) |>
-
-found-food |*> #=>
-    food current |cell> => minus[1] food current |cell>
-    carry |food> => plus[1] carry |food>
-    lay |scent> => |yes>
-    type |walk> => |op: return-home>
-
-not-found-food |*> #=> |>
+    if( and(is-greater-than[0] food current |cell>, is-equal[0] carry |food>) ):
+        food current |cell> => minus[1] food current |cell>
+        carry |food> => plus[1] carry |food>
+        lay |scent> => |yes>
+        type |walk> => |op: return-home>
+    end:
+    |>
 
 
 -- the if-reach-home operator:
--- if current cell is home cell then apply |op: reached-home>, else do nothing:
+-- if current cell is home cell then apply reached-home branch, else do nothing:
 if-reach-home |*> #=>
-    op-if( is-equal(current |cell>, home |cell>) |>, |op: reached-home>, |op: not-reached-home>) |>
+    if( current |cell> == home |cell> ):
+        stored-food current |cell> => stored-food |_self> ++ carry |food>
+        carry |food> => |0>
+        lay |scent> => |no>
+        type |walk> => |op: random-walk>
+        path |home> => |home>
+    end:
 
-
--- drop and store any food you are carrying:
-reached-home |*> #=>
-    stored-food current |cell> => arithmetic(stored-food |_self>, |+>, carry |food>) |>
-    carry |food> => |0>
-    lay |scent> => |no>
-    type |walk> => |op: random-walk>
-    path |home> => |home>
-
-not-reached-home |*> #=> |>
 
 
 record-scent |*> #=>
-    op-if(lay |scent>, |op: apply-scent>, |op: nop>) |>
-
-apply-scent |*> #=>
-    value current |cell> => plus[1] value current |cell>
-
+    if( lay |scent> ):
+        value current |cell> => plus[1] value current |cell>
+    end:
 
 
 if-find-scent-change-heading |*> #=>
-    op-if(is-greater-than[0] value |__self>, |op: found-scent>, |op: nop>) |>
-
-found-scent |*> #=>
-    heading |ops> => random-if-zero reverse-dir return-path |home>
+    if( value |__self> > |0> ):
+        heading |ops> => random-if-zero reverse-dir return-path |home>
+    end:
 
 random-if-zero (*) #=>
-    op-if(do-you-know sdrop |__self>, |op: id>, |op: pick-random-direction>) |__self>
-
-pick-random-direction |*> #=> pick-elt list-of |directions>
+    if( do-you-know sdrop |__self> ):
+        |__self>
+    else:
+        pick-elt list-of |directions>
+    end:
 
 
 
@@ -217,12 +201,12 @@ switch-on-return |*> #=>
 
 
 take-a-step |*> #=>
-    current |direction> => apply( type |walk>, current |cell>) |>
+    current |direction> => apply( type |walk>, current |cell>)
     path |home> +=> current |direction>
-    current |cell> => apply( current |direction>, current |cell>) |>
+    current |cell> => apply( current |direction>, current |cell>)
     location |ant> => current |cell>
-    if-find-food |>
-    if-reach-home |>
+    if-find-food
+    if-reach-home
 
 
 -- random-walk input is a grid location:
@@ -237,14 +221,12 @@ random-walk |*> #=>
     try |direction> => clean weighted-pick-elt heading |ops>
     --
     -- if valid direction, step, else turn right:
-    op-if( do-you-know apply(try |direction>, |__self>) |>, |op: valid-step>, |op: not-valid-step>) |>
-
-valid-step |*> #=>
-    try |direction>
-
-not-valid-step |*> #=>
-    heading |ops> => pick-elt ( turn-right + turn-right^2 ) heading |ops>
-    |op: id>
+    if( do-you-know apply(try |direction>, |__self>) ):
+        try |direction>
+    else:
+        heading |ops> => pick-elt ( turn-right + turn-right^2 ) heading |ops>
+        |op: id>
+    end:
 
 
 -- return-home input is a grid location (which we ignore, instead making use of return-path |home>):
