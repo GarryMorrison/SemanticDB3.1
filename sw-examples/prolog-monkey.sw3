@@ -1,5 +1,7 @@
 |context> => |prolog monkey bananas problem>
 url |the context> => |url: http://www.inf.ed.ac.uk/teaching/courses/aipp/lecture_slides/15_Planning.pdf>
+-- updated to the version 3.1.1 language
+
 
 -- A transcript making use of the below code:
 -- sa: set-up-initial-state
@@ -93,12 +95,12 @@ print-current-state |*> #=>
 
 
 -- go( current-location, next-location)
-go (*,*) #=>
+go-v1 (*,*) #=>
     unlearn[precondition] |count>
     precondition |count> +=> is-equal(at |monkey>, |__self1>)
     precondition |count> +=> is-equal(on |monkey>, |floor>)
     next |location> => |__self2>
-    if(is-equal(precondition |count>, 2|yes>), |op: go-action-A>, |op: go-action-B>)
+    op-if(is-equal(precondition |count>, 2|yes>), |op: go-action-A>, |op: go-action-B>)
 
 go-action-A (*) #=>
     at |monkey> => next |location>
@@ -108,9 +110,22 @@ go-action-B (*) #=>
     |monkey failed to move to> __ next |location>
 
 
+-- go( current-location, next-location)
+go (*,*) #=>
+    unlearn[precondition] |count>
+    precondition |count> +=> at |monkey> == |__self1>
+    precondition |count> +=> on |monkey> == |floor>
+    next |location> => |__self2>
+    if( precondition |count> == 2|yes> ):
+        at |monkey> => next |location>
+        |monkey moved to> __ next |location>
+    else:
+        |monkey failed to move to> __ next |location>
+    end:
+
 
 -- push( object, current-location, next-location)
-push (*,*,*) #=>
+push-v1 (*,*,*) #=>
     unlearn[precondition] |count>
     precondition |count> +=> is-equal(at |monkey>, |__self2>)
     precondition |count> +=> is-equal(at |__self1>, |__self2>)
@@ -118,7 +133,7 @@ push (*,*,*) #=>
     precondition |count> +=> is-equal(on |__self1>, |floor>)
     next |location> => |__self3>
     the |object> => |__self1>
-    if(is-equal(precondition |count>, 4|yes>), |op: push-action-A>, |op: push-action-B>)
+    op-if(is-equal(precondition |count>, 4|yes>), |op: push-action-A>, |op: push-action-B>)
 
 push-action-A (*) #=>
     at |monkey> => next |location>
@@ -129,15 +144,33 @@ push-action-B (*) #=>
     |monkey failed to push> __ the |object> __ |to> __ next |location>
 
 
+-- push( object, current-location, next-location)
+push (*,*,*) #=>
+    the |object> => |__self1>
+    current |location> => |__self2>
+    next |location> => |__self3>
+    unlearn[precondition] |count>
+    precondition |count> +=> at |monkey> == current |location>
+    precondition |count> +=> at the |object> == current |location>
+    precondition |count> +=> on |monkey> == |floor>
+    precondition |count> +=> on the |object> == |floor>
+    if( precondition |count> == 4|yes> ):
+        at |monkey> => next |location>
+        at the |object> => next |location>
+        |monkey pushed> __ the |object> __ |to> __ next |location>
+    else:
+        |monkey failed to push> __ the |object> __ |to> __ next |location>
+    end:
+
 
 -- climb-on( object )
-climb-on (*) #=>
+climb-on-v1 (*) #=>
     unlearn[precondition] |count>
     precondition |count> +=> is-equal(at |monkey>, at |__self1>)
     precondition |count> +=> is-equal(on |monkey>, |floor>)
     precondition |count> +=> is-equal(on |__self1>, |floor>)
     the |object> => |__self1>
-    if(is-equal(precondition |count>, 3|yes>), |op: climb-on-action-A>, |op: climb-on-action-B>)
+    op-if(is-equal(precondition |count>, 3|yes>), |op: climb-on-action-A>, |op: climb-on-action-B>)
 
 climb-on-action-A (*) #=>
     on |monkey> => the |object>
@@ -147,15 +180,30 @@ climb-on-action-B (*) #=>
     |monkey failed to climb on> __ the |object>
 
 
+-- climb-on( object )
+climb-on (*) #=>
+    the |object> => |__self1>
+    unlearn[precondition] |count>
+    precondition |count> +=> at |monkey> == at the |object>
+    precondition |count> +=> on |monkey> == |floor>
+    precondition |count> +=> on the |object> == |floor>
+    if( precondition |count> == 3|yes> ):
+        on |monkey> => the |object>
+        |monkey climbed on> __ the |object>
+    else:
+        |monkey failed to climb on> __ the |object>
+    end:
+
+
 
 -- grab( object )
-grab (*) #=>
+grab-v1 (*) #=>
     unlearn[precondition] |count>
     precondition |count> +=> is-equal(on |monkey>, |box>)
     precondition |count> +=> is-equal(at |__self1>, at |box>)
     precondition |count> +=> is-equal(status |__self1>, |hanging>)
     the |object> => |__self1>
-    if(is-equal(precondition |count>, 3|yes>), |op: grab-action-A>, |op: grab-action-B>)
+    op-if(is-equal(precondition |count>, 3|yes>), |op: grab-action-A>, |op: grab-action-B>)
 
 grab-action-A (*) #=>
     status the |object> => |grabbed>
@@ -164,5 +212,19 @@ grab-action-A (*) #=>
 grab-action-B (*) #=>
     |monkey failed to grab> __ the |object>
 
+
+-- grab( object )
+grab (*) #=>
+    the |object> => |__self1>
+    unlearn[precondition] |count>
+    precondition |count> +=> on |monkey> == |box>
+    precondition |count> +=> at the |object> == at |box>
+    precondition |count> +=> status the |object> == |hanging>
+    if( precondition |count> == 3|yes> ):
+        status the |object> => |grabbed>
+        |monkey grabbed> __ the |object>
+    else:
+        |monkey failed to grab> __ the |object>
+    end:
 
 
