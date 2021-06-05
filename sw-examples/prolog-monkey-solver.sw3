@@ -120,62 +120,122 @@ reset |*> #=>
     set-up-initial-state
 
 
-find-plan |*> #=>
+find-plan-v1 |*> #=>
     the |plan length> => show-many the |plan>
     the |operator> => pick-elt drop (the-list-of |operators> -1 the-list-of |used operators> -1 the-list-of |tried operators>)
     apply(the |operator>, |>)
     added-to-the |plan> => not is-equal(show-many the |plan>, the |plan length>)
-    op-if(added-to-the |plan>, |op: added-to-plan>, |op: did-not-add-to-plan>)
+    op-if(added-to-the |plan>, |op: added-to-plan-v1>, |op: did-not-add-to-plan-v1>)
 
-added-to-plan (*) #=>
+added-to-plan-v1 (*) #=>
     unlearn[the-list-of] |tried operators>
     the-list-of |used operators> +=> the |operator>
-    op-if(has-prefix["reached goal "] test-for-goal-state |>, |op: finished>, |op: not-finished>)
+    op-if(has-prefix["reached goal "] test-for-goal-state |>, |op: finished-v1>, |op: not-finished-v1>)
 
-did-not-add-to-plan (*) #=>
+did-not-add-to-plan-v1 (*) #=>
     the-list-of |tried operators> +=> the |operator>
     remaining-operator |count> => how-many drop (the-list-of |operators> -1 the-list-of |used operators> -1 the-list-of |tried operators>)
-    op-if(is-equal[0] remaining-operator |count>, |op: do-not-have-remaining-operators>, |op: have-remaining-operators>)
+    op-if(is-equal[0] remaining-operator |count>, |op: do-not-have-remaining-operators-v1>, |op: have-remaining-operators-v1>)
 
-do-not-have-remaining-operators (*) #=>
+do-not-have-remaining-operators-v1 (*) #=>
     print |here is the failed plan:>
     print smerge[" "] the |plan>
     print
     print |here are the tried operators:>
     print smerge[", "] sp2seq extract-value the-list-of |tried operators>
 
-have-remaining-operators (*) #=>
-    find-plan
+have-remaining-operators-v1 (*) #=>
+    find-plan-v1
 
-finished (*) #=>
+finished-v1 (*) #=>
     print |here is the plan:>
     print smerge[" "] the |plan>
     the |final plan> => the |plan>
     is |finished> => |yes>
 
-not-finished (*) #=>
-    find-plan
+not-finished-v1 (*) #=>
+    find-plan-v1
 
 
-find-plan-wrapper |*> #=>
-    op-if(is |finished>, |op: wrapper-finished>, |op: wrapper-not-finished>)
+find-plan-wrapper-v1 |*> #=>
+    op-if(is |finished>, |op: wrapper-finished-v1>, |op: wrapper-not-finished-v1>)
 
-wrapper-finished (*) #=>
+wrapper-finished-v1 (*) #=>
     |>
 
-wrapper-not-finished (*) #=>
+wrapper-not-finished-v1 (*) #=>
     reset
-    find-plan
+    find-plan-v1
     print |------------------------>
 
 
 max |attempts> => |100>
 
-find-final-plan |*> #=>
+find-final-plan-v1 |*> #=>
     is |finished> => |no>
-    find-plan-wrapper seq2sp srange(|1>, max |attempts>)
+    find-plan-wrapper-v1 range(|1>, max |attempts>)
     print
     print |Here is our plan:>
     smerge[" "] the |final plan>
+
+
+-- now invoke it:
+-- find-final-plan-v1
+
+---------------------------------------------------------------------------------
+-- the version 3.1.1 find-plan code:
+
+not |yes> => |no>
+not |no> => |yes>
+
+
+find-final-plan |*> #=>
+    is |finished> => |no>
+    find-plan-wrapper (|1> .. max |attempts>)
+    print
+    print |Here is our plan:>
+    smerge[" "] the |final plan>
+
+find-plan-wrapper |*> #=>
+    if( not is |finished> ):
+        reset
+        find-plan
+        print |------------------------>
+    end:
+    |>
+
+find-plan |*> #=>
+    the |plan length> => show-many the |plan>
+    the |operator> => pick-elt drop (the-list-of |operators> -1 the-list-of |used operators> -1 the-list-of |tried operators>)
+    apply(the |operator>, |>)
+    added-to-the |plan> => show-many the |plan> != the |plan length>
+    if( added-to-the |plan> ):
+        unlearn[the-list-of] |tried operators>
+        the-list-of |used operators> +=> the |operator>
+        if( has-prefix["reached goal "] test-for-goal-state |> ):
+            print |here is the plan:>
+            print smerge[" "] the |plan>
+            the |final plan> => the |plan>
+            is |finished> => |yes>
+        else:
+            find-plan
+        end:
+    else:
+        the-list-of |tried operators> +=> the |operator>
+        remaining-operator |count> => how-many drop (the-list-of |operators> -1 the-list-of |used operators> -1 the-list-of |tried operators>)
+        if( is-equal[0] remaining-operator |count> ):
+            print |here is the failed plan:>
+            print smerge[" "] the |plan>
+            print
+            print |here are the tried operators:>
+            print smerge[", "] sp2seq extract-value the-list-of |tried operators>
+        else:
+            find-plan
+        end:
+    end:
+
+
+-- now invoke it:
+find-final-plan
 
 
