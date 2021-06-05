@@ -6,8 +6,9 @@
 -- find-final-plan
 -- NB: it only tries for 100 times, so it may not always come to a satisfactory plan.
 -- This can be increased by changing the value of: max |attempts>
--- updated to the version 3.1.1 language
 
+-- updated to the version 3.1.1 language
+-- And now it uses a while loop, so will keep trying until it does find a satisfactory plan.
 
 
 set-up-initial-state
@@ -77,6 +78,7 @@ climb-on-worked (*) #=>
 climb-on-failed (*) #=>
     the |result>
 
+
 apply-climb-on |*> #=>
     climb |object> => pick-elt drop (the |objects> -1 |monkey>)
     the |result> => climb-on(climb |object>)
@@ -97,6 +99,7 @@ grab-worked (*) #=>
 
 grab-failed (*) #=>
     the |result>
+
 
 apply-grab |*> #=>
     the-grab |object> => pick-elt drop (the |objects> -1 |monkey>)
@@ -191,28 +194,24 @@ not |no> => |yes>
 
 find-final-plan |*> #=>
     is |finished> => |no>
-    find-plan-wrapper (|1> .. max |attempts>)
-    print
-    print |Here is our plan:>
-    smerge[" "] the |final plan>
-
-find-plan-wrapper |*> #=>
-    if( not is |finished> ):
+    while( not is |finished> ):
         reset
         find-plan
         print |------------------------>
     end:
-    |>
+    print
+    print |Here is our plan:>
+    smerge[" "] the |final plan>
+
 
 find-plan |*> #=>
     the |plan length> => show-many the |plan>
     the |operator> => pick-elt drop (the-list-of |operators> -1 the-list-of |used operators> -1 the-list-of |tried operators>)
     apply(the |operator>, |>)
-    added-to-the |plan> => show-many the |plan> != the |plan length>
-    if( added-to-the |plan> ):
+    if( show-many the |plan> > the |plan length> ):
         unlearn[the-list-of] |tried operators>
         the-list-of |used operators> +=> the |operator>
-        if( has-prefix["reached goal "] test-for-goal-state |> ):
+        if( has-prefix["reached goal "] test-for-goal-state ):
             print |here is the plan:>
             print smerge[" "] the |plan>
             the |final plan> => the |plan>
