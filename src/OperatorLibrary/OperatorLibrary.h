@@ -90,5 +90,6 @@ Sequence op_compound_union(const Sequence &seq, ContextList &context, const std:
 Sequence op_compound_sum(const Sequence &seq, ContextList &context, const std::vector<std::shared_ptr<CompoundConstant> > &parameters);
 Sequence op_spike_merge(const Sequence &seq, const std::vector<std::shared_ptr<CompoundConstant> > &parameters);
 Sequence op_random(const Sequence &seq, const std::vector<std::shared_ptr<CompoundConstant> > &parameters);
+Sequence op_sleep_ms(const Sequence &seq, const std::vector<std::shared_ptr<CompoundConstant> > &parameters);
 
 #endif //SDB3_1_OPERATORLIBRARY_H

@@ -10,6 +10,7 @@
 #include <algorithm>
 #include <random>
 #include <chrono>
+#include <thread>
 #include "OperatorLibrary.h"
 #include "../CompoundConstant/ConstantString.h"
 #include "../Function/misc.h"
@@ -2027,4 +2028,11 @@ Sequence op_random(const Sequence &seq, const std::vector<std::shared_ptr<Compou
         result.append(tmp_sp);
     }
     return result;
+}
+
+Sequence op_sleep_ms(const Sequence &seq, const std::vector<std::shared_ptr<CompoundConstant> > &parameters) {
+    if (parameters.empty()) { return seq; }
+    int sleep_for = parameters[0]->get_int();
+    std::this_thread::sleep_for(std::chrono::milliseconds(sleep_for));
+    return seq;
 }

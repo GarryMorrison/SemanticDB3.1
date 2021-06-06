@@ -2455,6 +2455,18 @@ OperatorUsageMap::OperatorUsageMap() {
             "    see also:\n"
             "        arithmetic, range, if, if-else, for, sfor\n";
 
+    operator_usage_map.map["sleep"] =
+            "\nsleep:\n"
+            "    description:\n"
+            "        sleep[t] seq\n"
+            "        sleep t milliseconds, then return seq\n"
+            "        useful for the rare case your code is too fast\n"
+            "        In particular, it is useful in walking-ant-v2.sw3\n"
+            "        where it is useful to slow down the ant so you can actually see his walking\n"
+            "        Note, t is the minimum sleep time, depending on what your code is doing, it could take longer\n\n"
+            "    examples:\n\n"
+            "    see also:\n"
+            "        walking-ant-v2.sw3\n";
 }
 
 std::string OperatorUsageMap::get_usage(const std::string &s) const {
