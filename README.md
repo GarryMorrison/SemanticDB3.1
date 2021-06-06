@@ -1,4 +1,4 @@
-# Semantic DB 3.1
+# Semantic DB 3.1.1
 
 This project is a C++ rewrite of the original python [Semantic DB](https://github.com/GarryMorrison/Semantic-DB). It largely works now, but we are still in the debug stage, and as such, it still contains bugs. But hopefully, not too many of them.
 
@@ -130,13 +130,13 @@ Very similar to stored-learn-rule but with one big difference. Once the right ha
 ```
 Fib |0> => |0>
 Fib |1> => |1>
-Fib |*> !=> arithmetic(Fib minus[1] |_self>, |+>, Fib minus[2] |_self>) |>
+Fib |*> !=> Fib minus[1] |_self> ++ Fib minus[2] |_self>
 ```
 where after we invoke `Fib |10>` we now know:
 ```
 Fib |0> => |0>
 Fib |1> => |1>
-Fib |*> !=>  arithmetic( Fib minus[1]|_self>, |+>, Fib minus[2]|_self> ) |>
+Fib |*> !=> Fib minus[1]|_self> ++ Fib minus[2]|_self>
 Fib |2> => |1>
 Fib |3> => |2>
 Fib |4> => |3>
@@ -290,6 +290,8 @@ Once the main project is compiled (hopefully it is not too difficult to do so), 
 
 ---
 
+Brief [usage information](http://semantic-db.org/docs/usage3/index.html) for our operators
+
 contact: garry -at- semantic-db.org
 
-Last updated: 7th December 2020
+Last updated: 6th June 2021
