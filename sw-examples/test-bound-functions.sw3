@@ -1,8 +1,9 @@
 -- test code for our new bound functions:
 -- though I think they are slower than I would like!
 
--- define one:
+-- define a bound function:
 fn {the|subject>, the |object>} #=>
+    print input |seq>
     print the |subject>
     print the |object>
 
@@ -11,7 +12,7 @@ fn {the|subject>, the |object>} #=>
 fn(|alpha>, |beta>)
 
 
--- define a single line function:
+-- define a single line bound function:
 bah {the|next subject>} #=> print the |next subject>
 
 -- now invoke it:
@@ -21,4 +22,12 @@ bah(|gamma>)
 -- invoke it again, this time with an explicit input sequence:
 fn(|one>, |two>) ssplit[" "] |some input sequence>
 
+
+-- the previous notation:
+star-bah (*) #=> print |__self1>
+
+star-fn (*,*) #=>
+    print|__self0>
+    print|__self1>
+    print|__self2>
 
