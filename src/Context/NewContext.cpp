@@ -249,7 +249,7 @@ void NewContext::add_learn(const std::string& op, const std::string& label, cons
 
 void NewContext::seq_learn(const ulong op_idx, const ulong label_idx, std::shared_ptr<BaseSequence> bSeq) {
     if (op_idx == ket_map.get_idx("supported-ops")) { return; }  // maybe hard wire in "supported-ops" as ket_map idx = 1?
-    if (bSeq->size() == 0) { return; }  // Maybe we don't want this here for sequences?
+    // if (bSeq->size() == 0) { return; }  // Maybe we don't want this here for sequences?
 
     Frame frame;
     if (rules_dict.find(label_idx) == rules_dict.end()) {
