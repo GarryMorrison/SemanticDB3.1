@@ -9,3 +9,11 @@ fn {the|subject>, the |object>} #=>
 -- invoke it:
 fn(|alpha>, |beta>)
 
+
+-- define a single line function:
+bah {the|next subject>} #=> print the |next subject>
+
+-- now invoke it:
+bah(|gamma>)
+
+
