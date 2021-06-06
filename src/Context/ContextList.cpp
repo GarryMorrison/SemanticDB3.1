@@ -394,6 +394,18 @@ void ContextList::bound_fn_learn(ulong op_idx, std::vector<ulong> &op_ket_idx_ve
     return data[index].bound_fn_learn(op_idx, op_ket_idx_vec, bSeq);
 }
 
+std::vector<ulong> ContextList::bound_fn_params_recall(const ulong op_idx, const int param_size) {
+    return data[index].bound_fn_params_recall(op_idx, param_size);
+}
+
+std::shared_ptr<BaseSequence> ContextList::bound_fn_body_recall(const ulong op_idx, const int param_size) {
+    return data[index].bound_fn_body_recall(op_idx, param_size);
+}
+
+unsigned int ContextList::bound_fn_recall_type(const ulong op_idx, const int param_size) {
+    return data[index].bound_fn_recall_type(op_idx, param_size);
+}
+
 void ContextList::print_multiverse(bool clean, std::ostream& out) const {
     for (const auto &context: data) {
         context.print_universe(clean, out);  // Maybe loop over index instead?

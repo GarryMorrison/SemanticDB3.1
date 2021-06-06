@@ -505,20 +505,27 @@ void NewContext::bound_fn_learn(ulong op_idx, std::vector<ulong> &op_ket_idx_vec
     bound_fn_rules_dict[{op_idx, vec_size}].learn(op_ket_idx_vec, bSeq);
 }
 
-/*  // Not yet sure how to implement this!
-std::shared_ptr<BaseSequence> NewContext::bound_fn_recall(const ulong op_idx, const int param_size) {
-    // test it is in the dict first. If not, return std::make_shared<Sequence>();
-    std::vector<ulong> params = bound_fn_rules_dict[{op_idx, param_size}].get_params();
-    std::shared_ptr<BaseSequence> bSeq = bound_fn_rules_dict[{op_idx, param_size}].get_body();
-    for (unsigned int i = 0; i < params.size(); i += 2) {
-        ulong var_op_idx = params[i];
-        ulong ket_op_idx = params[i + 1];
-        // unlearn first.
-
+std::vector<ulong> NewContext::bound_fn_params_recall(const ulong op_idx, const int param_size) {
+    std::vector<ulong> result;
+    if (bound_fn_rules_dict.find({op_idx, param_size}) == bound_fn_rules_dict.end()) {
+        return result;
     }
-    return bSeq;
+    return bound_fn_rules_dict[{op_idx, param_size}].get_params();
 }
-*/
+
+std::shared_ptr<BaseSequence> NewContext::bound_fn_body_recall(const ulong op_idx, const int param_size) {
+    if (bound_fn_rules_dict.find({op_idx, param_size}) == bound_fn_rules_dict.end()) {
+        return std::make_shared<Sequence>();
+    }
+    return bound_fn_rules_dict[{op_idx, param_size}].get_body();
+}
+
+unsigned int NewContext::bound_fn_recall_type(const ulong op_idx, const int param_size) {
+    if (bound_fn_rules_dict.find({op_idx, param_size}) == bound_fn_rules_dict.end()) {
+        return RULEUNDEFINED;
+    }
+    return RULESTORED;
+}
 
 void NewContext::print_universe(bool clean, std::ostream& out) const {
     std::string s, op, label;

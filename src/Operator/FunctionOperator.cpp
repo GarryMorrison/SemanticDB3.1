@@ -117,6 +117,19 @@ Sequence FunctionOperator::Compile(ContextList& context, const Sequence& seq) co
             break;
         }
     }
+    if (context.bound_fn_recall_type(idx, seq_vec.size()) == RULESTORED) {
+        // std::cout << "found a bound function, size: " << seq_vec.size() << "\n";
+        std::vector<ulong> params = context.bound_fn_params_recall(idx, seq_vec.size());
+        for (unsigned int i = 0; i < params.size(); i += 2) {
+            ulong op_idx = params[i];
+            ulong ket_idx = params[i + 1];
+            std::shared_ptr<BaseSequence> bSeq = std::make_shared<Sequence>(args[(i/2) + 1]);
+            context.unlearn(op_idx, ket_idx);           // A little bit expensive, but I think we need it if |> is fed as a parameter to our functions.
+            context.learn(op_idx, ket_idx, bSeq);  // In which case, the learn() will be a no-op, meaning previous values will be used. Which we don't want!
+        }
+        auto rule = context.bound_fn_body_recall(idx, seq_vec.size());
+        return rule->Compile(context, empty_ket, args);
+    }
     return Sequence();
 }
 
@@ -178,6 +191,19 @@ Sequence FunctionOperator::Compile(ContextList &context, const Sequence &seq, co
             }
             break;
         }
+    }
+    if (context.bound_fn_recall_type(idx, seq_vec.size()) == RULESTORED) {
+        // std::cout << "found a bound function, size: " << seq_vec.size() << "\n";
+        std::vector<ulong> params = context.bound_fn_params_recall(idx, seq_vec.size());
+        for (unsigned int i = 0; i < params.size(); i += 2) {
+            ulong op_idx = params[i];
+            ulong ket_idx = params[i + 1];
+            std::shared_ptr<BaseSequence> bSeq = std::make_shared<Sequence>(args[(i/2) + 1]);
+            context.unlearn(op_idx, ket_idx);           // A little bit expensive, but I think we need it if |> is fed as a parameter to our functions.
+            context.learn(op_idx, ket_idx, bSeq);  // In which case, the learn() will be a no-op, meaning previous values will be used. Which we don't want!
+        }
+        auto rule = context.bound_fn_body_recall(idx, seq_vec.size());
+        return rule->Compile(context, label_ket, args);
     }
     return Sequence();
 }
@@ -242,6 +268,19 @@ Sequence FunctionOperator::Compile(ContextList &context, const Sequence &seq, co
             break;
         }
     }
+    if (context.bound_fn_recall_type(idx, seq_vec.size()) == RULESTORED) {
+        // std::cout << "found a bound function, size: " << seq_vec.size() << "\n";
+        std::vector<ulong> params = context.bound_fn_params_recall(idx, seq_vec.size());
+        for (unsigned int i = 0; i < params.size(); i += 2) {
+            ulong op_idx = params[i];
+            ulong ket_idx = params[i + 1];
+            std::shared_ptr<BaseSequence> bSeq = std::make_shared<Sequence>(args[(i/2) + 1]);
+            context.unlearn(op_idx, ket_idx);           // A little bit expensive, but I think we need it if |> is fed as a parameter to our functions.
+            context.learn(op_idx, ket_idx, bSeq);  // In which case, the learn() will be a no-op, meaning previous values will be used. Which we don't want!
+        }
+        auto rule = context.bound_fn_body_recall(idx, seq_vec.size());
+        return rule->Compile(context, label_ket, args);
+    }
     return Sequence();
 }
 
@@ -303,6 +342,19 @@ Sequence FunctionOperator::Compile(ContextList &context, const Sequence &seq, co
             }
             break;
         }
+    }
+    if (context.bound_fn_recall_type(idx, seq_vec.size()) == RULESTORED) {
+        // std::cout << "found a bound function, size: " << seq_vec.size() << "\n";
+        std::vector<ulong> params = context.bound_fn_params_recall(idx, seq_vec.size());
+        for (unsigned int i = 0; i < params.size(); i += 2) {
+            ulong op_idx = params[i];
+            ulong ket_idx = params[i + 1];
+            std::shared_ptr<BaseSequence> bSeq = std::make_shared<Sequence>(args[(i/2) + 1]);
+            context.unlearn(op_idx, ket_idx);           // A little bit expensive, but I think we need it if |> is fed as a parameter to our functions.
+            context.learn(op_idx, ket_idx, bSeq);  // In which case, the learn() will be a no-op, meaning previous values will be used. Which we don't want!
+        }
+        auto rule = context.bound_fn_body_recall(idx, seq_vec.size());
+        return rule->Compile(context, label_ket, args);
     }
     return Sequence();
 }

@@ -1,7 +1,11 @@
 -- test code for our new bound functions:
 
+-- define one:
 fn {the|subject>, the |object>} #=>
     print the |subject>
     print the |object>
 
+
+-- invoke it:
+fn(|alpha>, |beta>)
 

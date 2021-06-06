@@ -88,6 +88,9 @@ public:
     unsigned int fn_recall_type(const ulong op_idx, const int param_size);
 
     void bound_fn_learn(ulong op_idx, std::vector<ulong> &op_ket_idx_vec, std::shared_ptr<BaseSequence> bSeq);
+    std::vector<ulong> bound_fn_params_recall(const ulong op_idx, const int param_size);  // change to unsigned int here?
+    std::shared_ptr<BaseSequence> bound_fn_body_recall(const ulong op_idx, const int param_size);
+    unsigned int bound_fn_recall_type(const ulong op_idx, const int param_size);
 
     void print_universe(bool clean = true, std::ostream& out = std::cout) const;
     void print_multiverse(bool clean = true, std::ostream& out = std::cout) const;
