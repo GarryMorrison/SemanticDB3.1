@@ -1,4 +1,5 @@
 -- test code for our new bound functions:
+-- though I think they are slower than I would like!
 
 -- define one:
 fn {the|subject>, the |object>} #=>
@@ -15,5 +16,9 @@ bah {the|next subject>} #=> print the |next subject>
 
 -- now invoke it:
 bah(|gamma>)
+
+
+-- invoke it again, this time with an explicit input sequence:
+fn(|one>, |two>) ssplit[" "] |some input sequence>
 
 

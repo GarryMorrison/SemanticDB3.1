@@ -119,6 +119,11 @@ Sequence FunctionOperator::Compile(ContextList& context, const Sequence& seq) co
     }
     if (context.bound_fn_recall_type(idx, seq_vec.size()) == RULESTORED) {
         // std::cout << "found a bound function, size: " << seq_vec.size() << "\n";
+        ulong input_idx = ket_map.get_idx("input");  // learn input|seq>. A little heavier and slower than I would like!
+        ulong seq_idx = ket_map.get_idx("seq");      // Also, we have hard wired in the op/ket labels here. Is there a better way?
+        context.unlearn(input_idx, seq_idx);
+        std::shared_ptr<BaseSequence> bSeq = std::make_shared<Sequence>(args[0]);
+        context.learn(input_idx, seq_idx, bSeq);
         std::vector<ulong> params = context.bound_fn_params_recall(idx, seq_vec.size());
         for (unsigned int i = 0; i < params.size(); i += 2) {
             ulong op_idx = params[i];
@@ -194,6 +199,11 @@ Sequence FunctionOperator::Compile(ContextList &context, const Sequence &seq, co
     }
     if (context.bound_fn_recall_type(idx, seq_vec.size()) == RULESTORED) {
         // std::cout << "found a bound function, size: " << seq_vec.size() << "\n";
+        ulong input_idx = ket_map.get_idx("input");
+        ulong seq_idx = ket_map.get_idx("seq");
+        context.unlearn(input_idx, seq_idx);
+        std::shared_ptr<BaseSequence> bSeq = std::make_shared<Sequence>(args[0]);
+        context.learn(input_idx, seq_idx, bSeq);
         std::vector<ulong> params = context.bound_fn_params_recall(idx, seq_vec.size());
         for (unsigned int i = 0; i < params.size(); i += 2) {
             ulong op_idx = params[i];
@@ -270,6 +280,11 @@ Sequence FunctionOperator::Compile(ContextList &context, const Sequence &seq, co
     }
     if (context.bound_fn_recall_type(idx, seq_vec.size()) == RULESTORED) {
         // std::cout << "found a bound function, size: " << seq_vec.size() << "\n";
+        ulong input_idx = ket_map.get_idx("input");
+        ulong seq_idx = ket_map.get_idx("seq");
+        context.unlearn(input_idx, seq_idx);
+        std::shared_ptr<BaseSequence> bSeq = std::make_shared<Sequence>(args[0]);
+        context.learn(input_idx, seq_idx, bSeq);
         std::vector<ulong> params = context.bound_fn_params_recall(idx, seq_vec.size());
         for (unsigned int i = 0; i < params.size(); i += 2) {
             ulong op_idx = params[i];
@@ -345,6 +360,11 @@ Sequence FunctionOperator::Compile(ContextList &context, const Sequence &seq, co
     }
     if (context.bound_fn_recall_type(idx, seq_vec.size()) == RULESTORED) {
         // std::cout << "found a bound function, size: " << seq_vec.size() << "\n";
+        ulong input_idx = ket_map.get_idx("input");
+        ulong seq_idx = ket_map.get_idx("seq");
+        context.unlearn(input_idx, seq_idx);
+        std::shared_ptr<BaseSequence> bSeq = std::make_shared<Sequence>(args[0]);
+        context.learn(input_idx, seq_idx, bSeq);
         std::vector<ulong> params = context.bound_fn_params_recall(idx, seq_vec.size());
         for (unsigned int i = 0; i < params.size(); i += 2) {
             ulong op_idx = params[i];
