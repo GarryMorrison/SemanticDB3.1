@@ -1,0 +1,7 @@
+-- test code for our new bound functions:
+
+fn {the|subject>, the |object>} #=>
+    print the |subject>
+    print the |object>
+
+

@@ -8,6 +8,8 @@
 
 #include <iostream>
 #include "NewContext.h"
+#include "BoundFunction.h"
+
 
 NewContext::NewContext(const std::string &s) {
     name = s;
@@ -496,6 +498,28 @@ unsigned int NewContext::fn_recall_type(const ulong op_idx, const int param_size
     return fn_rules_dict[param_size].recall_type(op_idx);
 }
 
+void NewContext::bound_fn_learn(ulong op_idx, std::vector<ulong> &op_ket_idx_vec, std::shared_ptr<BaseSequence> bSeq) {
+    unsigned int vec_size = op_ket_idx_vec.size() / 2 ;
+    BoundFunction bound_function;
+    bound_fn_rules_dict[{op_idx, vec_size}] = bound_function;
+    bound_fn_rules_dict[{op_idx, vec_size}].learn(op_ket_idx_vec, bSeq);
+}
+
+/*  // Not yet sure how to implement this!
+std::shared_ptr<BaseSequence> NewContext::bound_fn_recall(const ulong op_idx, const int param_size) {
+    // test it is in the dict first. If not, return std::make_shared<Sequence>();
+    std::vector<ulong> params = bound_fn_rules_dict[{op_idx, param_size}].get_params();
+    std::shared_ptr<BaseSequence> bSeq = bound_fn_rules_dict[{op_idx, param_size}].get_body();
+    for (unsigned int i = 0; i < params.size(); i += 2) {
+        ulong var_op_idx = params[i];
+        ulong ket_op_idx = params[i + 1];
+        // unlearn first.
+
+    }
+    return bSeq;
+}
+*/
+
 void NewContext::print_universe(bool clean, std::ostream& out) const {
     std::string s, op, label;
     ulong supported_ops_idx;
@@ -555,6 +579,27 @@ void NewContext::print_universe(bool clean, std::ostream& out) const {
             }
             s += "\n";
         }
+    }
+
+    // Now the bound functions:
+    for(const auto &entry: bound_fn_rules_dict) {
+        auto key_pair = entry.first;
+        std::vector<ulong> params = entry.second.get_params();
+
+        std::string string_params;
+        bool first_pass = true;
+        for( unsigned int i = 0; i < params.size(); i += 2) {
+            ulong op_idx = params[i];
+            ulong ket_idx = params[i + 1];
+            if (first_pass) {
+                string_params += ket_map.get_str(op_idx) + "|" + ket_map.get_str(ket_idx) + ">";
+                first_pass = false;
+            } else {
+                string_params += ", " + ket_map.get_str(op_idx) + "|" + ket_map.get_str(ket_idx) + ">";
+            }
+        }
+        s += ket_map.get_str(key_pair.first) + " {" + string_params + "} #=> " + entry.second.get_body()->to_string();
+        s += "\n";
     }
 
     s += "------------------------------------------\n";

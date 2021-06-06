@@ -135,6 +135,8 @@ yylloc->step();
 ")" { return token::RPAREN; }
 "[" { return token::LSQUARE; }
 "]" { return token::RSQUARE; }
+"{" { return token::LCURLEY; }
+"}" { return token::RCURLEY; }
 
 "," { return token::COMMA; }
 "^" { return token::POWER; }

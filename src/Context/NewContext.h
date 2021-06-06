@@ -12,7 +12,10 @@
 #include "../Sequence/Superposition.h"
 #include "Frame.h"
 #include "../Sequence/BaseSequence.h"
+#include "BoundFunction.h"
 
+// typedef std::pair<ulong, unsigned int> my_pair;
+class BoundFunction;
 
 class NewContext {
 private:
@@ -21,6 +24,9 @@ private:
     std::vector<ulong> sort_order;
     std::unordered_map<ulong, Frame> fn_rules_dict;
     // std::vector<ulong> fn_sort_order;
+    // std::unordered_map<my_pair, BoundFunction> bound_fn_rules_dict;
+    // std::map<my_pair, BoundFunction> bound_fn_rules_dict;
+    std::map<std::pair<ulong, unsigned int>, BoundFunction> bound_fn_rules_dict;
 
 public:
     // NewContext(const std::string& s) { name = s; };
@@ -89,6 +95,10 @@ public:
     void fn_learn(const ulong op_idx, const int param_size, std::shared_ptr<BaseSequence> bSeq);
     std::shared_ptr<BaseSequence> fn_recall(const ulong op_idx, const int param_size);
     unsigned int fn_recall_type(const ulong op_idx, const int param_size);
+
+    void bound_fn_learn(ulong op_idx, std::vector<ulong> &op_ket_idx_vec, std::shared_ptr<BaseSequence> bSeq);
+    // std::shared_ptr<BaseSequence> bound_fn_recall(const ulong op_idx, const int param_size);
+    // unsigned int bound_fn_recall_type(const ulong op_idx, const int param_size);
 
     void print_universe(bool clean = true, std::ostream& out = std::cout) const;
 

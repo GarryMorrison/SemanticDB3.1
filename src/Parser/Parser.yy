@@ -53,7 +53,7 @@
 
 /* verbose error messages */
 // Switch off for release version:
-// %define parse.error verbose
+%define parse.error verbose
 
 
 %union {
@@ -77,6 +77,7 @@
     class IfElseStatement* ifElseStatementVal;
     class ForStatement* forStatementVal;
     class WhileStatement* whileStatementVal;
+    std::vector<ulong>* paramVec;
 }
 
 %token			END	     0	"end of file"
@@ -113,6 +114,8 @@
 %token          RPAREN          "right parenthesis"
 %token          LSQUARE          "left square parenthesis"
 %token          RSQUARE          "right square parenthesis"
+%token          LCURLEY          "left curley parenthesis"
+%token          RCURLEY          "right curley parenthesis"
 %token          COMMA           "comma"
 %token          POWER           "power"
 %token          QUOTE           "quotation symbol"
@@ -149,6 +152,7 @@
 %type <ifElseStatementVal> if_else_statement
 %type <forStatementVal> for_statement
 %type <whileStatementVal> while_statement
+%type <paramVec> bound_function_parameters
 
 
 %destructor { delete $$; } STRING
@@ -279,7 +283,19 @@ multi_learn_rule : learn_rule { $$ = new MultiLearnRule(*$1);  /* std::cout << "
 
 function_learn_rule : OP_LABEL FN_SYM LEARN_SYM operator_or_general_sequence { std::shared_ptr<BaseSequence> tmp_ptr($4); driver.context.fn_learn($1, $2, tmp_ptr); }
                     | OP_LABEL FN_SYM LEARN_SYM EOL_INDENT multi_learn_rule { std::shared_ptr<BaseSequence> tmp_ptr($5); driver.context.fn_learn($1, $2, tmp_ptr); }
+                    | OP_LABEL LCURLEY bound_function_parameters RCURLEY LEARN_SYM EOL_INDENT multi_learn_rule {
+                        std::shared_ptr<BaseSequence> tmp_ptr($7); driver.context.bound_fn_learn($1, *$3, tmp_ptr);
+                    }
+                    // | OP_LABEL LCURLEY OP_LABEL KET_LABEL RCURLEY LEARN_SYM EOL_INDENT multi_learn_rule { }
+                    // | OP_LABEL LCURLEY OP_LABEL KET_LABEL COMMA OP_LABEL KET_LABEL RCURLEY LEARN_SYM EOL_INDENT multi_learn_rule { }
+                    // | OP_LABEL LCURLEY OP_LABEL KET_LABEL COMMA OP_LABEL KET_LABEL COMMA OP_LABEL KET_LABEL RCURLEY LEARN_SYM EOL_INDENT multi_learn_rule { }
+                    // | OP_LABEL LCURLEY OP_LABEL KET_LABEL COMMA OP_LABEL KET_LABEL COMMA OP_LABEL KET_LABEL COMMA OP_LABEL KET_LABEL RCURLEY LEARN_SYM EOL_INDENT multi_learn_rule { }
                     ;
+
+bound_function_parameters : OP_LABEL KET_LABEL { $$ = new std::vector<ulong>; $$->push_back($1); $$->push_back($2); }
+                          | bound_function_parameters COMMA OP_LABEL KET_LABEL { $$ = $1; $$->push_back($3); $$->push_back($4); }
+                          ;
+
 
 operator_with_sequence : ket {
                             // std::cout << "naked ket: " << $1->to_string() << std::endl;
