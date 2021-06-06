@@ -19,6 +19,18 @@ learn-grid[30, 30]
 -- define max steps per invocation of "walk":
 max |steps> => |400>
 
+-- enable or disable slow walk mode:
+-- for now, sleep for 20 milliseconds.
+-- change as desired.
+enable-slow-walk |*> #=>
+    pause |*> #=> sleep[20] |_self>
+
+enable-fast-walk |*> #=>
+    pause |*> #=> |_self>
+
+-- by default, use fast walk:
+enable-fast-walk
+
 
 -- learn current location:
 current |cell> => |grid: 10: 22>
@@ -238,6 +250,7 @@ return-home |*> #=> clean weighted-pick-elt return-path |home>
 update |*> #=>
     record-scent
     take-a-step
+    pause
     dg
     |>
 
@@ -266,6 +279,14 @@ print-usage |*> #=>
     print |        display grid:>
     print |            dg>
     print
+    print |        enable slow walk, ie a 20 ms delay between steps:>
+    print |        so you can actually see the ant walking>
+    print |            enable-slow-walk>
+    print
+    print |        enable fast walk, ie no delay, which is the default:>
+    print |            enable-fast-walk>
+    print
+
 
 print-usage
 
