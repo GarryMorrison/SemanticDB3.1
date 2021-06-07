@@ -26,6 +26,7 @@ class Superposition : public BaseSequence {
 private:
     std::unordered_map<ulong, double> sp;
     std::vector<ulong> sort_order;
+    ulong old_process_infix_compile(ulong idx1, unsigned int infix_type, ulong idx2) const;  // Deprecated. Remove later!
     ulong process_infix_compile(ulong idx1, unsigned int infix_type, ulong idx2) const;
 
 public:

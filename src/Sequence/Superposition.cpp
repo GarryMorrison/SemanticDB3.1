@@ -808,7 +808,7 @@ Sequence Superposition::Compile(ContextList& context, const Ket& label_ket, cons
 }
 
 
-ulong Superposition::process_infix_compile(ulong idx1, unsigned int infix_type, ulong idx2) const {
+ulong Superposition::old_process_infix_compile(ulong idx1, unsigned int infix_type, ulong idx2) const {
     // std::cout << "  idx1: " << ket_map.get_str(idx1) << "\n";
     // std::cout << "  idx2: " << ket_map.get_str(idx2) << "\n";
     ulong empty_idx = ket_map.get_idx("");
@@ -925,6 +925,221 @@ ulong Superposition::process_infix_compile(ulong idx1, unsigned int infix_type, 
             //     Sequence empty;
             //     return op_range2(empty, seq_one, seq_two);  // Should we inline it, or leave as a function call?
             // }
+        default: return ket_map.get_idx("unimplemented");
+    }
+}
+
+ulong Superposition::process_infix_compile(ulong idx1, unsigned int infix_type, ulong idx2) const {
+    // std::cout << "  idx1: " << ket_map.get_str(idx1) << "\n";
+    // std::cout << "  idx2: " << ket_map.get_str(idx2) << "\n";
+    ulong empty_idx = ket_map.get_idx("");
+    ulong yes_idx = ket_map.get_idx("yes");
+    ulong no_idx = ket_map.get_idx("no");
+
+    switch (infix_type) {
+        case OPGREATEREQUAL:
+        case OPGREATER:
+        case OPLESSEQUAL:
+        case OPLESS: {
+            try {
+                auto one_idx_vec = ket_map.get_split_idx(idx1);  // Handle more than just kets later! Ie, arithmetic over superpositions and sequences.
+                auto two_idx_vec = ket_map.get_split_idx(idx2);
+                if (one_idx_vec.empty() || two_idx_vec.empty()) { return empty_idx; }
+                long double x = std::stold(ket_map.get_str(one_idx_vec.back()));
+                long double y = std::stold(ket_map.get_str(two_idx_vec.back()));
+                one_idx_vec.pop_back();
+                two_idx_vec.pop_back();
+                if (one_idx_vec != two_idx_vec) { return empty_idx; } // Do we want this check here? Ie, checking that the categories are equal?
+                switch (infix_type) {
+                    case OPGREATEREQUAL:
+                        if (x >= y) { return yes_idx; }
+                        return no_idx;
+                    case OPGREATER:
+                        if (x > y) { return yes_idx; }
+                        return no_idx;
+                    case OPLESSEQUAL:
+                        if (x <= y) { return yes_idx; }
+                        return no_idx;
+                    case OPLESS:
+                        if (x < y) { return yes_idx; }
+                        return no_idx;
+                    default:
+                        return empty_idx;
+                }
+            } catch (const std::invalid_argument& e) {
+                return empty_idx;
+            }
+        }
+        case OPAND: {
+            if (idx1 == yes_idx && idx2 == yes_idx) { return yes_idx; }
+            return no_idx;
+        }
+        case OPOR: {
+            if (idx1 == yes_idx || idx2 == yes_idx) { return yes_idx; }
+            return no_idx;
+        }
+        case OPPLUS:
+        case OPMINUS:
+        case OPMULT:
+        case OPDIV:
+        case OPMOD:
+        case OPARITHPOWER: {
+            // std::cout << "    arithmetic section:\n";
+            auto one_idx_vec = ket_map.get_split_idx(idx1);  // Handle more than just kets later! Ie, arithmetic over superpositions and sequences.
+            auto two_idx_vec = ket_map.get_split_idx(idx2);
+            if (one_idx_vec.empty() || two_idx_vec.empty()) { return empty_idx; }
+            if (one_idx_vec.size() == 1 && two_idx_vec.size() == 1) {
+                try {
+                    long double x = std::stold(ket_map.get_str(one_idx_vec[0]));
+                    long double y = std::stold(ket_map.get_str(two_idx_vec[0]));
+                    long double value;
+                    switch (infix_type) {
+                        case OPPLUS : {
+                            value = x + y;
+                            break;
+                        }
+                        case OPMINUS : {
+                            value = x - y;
+                            break;
+                        }
+                        case OPMULT : {
+                            value = x * y;
+                            break;
+                        }
+                        case OPDIV : {
+                            value = x / y;
+                            break;
+                        } // check for div by zero here!
+                        case OPMOD : {
+                            value = static_cast<long long>(x) % static_cast<long long>(y);
+                            break;
+                        }
+                        case OPARITHPOWER : {
+                            value = std::pow(x, y);
+                            break;
+                        }
+                        default:
+                            return empty_idx;
+                    }
+                    return ket_map.get_idx(float_to_int(value, default_decimal_places));
+                } catch (const std::invalid_argument &e) {
+                    return empty_idx;
+                }
+            }
+            std::string categories1;
+            std::vector<long double> values1;
+            bool first_pass = true;
+            for (const auto idx: one_idx_vec) {
+                std::string label = ket_map.get_str(idx);
+                if (!is_number(label)) {
+                    if (first_pass) {
+                        categories1 += label + ": ";
+                    } else {
+                        break;
+                    }
+                } else {
+                    long double value = std::stold(label);  // Still a potential exception here.
+                    values1.push_back(value);
+                    first_pass = false;
+                }
+            }
+            std::string categories2;
+            std::vector<long double> values2;
+            first_pass = true;
+            for (const auto idx: two_idx_vec) {
+                std::string label = ket_map.get_str(idx);
+                if (!is_number(label)) {
+                    if (first_pass) {
+                        categories2 += label + ": ";
+                    } else {
+                        break;
+                    }
+                } else {
+                    long double value = std::stold(label);  // Still a potential exception here.
+                    values2.push_back(value);
+                    first_pass = false;
+                }
+            }
+            if (categories1 != categories2 || values1.size() != values2.size()) { return empty_idx; }  // Handle cases such as: |number: 5> ** |3> later!
+            if (values1.size() == 1) {
+                long double x = values1[0];
+                long double y = values2[0];
+                long double value;
+                switch (infix_type) {
+                    case OPPLUS : {
+                        value = x + y;
+                        break;
+                    }
+                    case OPMINUS : {
+                        value = x - y;
+                        break;
+                    }
+                    case OPMULT : {
+                        value = x * y;
+                        break;
+                    }
+                    case OPDIV : {
+                        value = x / y;
+                        break;
+                    } // check for div by zero here!
+                    case OPMOD : {
+                        value = static_cast<long long>(x) % static_cast<long long>(y);
+                        break;
+                    }
+                    case OPARITHPOWER : {
+                        value = std::pow(x, y);
+                        break;
+                    }
+                    default:
+                        return empty_idx;
+                }
+                return ket_map.get_idx(categories1 +float_to_int(value, default_decimal_places));
+            }
+            if (values1.size() == 2) {
+                long double x1 = values1[0];
+                long double x2 = values1[1];
+                long double y1 = values2[0];
+                long double y2 = values2[1];
+                long double value1;
+                long double value2;
+                switch (infix_type) {
+                    case OPPLUS : {
+                        value1 = x1 + y1;
+                        value2 = x2 + y2;
+                        break;
+                    }
+                    case OPMINUS : {
+                        value1 = x1 - y1;
+                        value2 = x2 - y2;
+                        break;
+                    }
+                    case OPMULT : {
+                        value1 = x1 * y1;
+                        value2 = x2 * y2;
+                        break;
+                    }
+                    case OPDIV : {
+                        value1 = x1 / y1;
+                        value2 = x2 / y2;
+                        break;
+                    } // check for div by zero here!
+                    case OPMOD : {
+                        value1 = static_cast<long long>(x1) % static_cast<long long>(y1);
+                        value2 = static_cast<long long>(x2) % static_cast<long long>(y2);
+                        break;
+                    }
+                    case OPARITHPOWER : {
+                        value1 = std::pow(x1, y1);
+                        value2 = std::pow(x2, y2);
+                        break;
+                    }
+                    default:
+                        return empty_idx;
+                }
+                return ket_map.get_idx(categories1 + float_to_int(value1, default_decimal_places) + ": " + float_to_int(value2, default_decimal_places));
+            }
+            return ket_map.get_idx("unimplemented");
+        }
         default: return ket_map.get_idx("unimplemented");
     }
 }
