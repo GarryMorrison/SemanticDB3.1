@@ -215,6 +215,9 @@ FunctionOperatorMap::FunctionOperatorMap() {
     idx = ket_map.get_idx("grid-simm");
     fn_map.context_whitelist_2.emplace(idx, &op_grid_simm2);
 
+    idx = ket_map.get_idx("similar-grid");
+    fn_map.context_whitelist_1.emplace(idx, &op_similar_grid);
+
     idx = ket_map.get_idx("intersection");
     fn_map.whitelist_2.emplace(idx, &op_intersection2);
 

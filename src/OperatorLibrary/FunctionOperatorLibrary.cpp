@@ -1412,3 +1412,50 @@ Sequence op_grid_simm2(ContextList &context, const Sequence &input_seq, const Se
     }
     return Sequence(ket_name, r / max_size);
 }
+
+Superposition op_similar_grid(ContextList &context, const Sequence &input_seq, const Sequence &one) {
+    if (input_seq.size() == 0 || one.size() == 0) { return Superposition(); }
+    auto one_vec = one.to_ket().label_split_idx();
+    ulong op_prefix_idx = ket_map.get_idx("op");
+    if (one_vec.size() != 2 || one_vec[0] != op_prefix_idx) { return Superposition(); }
+    std::vector<ulong> input_idx_vec;
+    for (const auto &k: input_seq.to_sp()) {
+        auto input_vec = k.label_split_idx();
+        if (input_vec.size() != 2 || input_vec[0] != op_prefix_idx) {
+            continue;
+        }
+        input_idx_vec.push_back(input_vec[1]);
+    }
+
+    if (input_idx_vec.empty()) { return Superposition(); }
+    ulong one_idx = one_vec[1];
+    std::vector<ulong> one_kets = context.relevant_kets(one_idx);
+    if (one_kets.empty()) { return Superposition(); }
+    Superposition result;
+    for (ulong input_idx: input_idx_vec) {
+        std::vector<ulong> input_kets = context.relevant_kets(input_idx);
+        if (input_kets.empty()) {
+            continue;
+        }
+        unsigned int max_size = std::max(one_kets.size(), input_kets.size());
+        std::unordered_set<ulong> m(one_kets.begin(), one_kets.end());  // Find the intersection of one_kets and two_kets:
+        std::vector<ulong> intersection_kets;
+        for (auto a: input_kets) {
+            if (m.count(a)) {
+                intersection_kets.push_back(a);
+                m.erase(a);
+            }
+        }
+        double r = 0;
+        for (ulong pattern_idx: intersection_kets) {
+            Sequence seq1 = context.recall(one_idx, pattern_idx)->to_seq();
+            Sequence seq2 = context.recall(input_idx, pattern_idx)->to_seq();
+            r += simm(seq1, seq2);
+        }
+        if (r > 0) {
+            result.add(input_idx, r);
+        }
+    }
+    result.coeff_sort();
+    return result;
+}

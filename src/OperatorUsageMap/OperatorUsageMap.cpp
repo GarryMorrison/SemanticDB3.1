@@ -2503,7 +2503,26 @@ OperatorUsageMap::OperatorUsageMap() {
             "        grid-simm(|op: image1>, |op: image2>)\n"
             "            0.666667|grid-simm>\n\n"
             "    see also:\n"
-            "        simm\n";
+            "        simm, similar-grid\n";
+
+    operator_usage_map.map["similar-grid"] =
+            "\nsimilar-grid:\n"
+            "    description:\n"
+            "        similar-grid(|op: image1>) list-of |images>\n"
+            "        Compare the grid defined with respect to the image1 operator,\n"
+            "        with all the grids defined with respect to the operators in list-of |images>\n"
+            "        The intended use case is to map images to grids of sequences, and then compare them.\n\n"
+            "    examples:\n"
+            "        -- the simplest possible example:\n"
+            "        -- a grid with only 1 element in it:\n"
+            "        image1 |0> => |a> . |b> . |c>\n"
+            "        image2 |0> => |a> . |> . |c>\n"
+            "        image3 |0> => |> . |b> . |>\n\n"
+            "        -- now compare them:\n"
+            "        similar-grid(|op: image1>) (|op: image1> + |op: image2> + |op: image3>)\n"
+            "            |image1> + 0.666667|image2> + 0.333333|image3>\n\n"
+            "    see also:\n"
+            "        grid-simm, similar-input\n";
 }
 
 std::string OperatorUsageMap::get_usage(const std::string &s) const {
