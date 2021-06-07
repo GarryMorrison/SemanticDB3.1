@@ -1066,9 +1066,9 @@ Sequence op_smap(const Sequence &seq, ContextList &context, const std::vector<st
 }
 
 // Maybe shift to Function/misc.cpp
-bool is_number(const std::string &str) {  // a quick check if a string is a number or not. NB: not perfect, since invalid numbers will return true.
-    return !str.empty() && str.find_first_not_of("-.0123456789") == std::string::npos;
-}
+// bool is_number(const std::string &str) {  // a quick check if a string is a number or not. NB: not perfect, since invalid numbers will return true.
+//     return !str.empty() && str.find_first_not_of("-.0123456789") == std::string::npos;
+// }
 
 long double Gaussian1(long double x, long double y, long double sigma) {
     long double ED = std::sqrt((x - y) * (x - y));  // Euclidean distance for a 1D "vector"
@@ -1082,13 +1082,13 @@ long double Gaussian2(long double x1, long double x2, long double y1, long doubl
 
 
 Superposition op_Gaussian(const Ket k, const std::vector<std::shared_ptr<CompoundConstant> > &parameters) {
-    if (parameters.empty()) { return Superposition(""); }
+    if (parameters.empty()) { return Superposition(); }
 
     double sigma = parameters[0]->get_float();
     double dx = 1.0;
     if (parameters.size() == 2) {
         dx = parameters[1]->get_float();
-        if (double_eq(dx, 0)) { return Superposition(""); }
+        if (double_eq(dx, 0)) { return Superposition(); }
     }
     auto k_vec = k.label_split_idx();
     std::string categories;
@@ -1108,7 +1108,7 @@ Superposition op_Gaussian(const Ket k, const std::vector<std::shared_ptr<Compoun
             first_pass = false;
         }
     }
-    if (values.empty()) { return Superposition(""); }
+    if (values.empty()) { return Superposition(); }
     double gauss_width = 9 * sigma * sigma;
     Superposition result;
     if (values.size() == 1) {

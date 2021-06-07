@@ -75,3 +75,7 @@ std::string string_repeat(const std::string& input, unsigned num) {
         ret += input;
     return ret;
 }
+
+bool is_number(const std::string &str) {  // a quick check if a string is a number or not. NB: not perfect, since invalid numbers will return true.
+    return !str.empty() && str.find_first_not_of("-.0123456789") == std::string::npos;
+}
