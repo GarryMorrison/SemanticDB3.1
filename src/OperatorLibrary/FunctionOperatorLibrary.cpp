@@ -1283,3 +1283,22 @@ Sequence op_sfor4(ContextList &context, const Sequence &input_seq, const Sequenc
     return result;
 }
 
+Sequence op_unlearn_fn(ContextList &context, const Sequence &input_seq, const Sequence &one) {
+    if (input_seq.size() == 0 || one.size() == 0) { return Sequence(); }
+    ulong op_prefix_idx = ket_map.get_idx("op");
+    std::vector<ulong> op_idx_to_delete;
+    for (const auto &k: one.to_sp()) {
+        auto vec = k.label_split_idx();
+        if (vec.size() != 2 || vec[0] != op_prefix_idx) {
+            continue;
+        }
+        op_idx_to_delete.push_back(vec[1]);
+    }
+    for (const auto &k: input_seq.to_sp()) {
+        ulong ket_idx = k.label_idx();
+        for (const auto &op_idx: op_idx_to_delete) {
+            context.unlearn(op_idx, ket_idx);
+        }
+    }
+    return Sequence("unlearned");
+}

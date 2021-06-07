@@ -399,6 +399,7 @@ FunctionOperatorMap::FunctionOperatorMap() {
 
     idx = ket_map.get_idx("unlearn");
     fn_map.compound_context_sp_fn.emplace(idx, &op_unlearn);
+    fn_map.context_whitelist_1.emplace(idx, &op_unlearn_fn);
 
     idx = ket_map.get_idx("sread");
     fn_map.whitelist_1.emplace(idx, &op_sread);
