@@ -2521,6 +2521,12 @@ OperatorUsageMap::OperatorUsageMap() {
             "        -- now compare them:\n"
             "        similar-grid(|op: image1>) (|op: image1> + |op: image2> + |op: image3>)\n"
             "            |image1> + 0.666667|image2> + 0.333333|image3>\n\n"
+            "        -- now compare image2 to the others:\n"
+            "        similar-grid(|op: image2>) (|op: image1> + |op: image2> + |op: image3>)\n"
+            "            |image2> + 0.666667|image1>\n\n"
+            "        -- now compare image3 to the others:\n"
+            "        similar-grid(|op: image3>) (|op: image1> + |op: image2> + |op: image3>)\n"
+            "            |image3> + 0.333333|image1>\n\n"
             "    see also:\n"
             "        grid-simm, similar-input\n";
 }

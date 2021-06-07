@@ -262,7 +262,9 @@ Sequence op_arithmetic3(const Sequence &input_seq, const Sequence &one, const Se
 }
 
 double simm(const Superposition &sp1, const Superposition &sp2) {
-    if (sp1.size() == 0 || sp2.size() == 0) { return 0; }
+    // if (sp1.size() == 0 || sp2.size() == 0) { return 0; }
+    // if (sp1.size() == 0 && sp2.size() == 0) { return 1; }  // I think we want this? Maybe it should be in sequence simm instead?
+    if (sp1.size() == 0 || sp2.size() == 0) { return 0; }  // Eg, If we put it here, it might break things.
     std::set<ulong> merged;
     double one_sum(0), two_sum(0), merged_sum(0);
     for (const auto k : sp1) {
@@ -320,13 +322,18 @@ double scaled_simm(const Superposition &sp1, const Superposition &sp2) {
 
 double simm(const Sequence &seq1, const Sequence &seq2) {
     size_t size = std::max(seq1.size(), seq2.size());
-    if (size == 0) { return 0; }
+    if (size == 0) { return 1; }  // Do we want 0 or 1 to be returned when input both empty kets?
     double r = 0;
     auto seq1_iter = seq1.cbegin();
     auto seq2_iter = seq2.cbegin();
     for (; seq1_iter != seq1.end() and seq2_iter != seq2.end(); ++seq1_iter, ++seq2_iter) {
         // r += simm(*seq1_iter, *seq2_iter);  // probably want scaled_simm() here instead.
-        r += scaled_simm(*seq1_iter, *seq2_iter);
+        // r += scaled_simm(*seq1_iter, *seq2_iter);
+        if ((*seq1_iter).size() == 0 && (*seq2_iter).size() == 0) {
+            r += 1;
+        } else {
+            r += scaled_simm(*seq1_iter, *seq2_iter);
+        }
     }
     return r / size;
 }
