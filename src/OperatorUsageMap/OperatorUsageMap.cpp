@@ -2434,6 +2434,7 @@ OperatorUsageMap::OperatorUsageMap() {
             "            ket1 - ket2\n"
             "            ket1 _ ket2\n"
             "            ket1 __ ket2\n"
+            "            ket1 :_ ket2\n"
             "            ket1 . ket2\n"
             "        Type 2:\n"
             "            seq|one> == seq|two>\n"

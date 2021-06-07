@@ -39,6 +39,7 @@ const std::string OperatorWithSequence::to_string() const {
             case SSEQ: s += " . "; break;
             case SMERGE: s += " _ "; break;
             case SMERGE2: s += " __ "; break;
+            case SCOLONMERGE: s += " :_ "; break;
 
             case OPEQUAL: s += " == "; break;
             case OPNOTEQUAL: s += " != "; break;
@@ -125,6 +126,7 @@ Sequence OperatorWithSequence::Compile(ContextList& context) const {
             case SSEQ: { result.append(current_result); break; }
             case SMERGE: { result.merge(current_result); break; }
             case SMERGE2: { result.merge(current_result, " "); break; }
+            case SCOLONMERGE: { result.merge(current_result, ": "); break; }
 
             case OPEQUAL: {
                 if (previous_result == current_result) {
@@ -198,6 +200,7 @@ Sequence OperatorWithSequence::Compile(ContextList& context, const Ket& label_ke
             case SSEQ: { result.append(current_result); break; }
             case SMERGE: { result.merge(current_result); break; }
             case SMERGE2: { result.merge(current_result, " "); break; }
+            case SCOLONMERGE: { result.merge(current_result, ": "); break; }
 
             case OPEQUAL: {
                 if (previous_result == current_result) {
@@ -270,6 +273,7 @@ Sequence OperatorWithSequence::Compile(ContextList &context, const Ket& label_ke
             case SSEQ: { result.append(current_result); break; }
             case SMERGE: { result.merge(current_result); break; }
             case SMERGE2: { result.merge(current_result, " "); break; }
+            case SCOLONMERGE: { result.merge(current_result, ": "); break; }
 
             case OPEQUAL: {
                 if (previous_result == current_result) {
@@ -344,6 +348,7 @@ Sequence OperatorWithSequence::Compile(ContextList& context, const Ket& label_ke
             case SSEQ: { result.append(current_result); break; }
             case SMERGE: { result.merge(current_result); break; }
             case SMERGE2: { result.merge(current_result, " "); break; }
+            case SCOLONMERGE: { result.merge(current_result, ": "); break; }
 
             case OPEQUAL: {
                 // std::cout << "OpWithSeq::Compile(context, label_ket, args):\n";

@@ -12,6 +12,7 @@
 #define SSEQ 2
 #define SMERGE 3
 #define SMERGE2 4
+#define SCOLONMERGE 5
 
 #define OPEQUAL 100
 #define OPNOTEQUAL 101

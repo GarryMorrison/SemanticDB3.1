@@ -114,6 +114,7 @@ yylloc->step();
 "." { yylval->integerVal = SSEQ; return token::INFIX_OP; }
 "__" { yylval->integerVal = SMERGE2; return token::INFIX_OP; }
 "_" { yylval->integerVal = SMERGE; return token::INFIX_OP; }
+":_" { yylval->integerVal = SCOLONMERGE; return token::INFIX_OP; }
 
 " == " { yylval->integerVal = OPEQUAL; return token::INFIX_OP; }
 " != " { yylval->integerVal = OPNOTEQUAL; return token::INFIX_OP; }
