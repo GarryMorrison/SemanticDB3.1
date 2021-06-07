@@ -11,7 +11,7 @@
 #include "../Function/split_join.h"
 #include "../Operator/FunctionOperator.h"
 
-Superposition range2(ulong start_idx2, ulong stop_idx2) {
+Superposition old_range2(ulong start_idx2, ulong stop_idx2) {
     auto start_vec = ket_map.get_split_idx(start_idx2);
     auto stop_vec = ket_map.get_split_idx(stop_idx2);
 
@@ -38,6 +38,81 @@ Superposition range2(ulong start_idx2, ulong stop_idx2) {
     } catch (const std::invalid_argument &e) {
         return Superposition();
     }
+}
+
+Superposition range2(ulong start_idx, ulong stop_idx) {
+    auto start_vec = ket_map.get_split_idx(start_idx);
+    auto stop_vec = ket_map.get_split_idx(stop_idx);
+    if (start_vec.empty() || stop_vec.empty()) { return Superposition(); }
+    if (start_vec.size() == 1 && stop_vec.size() == 1) {
+        try {
+            long double v1 = std::stold(ket_map.get_str(start_vec[0]));
+            long double v2 = std::stold(ket_map.get_str(stop_vec[0]));
+            Superposition sp;
+            unsigned int steps = std::floor(v2 - v1);  // Do we need ceiling() or floor()?
+            for (unsigned int i = 0; i <= steps; i++) {
+                sp.add(float_to_int(i + v1, default_decimal_places));
+            }
+            return sp;
+        } catch (const std::invalid_argument &e) {
+            return Superposition();
+        }
+    }
+    std::string categories1;
+    std::vector<long double> values1;
+    bool first_pass = true;
+    for (const auto idx: start_vec) {
+        std::string label = ket_map.get_str(idx);
+        if (!is_number(label)) {
+            if (first_pass) {
+                categories1 += label + ": ";
+            } else {
+                break;
+            }
+        } else {
+            long double value = std::stold(label);  // Still a potential exception here.
+            values1.push_back(value);
+            first_pass = false;
+        }
+    }
+    std::string categories2;
+    std::vector<long double> values2;
+    first_pass = true;
+    for (const auto idx: stop_vec) {
+        std::string label = ket_map.get_str(idx);
+        if (!is_number(label)) {
+            if (first_pass) {
+                categories2 += label + ": ";
+            } else {
+                break;
+            }
+        } else {
+            long double value = std::stold(label);  // Still a potential exception here.
+            values2.push_back(value);
+            first_pass = false;
+        }
+    }
+    if (categories1 != categories2 || values1.size() != values2.size()) { return Superposition(); }
+    if (values1.size() == 1) {
+        Superposition sp;
+        unsigned int steps = std::floor(values2[0] - values1[0]);  // Do we need ceiling() or floor()?
+        for (unsigned int i = 0; i <= steps; i++) {
+            sp.add(categories1 + float_to_int(i + values1[0], default_decimal_places));
+        }
+        return sp;
+    }
+    if (values1.size() == 2) {
+        Superposition sp;
+        unsigned int steps0 = std::floor(values2[0] - values1[0]);  // Do we need ceiling() or floor()?
+        unsigned int steps1 = std::floor(values2[1] - values1[1]);  // Do we need ceiling() or floor()?
+        for (unsigned int i = 0; i <= steps0; i++) {
+            for (unsigned int j = 0; j <= steps1; j++) {
+                sp.add(categories1 + float_to_int(i + values1[0], default_decimal_places) + ": " + float_to_int(j + values1[1], default_decimal_places));
+            }
+        }
+        return sp;
+    }
+    return Superposition("unimplemented range");
 }
 
 Sequence op_srange2(const Sequence& input_seq, const Sequence& start, const Sequence& stop) {
