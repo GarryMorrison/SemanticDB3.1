@@ -2478,6 +2478,32 @@ OperatorUsageMap::OperatorUsageMap() {
             "    examples:\n\n"
             "    see also:\n"
             "        walking-ant-v2.sw3\n";
+
+    operator_usage_map.map["grid-simm"] =
+            "\ngrid-simm:\n"
+            "    description:\n"
+            "        grid-simm(|op: image1>, |op: image2>)\n"
+            "        grid-simm(|op: image1>, |op: image2>) ket\n"
+            "        returns the grid similarity of all the sequences defined with respect to the image1 operator\n"
+            "        and those defined with respect to the image2 operator\n"
+            "        The intended use case is to map images to grids of sequences, and then compare them\n"
+            "        The result is returned as the coefficient of |grid simm>,\n"
+            "        Or, if ket is specified, then the result is the coefficient of that ket\n"
+            "        Where the result should be in range [0,1]\n\n"
+            "    examples:\n"
+            "        -- if only 1 pattern is defined for each operator,\n"
+            "        -- it should return the standard result for simm(seq1, seq2)\n"
+            "        -- Eg:\n"
+            "        image1 |0> => |a> . |b> . |c>\n"
+            "        image2 |0> => |a> . |> . |c>\n\n"
+            "        -- First, standard simm:\n"
+            "        simm(image1|0>, image2|0>)\n"
+            "            0.666667|simm>\n\n"
+            "        -- Now grid-simm:\n"
+            "        grid-simm(|op: image1>, |op: image2>)\n"
+            "            0.666667|grid-simm>\n\n"
+            "    see also:\n"
+            "        simm\n";
 }
 
 std::string OperatorUsageMap::get_usage(const std::string &s) const {

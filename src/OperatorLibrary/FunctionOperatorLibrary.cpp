@@ -4,6 +4,7 @@
 
 #include <iostream>
 #include <set>
+#include <unordered_set>
 #include <math.h>
 #include "FunctionOperatorLibrary.h"
 #include "../Function/misc.h"
@@ -1376,4 +1377,38 @@ Sequence op_unlearn_fn(ContextList &context, const Sequence &input_seq, const Se
         }
     }
     return Sequence("unlearned");
+}
+
+Sequence op_grid_simm2(ContextList &context, const Sequence &input_seq, const Sequence &one, const Sequence &two) {
+    std::string ket_name = "grid-simm";
+    if (input_seq.size() > 0) {
+        ket_name = input_seq.to_ket().label();
+    }
+    if (one.size() == 0 || two.size() == 0) { return Sequence(); }
+    auto one_vec = one.to_ket().label_split_idx();
+    auto two_vec = two.to_ket().label_split_idx();
+    if (one_vec.size() != 2 || two_vec.size() != 2) { return Sequence(); }
+    ulong op_prefix_idx = ket_map.get_idx("op");
+    if (one_vec[0] != op_prefix_idx || two_vec[0] != op_prefix_idx) { return Sequence(); }
+    ulong one_idx = one_vec[1];
+    ulong two_idx = two_vec[1];
+    std::vector<ulong> one_kets = context.relevant_kets(one_idx);
+    std::vector<ulong> two_kets = context.relevant_kets(two_idx);
+    if (one_kets.empty() || two_kets.empty()) { return Sequence(ket_name, 0); }
+    unsigned int max_size = std::max(one_kets.size(), two_kets.size());
+    std::unordered_set<ulong> m(one_kets.begin(), one_kets.end());  // Find the intersection of one_kets and two_kets:
+    std::vector<ulong> intersection_kets;
+    for (auto a: two_kets) {
+        if (m.count(a)) {
+            intersection_kets.push_back(a);
+            m.erase(a);
+        }
+    }
+    double r = 0;
+    for (ulong pattern_idx: intersection_kets) {
+        Sequence seq1 = context.recall(one_idx, pattern_idx)->to_seq();
+        Sequence seq2 = context.recall(two_idx, pattern_idx)->to_seq();
+        r += simm(seq1, seq2);
+    }
+    return Sequence(ket_name, r / max_size);
 }
