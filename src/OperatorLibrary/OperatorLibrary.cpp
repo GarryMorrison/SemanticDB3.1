@@ -834,7 +834,7 @@ Ket op_display_grid(const Superposition &sp, ContextList &context, const std::ve
 
     std::cout << "width:  " << width << "\n";
     std::cout << "height: " << height << "\n\n";
-    std::cout << std::left << std::setw(3) << " ";
+    std::cout << std::left << std::setfill(' ') << std::setw(3) << " ";
     for (int x = 0; x < width; x++) {
         std::cout << std::right << std::setw(4) << x;
     }
