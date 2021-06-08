@@ -727,6 +727,10 @@ ulong grid_element(const unsigned int x, const unsigned int y) {
     return ket_map.get_idx("grid: " + std::to_string(x) + ": " + std::to_string(y));
 }
 
+ulong grid_element(const std::string &s, const unsigned int x, const unsigned int y) {
+    return ket_map.get_idx(s + std::to_string(x) + ": " + std::to_string(y));
+}
+
 bool is_in_grid(const int x, const int y, const unsigned int width, const unsigned int height) {
     if (x < 0 || y < 0 || x >= width || y >= height) { return false; }
     return true;
@@ -810,11 +814,17 @@ Ket op_display_grid(const Superposition &sp, ContextList &context, const std::ve
 
     ulong op_idx = ket_map.get_idx("value");
     std::string empty_char = ".";
-    if (parameters.size() == 3) {
+    std::string cell_prefix = "grid: ";
+    if (parameters.size() >= 3) {
         op_idx = parameters[2]->get_operator().get_idx();
-    } else if (parameters.size() == 4) {
+    }
+    if (parameters.size() >= 4) {
         empty_char = parameters[3]->get_string();
-    } else if (parameters.size() > 4) {
+    }
+    if (parameters.size() == 5 ) {
+        cell_prefix = parameters[4]->get_string();
+    }
+    if (parameters.size() > 5) {
         return Ket("");
     }
 
@@ -832,7 +842,7 @@ Ket op_display_grid(const Superposition &sp, ContextList &context, const std::ve
     for (int y = 0; y < height; y++) {
         std::cout << std::left << std::setw(3) << y;
         for (int x = 0; x < width; x++) {
-            ulong element_idx = grid_element(y,x);
+            ulong element_idx = grid_element(cell_prefix, y,x);
             if (element_idx == ant_location) {
                 std::cout << std::right << std::setw(4) << the_ant;
             } else {
