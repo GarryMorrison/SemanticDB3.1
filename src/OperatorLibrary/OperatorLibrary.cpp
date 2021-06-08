@@ -198,7 +198,7 @@ Ket pop_float(const Ket &k) {
     try {
         double value = std::stod(value_str);
         if ( k_vec.size() == 1) {
-            return Ket(" ", value);
+            return Ket(" ", value * k.value());
         }
         k_vec.pop_back();
         ulong label_idx = ket_map.get_idx(k_vec);
