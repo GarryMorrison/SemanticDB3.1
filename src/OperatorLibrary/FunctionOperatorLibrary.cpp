@@ -1460,7 +1460,7 @@ Superposition op_similar_grid(ContextList &context, const Sequence &input_seq, c
             r += simm(seq1, seq2);
         }
         if (r > 0) {
-            result.add(input_idx, r);
+            result.add(input_idx, r / max_size);
         }
     }
     result.coeff_sort();
