@@ -1061,8 +1061,8 @@ ulong Superposition::process_infix_compile(ulong idx1, unsigned int infix_type, 
                 }
             }
             // if (categories1 != categories2 || values1.size() != values2.size()) { return empty_idx; }  // Handle cases such as: |number: 5> ** |3> later!
-            if (values1.size() != values2.size()) { return empty_idx; }
-            std::string categories = categories1;
+            if (values1.size() != values2.size()) { return empty_idx; }  // Currently broken if you want to do, say: |2: 5> ** |10> == |2: 50>
+            std::string categories = categories1;                        // Instead you have to do: |2: 5> ** (|1> :_ |10>)
             if (categories1.empty()) {
                 categories = categories2;
             } else if (categories2.empty()) {

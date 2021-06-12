@@ -10,7 +10,7 @@
 #include "../FunctionOperatorMap/FunctionOperatorMap.h"
 
 
-Sequence SimpleOperator::Compile(NewContext& context, const Sequence& seq) const {
+Sequence SimpleOperator::Compile(NewContext& context, const Sequence& seq) const {  // Really should delete this function!
     if (op_idx == ket_map.get_idx("")) { return seq; }  // Change later?
     if (fn_map.sigmoids.find(op_idx) != fn_map.sigmoids.end()) {
         auto sigmoid = fn_map.sigmoids[op_idx];
@@ -77,11 +77,30 @@ Sequence SimpleOperator::Compile(ContextList& context, const Sequence& seq) cons
     } else if (context.fn_recall_type(op_idx, 1) == RULESTORED) {  // What about other rule types?
         auto rule = context.fn_recall(op_idx, 1);
         std::vector<Sequence> args; // specify size of args here?
-        Sequence empty("");
+        // Sequence empty("");
+        Sequence empty;
         args.push_back(empty);
         args.push_back(seq);
-        Ket empty_ket("");
+        // Ket empty_ket("");
+        Ket empty_ket;
         return rule->Compile(context, empty_ket, args);  // Currently set label_idx to 0. Not sure what else we can do.
+    } else if (context.bound_fn_recall_type(op_idx, 1) == RULESTORED) {
+        ulong input_idx = ket_map.get_idx("input");  // learn input|seq>. A little heavier and slower than I would like!
+        ulong seq_idx = ket_map.get_idx("seq");      // Also, we have hard wired in the op/ket labels here. Is there a better way?
+        context.unlearn(input_idx, seq_idx);
+        std::vector<ulong> params = context.bound_fn_params_recall(op_idx, 1);
+        ulong param_op_idx = params[0];
+        ulong param_ket_idx = params[1];
+        std::shared_ptr<BaseSequence> bSeq = std::make_shared<Sequence>(seq);
+        context.unlearn(param_op_idx, param_ket_idx);
+        context.learn(param_op_idx, param_ket_idx, bSeq);
+        auto rule = context.bound_fn_body_recall(op_idx, 1);
+        std::vector<Sequence> args; // specify size of args here?
+        Sequence empty;
+        args.push_back(empty);
+        args.push_back(seq);
+        Ket empty_ket;
+        return rule->Compile(context, empty_ket, args);
     }
 
     Sequence result;
