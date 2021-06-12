@@ -1060,7 +1060,16 @@ ulong Superposition::process_infix_compile(ulong idx1, unsigned int infix_type, 
                     first_pass = false;
                 }
             }
-            if (categories1 != categories2 || values1.size() != values2.size()) { return empty_idx; }  // Handle cases such as: |number: 5> ** |3> later!
+            // if (categories1 != categories2 || values1.size() != values2.size()) { return empty_idx; }  // Handle cases such as: |number: 5> ** |3> later!
+            if (values1.size() != values2.size()) { return empty_idx; }
+            std::string categories = categories1;
+            if (categories1.empty()) {
+                categories = categories2;
+            } else if (categories2.empty()) {
+                categories = categories1;
+            } else if (categories1 != categories2) {
+                return empty_idx;
+            }
             if (values1.size() == 1) {
                 long double x = values1[0];
                 long double y = values2[0];
@@ -1093,7 +1102,7 @@ ulong Superposition::process_infix_compile(ulong idx1, unsigned int infix_type, 
                     default:
                         return empty_idx;
                 }
-                return ket_map.get_idx(categories1 +float_to_int(value, default_decimal_places));
+                return ket_map.get_idx(categories +float_to_int(value, default_decimal_places));
             }
             if (values1.size() == 2) {
                 long double x1 = values1[0];
@@ -1136,7 +1145,7 @@ ulong Superposition::process_infix_compile(ulong idx1, unsigned int infix_type, 
                     default:
                         return empty_idx;
                 }
-                return ket_map.get_idx(categories1 + float_to_int(value1, default_decimal_places) + ": " + float_to_int(value2, default_decimal_places));
+                return ket_map.get_idx(categories + float_to_int(value1, default_decimal_places) + ": " + float_to_int(value2, default_decimal_places));
             }
             return ket_map.get_idx("unimplemented");
         }
