@@ -77,13 +77,13 @@ set-up-initial-state |*> #=>
 
 test-for-goal-state |*> #=>
     unlearn[goal-state] |count>
-    goal-state |count> +=> is-equal(on |monkey>, |box>)
-    goal-state |count> +=> is-equal(on |box>, |floor>)
-    goal-state |count> +=> is-equal(at |monkey>, |c>)
-    goal-state |count> +=> is-equal(at |box>, |c>)
-    goal-state |count> +=> is-equal(at |bananas>, |c>)
-    goal-state |count> +=> is-equal(status |bananas>, |grabbed>)
-    value-if(is-equal(goal-state |count>, 6|yes>), |reached goal state!>, |not reached goal state>)
+    goal-state |count> +=> on |monkey> == |box>
+    goal-state |count> +=> on |box> == |floor>
+    goal-state |count> +=> at |monkey> == |c>
+    goal-state |count> +=> at |box> == |c>
+    goal-state |count> +=> at |bananas> == |c>
+    goal-state |count> +=> status |bananas> == |grabbed>
+    value-if( goal-state |count> == 6|yes>, |reached goal state!>, |not reached goal state>)
 
 print-current-state |*> #=>
     print (|monkey is on> __ on |monkey>)
