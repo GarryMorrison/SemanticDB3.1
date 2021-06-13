@@ -1653,7 +1653,7 @@ OperatorUsageMap::OperatorUsageMap() {
             "        sread(|1> . |fish> . |11> . |4>) (|one> . |two> . |three> . |four> . |five> . |six> . |seven>)\n"
             "            |one> . |> . |> . |four>\n\n"
             "    see also:\n"
-            "        not-sread";
+            "        not-sread, read, not-read\n";
 
     operator_usage_map.map["not-sread"] =
             "\nnot-sread:\n"
@@ -1674,7 +1674,51 @@ OperatorUsageMap::OperatorUsageMap() {
             "        not-sread(|-2> + |-4>) (|one> . |two> . |three> . |four> . |five> . |six> . |seven>)\n"
             "            |one> . |two> . |three> . |five> . |seven>\n\n"
             "    see also:\n"
-            "        sread";
+            "        sread, read, not-read\n";
+
+    operator_usage_map.map["read"] =
+            "\nread:\n"
+            "    description:\n"
+            "        read(positions) superposition\n"
+            "        replace positions with their index in the input superposition\n"
+            "        if the input is a sequence, then apply this operator for each sub-superposition\n"
+            "        index values start from 1, not 0\n"
+            "        negative values are also valid, so -1 is last element, -2 is second last element, etc\n"
+            "        if out of range, or not a number, return |> for that slot\n\n"
+            "    examples:\n"
+            "        -- a simple abstract example:\n"
+            "        read(|1> + |3> + |5>) (|one> + |two> + |three> + |four> + |five> + |six> + |seven>)\n"
+            "            |one> + |three> + |five>\n\n"
+            "        -- negative indices example:\n"
+            "        read(|-1> + |-3> + |-5>) (|one> + |two> + |three> + |four> + |five> + |six> + |seven>)\n"
+            "            |seven> + |five> + |three>\n\n"
+            "        -- if out of range, or not a number, return |> for that slot:\n"
+            "        read(|1> + |fish> + |11> + |4>) (|one> + |two> + |three> + |four> + |five> + |six> + |seven>)\n"
+            "            |one> + |four>\n\n"
+            "    see also:\n"
+            "        not-read, sread, not-sread\n";
+
+    operator_usage_map.map["not-read"] =
+            "\nnot-read:\n"
+            "    description:\n"
+            "        not-read(positions) superposition\n"
+            "        remove kets from the given superposition if their index is in 'positions'\n"
+            "        if the input is a sequence, then apply this operator for each sub-superposition\n"
+            "        index values start from 1, not 0\n"
+            "        negative values are also valid, so -1 is last element, -2 is second last element, etc\n"
+            "        if out of range, or not a number, return |> for that slot\n\n"
+            "    examples:\n"
+            "        -- a simple abstract example:\n"
+            "        not-read(|1> + |3> + |5>) (|one> + |two> + |three> + |four> + |five> + |six> + |seven>)\n"
+            "            |two> + |four> + |six> + |seven>\n\n"
+            "        -- negative indices example:\n"
+            "        not-read(|-1> + |-3> + |-5>) (|one> + |two> + |three> + |four> + |five> + |six> + |seven>)\n"
+            "            |one> + |two> + |four> + |six>\n\n"
+            "        -- if out of range, or not a number, return |> for that slot:\n"
+            "        not-read(|1> + |fish> + |11> + |4>) (|one> + |two> + |three> + |four> + |five> + |six> + |seven>)\n"
+            "            |two> + |three> + |five> + |six> + |seven>\n\n"
+            "    see also:\n"
+            "        read, sread, not-sread\n";
 
     operator_usage_map.map["pick"] =
             "\npick:\n"

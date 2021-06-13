@@ -1186,15 +1186,12 @@ Sequence op_not_sread(const Sequence &input_seq, const Sequence &one) {
 }
 
 Sequence op_read(const Sequence &input_seq, const Sequence &one) {
-    std::set<ulong> index_set;  // Any use in using unordered_set here?
+    std::vector<long long> index_vec;
     Superposition positions = one.to_sp();
     for (const auto &k: positions) {
         try {
             long long idx = std::stoll(k.label()) - 1;
-            if (idx < 0) {
-                idx += input_seq.size() + 1;
-            }
-            index_set.insert((ulong)idx);
+            index_vec.push_back(idx);
         } catch (const std::invalid_argument &e) {
             continue;
         }
@@ -1202,12 +1199,11 @@ Sequence op_read(const Sequence &input_seq, const Sequence &one) {
     Sequence result;
     for (const auto &sp: input_seq) {
         Superposition tmp_sp;
-        ulong idx = 0;
-        for (const auto &k: sp) {
-            if (index_set.find(idx) != index_set.end()) {
-                tmp_sp.add(k);
+        for (long long idx: index_vec) {
+            if (idx < 0) {
+                idx += sp.size() + 1;
             }
-            idx++;
+            tmp_sp.add(sp.get((ulong) idx));
         }
         result.append(tmp_sp);
     }
@@ -1215,15 +1211,12 @@ Sequence op_read(const Sequence &input_seq, const Sequence &one) {
 }
 
 Sequence op_not_read(const Sequence &input_seq, const Sequence &one) {
-    std::set<ulong> index_set;  // Any use in using unordered_set here?
+    std::set<long> index_set;  // Any use in using unordered_set here?
     Superposition positions = one.to_sp();
     for (const auto &k: positions) {
         try {
-            long long idx = std::stoll(k.label()) - 1;
-            if (idx < 0) {
-                idx += input_seq.size() + 1;
-            }
-            index_set.insert((ulong)idx);
+            long idx = std::stol(k.label()) - 1;
+            index_set.insert(idx);
         } catch (const std::invalid_argument &e) {
             continue;
         }
@@ -1231,12 +1224,14 @@ Sequence op_not_read(const Sequence &input_seq, const Sequence &one) {
     Sequence result;
     for (const auto &sp: input_seq) {
         Superposition tmp_sp;
-        ulong idx = 0;
+        long idx = 0;
+        long reverse_idx = - sp.size() - 1;
         for (const auto &k: sp) {
-            if (index_set.find(idx) == index_set.end()) {
+            if (index_set.find(idx) == index_set.end() && index_set.find(reverse_idx) == index_set.end()) {  // Is there a cleaner way to implement this?
                 tmp_sp.add(k);
             }
             idx++;
+            reverse_idx++;
         }
         result.append(tmp_sp);
     }
