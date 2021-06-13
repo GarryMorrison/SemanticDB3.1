@@ -33,7 +33,11 @@ namespace SDB {
     bool Driver::parse_file(const std::string &filename)
     {
         std::ifstream in(filename.c_str());
-        if (!in.good()) return false;
+        // if (!in.good()) return false;
+        if (!in.good()) {
+            std::cerr << "File error" << std::endl;
+            return false;
+        }
         return parse_stream(in, filename);
     }
 
