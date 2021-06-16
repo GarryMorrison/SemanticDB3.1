@@ -79,10 +79,20 @@ const std::string docs_sw3_page =
         "</html>";
 
 
+std::string escape_infix_operators(const std::string &raw_string) {
+    if (raw_string == " + ") { return "infix_plus"; }
+    if (raw_string == " - ") { return "infix_minus"; }
+    if (raw_string == " _ ") { return "infix_merge"; }
+    if (raw_string == " __ ") { return "infix_smerge"; }
+    if (raw_string == " :_ ") { return "infix_colon_merge"; }
+    if (raw_string == " . ") { return "infix_seq"; }
+    return raw_string;
+}
+
 std::string linkify_operators(std::map<std::string, std::string> &operator_locations, const std::string &source_usage) {
     std::string usage = source_usage;  // Just copy it, since we want to modify it in place.
     for (const auto &iter: operator_locations) {
-        std::string html_link = "<a href=\"../" + iter.second + "/" + iter.first + ".html\">" + iter.first + "</a>";
+        std::string html_link = "<a href=\"../" + iter.second + "/" + escape_infix_operators(iter.first) + ".html\">" + iter.first + "</a>";
 
         std::string from = " " + iter.first + " ";  // Potentially add more of these later. Or do it in a more intelligent way?
         std::string to = " " + html_link + " ";
@@ -150,7 +160,7 @@ std::string generate_statement_usage_docs(std::map<std::string, std::string> &op
     // Now learn the statements:
     for (const auto &str: built_in_statements) {
         if (operator_usage_map.usage_is_defined(str)) {
-            std::string statement_file = dir + "/" + str + ".html";
+            std::string statement_file = dir + "/" + escape_infix_operators(str) + ".html";
             section += "        <dd><a href=\"" + statement_file + "\">" + str + "</a></dd>\n";
 
             std::string usage = operator_usage_map.get_usage(str) + "\n";
@@ -348,13 +358,19 @@ void DocsGenerator::generate(const std::string& dir) {
     // Learn operator locations:
 
     // First, learn built in statements:
-    std::vector<std::string> built_in_statements{ "operators", "if", "if-else", "for", "sfor" , "while" };
-    operator_locations["operators"] = "built-in-statement";
+    std::vector<std::string> built_in_statements{ "if", "if-else", "for", "sfor" , "while", "operators", " + ", " - ", " _ ", " __ ", " :_ ", " . " };
     operator_locations["if"] = "built-in-statement";
     operator_locations["if-else"] = "built-in-statement";
     operator_locations["for"] = "built-in-statement";
     operator_locations["sfor"] = "built-in-statement";
     operator_locations["while"] = "built-in-statement";
+    operator_locations["operators"] = "built-in-statement";
+    operator_locations[" + "] = "built-in-statement";
+    operator_locations[" - "] = "built-in-statement";
+    operator_locations[" _ "] = "built-in-statement";
+    operator_locations[" __ "] = "built-in-statement";
+    operator_locations[" :_ "] = "built-in-statement";
+    operator_locations[" . "] = "built-in-statement";
 
     // Now, learn our operators:
     // NB: the locations must match those used in the next section.
