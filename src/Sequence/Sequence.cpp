@@ -751,8 +751,8 @@ Sequence Sequence::apply_sp_fn(const std::function<Sequence(const Superposition&
     Sequence result;
     for (const auto &sp: seq) {
         Sequence tmp = fn(sp);
-        // result.append(tmp);  // not sure if it should be result.add(tmp). Probably.
-        result.add(tmp);
+        result.append(tmp);  // not sure if it should be result.add(tmp). Probably.
+        // result.add(tmp);
     }
     return result;
 }
