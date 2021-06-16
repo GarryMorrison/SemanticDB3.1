@@ -87,12 +87,19 @@ Sequence SimpleOperator::Compile(ContextList& context, const Sequence& seq) cons
     } else if (context.bound_fn_recall_type(op_idx, 1) == RULESTORED) {
         ulong input_idx = ket_map.get_idx("input");  // learn input|seq>. A little heavier and slower than I would like!
         ulong seq_idx = ket_map.get_idx("seq");      // Also, we have hard wired in the op/ket labels here. Is there a better way?
-        context.unlearn(input_idx, seq_idx);
+        unsigned int input_rule_type = context.recall_type(input_idx, seq_idx);
+        std::shared_ptr<BaseSequence> input_bSeq;
+        if (input_rule_type != RULEUNDEFINED) {
+            input_bSeq = context.recall(input_idx, seq_idx);
+        }
+        std::shared_ptr<BaseSequence> bSeq_empty = std::make_shared<Ket>();
+        context.learn(input_idx, seq_idx, bSeq_empty);
         std::vector<ulong> params = context.bound_fn_params_recall(op_idx, 1);
         ulong param_op_idx = params[0];
         ulong param_ket_idx = params[1];
+        unsigned int param_rule_type = context.recall_type(param_op_idx, param_ket_idx);
+        std::shared_ptr<BaseSequence> param_bSeq = context.recall(param_op_idx, param_ket_idx);
         std::shared_ptr<BaseSequence> bSeq = std::make_shared<Sequence>(seq);
-        context.unlearn(param_op_idx, param_ket_idx);
         context.learn(param_op_idx, param_ket_idx, bSeq);
         auto rule = context.bound_fn_body_recall(op_idx, 1);
         std::vector<Sequence> args; // specify size of args here?
@@ -100,7 +107,25 @@ Sequence SimpleOperator::Compile(ContextList& context, const Sequence& seq) cons
         args.push_back(empty);
         args.push_back(seq);
         Ket empty_ket;
-        return rule->Compile(context, empty_ket, args);
+        // return rule->Compile(context, empty_ket, args);
+        Sequence result = rule->Compile(context, empty_ket, args);
+
+        // Now restore the variables:
+        switch (input_rule_type) {
+            case RULENORMAL: context.learn(input_idx, seq_idx, input_bSeq); break;
+            case RULESTORED: context.stored_learn(input_idx, seq_idx, input_bSeq); break;
+            case RULEMEMOIZE: context.memoize_learn(input_idx, seq_idx, input_bSeq); break;
+            case RULEUNDEFINED: context.unlearn(input_idx, seq_idx); break;
+            default: break;
+        }
+        switch (param_rule_type) {
+            case RULENORMAL: context.learn(param_op_idx, param_ket_idx, param_bSeq); break;
+            case RULESTORED: context.stored_learn(param_op_idx, param_ket_idx, param_bSeq); break;
+            case RULEMEMOIZE: context.memoize_learn(param_op_idx, param_ket_idx, param_bSeq); break;
+            case RULEUNDEFINED: context.unlearn(param_op_idx, param_ket_idx); break;
+            default: break;
+        }
+        return result;
     }
 
     Sequence result;
