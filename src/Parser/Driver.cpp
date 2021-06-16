@@ -35,7 +35,7 @@ namespace SDB {
         std::ifstream in(filename.c_str());
         // if (!in.good()) return false;
         if (!in.good()) {
-            std::cerr << "File error" << std::endl;
+            std::cerr << "File error" << std::endl; // Maybe a better error message here later.
             return false;
         }
         return parse_stream(in, filename);

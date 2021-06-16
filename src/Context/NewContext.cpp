@@ -166,7 +166,7 @@ BaseSequence* NewContext::recall(const ulong op_idx, const ulong label_idx) {
 
 void NewContext::learn(const ulong op_idx, const ulong label_idx, std::shared_ptr<BaseSequence> bSeq) {
     if (op_idx == ket_map.get_idx("supported-ops")) { return; }  // maybe hard wire in "supported-ops" as ket_map idx = 1?
-    if (bSeq->size() == 0) { return; }
+    // if (bSeq->size() == 0) { return; }
 
     Frame frame;
     if (rules_dict.find(label_idx) == rules_dict.end()) {
@@ -178,7 +178,7 @@ void NewContext::learn(const ulong op_idx, const ulong label_idx, std::shared_pt
 
 void NewContext::learn(const std::string& op, const std::string& label, std::shared_ptr<BaseSequence> bSeq){
     if (op == "supported-ops") { return;}
-    if (bSeq->size() == 0) {return; }
+    // if (bSeq->size() == 0) {return; }
     ulong op_idx, label_idx;
     // op_idx = ket_map.get_idx("op: " + op);
     op_idx = ket_map.get_idx(op);
@@ -195,7 +195,7 @@ void NewContext::learn(const std::string& op, const std::string& label, std::sha
 
 void NewContext::learn(const std::string& op, const std::string& label, const std::string& srule){
     if (op == "supported-ops") { return;}
-    if (srule == "") {return; }
+    // if (srule == "") {return; }
     ulong op_idx, label_idx;
     // op_idx = ket_map.get_idx("op: " + op);
     op_idx = ket_map.get_idx(op);

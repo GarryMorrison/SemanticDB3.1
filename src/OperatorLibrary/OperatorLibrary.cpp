@@ -762,7 +762,7 @@ Ket op_learn_grid(const Superposition &sp, ContextList &context, const std::vect
         for (int x = 0; x < width; x++) {
             ulong element_idx = grid_element(y,x);
             context.learn(op_idx, element_idx, zero_seq);
-            if (is_in_grid(x, y - 1, width, height)) {
+            if (is_in_grid(x, y - 1, width, height)) {   // I'm confused why is_in_grid() and grid_element() have opposite parameter orders?
                 ulong neighbour_idx = grid_element(y - 1, x);
                 std::shared_ptr<BaseSequence> neighbour = std::make_shared<Ket>(neighbour_idx);
                 context.learn(north_idx, element_idx, neighbour);
