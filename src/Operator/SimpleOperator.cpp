@@ -98,7 +98,10 @@ Sequence SimpleOperator::Compile(ContextList& context, const Sequence& seq) cons
         ulong param_op_idx = params[0];
         ulong param_ket_idx = params[1];
         unsigned int param_rule_type = context.recall_type(param_op_idx, param_ket_idx);
-        std::shared_ptr<BaseSequence> param_bSeq = context.recall(param_op_idx, param_ket_idx);
+        std::shared_ptr<BaseSequence> param_bSeq;
+        if (param_rule_type != RULEUNDEFINED) {
+            param_bSeq = context.recall(param_op_idx, param_ket_idx);
+        }
         std::shared_ptr<BaseSequence> bSeq = std::make_shared<Sequence>(seq);
         context.learn(param_op_idx, param_ket_idx, bSeq);
         auto rule = context.bound_fn_body_recall(op_idx, 1);
