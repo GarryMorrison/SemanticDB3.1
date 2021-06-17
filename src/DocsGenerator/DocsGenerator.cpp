@@ -111,6 +111,21 @@ std::string escape_infix_operators(const std::string &raw_string) {
     if (raw_string == " .=> ") { return "seq_learn_rule"; }
     if (raw_string == " #=> ") { return "stored_learn_rule"; }
     if (raw_string == " !=> ") { return "memoize_learn_rule"; }
+    if (raw_string == " == ") { return "infix_equal"; }
+    if (raw_string == " != ") { return "infix_not_equal"; }
+    if (raw_string == " >= ") { return "infix_greater_equal"; }
+    if (raw_string == " > ") { return "infix_greater"; }
+    if (raw_string == " <= ") { return "infix_less_equal"; }
+    if (raw_string == " < ") { return "infix_less"; }
+    if (raw_string == " && ") { return "infix_and"; }
+    if (raw_string == " || ") { return "infix_or"; }
+    if (raw_string == " ++ ") { return "infix_double_plus"; }
+    if (raw_string == " -- ") { return "infix_double_minus"; }
+    if (raw_string == " ** ") { return "infix_double_mult"; }
+    if (raw_string == " // ") { return "infix_double_div"; }
+    if (raw_string == " %% ") { return "infix_double_mod"; }
+    if (raw_string == " ^^ ") { return "infix_double_pow"; }
+    if (raw_string == " .. ") { return "infix_range"; }
     return raw_string;
 }
 
@@ -404,7 +419,7 @@ void DocsGenerator::generate(const std::string& dir) {
     operator_locations["bound function"] = "built-in-statement";
     operator_locations["operators"] = "built-in-statement";
 
-    // Now, learn infix operators:
+    // Now, learn infix operators, type 1:
     std::vector<std::string> infix_operators{ " + ", " - ", " _ ", " __ ", " :_ ", " . " };
     operator_locations[" + "] = "infix_operator";
     operator_locations[" - "] = "infix_operator";
@@ -412,6 +427,24 @@ void DocsGenerator::generate(const std::string& dir) {
     operator_locations[" __ "] = "infix_operator";
     operator_locations[" :_ "] = "infix_operator";
     operator_locations[" . "] = "infix_operator";
+
+    // Now, learn infix operators, type 2:
+    std::vector<std::string> infix_operators2{ " == ", " != ", " >= ", " > ", " <= ", " < ", " && ", " || ", " ++ ", " -- ", " ** ", " // ", " %% ", " ^^ ", " .. "};
+    operator_locations[" == "] = "infix_operator";
+    operator_locations[" != "] = "infix_operator";
+    operator_locations[" >= "] = "infix_operator";
+    operator_locations[" > "] = "infix_operator";
+    operator_locations[" <= "] = "infix_operator";
+    operator_locations[" < "] = "infix_operator";
+    operator_locations[" && "] = "infix_operator";
+    operator_locations[" || "] = "infix_operator";
+    operator_locations[" ++ "] = "infix_operator";
+    operator_locations[" -- "] = "infix_operator";
+    operator_locations[" ** "] = "infix_operator";
+    operator_locations[" // "] = "infix_operator";
+    operator_locations[" %% "] = "infix_operator";
+    operator_locations[" ^^ "] = "infix_operator";
+    operator_locations[" .. "] = "infix_operator";
 
     // Now, learn learn rules:
     std::vector<std::string> learn_rules{ " => ", " +=> ", " .=> ", " #=> ", " !=> "};
@@ -450,8 +483,11 @@ void DocsGenerator::generate(const std::string& dir) {
     // Generate built-in statements section:
     body += generate_statement_usage_docs(operator_locations, "built in statements", dest_dir, "built-in-statement", built_in_statements);
 
-    // Generate infix operators section:
+    // Generate infix operators, v1 section:
     body += generate_statement_usage_docs(operator_locations, "infix operators, type 1", dest_dir, "infix_operator", infix_operators);
+
+    // Generate infix operators, v2 section:
+    body += generate_statement_usage_docs(operator_locations, "infix operators, type 2", dest_dir, "infix_operator", infix_operators2);
 
     // Generate learn rules section:
     body += generate_statement_usage_docs(operator_locations, "learn rules", dest_dir, "learn_rule", learn_rules);
