@@ -29,7 +29,7 @@ const std::string docs_index_page =
         "</head>\n"
         "<body>\n"
         "<h3>Semantic DB 3.1.1 usage information</h3>\n"
-        "Welcome to the Semantic DB 3.1.1 usage page. Below are brief descriptions and examples for our operators and sequence functions.\n"
+        "Welcome to the Semantic DB 3.1.1 usage page. Below are brief descriptions of the components of the SDB language.\n"
         "The corresponding github repo is <a href=\"https://github.com/GarryMorrison/SemanticDB3.1\">available here</a>.\n"
         "<hr>\n"
         "$body$\n"
@@ -106,6 +106,11 @@ std::string escape_infix_operators(const std::string &raw_string) {
     if (raw_string == " __ ") { return "infix_smerge"; }
     if (raw_string == " :_ ") { return "infix_colon_merge"; }
     if (raw_string == " . ") { return "infix_seq"; }
+    if (raw_string == " => ") { return "learn_rule"; }
+    if (raw_string == " +=> ") { return "add_learn_rule"; }
+    if (raw_string == " .=> ") { return "seq_learn_rule"; }
+    if (raw_string == " #=> ") { return "stored_learn_rule"; }
+    if (raw_string == " !=> ") { return "memoize_learn_rule"; }
     return raw_string;
 }
 
@@ -399,7 +404,7 @@ void DocsGenerator::generate(const std::string& dir) {
     operator_locations["bound function"] = "built-in-statement";
     operator_locations["operators"] = "built-in-statement";
 
-    // Now, learn infix operators::
+    // Now, learn infix operators:
     std::vector<std::string> infix_operators{ " + ", " - ", " _ ", " __ ", " :_ ", " . " };
     operator_locations[" + "] = "infix_operator";
     operator_locations[" - "] = "infix_operator";
@@ -407,6 +412,14 @@ void DocsGenerator::generate(const std::string& dir) {
     operator_locations[" __ "] = "infix_operator";
     operator_locations[" :_ "] = "infix_operator";
     operator_locations[" . "] = "infix_operator";
+
+    // Now, learn learn rules:
+    std::vector<std::string> learn_rules{ " => ", " +=> ", " .=> ", " #=> ", " !=> "};
+    operator_locations[" => "] = "learn_rule";
+    operator_locations[" +=> "] = "learn_rule";
+    operator_locations[" .=> "] = "learn_rule";
+    operator_locations[" #=> "] = "learn_rule";
+    operator_locations[" !=> "] = "learn_rule";
 
     // Now, learn our operators:
     // NB: the locations must match those used in the next section.
@@ -439,6 +452,9 @@ void DocsGenerator::generate(const std::string& dir) {
 
     // Generate infix operators section:
     body += generate_statement_usage_docs(operator_locations, "infix operators, type 1", dest_dir, "infix_operator", infix_operators);
+
+    // Generate learn rules section:
+    body += generate_statement_usage_docs(operator_locations, "learn rules", dest_dir, "learn_rule", learn_rules);
 
     // Generate operator sections:
     body += generate_operator_usage_docs(operator_locations, "built in operators", dest_dir, "built-in", fn_map.built_in);
