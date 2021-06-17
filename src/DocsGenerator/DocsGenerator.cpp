@@ -126,6 +126,12 @@ std::string escape_infix_operators(const std::string &raw_string) {
     if (raw_string == " %% ") { return "infix_double_mod"; }
     if (raw_string == " ^^ ") { return "infix_double_pow"; }
     if (raw_string == " .. ") { return "infix_range"; }
+    if (raw_string == "|*>") { return "misc_star_ket"; }
+    if (raw_string == "|category: *>") { return "misc_category_ket"; }
+    if (raw_string == "|_self>") { return "misc_self_ket"; }
+    if (raw_string == "(*,*)") { return "misc_star_params"; }
+    if (raw_string == "|__self>") { return "misc_multi_self_ket"; }
+    if (raw_string == "|context>") { return "misc_context_ket"; }
     return raw_string;
 }
 
@@ -454,6 +460,19 @@ void DocsGenerator::generate(const std::string& dir) {
     operator_locations[" #=> "] = "learn_rule";
     operator_locations[" !=> "] = "learn_rule";
 
+    // Now, learn misc components:
+    std::vector<std::string> misc_components{ "label descent", "|*>", "|category: *>", "|_self>", "(*,*)", "|__self>", "|context>", "supported-ops", "dump", "if-then machine" };
+    operator_locations["label descent"] = "misc";
+    operator_locations["|*>"] = "misc";
+    operator_locations["|category: *>"] = "misc";
+    operator_locations["|_self>"] = "misc";
+    operator_locations["(*,*)"] = "misc";
+    operator_locations["|__self>"] = "misc";
+    operator_locations["|context>"] = "misc";
+    operator_locations["supported-ops"] = "misc";
+    operator_locations["dump"] = "misc";
+    operator_locations["if-then machine"] = "misc";
+
     // Now, learn our operators:
     // NB: the locations must match those used in the next section.
     learn_locations(operator_locations, "built-in", fn_map.built_in);
@@ -491,6 +510,9 @@ void DocsGenerator::generate(const std::string& dir) {
 
     // Generate learn rules section:
     body += generate_statement_usage_docs(operator_locations, "learn rules", dest_dir, "learn_rule", learn_rules);
+
+    // Generate misc section:
+    body += generate_statement_usage_docs(operator_locations, "misc", dest_dir, "misc", misc_components);
 
     // Generate operator sections:
     body += generate_operator_usage_docs(operator_locations, "built in operators", dest_dir, "built-in", fn_map.built_in);
