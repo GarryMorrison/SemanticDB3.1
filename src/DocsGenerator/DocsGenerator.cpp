@@ -21,7 +21,12 @@ extern OperatorUsageMap operator_usage_map;
 
 const std::string docs_index_page =
         "<html>\n"
-        "<head><title>Semantic DB 3.1.1 usage information</title></head>\n"
+        "<head>\n"
+        "<title>Semantic DB 3.1.1 usage information</title>\n"
+        "<style type=\"text/css\">\n"
+        " a {text-decoration:none;}\n"
+        "</style>\n"
+        "</head>\n"
         "<body>\n"
         "<h3>Semantic DB 3.1.1 usage information</h3>\n"
         "Welcome to the Semantic DB 3.1.1 usage page. Below are brief descriptions and examples for our operators and sequence functions.\n"
@@ -36,7 +41,12 @@ const std::string docs_index_page =
 
 const std::string docs_statement_page =
         "<html>\n"
-        "<head><title>$statement-type$: $statement-name$</title></head>\n"
+        "<head>\n"
+        "<title>$statement-type$: $statement-name$</title>\n"
+        "<style type=\"text/css\">\n"
+        " a {text-decoration:none;}\n"
+        "</style>\n"
+        "</head>\n"
         "<body>\n"
         "<h3>$statement-type$: $statement-name$</h3>\n"
         "<hr>\n"
@@ -51,7 +61,12 @@ const std::string docs_statement_page =
 
 const std::string docs_operator_page =
         "<html>\n"
-        "<head><title>$operator-type$: $operator-name$</title></head>\n"
+        "<head>\n"
+        "<title>$operator-type$: $operator-name$</title>\n"
+        "<style type=\"text/css\">\n"
+        " a {text-decoration:none;}\n"
+        "</style>\n"
+        "</head>\n"
         "<body>\n"
         "<h3>$operator-type$: $operator-name$</h3>\n"
         "<hr>\n"
@@ -65,7 +80,12 @@ const std::string docs_operator_page =
 
 const std::string docs_sw3_page =
         "<html>\n"
-        "<head><title>$sw3-type$: $sw3-name$</title></head>\n"
+        "<head>\n"
+        "<title>$sw3-type$: $sw3-name$</title>\n"
+        "<style type=\"text/css\">\n"
+        " a {text-decoration:none;}\n"
+        "</style>\n"
+        "</head>\n"
         "<body>\n"
         "<h3>$sw3-type$: $sw3-name$</h3>\n"
         "\nRaw file <a href=\"$sw3-name$\">here.</a>\n"
@@ -92,6 +112,13 @@ std::string escape_infix_operators(const std::string &raw_string) {
 std::string linkify_operators(std::map<std::string, std::string> &operator_locations, const std::string &source_usage) {
     std::string usage = source_usage;  // Just copy it, since we want to modify it in place.
     for (const auto &iter: operator_locations) {
+        if (iter.first[0] == ' ' && iter.first.back() == ' ') {  // I'm not convinced we want this.
+            std::string new_str = iter.first.substr(1, iter.first.size() - 2);
+            std::string html_link = "<a href=\"../" + iter.second + "/" + escape_infix_operators(iter.first) + ".html\" style=\"text-decoration:none\">" + new_str + "</a>";
+            std::string from = " " + new_str + " ";
+            std::string to = " " + html_link + " ";
+            string_replace_all(usage, from, to);
+        }
         std::string html_link = "<a href=\"../" + iter.second + "/" + escape_infix_operators(iter.first) + ".html\">" + iter.first + "</a>";
 
         std::string from = " " + iter.first + " ";  // Potentially add more of these later. Or do it in a more intelligent way?
@@ -358,19 +385,22 @@ void DocsGenerator::generate(const std::string& dir) {
     // Learn operator locations:
 
     // First, learn built in statements:
-    std::vector<std::string> built_in_statements{ "if", "if-else", "for", "sfor" , "while", "operators", " + ", " - ", " _ ", " __ ", " :_ ", " . " };
+    std::vector<std::string> built_in_statements{ "if", "if-else", "for", "sfor" , "while", "operators" };
     operator_locations["if"] = "built-in-statement";
     operator_locations["if-else"] = "built-in-statement";
     operator_locations["for"] = "built-in-statement";
     operator_locations["sfor"] = "built-in-statement";
     operator_locations["while"] = "built-in-statement";
     operator_locations["operators"] = "built-in-statement";
-    operator_locations[" + "] = "built-in-statement";
-    operator_locations[" - "] = "built-in-statement";
-    operator_locations[" _ "] = "built-in-statement";
-    operator_locations[" __ "] = "built-in-statement";
-    operator_locations[" :_ "] = "built-in-statement";
-    operator_locations[" . "] = "built-in-statement";
+
+    // Now, learn infix operators::
+    std::vector<std::string> infix_operators{ " + ", " - ", " _ ", " __ ", " :_ ", " . " };
+    operator_locations[" + "] = "infix_operator";
+    operator_locations[" - "] = "infix_operator";
+    operator_locations[" _ "] = "infix_operator";
+    operator_locations[" __ "] = "infix_operator";
+    operator_locations[" :_ "] = "infix_operator";
+    operator_locations[" . "] = "infix_operator";
 
     // Now, learn our operators:
     // NB: the locations must match those used in the next section.
@@ -400,6 +430,9 @@ void DocsGenerator::generate(const std::string& dir) {
 
     // Generate built-in statements section:
     body += generate_statement_usage_docs(operator_locations, "built in statements", dest_dir, "built-in-statement", built_in_statements);
+
+    // Generate infix operators section:
+    body += generate_statement_usage_docs(operator_locations, "infix operators", dest_dir, "infix_operator", infix_operators);
 
     // Generate operator sections:
     body += generate_operator_usage_docs(operator_locations, "built in operators", dest_dir, "built-in", fn_map.built_in);
