@@ -112,9 +112,9 @@ std::string escape_infix_operators(const std::string &raw_string) {
 std::string linkify_operators(std::map<std::string, std::string> &operator_locations, const std::string &source_usage) {
     std::string usage = source_usage;  // Just copy it, since we want to modify it in place.
     for (const auto &iter: operator_locations) {
-        if (iter.first[0] == ' ' && iter.first.back() == ' ') {  // I'm not convinced we want this.
+        if (iter.first[0] == ' ' && iter.first.back() == ' ') {  // I'm not convinced we want this. Now we have switched off underlines, yeah, we do.
             std::string new_str = iter.first.substr(1, iter.first.size() - 2);
-            std::string html_link = "<a href=\"../" + iter.second + "/" + escape_infix_operators(iter.first) + ".html\" style=\"text-decoration:none\">" + new_str + "</a>";
+            std::string html_link = "<a href=\"../" + iter.second + "/" + escape_infix_operators(iter.first) + ".html\">" + new_str + "</a>";
             std::string from = " " + new_str + " ";
             std::string to = " " + html_link + " ";
             string_replace_all(usage, from, to);
@@ -153,6 +153,10 @@ std::string linkify_operators(std::map<std::string, std::string> &operator_locat
         to = " " + html_link + "^";
         string_replace_all(usage, from, to);
 
+        from = "(" + iter.first + "|";
+        to = "(" + html_link + "|";
+        string_replace_all(usage, from, to);
+
         from = "|op: " + iter.first + ">";
         to = "|op: " + html_link + ">";
         string_replace_all(usage, from, to);
@@ -164,6 +168,7 @@ std::string linkify_operators(std::map<std::string, std::string> &operator_locat
         from = " " + iter.first + ">";  // Does this one work, or bug out?
         to = " " + html_link + ">";
         string_replace_all(usage, from, to);
+
     }
     return usage;
 }
@@ -385,12 +390,13 @@ void DocsGenerator::generate(const std::string& dir) {
     // Learn operator locations:
 
     // First, learn built in statements:
-    std::vector<std::string> built_in_statements{ "if", "if-else", "for", "sfor" , "while", "operators" };
+    std::vector<std::string> built_in_statements{ "if", "if-else", "for", "sfor" , "while", "bound function", "operators" };
     operator_locations["if"] = "built-in-statement";
     operator_locations["if-else"] = "built-in-statement";
     operator_locations["for"] = "built-in-statement";
     operator_locations["sfor"] = "built-in-statement";
     operator_locations["while"] = "built-in-statement";
+    operator_locations["bound function"] = "built-in-statement";
     operator_locations["operators"] = "built-in-statement";
 
     // Now, learn infix operators::
@@ -432,7 +438,7 @@ void DocsGenerator::generate(const std::string& dir) {
     body += generate_statement_usage_docs(operator_locations, "built in statements", dest_dir, "built-in-statement", built_in_statements);
 
     // Generate infix operators section:
-    body += generate_statement_usage_docs(operator_locations, "infix operators", dest_dir, "infix_operator", infix_operators);
+    body += generate_statement_usage_docs(operator_locations, "infix operators, type 1", dest_dir, "infix_operator", infix_operators);
 
     // Generate operator sections:
     body += generate_operator_usage_docs(operator_locations, "built in operators", dest_dir, "built-in", fn_map.built_in);
