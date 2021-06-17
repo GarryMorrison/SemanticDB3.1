@@ -2554,7 +2554,7 @@ OperatorUsageMap::OperatorUsageMap() {
             "            ket1 .. ket2\n\n"
             "    examples:\n"
             "    see also:\n"
-            "        arithmetic, range, if, if-else, for, sfor\n";
+            "        is-equal, and, or, arithmetic, range\n";
 
     operator_usage_map.map[" + "] =
             "\n + :\n"
@@ -3250,7 +3250,7 @@ OperatorUsageMap::OperatorUsageMap() {
             "        range |3 .. 5 .. 0.5>\n"
             "            |3> + |3.5> + |4> + |4.5> + |5>\n\n"
             "    see also:\n"
-            "        range, srange, sp2seq, compile, ssplit\n";
+            "        range, srange, sp2seq, compile, ssplit, display-grid\n";
 
     operator_usage_map.map["|context>"] =
             "\n|context>:\n"
@@ -3474,6 +3474,18 @@ OperatorUsageMap::OperatorUsageMap() {
             "            0.666667|found: abc>\n\n"
             "    see also:\n"
             "        similar-input, strict-similar-input, equal-input, drop-below, identify-and-predict-integer-sequence-fragments.sw3\n";
+
+    operator_usage_map.map["comment"] =
+            "\ncomment:\n"
+            "    description:\n"
+            "        -- some text ...\n"
+            "        any line that starts with -- is considered a comment\n"
+            "        if inside a multi-line learn rule, the -- must match the current indentation level\n"
+            "        the first line of a multi-line learn rule can not be a comment\n"
+            "        we may improve comment handling at a later date\n\n"
+            "    examples:\n"
+            "        -- this is a comment\n\n"
+            "    see also:\n";
 
 }
 
