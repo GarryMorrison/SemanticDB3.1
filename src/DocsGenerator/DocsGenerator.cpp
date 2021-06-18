@@ -153,6 +153,7 @@ std::string escape_infix_operators(const std::string &raw_string) {
     if (raw_string == "(*,*)") { return "misc_star_params"; }
     if (raw_string == "|__self>") { return "misc_multi_self_ket"; }
     if (raw_string == "|context>") { return "misc_context_ket"; }
+    if (raw_string == "|>") { return "misc_empty_ket"; }
     return raw_string;
 }
 
@@ -482,7 +483,8 @@ void DocsGenerator::generate(const std::string& dir) {
     operator_locations[" !=> "] = "learn_rule";
 
     // Now, learn misc components:
-    std::vector<std::string> misc_components{ "comment", "label descent", "|*>", "|category: *>", "|_self>", "(*,*)", "|__self>", "|context>", "supported-ops", "dump", "if-then machine" };
+    std::vector<std::string> misc_components{ "|>", "comment", "label descent", "|*>", "|category: *>", "|_self>", "(*,*)", "|__self>", "|context>", "supported-ops", "dump", "if-then machine" };
+    operator_locations["|>"] = "misc";
     operator_locations["comment"] = "misc";
     operator_locations["label descent"] = "misc";
     operator_locations["|*>"] = "misc";
