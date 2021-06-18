@@ -497,6 +497,17 @@ void DocsGenerator::generate(const std::string& dir) {
     operator_locations["dump"] = "misc";
     operator_locations["if-then machine"] = "misc";
 
+    // Now, learn operator types:
+    std::vector<std::string> operator_types{"sigmoid", "numeric", "simple", "compound", "function", "bracket", "powered", "sequence"};
+    operator_locations["sigmoid"] = "operator_type";
+    operator_locations["numeric"] = "operator_type";
+    operator_locations["simple"] = "operator_type";
+    operator_locations["compound"] = "operator_type";
+    operator_locations["function"] = "operator_type";
+    operator_locations["bracket"] = "operator_type";
+    operator_locations["powered"] = "operator_type";
+    operator_locations["sequence"] = "operator_type";
+
     // Now, learn our operators:
     // NB: the locations must match those used in the next section.
     learn_locations(operator_locations, "built-in", fn_map.built_in);
@@ -537,6 +548,9 @@ void DocsGenerator::generate(const std::string& dir) {
 
     // Generate misc section:
     body += generate_statement_usage_docs(operator_locations, "misc", dest_dir, "misc", misc_components);
+
+    // Generate operator types section:
+    body += generate_statement_usage_docs(operator_locations, "operator types", dest_dir, "operator_type", operator_types);
 
     // Generate operator sections:
     body += generate_operator_usage_docs(operator_locations, "built in operators", dest_dir, "built-in", fn_map.built_in);

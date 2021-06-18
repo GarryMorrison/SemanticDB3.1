@@ -3740,6 +3740,132 @@ OperatorUsageMap::OperatorUsageMap() {
             "    see also:\n"
             "        do-you-know, drop, sdrop, value-if\n";
 
+    operator_usage_map.map["sigmoid"] =
+            "\nsigmoid:\n"
+            "    description:\n"
+            "        sigmoid operator\n"
+            "        operators that change coefficients of kets, but not the structure of the input sequence\n"
+            "        the most commonly used sigmoid operator is the clean sigmoid that just sets coefficients to either 1 or 0\n\n"
+            "    examples:\n"
+            "        the |sp> => rank split |abcde>\n"
+            "        the |sp>\n"
+            "            |a> + 2|b> + 3|c> + 4|d> + 5|e>\n\n"
+            "        clean the |sp>\n"
+            "            |a> + |b> + |c> + |d> + |e>\n\n"
+            "    see also:\n"
+            "        clean\n";
+
+    operator_usage_map.map["numeric"] =
+            "\nnumeric:\n"
+            "    description:\n"
+            "        numeric operator\n"
+            "        operators that multiply the coefficients of kets by some number (either an integer or a float)\n"
+            "        it preserves the structure of the input sequence\n"
+            "        also shows that application of operators to a sequence is really just a special type of multiplication\n"
+            "    examples:\n"
+            "        the |sp> => rank split |abcde>\n"
+            "        the |sp>\n"
+            "            |a> + 2|b> + 3|c> + 4|d> + 5|e>\n\n"
+            "        100 the |sp>\n"
+            "            100|a> + 200|b> + 300|c> + 400|d> + 500|e>\n\n"
+            "        -- a quick calculation of factorial:\n"
+            "        1 2 3 4 5 6 |x>\n"
+            "            720|x>\n\n"
+            "        -- a quick calculation of the square of 17:\n"
+            "        17^2 |x>\n"
+            "            289|x>\n\n"
+            "    see also:\n";
+
+    operator_usage_map.map["simple"] =
+            "\nsimple:\n"
+            "    description:\n"
+            "        simple operator\n"
+            "        an operator that takes no parameters\n"
+            "        either a literal operator defined with respect to some ket\n"
+            "        or a function with one parameter\n"
+            "        or an operator in the operator library\n"
+            "        depending on the exact definition of the operator, it sometimes corresponds to sparse matrix multiplication\n\n"
+            "    examples:\n"
+            "    see also:\n";
+
+    operator_usage_map.map["compound"] =
+            "\ncompound:\n"
+            "    description:\n"
+            "        compound operator\n"
+            "        an operator that has constant parameters, denoted: compound-op[... params ...]\n"
+            "        those parameters can be of type: integer, float, simple operator, *, or string\n"
+            "        if you require variable parameters, then you need to look at function operators instead\n\n"
+            "    examples:\n"
+            "        -- a quick way to generate a list with less typing:\n"
+            "        split[\" \"] |one two three four five six seven>\n"
+            "            |one> + |two> + |three> + |four> + |five> + |six> + |seven>\n\n\n"
+            "        -- learn some basic knowledge about Fred and Sam:\n"
+            "        friends |Fred> => |Jack> + |Harry> + |Ed> + |Mary> + |Rob> + |Patrick> + |Emma> + |Charlie>\n"
+            "        age |Fred> => |32>\n\n"
+            "        friends |Sam> => |Charlie> + |George> + |Emma> + |Jack> + |Robert> + |Frank> + |Julie>\n"
+            "        age |Sam> => |34>\n\n"
+            "        -- now display it as a table:\n"
+            "        table[person, age, friends] split[\" \"] |Fred Sam>\n"
+            "            +--------+-----+-----------------------------------------------------------+\n"
+            "            | person | age | friends                                                   |\n"
+            "            +--------+-----+-----------------------------------------------------------+\n"
+            "            | Fred   | 32  | Jack + Harry + Ed + Mary + Rob + Patrick + Emma + Charlie |\n"
+            "            | Sam    | 34  | Charlie + George + Emma + Jack + Robert + Frank + Julie   |\n"
+            "            +--------+-----+-----------------------------------------------------------+\n\n"
+            "    see also:\n"
+            "        table, split\n";
+
+    operator_usage_map.map["function"] =
+            "\nfunction:\n"
+            "    description:\n"
+            "        function operator\n"
+            "        an operator that has sequences as parameters, denoted: fn(seq1, seq2, seq3) input-seq\n"
+            "        the sequences are evaluated at invoke time, not definition time\n"
+            "        there are also context function operators, in which case the back end code also has access to the ContextList\n"
+            "        current code limitation is we only support up to 4 parameters\n"
+            "        bound functions are one way to get past this limitation\n\n"
+            "    examples:\n"
+            "        range(|1>, |5>, |0.5>)\n"
+            "            |1> + |1.5> + |2> + |2.5> + |3> + |3.5> + |4> + |4.5> + |5>\n\n"
+            "    see also:\n"
+            "        range, arithmetic\n";
+
+    operator_usage_map.map["bracket"] =
+            "\nbracket:\n"
+            "    description:\n"
+            "        bracket operator\n\n"
+            "    examples:\n"
+            "    see also:\n";
+
+    operator_usage_map.map["powered"] =
+            "\npowered:\n"
+            "    description:\n"
+            "        powered operator\n"
+            "        an operator that applies another operator multiple times\n"
+            "        eg, op^4 |some ket> is a short-cut for: op op op op |some ket>\n"
+            "        again, a nod back to operator application being a special type of multiplication\n"
+            "        a powered op is just an operator raised to some integer power\n\n"
+            "    examples:\n"
+            "        -- let's define a simple operator that prepends a category:\n"
+            "        op |*> #=> |op> :_ |_self>\n\n"
+            "        -- now let's power it to the 5th power:\n"
+            "        op^5 |some ket>\n"
+            "            |op: op: op: op: op: some ket>\n\n"
+            "    see also:\n";
+
+    operator_usage_map.map["sequence"] =
+            "\nsequence:\n"
+            "    description:\n"
+            "        sequence operator\n"
+            "        a sequence of operators, of any type, chained together\n"
+            "        each operator is separated by a space character\n"
+            "        and is evaluated from the right, towards the left\n"
+            "        the input to any operator is a sequence, the output of any operator is also a sequence\n"
+            "        consequently any chain of operators also maps an input sequence to an output sequence\n"
+            "        there is some similarity of operator sequences with the pipe command | on the command line\n\n"
+            "    examples:\n"
+            "    see also:\n";
+
 }
 
 std::string OperatorUsageMap::get_usage(const std::string &s) const {
