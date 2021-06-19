@@ -468,6 +468,9 @@ FunctionOperatorMap::FunctionOperatorMap() {
 
     idx = ket_map.get_idx("spike-merge");
     fn_map.compound_seq_fn.emplace(idx, &op_spike_merge);
+
+    idx = ket_map.get_idx("transform");
+    fn_map.whitelist_2.emplace(idx, &op_transform);
 }
 
 template <class T>

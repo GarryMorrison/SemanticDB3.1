@@ -1463,3 +1463,18 @@ Superposition op_similar_grid(ContextList &context, const Sequence &input_seq, c
     result.coeff_sort();
     return result;
 }
+
+Superposition op_transform(const Sequence &input_seq, const Sequence &one, const Sequence &two) {
+    Superposition input_sp = input_seq.to_sp();
+    Superposition LHS_sp = one.to_sp();
+    Superposition RHS_sp = two.to_sp();
+    for (const auto &k: LHS_sp) {
+        if (input_sp.find_value(k) < k.value()) {  // If the input doesn't contain enough "ingredients" then return it unchanged.
+            return input_sp;
+        }
+    }
+    LHS_sp.multiply(-1);
+    input_sp.add(LHS_sp);
+    input_sp.add(RHS_sp);
+    return input_sp;
+}

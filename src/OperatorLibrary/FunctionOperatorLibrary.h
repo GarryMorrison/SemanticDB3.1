@@ -61,5 +61,6 @@ Sequence op_sfor4(ContextList &context, const Sequence &input_seq, const Sequenc
 Sequence op_unlearn_fn(ContextList &context, const Sequence &input_seq, const Sequence &one);
 Sequence op_grid_simm2(ContextList &context, const Sequence &input_seq, const Sequence &one, const Sequence &two);
 Superposition op_similar_grid(ContextList &context, const Sequence &input_seq, const Sequence &one);
+Superposition op_transform(const Sequence &input_seq, const Sequence &one, const Sequence &two);
 
 #endif //SDB3_1_FUNCTIONOPERATORLIBRARY_H
