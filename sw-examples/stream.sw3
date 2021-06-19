@@ -1,0 +1,17 @@
+-- stream of consciousness operator
+-- created 2021/6/19
+-- usually helpful to invoke find-inverse[*] before using this operator,
+-- to help prevent running into dead ends
+-- though at the cost of potentially going around in circles
+-- the larger the data-set the better this operator works.
+-- to invoke: stream(|20>) |starting ket>
+
+
+stream {max|steps>} #=>
+    the |ket> => pick-elt clean seq2sp input |seq>
+    for( the |k> in |1> .. max|steps>):
+        print (the|k> :_ the |ket>)
+        the |operator> => pick-elt supported-ops the |ket>
+        the |ket> => pick-elt clean seq2sp apply(the |operator>, the |ket>)
+    end:
+
