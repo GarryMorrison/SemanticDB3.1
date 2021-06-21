@@ -4051,7 +4051,7 @@ OperatorUsageMap::OperatorUsageMap() {
             "        0.1|x: 1> + 7.2|x: 2> + 5|x: 3> + 0.09|x: 4> + 3.4|x: 5>\n"
             "        -- where we have chosen |x: k> as the basis elements, but they can be any string\n\n"
             "    see also:\n"
-            "        ket, sequence, union, is-mbr, is-subset, simm\n";
+            "        ket, sequence, union, intersection, is-mbr, is-subset, simm\n";
 
     operator_usage_map.map["sequence"] =
             "\nsequence:\n"
@@ -4078,6 +4078,30 @@ OperatorUsageMap::OperatorUsageMap() {
             "            |a> + 2|b> + 3|c> . |u> + 2|v> . |x> + 2|y> + 3|z>\n\n"
             "    see also:\n"
             "        ket, superposition, ssplit\n";
+
+    operator_usage_map.map["bar-chart"] =
+            "\nbar-chart:\n"
+            "    description:\n"
+            "        bar-chart[width] sp\n"
+            "        rescale the kets in sp to width, and then draw a basic bar-chart.\n"
+            "        a nice quick visualization of ket coefficients\n"
+            "        often combined with a sort operator of some sort\n\n"
+            "    examples:\n"
+            "        -- simplest example is a bar-chart of a Gaussian:\n"
+            "        bar-chart[50] Gaussian[0.7] |x: 10>\n"
+            "            ----------\n"
+            "            x: 6  : |\n"
+            "            x: 7  : ||\n"
+            "            x: 8  : ||||||\n"
+            "            x: 9  : ||||||||||||||||||\n"
+            "            x: 10 : ||||||||||||||||||||||||||||||||||||||||||||||||||\n"
+            "            x: 11 : ||||||||||||||||||\n"
+            "            x: 12 : ||||||\n"
+            "            x: 13 : ||\n"
+            "            x: 14 : |\n"
+            "            ----------\n\n"
+            "    see also:\n"
+            "        Gaussian\n";
 }
 
 std::string OperatorUsageMap::get_usage(const std::string &s) const {
