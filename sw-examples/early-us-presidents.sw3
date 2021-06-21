@@ -1,0 +1,53 @@
+-- a small data-set related to the first 6 US presidents.
+-- updated 2021/6/21
+
+
+|context> => |early US Presidents>
+
+the-list-of |early US Presidents> => |Washington> + |Adams> + |Jefferson> + |Madison> + |Monroe> + |Q Adams>
+
+president-number |Washington> => |number: 1>
+president-era |Washington> => |year: 1789> .. |year: 1797>
+party |Washington> => |party: Independent>
+full-name |Washington> => |person: George Washington>
+
+title |person: George Washington> => |US President: George Washington>
+
+president-number |Adams> => |number: 2>
+president-era |Adams> => |year: 1797> .. |year: 1801>
+party |Adams> => |party: Federalist>
+full-name |Adams> => |person: John Adams>
+
+title |person: John Adams> => |US President: John Adams>
+
+president-number |Jefferson> => |number: 3>
+president-era |Jefferson> => |year: 1801> .. |year: 1809>
+party |Jefferson> => |party: Democratic-Republican>
+full-name |Jefferson> => |person: Thomas Jefferson>
+
+title |person: Thomas Jefferson> => |US President: Thomas Jefferson>
+
+president-number |Madison> => |number: 4>
+president-era |Madison> => |year: 1809> .. |year: 1817>
+party |Madison> => |party: Democratic-Republican>
+full-name |Madison> => |person: James Madison>
+
+title |person: James Madison> => |US President: James Madison>
+
+president-number |Monroe> => |number: 5>
+president-era |Monroe> => |year: 1817> .. |year: 1825>
+party |Monroe> => |party: Democratic-Republican>
+full-name |Monroe> => |person: James Monroe>
+
+title |person: James Monroe> => |US President: James Monroe>
+
+president-number |Q Adams> => |number: 6>
+president-era |Q Adams> => |year: 1825> .. |year: 1829>
+party |Q Adams> => |party: Democratic-Republican>
+full-name |Q Adams> => |person: John Quincy Adams>
+
+title |person: John Quincy Adams> => |US President: John Quincy Adams>
+
+founded |party: Democratic-Republican> => |year: 1791>
+dissolved |party: Democratic-Republican> => |year: 1825>
+
