@@ -836,37 +836,40 @@ Sequence op_value_if(const Sequence &input_seq, const Sequence &one, const Seque
     return three;
 }
 
-Sequence op_is_mbr(const Sequence &input_seq, const Sequence &one) {
+Ket op_is_mbr(const Sequence &input_seq, const Sequence &one) {
     if (input_seq.size() == 0 || one.size() == 0) { return Ket("no"); }
-    ulong ket_idx = one.to_ket().label_idx();
-    for (const auto &k: input_seq.to_sp()) {  // could probably tighten this up using sp.find_value(ket).
-        if (k.label_idx() == ket_idx) {
-            return Ket("yes");
-        }
-    }
+    Ket one_ket = one.to_ket();
+    if (input_seq.to_sp().find_value(one_ket) > 0) { return Ket("yes"); }
     return Ket("no");
 }
 
-Sequence op_mbr(const Sequence &input_seq, const Sequence &one) {
-    if (input_seq.size() == 0 || one.size() == 0) { return Ket(""); }
+Ket op_mbr(const Sequence &input_seq, const Sequence &one) {
+    if (input_seq.size() == 0 || one.size() == 0) { return Ket(); }
     Ket one_ket = one.to_ket();
     double value = input_seq.to_sp().find_value(one_ket);
     return Ket(one_ket.label_idx(), value);
 }
 
-Sequence op_is_subset(const Sequence &input_seq, const Sequence &one) {
+Ket op_is_subset(const Sequence &input_seq, const Sequence &one) {
     if (input_seq.size() == 0 || one.size() == 0) { return Ket("no"); }
+    Superposition input_sp = input_seq.to_sp();
+    Superposition one_sp = one.to_sp();
+    for (const auto &k: one_sp) {
+        if (k.value() > input_sp.find_value(k)) {
+            return Ket("no");
+        }
+    }
+    /*
     for (const auto &sp_one: one) {
-        for (const auto &sp_input: input_seq) {
+        for (const auto &sp_input: input_seq) {  // I don't understand what I was trying to do here ....
             for (const auto &k: sp_one) {
-                double one_value = k.value();
-                double input_seq_value = sp_input.find_value(k);
-                if (one_value > input_seq_value) {
+                if (k.value() > sp_input.find_value(k)) {
                     return Ket("no");
                 }
             }
         }
     }
+    */
     return Ket("yes");
 }
 

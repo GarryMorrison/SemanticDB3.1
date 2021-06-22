@@ -34,9 +34,9 @@ Sequence op_seq_learn(ContextList &context, const Sequence &input_seq, const Seq
 Sequence op_zip(ContextList &context, const Sequence &input_seq, const Sequence &one);
 Sequence op_if(ContextList &context, const Sequence &input_seq, const Sequence &one, const Sequence &two, const Sequence &three);
 Sequence op_value_if(const Sequence &input_seq, const Sequence &one, const Sequence &two, const Sequence &three);
-Sequence op_is_mbr(const Sequence &input_seq, const Sequence &one);
-Sequence op_mbr(const Sequence &input_seq, const Sequence &one);
-Sequence op_is_subset(const Sequence &input_seq, const Sequence &one);
+Ket op_is_mbr(const Sequence &input_seq, const Sequence &one);
+Ket op_mbr(const Sequence &input_seq, const Sequence &one);
+Ket op_is_subset(const Sequence &input_seq, const Sequence &one);
 Sequence op_and1(const Sequence &input_seq, const Sequence &one);
 Sequence op_or1(const Sequence &input_seq, const Sequence &one);
 Sequence op_xor1(const Sequence &input_seq, const Sequence &one);
