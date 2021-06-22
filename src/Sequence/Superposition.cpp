@@ -6,6 +6,7 @@
 #include <cmath>
 #include <random>
 #include <algorithm>
+#include <chrono>
 #include "Superposition.h"
 #include "../Function/misc.h"
 #include "../Function/NaturalSort.h"
@@ -709,7 +710,7 @@ Ket Superposition::pick_elt() const {
     return Ket(idx, value);
 }
 
-Ket Superposition::weighted_pick_elt() const {
+Ket Superposition::weighted_pick_elt() const {  // Not happy with the results on this. I suspect there is a bug in here somewhere!
     Superposition sp1 = this->drop();
     if (sp1.size() == 0) { return Ket(); }
     if (sp1.sort_order[0] == ket_map.get_idx("")) { return Ket(); }
@@ -719,9 +720,11 @@ Ket Superposition::weighted_pick_elt() const {
         sum += value;
     }  // sum should be > 0
     std::random_device rd;  // is this correct to re-seed on every invoke?
-    std::mt19937 eng(rd()); // code from here: https://stackoverflow.com/questions/7560114/random-number-c-in-some-range
+    std::mt19937 gen(rd()); // code from here: https://stackoverflow.com/questions/7560114/random-number-c-in-some-range
+    // int m_seed {static_cast<int>(std::chrono::high_resolution_clock::now().time_since_epoch().count())};  // Testing a better seed method than std::random_device.
+    // std::mt19937 gen(m_seed);                                                                             // Nope, seems a little worse.
     std::uniform_int_distribution<> distr(0, sum);
-    ulong r = distr(eng);
+    ulong r = distr(gen);
     double upto = 0;
     for (const auto k : sp1 ) { // maybe iterate using sort_order instead as an optimization?
         double w = k.value();
