@@ -1,0 +1,30 @@
+-- a simple quantum mechanics experiment:
+-- created 2021/6/22
+
+-- let's first define a superposition, that we can measure one ket at a time:
+-- this superposition doesn't seem to work all that great:
+the |superposition> => |a> + 0.2|b> + 0.5|c> + 8.1|d> + 0.01|e>
+
+-- but this one, with uniform probabilities, seems to work fine:
+-- the |superposition> => |a> + |b> + |c> + |d> + |e>
+
+
+-- now define the run experiment operator:
+-- each iteration it sets up a new experiment
+-- and then takes a measurement of that system
+-- then "cheat" and compare the result with the original superposition
+run-experiment |*> #=>
+    unlearn[the] |result>
+    for( the|k> in |1> .. |__self>):
+        measure |system> !=> clean weighted-pick-elt the |superposition>
+        the |result> +=> measure |system>
+        the |similarity> => simm(the |result>, the |superposition>)
+        print (the |k> :_ round[1] extract-value push-float 100 the |similarity>)
+    end:
+    the |similarity>
+
+
+-- now invoke it for 500 trials:
+-- run-experiment |500>
+
+
