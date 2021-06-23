@@ -723,8 +723,9 @@ Ket Superposition::weighted_pick_elt() const {  // Not happy with the results on
     std::mt19937 gen(rd()); // code from here: https://stackoverflow.com/questions/7560114/random-number-c-in-some-range
     // int m_seed {static_cast<int>(std::chrono::high_resolution_clock::now().time_since_epoch().count())};  // Testing a better seed method than std::random_device.
     // std::mt19937 gen(m_seed);                                                                             // Nope, seems a little worse.
-    std::uniform_int_distribution<> distr(0, sum);
-    ulong r = distr(gen);
+    // std::uniform_int_distribution<> distr(0, sum);
+    std::uniform_real_distribution<double> distr(0, sum);
+    double r = distr(gen);
     double upto = 0;
     for (const auto k : sp1 ) { // maybe iterate using sort_order instead as an optimization?
         double w = k.value();

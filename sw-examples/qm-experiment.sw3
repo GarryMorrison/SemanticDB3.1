@@ -1,18 +1,21 @@
 -- a simple quantum mechanics experiment:
 -- created 2021/6/22
+-- updated 2021/6/23
 
 -- let's first define a superposition, that we can measure one ket at a time:
--- this superposition doesn't seem to work all that great:
+-- (it can be any superposition, with positive coefficients)
 the |superposition> => |a> + 0.2|b> + 0.5|c> + 8.1|d> + 0.01|e>
-
--- but this one, with uniform probabilities, seems to work fine:
--- the |superposition> => |a> + |b> + |c> + |d> + |e>
 
 
 -- now define the run experiment operator:
 -- each iteration it sets up a new experiment
--- and then takes a measurement of that system
--- then "cheat" and compare the result with the original superposition
+-- and then takes a measurement of that system 
+-- (which is a single ket, chosen with probability according to the coefficients in the original superposition)
+-- then compares the cumulative result with the original superposition
+-- then outputs the similarity results for that trial
+-- over many, many trials, the result should converge towards that of the original superposition
+-- note that the magnitude of the superpositions do not matter in the simm() comparison
+-- it is their normalized "shape" that is compared
 run-experiment |*> #=>
     unlearn[the] |result>
     for( the|k> in |1> .. |__self>):
