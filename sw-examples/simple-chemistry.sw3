@@ -1,0 +1,20 @@
+-- represent some simple chemical reactions, using our transform() operator
+-- created 2021/6/23
+
+-- define the individual reactions:
+make-carbon-dioxide (*) #=> drop transform(|C> + |O2>, |CO2>) |__self>
+make-sodium-bicarbonate (*) #=> drop transform(|CO2> + |NaOH>, |NaHCO3>) |__self>
+make-sodium-chloride (*) #=> drop transform(|NaHCO3> + |HCl>, |H2O> + |NaCl> + |CO2>) |__self>
+
+
+-- now chain them:
+chained-reaction |*> #=>
+    step |one> => make-carbon-dioxide (|C> + |O2>)
+    step |two> => make-sodium-bicarbonate (step |one> + |NaOH>)
+    step |three> => make-sodium-chloride (step |two> + |HCl>)
+
+
+-- now invoke it:
+chained-reaction
+
+
