@@ -16,7 +16,7 @@ chained-reaction |*> #=>
 
 
 -- now invoke our sample chemical reaction:
--- chained-reaction
+chained-reaction
 
 
 
@@ -51,5 +51,5 @@ split-molecule |*> #=>
 
 
 -- test our split-molecule operator with some sample molecules:
-table[molecule, split-molecule] split[" "] |H Na H2 H2O C6H12O6 NaHCO3>
+table[molecule, split-molecule] split[" "] |H Na H2 H2O C6H12O6 NaHCO3 NaCl CO2>
 

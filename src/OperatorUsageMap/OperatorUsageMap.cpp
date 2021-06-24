@@ -4136,7 +4136,7 @@ OperatorUsageMap::OperatorUsageMap() {
             "        weighted-pick-elt input-sp\n"
             "        randomly pick a ket from the input superposition\n"
             "        the probability of being picked is determined by the coefficients of the ket\n"
-            "        the returned ket has the same coefficient as in the input superposiiton\n"
+            "        the returned ket has the same coefficient as in the input superposition\n"
             "        for un-weighted probabilities, use pick-elt\n\n"
             "    examples:\n\n"
             "        -- if applied to an empty ket, return the empty ket:\n"
