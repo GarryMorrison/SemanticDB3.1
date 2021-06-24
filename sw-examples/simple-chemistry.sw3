@@ -1,6 +1,7 @@
 -- represent some simple chemical reactions, using our transform() operator
 -- and define an operator that splits a chemical into component atoms
 -- created 2021/6/23
+-- updated 2021/6/24
 
 -- define the individual reactions:
 make-carbon-dioxide (*) #=> drop transform(|C> + |O2>, |CO2>) |__self>
@@ -20,12 +21,13 @@ chained-reaction
 
 
 
-is-lower-case ssplit |abcdefghijklmnopqrstuvwxyz> => |yes>
-is-upper-case ssplit |ABCDEFGHIJKLMNOPQRSTUVWXYZ> => |yes>
-is-digit ssplit |0123456789> => |yes>
+-- learn classes:
+is-lower-case split |abcdefghijklmnopqrstuvwxyz> => |yes>
+is-upper-case split |ABCDEFGHIJKLMNOPQRSTUVWXYZ> => |yes>
+is-digit split |0123456789> => |yes>
 
 
--- split molecules into single atoms:
+-- split molecules into single atoms, using a simple parser:
 split-molecule |*> #=>
     unlearn[the] (|atom label> + |atom digits> + |atoms>)
     for( the |char> in ssplit |__self>):
