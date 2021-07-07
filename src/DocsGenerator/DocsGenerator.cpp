@@ -7,6 +7,7 @@
 #include <time.h>
 #include <filesystem>
 #include <map>
+#include <sstream>
 #include "DocsGenerator.h"
 #include "../FunctionOperatorMap/FunctionOperatorMap.h"
 #include "../OperatorUsageMap/OperatorUsageMap.h"
