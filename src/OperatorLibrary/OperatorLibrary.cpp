@@ -3,6 +3,7 @@
 //
 
 #include <iostream>
+#include <fstream>
 #include <string>
 #include <iomanip>
 #include <cmath>
@@ -2045,4 +2046,70 @@ Sequence op_sleep_ms(const Sequence &seq, const std::vector<std::shared_ptr<Comp
     int sleep_for = parameters[0]->get_int();
     std::this_thread::sleep_for(std::chrono::milliseconds(sleep_for));
     return seq;
+}
+
+Ket op_save_as_dot(const Superposition &sp, ContextList &context, const std::vector<std::shared_ptr<CompoundConstant> > &parameters) {
+    if (parameters.size() < 2 || sp.size() == 0) { return Ket(); }
+    std::string filename = parameters[0]->get_string();
+    ulong star_idx = ket_map.get_idx("*");
+    std::set<ulong> operators;
+    if (parameters.size() == 2 && (parameters[1]->get_operator().get_idx() == star_idx)) {  // save everything.
+        for (const auto &k: sp) {
+            ulong label_idx = k.label_idx();
+            std::vector<ulong> supported_ops = context.supported_ops(label_idx);
+            operators.insert(std::begin(supported_ops), std::end(supported_ops));
+        }
+    } else {
+        bool first_pass = true;
+        for (const auto &param: parameters) {
+            if (first_pass) {
+                first_pass = false;
+                continue;
+            }
+            ulong op_idx = param->get_operator().get_idx();
+            operators.insert(op_idx);
+        }
+    }
+    std::string dot_file = "digraph G {\n  node [ shape=Mrecord ]\n";
+    for (ulong op_idx: operators) {
+        std::string op_str = ket_map.get_str(op_idx);
+        for (const auto &k: sp) {
+            ulong label_idx = k.label_idx();
+            Sequence RHS = context.recall(op_idx, label_idx)->to_seq();
+            if (RHS.size() <= 1) {
+                for (const auto &k2: RHS.to_sp()) {
+                    dot_file += "  \"" + k.label() + "\" -> \"" + k2.label() + "\" [ label=\"" + op_str + "\" ]\n";
+                }
+            } else {
+                dot_file += "\n  subgraph cluster_0 {\n  rankdir=\"LR\"\n  ranksep=\"0.05\"\n";
+                bool first_pass = true;
+                std::string first_element;
+                for (const auto &sp2: RHS) {
+                    if (first_pass) {
+                        first_pass = false;
+                        first_element = sp2.readable_display();
+                        dot_file += "  \"" + first_element + "\"";
+                    } else {
+                        dot_file += " -> \"" + sp2.readable_display() + "\"";
+                    }
+                }
+                dot_file += " [ arrowhead=dot ]\n  }\n  \"" + k.label() + "\" -> \"" + first_element +
+                            "\"  [ label=\"" + op_str + "\" ] \n";
+            }
+        }
+    }
+    dot_file += "}\n";
+    std::cout << "filename: " << filename << "\n";
+    std::cout << dot_file;
+    std::ofstream myfile;
+    myfile.open(filename);
+    if (myfile.is_open()) {  // Is this a security risk??
+        myfile << dot_file;
+        myfile.close();
+        return Ket("saved dot file");
+    } else {
+        std::cout << "Unable to open file: " << dot_file << std::endl;
+        return Ket("failed to save dot file");
+    }
+    return Ket("We shouldn't be here in save-as-dot.");
 }

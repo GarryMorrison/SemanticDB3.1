@@ -471,6 +471,9 @@ FunctionOperatorMap::FunctionOperatorMap() {
 
     idx = ket_map.get_idx("transform");
     fn_map.whitelist_2.emplace(idx, &op_transform);
+
+    idx = ket_map.get_idx("save-as-dot");
+    fn_map.compound_context_sp_fn.emplace(idx, &op_save_as_dot);
 }
 
 template <class T>
