@@ -10,7 +10,7 @@
 
 std::string standard_introduction_text = "Welcome to the Semantic DB version 3.1.1\n";
 std::string interactive_introduction_text = "\nWelcome to the Semantic DB version 3.1.1 shell.\n"
-                                            "Last updated 18th June 2021.\n"
+                                            "Last updated 26th November 2021.\n"
                                             "Type h for help.\n"
                                             "Online info for the SDB language at http://semantic-db.org/docs/usage3/\n";
 
@@ -59,7 +59,7 @@ int main(int argc, char** argv) {
         TCLAP::CmdLine cmd("The Semantic DB 3.1.1 shell", ' ', "3.1.1");
 
         // TCLAP::SwitchArg generate_docs_switch("g", "generate", "Generate html documentation (currently unimplemented).", cmd, false);
-        TCLAP::ValueArg<std::string> generate_docs_arg("g", "generate", "Generate html documentation in the given directory (currently unimplemented).", false, "", "directory");
+        TCLAP::ValueArg<std::string> generate_docs_arg("g", "generate", "Generate html documentation in the given directory.", false, "", "directory");
         cmd.add(generate_docs_arg);
         TCLAP::ValueArg<unsigned int> decimal_places_arg("p", "places", "Set the default number of decimal places used in kets.", false, 5, "integer");
         cmd.add( decimal_places_arg );

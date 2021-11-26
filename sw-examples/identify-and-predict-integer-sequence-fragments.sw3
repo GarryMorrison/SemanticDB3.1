@@ -1,6 +1,7 @@
 -- use smap and if-then machines to identify and predict next digits from an integer sequence fragment:
 -- see: 
 -- updated to the version 3.1.1 language
+-- 2021/11/26 fixed a bug that caused a crash when trying to create if then machines.
 
 
 -- min and max ngram lenghts for the prediction if-then machines:
@@ -105,12 +106,16 @@ create-next-rules (*) #=>
 -- a helper operator:
 -- extract-node-number |*> #=> sselect[2,2] ssplit[": "] |_self>
 extract-node-number |*> #=> extract-value extract-category |_self>
+not |no> => |yes>
+not |yes> => |no>
 
 
 -- define our if-then machine creation operator:
 create-if-then-machine (*,*) #=>
-    node |number> => |1>
     node |number> => plus[1] clean select[-1,-1] ket-sort extract-node-number rel-kets[then] |>
+    if( not do-you-know node |number> ):
+        node |number> => |1>
+    end:
     node |idx> => |1>
     smap(min |ngram len>, max |ngram len>, |__self1>) |__self0>
     node |label> => |node:> __ node |number> _ |: *>
