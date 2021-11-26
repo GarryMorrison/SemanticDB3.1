@@ -4186,6 +4186,23 @@ OperatorUsageMap::OperatorUsageMap() {
             "    see also:\n"
             "        pick-elt, random\n";
 
+    operator_usage_map.map["save-as-dot"] =
+            "\nsave-as-dot:\n"
+            "    description:\n"
+            "        save-as-dot[\"filename.dot\", op1, ... , opn] input-sp\n"
+            "        save-as-dot[\"filename.dot\", *] input-sp\n"
+            "        Save learn rules as a dot file, so it can be visualized with graphviz.\n"
+            "        The first parameter is the filename to save it to,\n"
+            "        noting the file will be saved to the current directory, even if you specify a path.\n"
+            "        The operators then define which operators to use, * means use all operators.\n"
+            "        input-sp is a list of the kets we want to save as dot files.\n\n"
+            "    examples:\n"
+            "        -- Save everything, to the file foo.dot:\n"
+            "        save-as-dot[\"foo.dot\", *] rel-kets[*]\n\n"
+            "        -- Save only age and friends for Fred, Sam and Jack, to filename foo2.dot:\n"
+            "        save-as-dot[\"foo2.dot\", age, friends] split[\" \"] |Fred Sam Jack>\n\n"
+            "    see also:\n"
+            "        ";
 }
 
 std::string OperatorUsageMap::get_usage(const std::string &s) const {
