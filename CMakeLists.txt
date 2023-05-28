@@ -3,132 +3,71 @@ project(SDB3_1)
 
 set(CMAKE_CXX_STANDARD 17)
 
-# FIND_PACKAGE(BISON 3.3 REQUIRED)
-FIND_PACKAGE(BISON)
+# find build requirements
+FIND_PACKAGE(BISON 3.3 REQUIRED)
 FIND_PACKAGE(FLEX)
 
+## INCLUDES
+# include root source directory for includes search
+INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR})
+# include binary build directory for includes search
+INCLUDE_DIRECTORIES(${CMAKE_CURRENT_BINARY_DIR})
+# include 3rd party headers for includes search
+INCLUDE_DIRECTORIES(src/tclap/)
+
+
+## SDB CORE
+# Parser: generated bison/flex outputs for Parser
 BISON_TARGET(Parser src/Parser/Parser.yy ${CMAKE_CURRENT_BINARY_DIR}/parser.tab.cpp DEFINES_FILE ${CMAKE_CURRENT_BINARY_DIR}/parser.h)
 FLEX_TARGET(Lexer src/Parser/Scanner.ll ${CMAKE_CURRENT_BINARY_DIR}/lexer.cpp DEFINES_FILE ${CMAKE_CURRENT_BINARY_DIR}/lexer.h)
-
 ADD_FLEX_BISON_DEPENDENCY(Lexer Parser)
-INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_CURRENT_BINARY_DIR} src/tclap/)
 
-file(GLOB root_SRC CONFIGURE_DEPENDS "*.h" "*.cpp")
+# Parser: set parser header and source files explicitly to avoid any generated bison/flex outputs
+set(Parser_SRC "src/Parser/Driver.h" "src/Parser/Driver.cpp" "src/Parser/Scanner.h")
 
+# collect all files ending in .h and .cpp
+file(GLOB CompoundConstant_SRC CONFIGURE_DEPENDS "src/CompoundConstant/*.h" "src/CompoundConstant/*.cpp")
+file(GLOB Context_SRC CONFIGURE_DEPENDS "src/Context/*.h" "src/Context/*.cpp")
+file(GLOB DocsGenerator_SRC CONFIGURE_DEPENDS "src/DocsGenerator/*.h" "src/DocsGenerator/*.cpp")
 file(GLOB Function_SRC CONFIGURE_DEPENDS "src/Function/*.h" "src/Function/*.cpp")
+file(GLOB FunctionOperatorMap_SRC CONFIGURE_DEPENDS "src/FunctionOperatorMap/*.h" "src/FunctionOperatorMap/*.cpp")
 file(GLOB KetMap_SRC CONFIGURE_DEPENDS "src/KetMap/*.h" "src/KetMap/*.cpp")
+file(GLOB Operator_SRC CONFIGURE_DEPENDS "src/Operator/*.h" "src/Operator/*.cpp")
+file(GLOB OperatorLibrary_SRC CONFIGURE_DEPENDS "src/OperatorLibrary/*.h" "src/OperatorLibrary/*.cpp")
+file(GLOB OperatorUsageMap_SRC CONFIGURE_DEPENDS "src/OperatorUsageMap/*.h" "src/OperatorUsageMap/*.cpp")
+file(GLOB Sequence_SRC CONFIGURE_DEPENDS "src/Sequence/*.h" "src/Sequence/*.cpp")
+
+# SDB CORE library
+set(CORE_SOURCE_FILES
+     ${Parser_SRC}
+     ${BISON_Parser_OUTPUTS}
+     ${FLEX_Lexer_OUTPUTS}
+     ${CompoundConstant_SRC}
+     ${Context_SRC}
+     ${DocsGenerator_SRC}
+     ${Function_SRC}
+     ${FunctionOperatorMap_SRC}
+     ${KetMap_SRC}
+     ${Operator_SRC}
+     ${OperatorLibrary_SRC}
+     ${OperatorUsageMap_SRC}
+     ${Sequence_SRC}
+)
+add_library(sdb_core STATIC ${CORE_SOURCE_FILES})
 
 
-add_executable(SDB3_1
+# BUILD TARGETS
+# FIXME: add a GUI target here
 
- # src/
- src/main.cpp src/SDB3_header.h
+# CLI binary
+add_executable(SDB3_1 src/main.cpp src/SDB3_header.h)
+target_link_libraries(SDB3_1 sdb_core)
 
- # CompoundConstant
- src/CompoundConstant/CompoundConstant.cpp
- src/CompoundConstant/CompoundConstant.h
- src/CompoundConstant/ConstantInteger.cpp
- src/CompoundConstant/ConstantInteger.h
- src/CompoundConstant/ConstantFloat.cpp
- src/CompoundConstant/ConstantFloat.h
- src/CompoundConstant/ConstantOperator.cpp
- src/CompoundConstant/ConstantOperator.h
- src/CompoundConstant/ConstantString.cpp
- src/CompoundConstant/ConstantString.h
+# test main binary
+add_executable(test_main src/test_main.cpp src/SDB3_header.h)
+target_link_libraries(test_main sdb_core)
 
- # Context
- src/Context/Frame.cpp
- src/Context/Frame.h
- src/Context/NewContext.cpp
- src/Context/NewContext.h
- src/Context/ContextList.cpp
- src/Context/ContextList.h
- src/Context/BoundFunction.cpp
- src/Context/BoundFunction.h
+# test parser binary
+add_executable(test_parser src/test_parser_main.cpp src/SDB3_header.h)
+target_link_libraries(test_parser sdb_core)
 
- # DocsGenerator
- src/DocsGenerator/DocsGenerator.cpp
- src/DocsGenerator/DocsGenerator.h
-
- # Function
- src/Function/split_join.cpp
- src/Function/split_join.h
- src/Function/misc.cpp
- src/Function/misc.h
- src/Function/Timer.cpp
- src/Function/Timer.h
- src/Function/NaturalSort.h
-
- # FunctionsOperatorMap
- src/FunctionOperatorMap/FunctionOperatorMap.cpp
- src/FunctionOperatorMap/FunctionOperatorMap.h
-
- # Ketmap
- src/KetMap/KetMap.cpp
- src/KetMap/KetMap.h
-
- # Operator
- src/Operator/BaseOperator.h
- src/Operator/BracketOperator.cpp
- src/Operator/BracketOperator.h
- src/Operator/CompoundOperator.cpp
- src/Operator/CompoundOperator.h
- src/Operator/EmptyOperator.h
- src/Operator/FunctionOperator.cpp
- src/Operator/FunctionOperator.h
- src/Operator/NumericOperator.cpp
- src/Operator/NumericOperator.h
- src/Operator/OperatorSequence.cpp
- src/Operator/OperatorSequence.h
- src/Operator/PoweredOperator.cpp
- src/Operator/PoweredOperator.h
- src/Operator/SimpleOperator.cpp
- src/Operator/SimpleOperator.h
-
- # OperatorLibrary
- src/OperatorLibrary/FunctionOperatorLibrary.cpp
- src/OperatorLibrary/FunctionOperatorLibrary.h
- src/OperatorLibrary/OperatorLibrary.cpp
- src/OperatorLibrary/OperatorLibrary.h
- src/OperatorLibrary/SigmoidLibrary.cpp
- src/OperatorLibrary/SigmoidLibrary.h
-
- # OperatorUsageMap
- src/OperatorUsageMap/OperatorUsageMap.cpp
- src/OperatorUsageMap/OperatorUsageMap.h
-
- # Parser
- src/Parser/Driver.cpp
- src/Parser/Driver.h
- src/Parser/Scanner.h
- ${BISON_Parser_OUTPUTS}
- ${FLEX_Lexer_OUTPUTS}
-
- # Sequence
- src/Sequence/Ket.cpp
- src/Sequence/Ket.h
- src/Sequence/Superposition.cpp
- src/Sequence/Superposition.h
- src/Sequence/Sequence.cpp
- src/Sequence/Sequence.h
- src/Sequence/SuperpositionIter.cpp
- src/Sequence/SuperpositionIter.h
- src/Sequence/BaseSequence.h
- src/Sequence/OperatorWithSequence.cpp
- src/Sequence/OperatorWithSequence.h
- src/Sequence/SelfKet.cpp
- src/Sequence/SelfKet.h
- src/Sequence/IfElseStatement.cpp
- src/Sequence/IfElseStatement.h
- src/Sequence/ForStatement.cpp
- src/Sequence/ForStatement.h
- src/Sequence/WhileStatement.cpp
- src/Sequence/WhileStatement.h
- src/Sequence/LearnRule.cpp
- src/Sequence/LearnRule.h
- src/Sequence/MultiLearnRule.cpp
- src/Sequence/MultiLearnRule.h
- src/Sequence/MultiSelfKet.cpp
- src/Sequence/MultiSelfKet.h
-
- )

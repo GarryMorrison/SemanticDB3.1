@@ -4,6 +4,9 @@
 #include "SDB3_header.h"
 #include "src/Parser/Driver.h"
 
+// FIXME: this variable needs to be defined before it links to sdb_core properly
+unsigned int default_decimal_places;
+
 int main() {
 
     ContextList context("Global context");
