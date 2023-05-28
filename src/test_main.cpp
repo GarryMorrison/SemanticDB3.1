@@ -3,6 +3,9 @@
 
 #include "SDB3_header.h"
 
+// FIXME: this variable needs to be defined before it links to sdb_core properly
+unsigned int default_decimal_places;
+
 int main() {
     // Test KetMap:
     // KetMap ket_map; // make it global, so don't need to define it here.

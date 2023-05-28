@@ -41,7 +41,10 @@ std::string help_string = "\n    q, quit, exit          quit the semantic agent\
                           "    reset                  Completely erase all knowledge\n"
                           "    -- comment             ignore, this is just a comment line\n";
 
+
+// FIXME: this variable needs to be defined before it links to sdb_core properly
 unsigned int default_decimal_places;
+
 extern OperatorUsageMap operator_usage_map;
 extern DocsGenerator docs_generator;
 
