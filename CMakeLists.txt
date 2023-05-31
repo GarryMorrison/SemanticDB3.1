@@ -3,6 +3,15 @@ project(SDB3_1)
 
 set(CMAKE_CXX_STANDARD 17)
 
+# compiler settings for use of gprof
+# invoke using: cmake -DUSE_GPROF=ON ..
+if (USE_GPROF)
+    message("Configuring for gprof")
+    SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -pg")
+    SET(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -pg")
+    SET(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} -pg")
+endif()
+
 # find build requirements
 FIND_PACKAGE(BISON 3.3 REQUIRED)
 FIND_PACKAGE(FLEX)
