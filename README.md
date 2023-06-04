@@ -1,6 +1,6 @@
 # Semantic DB 3.1.1
 
-This project is a C++ rewrite of the original python [Semantic DB](https://github.com/GarryMorrison/Semantic-DB). It largely works now, but we are still in the debug stage, and as such, it still contains bugs. But hopefully, not too many of them.
+This project is a C++ rewrite of the original python [Semantic DB](https://github.com/GarryMorrison/Semantic-DB). It is itself now deprecated by [version 4](https://github.com/GarryMorrison/SemanticDB4), which is available with both a command line and a graphical user interface. SDB4 includes bug fixes, new operators and various improvements, and is a full super-set of SDB 3.1.1, so there is now no reason to use this version at all.
 
 What is the Semantic DB
 -----------------------
